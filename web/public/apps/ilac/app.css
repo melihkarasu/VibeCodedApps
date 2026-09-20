@@ -1,0 +1,35 @@
+/* İlaç & Prospektüs Rehberi - Custom Component Styles */
+
+.adverse-bar-track {
+  width: 100%;
+  height: 8px;
+  background-color: #f3f4f6;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.adverse-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #ffd06a 0%, #fa520f 100%);
+  transition: width 0.5s ease-out;
+}
+
+.tab-btn {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  color: #fa520f;
+  border-bottom: 2px solid #fa520f;
+  font-weight: 600;
+}
+
+.drug-pill-btn {
+  transition: all 0.15s ease-in-out;
+}
+
+.drug-pill-btn:hover {
+  transform: translateY(-1px);
+}

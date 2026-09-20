@@ -1,0 +1,49 @@
+/* İnteraktif Kas Anatomisi & Egzersiz Rehberi Stilleri */
+
+.muscle-chip-btn {
+  transition: all 0.15s ease-in-out;
+}
+
+.muscle-chip-btn.active {
+  background-color: #1f1f1f;
+  color: #ffffff;
+  border-color: #1f1f1f;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.anatomy-svg-box {
+  background: radial-gradient(circle, #f8f6f0 0%, #ede8dc 100%);
+  border: 1px solid #e6d5a8;
+}
+
+.muscle-group-shape {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  fill: #d1d5db;
+  stroke: #ffffff;
+  stroke-width: 1.5;
+}
+
+.muscle-group-shape:hover {
+  fill: #ffa110;
+}
+
+.muscle-group-shape.active {
+  fill: #fa520f;
+  filter: drop-shadow(0 0 6px rgba(250, 82, 15, 0.6));
+}
+
+.exercise-card {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.exercise-card:hover {
+  transform: translateY(-2px);
+  border-color: #fa520f;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
+}
+
+.custom-modal-backdrop {
+  background: rgba(31, 31, 31, 0.7);
+  backdrop-filter: blur(4px);
+}
