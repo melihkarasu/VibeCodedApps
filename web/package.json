@@ -1,0 +1,13 @@
+{
+  "name": "vibe-coded-apps-web",
+  "version": "1.0.0",
+  "description": "Vibe Coded Apps - Showcase & Micro Apps Container",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.48.1",
+    "express": "^4.21.2"
+  }
+}

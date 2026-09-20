@@ -1,0 +1,229 @@
+{
+  "success": true,
+  "source": "TCMB (Günde 1 Kez Güncellenen Kalıcı JSON Önbellek)",
+  "tarih": "18.09.2026",
+  "bultenNo": "2026/176",
+  "timestamp": "2026-09-20T12:06:15.533Z",
+  "rates": {
+    "USD": {
+      "code": "USD",
+      "name": "ABD DOLARI",
+      "unit": 1,
+      "forexBuying": 48.6116,
+      "forexSelling": 48.6992,
+      "banknoteBuying": 48.5776,
+      "banknoteSelling": 48.7723,
+      "crossRateUSD": null
+    },
+    "AUD": {
+      "code": "AUD",
+      "name": "AVUSTRALYA DOLARI",
+      "unit": 1,
+      "forexBuying": 34.5568,
+      "forexSelling": 34.7821,
+      "banknoteBuying": 34.3978,
+      "banknoteSelling": 34.9908,
+      "crossRateUSD": 1.4034
+    },
+    "DKK": {
+      "code": "DKK",
+      "name": "DANİMARKA KRONU",
+      "unit": 1,
+      "forexBuying": 7.4525,
+      "forexSelling": 7.4891,
+      "banknoteBuying": 7.4473,
+      "banknoteSelling": 7.5063,
+      "crossRateUSD": 6.5128
+    },
+    "EUR": {
+      "code": "EUR",
+      "name": "EURO",
+      "unit": 1,
+      "forexBuying": 55.7981,
+      "forexSelling": 55.8986,
+      "banknoteBuying": 55.759,
+      "banknoteSelling": 55.9824,
+      "crossRateUSD": null
+    },
+    "GBP": {
+      "code": "GBP",
+      "name": "İNGİLİZ STERLİNİ",
+      "unit": 1,
+      "forexBuying": 64.8549,
+      "forexSelling": 65.193,
+      "banknoteBuying": 64.8095,
+      "banknoteSelling": 65.2908,
+      "crossRateUSD": null
+    },
+    "CHF": {
+      "code": "CHF",
+      "name": "İSVİÇRE FRANGI",
+      "unit": 1,
+      "forexBuying": 58.7941,
+      "forexSelling": 59.1716,
+      "banknoteBuying": 58.7059,
+      "banknoteSelling": 59.2603,
+      "crossRateUSD": 0.8249
+    },
+    "SEK": {
+      "code": "SEK",
+      "name": "İSVEÇ KRONU",
+      "unit": 1,
+      "forexBuying": 4.9284,
+      "forexSelling": 4.9794,
+      "banknoteBuying": 4.9249,
+      "banknoteSelling": 4.9908,
+      "crossRateUSD": 9.8217
+    },
+    "CAD": {
+      "code": "CAD",
+      "name": "KANADA DOLARI",
+      "unit": 1,
+      "forexBuying": 34.672,
+      "forexSelling": 34.8284,
+      "banknoteBuying": 34.5437,
+      "banknoteSelling": 34.9607,
+      "crossRateUSD": 1.4002
+    },
+    "KWD": {
+      "code": "KWD",
+      "name": "KUVEYT DİNARI",
+      "unit": 1,
+      "forexBuying": 157.2773,
+      "forexSelling": 159.3353,
+      "banknoteBuying": 154.9181,
+      "banknoteSelling": 161.7253,
+      "crossRateUSD": null
+    },
+    "NOK": {
+      "code": "NOK",
+      "name": "NORVEÇ KRONU",
+      "unit": 1,
+      "forexBuying": 5.1432,
+      "forexSelling": 5.1778,
+      "banknoteBuying": 5.1396,
+      "banknoteSelling": 5.1897,
+      "crossRateUSD": 9.4284
+    },
+    "SAR": {
+      "code": "SAR",
+      "name": "SUUDİ ARABİSTAN RİYALİ",
+      "unit": 1,
+      "forexBuying": 12.9408,
+      "forexSelling": 12.9641,
+      "banknoteBuying": 12.8437,
+      "banknoteSelling": 13.0613,
+      "crossRateUSD": 3.7565
+    },
+    "JPY": {
+      "code": "JPY",
+      "name": "JAPON YENİ",
+      "unit": 100,
+      "forexBuying": 30.7666,
+      "forexSelling": 30.9704,
+      "banknoteBuying": 30.6528,
+      "banknoteSelling": 31.0881,
+      "crossRateUSD": 157.62
+    },
+    "RON": {
+      "code": "RON",
+      "name": "RUMEN LEYİ",
+      "unit": 1,
+      "forexBuying": 10.5404,
+      "forexSelling": 10.6783,
+      "banknoteBuying": null,
+      "banknoteSelling": null,
+      "crossRateUSD": 4.5861
+    },
+    "RUB": {
+      "code": "RUB",
+      "name": "RUS RUBLESİ",
+      "unit": 1,
+      "forexBuying": 0.57344,
+      "forexSelling": 0.58094,
+      "banknoteBuying": null,
+      "banknoteSelling": null,
+      "crossRateUSD": 84.3
+    },
+    "CNY": {
+      "code": "CNY",
+      "name": "ÇİN YUANI",
+      "unit": 1,
+      "forexBuying": 7.2173,
+      "forexSelling": 7.3118,
+      "banknoteBuying": null,
+      "banknoteSelling": null,
+      "crossRateUSD": 6.6977
+    },
+    "PKR": {
+      "code": "PKR",
+      "name": "PAKİSTAN RUPİSİ",
+      "unit": 1,
+      "forexBuying": 0.1744,
+      "forexSelling": 0.17668,
+      "banknoteBuying": null,
+      "banknoteSelling": null,
+      "crossRateUSD": 277.18
+    },
+    "QAR": {
+      "code": "QAR",
+      "name": "KATAR RİYALİ",
+      "unit": 1,
+      "forexBuying": 13.2594,
+      "forexSelling": 13.4329,
+      "banknoteBuying": null,
+      "banknoteSelling": null,
+      "crossRateUSD": 3.6457
+    },
+    "KRW": {
+      "code": "KRW",
+      "name": "GÜNEY KORE WONU",
+      "unit": 1,
+      "forexBuying": 0.03489,
+      "forexSelling": 0.03535,
+      "banknoteBuying": null,
+      "banknoteSelling": null,
+      "crossRateUSD": 1385
+    },
+    "AZN": {
+      "code": "AZN",
+      "name": "AZERBAYCAN YENİ MANATI",
+      "unit": 1,
+      "forexBuying": 28.4348,
+      "forexSelling": 28.8069,
+      "banknoteBuying": null,
+      "banknoteSelling": null,
+      "crossRateUSD": 1.7
+    },
+    "AED": {
+      "code": "AED",
+      "name": "BİRLEŞİK ARAP EMİRLİKLERİ DİRHEMİ",
+      "unit": 1,
+      "forexBuying": 13.1615,
+      "forexSelling": 13.3337,
+      "banknoteBuying": null,
+      "banknoteSelling": null,
+      "crossRateUSD": 3.6728
+    },
+    "KZT": {
+      "code": "KZT",
+      "name": "KAZAKİSTAN TENGESİ",
+      "unit": 1,
+      "forexBuying": 0.10827,
+      "forexSelling": 0.10969,
+      "banknoteBuying": null,
+      "banknoteSelling": null,
+      "crossRateUSD": 446.47
+    },
+    "XDR": {
+      "code": "XDR",
+      "name": "ÖZEL ÇEKME HAKKI (SDR)",
+      "unit": 1,
+      "forexBuying": 66.4015,
+      "forexSelling": null,
+      "banknoteBuying": null,
+      "banknoteSelling": null,
+      "crossRateUSD": null
+    }
+  }
+}
