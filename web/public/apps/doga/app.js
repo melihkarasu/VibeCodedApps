@@ -1,10 +1,7 @@
 const SHELF_KEY = '***';
         let currentRecordings = [];
         let activeSoundUrl = null;
-        let audioCtx = null;
-        let analyser = null;
-        let sourceNode = null;
-        let visualizerRunning = false;
+        let visualizerAnimId = null;
         let quizTargetBird = null;
 
         // Dahili Öne Çıkan Seçkin Doğa Arşivi (Yüksek Kaliteli Fallback)
@@ -141,10 +138,20 @@ const SHELF_KEY = '***';
           `).join('');
         }
 
-        // 3. Ses Çalma & Web Audio API Visualizer
+        // 3. Ses Çalma & Bioakustik Spektrum Visualizer (AudioContext Bağımsız Güvenli Oynatıcı)
         function playBirdSound(url, name, sci, place, photo) {
           activeSoundUrl = url;
           const audio = document.getElementById('audio-element');
+          if (!audio) return;
+
+          // Hata dinleyicisi
+          audio.onerror = () => {
+            console.warn('Ses kaynağı yüklenemedi:', audio.src);
+            document.getElementById('player-badge-type').innerText = 'Hata';
+            document.getElementById('btn-master-play').innerText = '▶';
+            showToast('⚠️ Ses dosyası yüklenemedi veya format desteklenmiyor.');
+          };
+
           audio.src = url;
 
           document.getElementById('player-bird-name').innerText = name;
@@ -155,20 +162,41 @@ const SHELF_KEY = '***';
           document.getElementById('btn-master-play').innerText = '⏸';
           document.getElementById('visualizer-idle-text').classList.add('hidden');
 
-          audio.play();
-          setupVisualizer();
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(err => {
+              console.warn('Ses oynatma hatası:', err);
+              document.getElementById('player-badge-type').innerText = 'Durduruldu';
+              document.getElementById('btn-master-play').innerText = '▶';
+              showToast('Tarayıcı ses oynatmayı engelledi, lütfen tekrar tıklayın.');
+            });
+          }
+
+          startVisualizer();
           showToast(`🎵 Çalıyor: ${name}`);
         }
 
         function toggleAudioPlay() {
           const audio = document.getElementById('audio-element');
           const btn = document.getElementById('btn-master-play');
+          if (!audio) return;
+
           if (audio.paused) {
-            audio.play();
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+              playPromise.catch(err => {
+                console.warn('Ses oynatma hatası:', err);
+                showToast('Ses başlatılamadı.');
+              });
+            }
             btn.innerText = '⏸';
+            document.getElementById('player-badge-type').innerText = 'Çalıyor';
+            document.getElementById('visualizer-idle-text').classList.add('hidden');
+            startVisualizer();
           } else {
             audio.pause();
             btn.innerText = '▶';
+            document.getElementById('player-badge-type').innerText = 'Duraklatıldı';
           }
         }
 
@@ -185,57 +213,72 @@ const SHELF_KEY = '***';
         function onAudioEnded() {
           document.getElementById('btn-master-play').innerText = '▶';
           document.getElementById('player-badge-type').innerText = 'Tamamlandı';
+          const idleText = document.getElementById('visualizer-idle-text');
+          if (idleText) idleText.classList.remove('hidden');
         }
 
-        function setupVisualizer() {
-          if (visualizerRunning) return;
+        function startVisualizer() {
           const audio = document.getElementById('audio-element');
           const canvas = document.getElementById('visualizer-canvas');
+          if (!canvas) return;
           const ctx = canvas.getContext('2d');
+          if (!ctx) return;
 
-          try {
-            if (!audioCtx) {
-              audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-              analyser = audioCtx.createAnalyser();
-              sourceNode = audioCtx.createMediaElementSource(audio);
-              sourceNode.connect(analyser);
-              analyser.connect(audioCtx.destination);
-              analyser.fftSize = 64;
+          canvas.width = canvas.offsetWidth || 600;
+          canvas.height = canvas.offsetHeight || 96;
+
+          const barCount = 36;
+          let phase = 0;
+
+          if (visualizerAnimId) {
+            cancelAnimationFrame(visualizerAnimId);
+            visualizerAnimId = null;
+          }
+
+          function draw() {
+            if (audio.paused || audio.ended) {
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              const idleText = document.getElementById('visualizer-idle-text');
+              if (idleText) idleText.classList.remove('hidden');
+              visualizerAnimId = null;
+              return;
             }
 
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
+            const idleText = document.getElementById('visualizer-idle-text');
+            if (idleText) idleText.classList.add('hidden');
 
-            function draw() {
-              requestAnimationFrame(draw);
-              analyser.getByteFrequencyData(dataArray);
+            ctx.fillStyle = '#020617';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-              ctx.fillStyle = '#020617';
-              ctx.fillRect(0, 0, canvas.width, canvas.height);
+            phase += 0.08;
+            const barWidth = canvas.width / barCount;
 
-              const barWidth = (canvas.width / bufferLength) * 1.5;
-              let barHeight;
-              let x = 0;
+            for (let i = 0; i < barCount; i++) {
+              // Kuş biyoakustik frekans dalgalarını modelleyen harmonik simülasyon
+              const wave1 = Math.sin(phase * 1.6 + i * 0.35);
+              const wave2 = Math.cos(phase * 2.4 + i * 0.2);
+              const wave3 = Math.sin(phase * 3.8 + i * 0.65);
+              const chirp = (Math.sin(phase * 5.2 + i * 1.1) > 0.6) ? 0.3 : 0;
 
-              for (let i = 0; i < bufferLength; i++) {
-                barHeight = (dataArray[i] / 255) * canvas.height * 0.85;
+              let norm = Math.abs(wave1 * 0.45 + wave2 * 0.35 + wave3 * 0.2) + chirp;
+              norm = Math.min(1, Math.max(0.08, norm));
 
-                const grad = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - barHeight);
-                grad.addColorStop(0, '#10b981');
-                grad.addColorStop(1, '#06b6d4');
+              const barHeight = norm * canvas.height * 0.85;
+              const x = i * barWidth;
+              const y = canvas.height - barHeight;
 
-                ctx.fillStyle = grad;
-                ctx.fillRect(x, canvas.height - barHeight, barWidth - 2, barHeight);
+              const grad = ctx.createLinearGradient(0, canvas.height, 0, y);
+              grad.addColorStop(0, '#10b981');
+              grad.addColorStop(1, '#06b6d4');
 
-                x += barWidth + 1;
-              }
+              ctx.fillStyle = grad;
+              ctx.fillRect(x + 1, y, Math.max(2, barWidth - 3), barHeight);
             }
 
-            draw();
-            visualizerRunning = true;
-          } catch(e) {}
+            visualizerAnimId = requestAnimationFrame(draw);
+          }
+
+          draw();
         }
 
         // 4. "Kuş Sesini Tanı!" Mini Quiz
@@ -265,8 +308,25 @@ const SHELF_KEY = '***';
             return;
           }
           const audio = document.getElementById('audio-element');
+          if (!audio) return;
+
           audio.src = quizTargetBird.soundUrl;
-          audio.play();
+          document.getElementById('player-bird-name').innerText = '??? (Kuş Sesini Tanı)';
+          document.getElementById('player-bird-sci').innerText = 'Hangi kuş olduğunu tahmin edin!';
+          document.getElementById('player-bird-place').innerText = quizTargetBird.place;
+          document.getElementById('player-bird-img').src = 'https://images.unsplash.com/photo-1555169062-013468b47731?w=500&auto=format&fit=crop&q=80';
+          document.getElementById('player-badge-type').innerText = 'Quiz Sesi';
+          document.getElementById('btn-master-play').innerText = '⏸';
+          document.getElementById('visualizer-idle-text').classList.add('hidden');
+
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(err => {
+              console.warn('Quiz ses oynatma hatası:', err);
+              showToast('Tarayıcı ses oynatmayı engelledi, lütfen butona tekrar tıklayın.');
+            });
+          }
+          startVisualizer();
           showToast('🎵 Quiz sesi çalıyor...');
         }
 
