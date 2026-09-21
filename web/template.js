@@ -10,8 +10,10 @@ const pageTemplate = (title, content, extraHead = '') => `
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
+  <!-- Precompiled Tailwind CSS (Zero Runtime / No CDN Delay) -->
+  <link rel="stylesheet" href="/static/css/tailwind.min.css">
+  <script data-cfasync="false" src="https://cdn.tailwindcss.com"></script>
+  <script data-cfasync="false">
     tailwind.config = {
       theme: {
         extend: {
