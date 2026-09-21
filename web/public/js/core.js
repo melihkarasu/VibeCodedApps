@@ -179,6 +179,11 @@ function parseJwtPayload(token) {
   }
 
   if (tokenStr) {
+    // Hash ve arama parametrelerini DERHAL URL'den temizle (token açıkta kalmasın)
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.pathname);
+    }
+
     localStorage.setItem('vibe_token', tokenStr);
     if (refreshTokenStr) {
       localStorage.setItem('vibe_refresh_token', refreshTokenStr);
@@ -198,11 +203,6 @@ function parseJwtPayload(token) {
       window.__vibe_user = prof;
       renderUserNav(prof);
       window.notifyAuthChange(true, prof);
-    }
-
-    // Hash ve arama parametrelerini URL'den temizle
-    if (window.history && window.history.replaceState) {
-      window.history.replaceState(null, null, window.location.pathname);
     }
 
     if (window.location.pathname.includes('/auth')) {

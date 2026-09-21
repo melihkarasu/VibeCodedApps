@@ -71,6 +71,32 @@ const pageTemplate = (title, content, extraHead = '') => `
       });
     }
   </script>
+  <!-- Immediate OAuth Hash Fragment Token Capture & URL Sanitizer -->
+  <script data-cfasync="false">
+    (function() {
+      try {
+        var h = window.location.hash;
+        var s = window.location.search;
+        var p = null;
+        if (h && h.indexOf('access_token=') !== -1) {
+          p = new URLSearchParams(h.replace(/^#/, ''));
+        } else if (s && s.indexOf('access_token=') !== -1) {
+          p = new URLSearchParams(s.replace(/^\?/, ''));
+        }
+        if (p) {
+          var at = p.get('access_token');
+          var rt = p.get('refresh_token');
+          if (at) {
+            localStorage.setItem('vibe_token', at);
+            if (rt) localStorage.setItem('vibe_refresh_token', rt);
+            if (window.history && window.history.replaceState) {
+              window.history.replaceState(null, null, window.location.pathname);
+            }
+          }
+        }
+      } catch(e) {}
+    })();
+  </script>
   ${extraHead}
 </head>
 <body class="bg-mistral-canvas text-mistral-ink min-h-screen flex flex-col antialiased selection:bg-mistral-orange selection:text-white">
@@ -142,7 +168,7 @@ const pageTemplate = (title, content, extraHead = '') => `
   </footer>
 
   <!-- Global Core Utilities & SSO Authentication (Cache Destekli Statik JS) -->
-  <script src="/static/js/core.js" defer></script>
+  <script data-cfasync="false" src="/static/js/core.js?v=20260922"></script>
 </body>
 </html>
 `;
