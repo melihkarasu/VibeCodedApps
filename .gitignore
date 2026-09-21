@@ -22,3 +22,6 @@ Thumbs.db
 
 # OpenClaw / Temp
 .clawhub/
+
+# Dynamic API Caches
+web/cache/*.json
