@@ -75,23 +75,20 @@ const pageTemplate = (title, content, extraHead = '') => `
   <script data-cfasync="false">
     (function() {
       try {
-        var h = window.location.hash;
-        var s = window.location.search;
-        var p = null;
-        if (h && h.indexOf('access_token=') !== -1) {
-          p = new URLSearchParams(h.replace(/^#/, ''));
-        } else if (s && s.indexOf('access_token=') !== -1) {
-          p = new URLSearchParams(s.replace(/^\?/, ''));
-        }
-        if (p) {
+        var h = window.location.hash || '';
+        var s = window.location.search || '';
+        if (h.indexOf('access_token=') !== -1 || s.indexOf('access_token=') !== -1) {
+          var p = new URLSearchParams(h.indexOf('access_token=') !== -1 ? (h.charAt(0) === '#' ? h.substring(1) : h) : (s.charAt(0) === '?' ? s.substring(1) : s));
           var at = p.get('access_token');
           var rt = p.get('refresh_token');
           if (at) {
-            localStorage.setItem('vibe_token', at);
-            if (rt) localStorage.setItem('vibe_refresh_token', rt);
-            if (window.history && window.history.replaceState) {
-              window.history.replaceState(null, null, window.location.pathname);
-            }
+            try { localStorage.setItem('vibe_token', at); } catch(e) {}
+            if (rt) { try { localStorage.setItem('vibe_refresh_token', rt); } catch(e) {} }
+          }
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', window.location.pathname);
+          } else {
+            window.location.hash = '';
           }
         }
       } catch(e) {}
