@@ -1,19 +1,32 @@
 const express = require('express');
 const router = express.Router();
+const crypto = require('crypto');
 
 const SUPABASE_URL = process.env.INTERNAL_SUPABASE_URL || process.env.SUPABASE_URL || 'http://vibe-supabase-kong:8000';
-const SERVICE_ROLE_KEY = process.env.SERVICE_ROLE_KEY;
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || 'REDACTED')
   .split(',')
   .map(e => e.trim().toLowerCase());
 
+// PostgREST ile tam uyumlu dinamik Service Role anahtarı üretici
+function getServiceRoleKey() {
+  const secret = process.env.JWT_SECRET;
+  if (secret) {
+    const h = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
+    const p = Buffer.from(JSON.stringify({ role: 'service_role', iss: 'supabase', iat: 1700000000, exp: 2100000000 })).toString('base64url');
+    const s = crypto.createHmac('sha256', secret).update(h + '.' + p).digest('base64url');
+    return h + '.' + p + '.' + s;
+  }
+  return process.env.SERVICE_ROLE_KEY;
+}
+
 // PostgREST Client Helper (Service Role Yetkisiyle)
 async function supabaseRequest(path, options = {}) {
   const url = SUPABASE_URL.replace(/\/app$/, '') + '/rest/v1' + path;
+  const serviceKey = getServiceRoleKey();
   const headers = {
     'Content-Type': 'application/json',
-    'apikey': SERVICE_ROLE_KEY,
-    'Authorization': 'Bearer ' + SERVICE_ROLE_KEY,
+    'apikey': serviceKey,
+    'Authorization': 'Bearer ' + serviceKey,
     'Prefer': 'return=representation',
     ...options.headers
   };
@@ -69,7 +82,7 @@ router.get('/stats', async (req, res) => {
       supabaseRequest('/categories?select=id'),
       supabaseRequest('/apps?select=id,status'),
       supabaseRequest('/user_favorites?select=id'),
-      supabaseRequest('/rpc/get_admin_users', { method: 'POST' }).catch(() => [])
+      supabaseRequest('/rpc/get_admin_users', { method: 'GET' }).catch(() => [])
     ]);
 
     res.json({
@@ -93,7 +106,7 @@ router.get('/stats', async (req, res) => {
 // -------------------------------------------------------------
 router.get('/users', async (req, res) => {
   try {
-    const users = await supabaseRequest('/rpc/get_admin_users', { method: 'POST' });
+    const users = await supabaseRequest('/rpc/get_admin_users', { method: 'GET' });
     res.json({ success: true, users: Array.isArray(users) ? users : [] });
   } catch (err) {
     console.error('[AdminAPI] Users error:', err.message);
