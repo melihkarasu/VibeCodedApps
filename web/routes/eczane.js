@@ -68,7 +68,7 @@ module.exports = function(pageTemplate) {
         }
       </style>
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/eczane/app.js?v=5.0" defer></script>
+      <script src="/static/apps/eczane/app.js?v=7.0" defer></script>
     `;
 
     const content = `
@@ -94,6 +94,24 @@ module.exports = function(pageTemplate) {
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-medium" id="eczane-status-label">81 İl Canlı Eczane API</span>
         </div>
+      </div>
+
+      <!-- KONUM İZİN BİLDİRİM ÇUBUĞU (Kullanıcı Tıklaması ile İzin Tetikleme) -->
+      <div id="location-permission-banner" class="hidden mb-6 p-4 rounded-2xl bg-amber-50 border border-amber-300 flex flex-col sm:flex-row items-center justify-between gap-3 text-amber-950 transition-all shadow-xs">
+        <div class="flex items-center gap-2.5 text-xs sm:text-sm font-medium">
+          <span class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 text-base shadow-xs">
+            <i class="fa-solid fa-location-dot"></i>
+          </span>
+          <span id="location-banner-text">📍 Bulunduğunuz şehirdeki en yakın nöbetçi eczaneleri görmek için konumunuzu tespit edelim:</span>
+        </div>
+        <button 
+          type="button" 
+          id="btn-banner-gps" 
+          onclick="handleMyLocationClick()" 
+          class="shrink-0 px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer">
+          <i class="fa-solid fa-location-crosshairs"></i>
+          <span>Konumumu Tespit Et</span>
+        </button>
       </div>
 
       <!-- KONTROL & KONUM & FİLTRE PANELİ -->
