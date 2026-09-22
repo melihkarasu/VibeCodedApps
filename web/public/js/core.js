@@ -386,6 +386,73 @@ window.logout = async function() {
   if (window.location.pathname.includes('/auth')) {
     window.location.reload();
   } else {
-    window.location.href = '/app';
+    window.location.href = '/';
   }
 };
+
+// 6. Kullanıcı Veritabanı Senkronizasyon Motoru (user_app_data)
+// Uygulama açıldığında yalnızca o uygulamanın veritabanı kayıtlarını çeker ve localStorage ile eşitler.
+window.syncAppUserData = async function(appId) {
+  const token = localStorage.getItem('vibe_token');
+  if (!token || !appId) return null;
+
+  try {
+    const res = await fetch('/api/user-data/' + encodeURIComponent(appId), {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (res.ok) {
+      const result = await res.json();
+      if (result.success && result.data) {
+        Object.keys(result.data).forEach(k => {
+          try {
+            const v = result.data[k];
+            localStorage.setItem(k, typeof v === 'string' ? v : JSON.stringify(v));
+          } catch(e) {}
+        });
+        window.dispatchEvent(new CustomEvent('vibe_user_data_synced', {
+          detail: { appId: appId, data: result.data }
+        }));
+        return result.data;
+      }
+    }
+  } catch (err) {
+    console.warn('[UserDataSync] Senkronizasyon hatası:', err.message);
+  }
+  return null;
+};
+
+window.saveAppUserData = async function(appId, key, value) {
+  try {
+    localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+  } catch(e) {}
+
+  const token = localStorage.getItem('vibe_token');
+  if (!token || !appId) return;
+
+  try {
+    await fetch('/api/user-data/' + encodeURIComponent(appId), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({ key: key, value: value })
+    });
+  } catch (err) {
+    console.warn('[UserDataSave] Veritabanına kaydetme hatası:', err.message);
+  }
+};
+
+// Sayfa Yüklendiğinde Otomatik Uygulama Verisi Çekme
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    const path = window.location.pathname;
+    if (path !== '/' && !path.includes('/auth') && path !== '/app') {
+      const segments = path.replace(/^\//, '').split('/');
+      const appId = segments[0] === 'app' ? segments[1] : segments[0];
+      if (appId && window.isLoggedIn()) {
+        window.syncAppUserData(appId);
+      }
+    }
+  } catch(e) {}
+});

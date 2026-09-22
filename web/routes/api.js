@@ -50,6 +50,7 @@ router.use('/', require('./api/httpstatus'));
 // 6. Kimlik Doğrulama, Kullanıcı & Sağlık
 router.use('/', require('./api/auth'));
 router.use('/', require('./api/favorites'));
+router.use('/', require('./api/user-data'));
 router.use('/', require('./api/eczane'));
 router.use('/', require('./api/ilac'));
 router.use('/', require('./api/egzersiz'));

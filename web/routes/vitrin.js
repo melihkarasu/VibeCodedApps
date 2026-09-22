@@ -12,7 +12,7 @@ module.exports = function(pageTemplate) {
             name: "İzmir Nöbetçi Eczane Radarı",
             icon: "💊",
             desc: "İzmir BB Açık Veri API'si ve OpenStreetMap ile canlı konum, en yakın 5 nöbetçi eczane, mesafe ve tek tıkla arama/yol tarifi.",
-            url: "/app/nobetci-eczane",
+            url: "/nobetci-eczane",
             action: "Eczaneleri Bul"
           },
           {
@@ -20,7 +20,7 @@ module.exports = function(pageTemplate) {
             name: "İlaç & Prospektüs Rehberi",
             icon: "💊",
             desc: "U.S. FDA ve resmi farmakope veri tabanı ile etken maddeler, prospektüs özeti, kullanım uyarıları ve açık bildirilmiş yan etki analitiği.",
-            url: "/app/ilac-rehberi",
+            url: "/ilac-rehberi",
             action: "İlacı İncele"
           },
           {
@@ -28,7 +28,7 @@ module.exports = function(pageTemplate) {
             name: "İnteraktif Kas Anatomisi & Egzersiz",
             icon: "🏋️",
             desc: "workout-cool ve Wger verileriyle interaktif vücut kas haritası, hedeflenen egzersizler, doğru form rehberi ve duruş terapisi.",
-            url: "/app/kas-anatomisi",
+            url: "/kas-anatomisi",
             action: "Anatomiyi Keşfet"
           },
           {
@@ -36,7 +36,7 @@ module.exports = function(pageTemplate) {
             name: "Klinik Araştırmalar Radarı",
             icon: "🔬",
             desc: "NIH ClinicalTrials.gov v2 API ile kanser, diyabet ve nörolojideki aktif klinik deneyler, faz aşamaları ve deneysel tedaviler.",
-            url: "/app/klinik-arastirma",
+            url: "/klinik-arastirma",
             action: "Çalışmaları İncele"
           },
           {
@@ -44,7 +44,7 @@ module.exports = function(pageTemplate) {
             name: "Küresel Sağlık Atlası (DSÖ)",
             icon: "🌐",
             desc: "Dünya Sağlık Örgütü resmi verileriyle Türkiye ve 190+ ülkenin beklenen yaşam süresi, aşılanma ve mortalite göstergeleri.",
-            url: "/app/dso-saglik",
+            url: "/dso-saglik",
             action: "Göstergeleri İncele"
           }
         ]
@@ -61,7 +61,7 @@ module.exports = function(pageTemplate) {
             name: "Akıllı Tarım & Zirai Hava",
             icon: "🌾",
             desc: "Open-Meteo ile toprak nemi/sıcaklığı derinlikleri, don riski erken uyarı sistemi, evapotranspirasyon ve sulama tavsiyeleri.",
-            url: "/app/tarim-hava",
+            url: "/tarim-hava",
             action: "Paneli Başlat"
           },
           {
@@ -69,7 +69,7 @@ module.exports = function(pageTemplate) {
             name: "Web Karbon Ayak İzi",
             icon: "🌱",
             desc: "Web sitelerinin sayfa yükleme başına CO2 salımı, yeşil hosting doğrulaması ve gömülebilir dinamik eko-rozet.",
-            url: "/app/karbon-metre",
+            url: "/karbon-metre",
             action: "Ölçümü Başlat"
           },
           {
@@ -77,7 +77,7 @@ module.exports = function(pageTemplate) {
             name: "Kuş Sesi Dedektifi",
             icon: "🐦",
             desc: "iNaturalist biyoakustik arşivi ile 500.000+ yabani kuş sesi, canlı spektrum ses dalgası ve mini tahmin testi.",
-            url: "/app/doga-sesleri",
+            url: "/doga-sesleri",
             action: "Sesleri Dinle"
           },
           {
@@ -85,7 +85,7 @@ module.exports = function(pageTemplate) {
             name: "Küresel Coğrafya Atlası",
             icon: "🌍",
             desc: "REST Countries API ile 250 dünya ülkesinin bayrakları, başkentleri, nüfusu, dilleri ve sınır komşuları.",
-            url: "/app/cografya-atlasi",
+            url: "/cografya-atlasi",
             action: "Atlası İncele"
           },
           {
@@ -93,7 +93,7 @@ module.exports = function(pageTemplate) {
             name: "Canlı Hava Kalitesi Radarı",
             icon: "💨",
             desc: "Dünya şehirlerinin canlı PM2.5, PM10, NO2 kirlilik seviyeleri, Avrupa AQI endeksi ve sağlık tavsiyeleri.",
-            url: "/app/hava-kalitesi",
+            url: "/hava-kalitesi",
             action: "Havayı Ölç"
           },
           {
@@ -101,7 +101,7 @@ module.exports = function(pageTemplate) {
             name: "Şehir Bisiklet Rehberi",
             icon: "🚲",
             desc: "CityBikes API ile 400+ dünya metropolünde canlı bisiklet durakları, boş bisiklet ve park yuvası haritası.",
-            url: "/app/sehir-bisiklet",
+            url: "/sehir-bisiklet",
             action: "Durakları Gör"
           },
           {
@@ -109,7 +109,7 @@ module.exports = function(pageTemplate) {
             name: "Mavi Rota: Dalga & Sörf Radarı",
             icon: "🌊",
             desc: "Open-Meteo Marine API ile Ege, Akdeniz ve Karadeniz kıyılarında canlı dalga boyu, periyot ve sörf uygunluğu.",
-            url: "/app/deniz-dalga",
+            url: "/deniz-dalga",
             action: "Denizi İncele"
           },
           ]
@@ -125,7 +125,7 @@ module.exports = function(pageTemplate) {
             name: "3D Molekül Stüdyosu",
             icon: "🧬",
             desc: "PubChem 3D Conformer ve 3Dmol.js WebGL motoruyla kimyasalların ve ilaçların 3D atomik modellemesi.",
-            url: "/app/molekul-studyosu",
+            url: "/molekul-studyosu",
             action: "Stüdyoyu Başlat"
           },
           {
@@ -133,7 +133,7 @@ module.exports = function(pageTemplate) {
             name: "Where is ISS? Uzay Radarı",
             icon: "🛰️",
             desc: "Uluslararası Uzay İstasyonu'nun (ISS) anlık enlem, boylam, 27.600 km/s yörünge hızı ve canlı haritası.",
-            url: "/app/iss-takip",
+            url: "/iss-takip",
             action: "İstasyonu Takip Et"
           },
           {
@@ -141,7 +141,7 @@ module.exports = function(pageTemplate) {
             name: "Sayılar Atlası & Matematik",
             icon: "🧮",
             desc: "Numbers motoru ile sayıların asallık, Fibonacci, bölen analizi, ikili kodları ve tarihteki gizemli gerçekleri.",
-            url: "/app/sayilar-atlasi",
+            url: "/sayilar-atlasi",
             action: "Sayıyı Keşfet"
           },
           {
@@ -149,7 +149,7 @@ module.exports = function(pageTemplate) {
             name: "Nobel Ödülleri Arşivi",
             icon: "🎖️",
             desc: "Nobel Vakfı resmi API'si ile 1901'den günümüze bilim insanları, çığır açan keşifler ve edebiyat ödülleri.",
-            url: "/app/nobel-arsivi",
+            url: "/nobel-arsivi",
             action: "Arşivi İncele"
           }
         ]
@@ -165,7 +165,7 @@ module.exports = function(pageTemplate) {
             name: "Global Sanat Galerisi",
             icon: "🎨",
             desc: "The Met Museum dijital arşivi ile usta ressamlar, derin yakınlaştırma (deep zoom) ve kişisel sanat sergisi.",
-            url: "/app/sanat-galerisi",
+            url: "/sanat-galerisi",
             action: "Galeriyi Gez"
           },
           {
@@ -173,7 +173,7 @@ module.exports = function(pageTemplate) {
             name: "Dijital Kütüphane",
             icon: "📖",
             desc: "Project Gutenberg ile 70.000+ dünya klasiği, tarayıcı içi e-kitap okuyucu, yer imleri ve kişisel kitaplık.",
-            url: "/app/klasik-kutuphane",
+            url: "/klasik-kutuphane",
             action: "Okumaya Başla"
           },
           {
@@ -181,7 +181,7 @@ module.exports = function(pageTemplate) {
             name: "Küresel Tatil Takvimi",
             icon: "📅",
             desc: "100+ ülkenin resmi tatilleri, eşzamanlı çoklu ülke karşılaştırması, akıllı köprü izin fırsatları ve iCal desteği.",
-            url: "/app/tatil-takvimi",
+            url: "/tatil-takvimi",
             action: "Takvimi Aç"
           },
           {
@@ -189,7 +189,7 @@ module.exports = function(pageTemplate) {
             name: "UNESCO Dünya Mirası Atlası",
             icon: "🏛️",
             desc: "Göbeklitepe'den Machu Picchu'ya dünya mirası alanları, fotoğrafları, kabul yılları ve harita konumları.",
-            url: "/app/unesco-miras",
+            url: "/unesco-miras",
             action: "Mirasları Keşfet"
           },
           {
@@ -197,7 +197,7 @@ module.exports = function(pageTemplate) {
             name: "Sesli Kütüphane (LibriVox)",
             icon: "🎧",
             desc: "LibriVox açık kamu malı arşivi ile dünya edebiyatı klasiklerinin seslendirilmiş kayıtları ve ses çaları.",
-            url: "/app/sesli-kitap",
+            url: "/sesli-kitap",
             action: "Kitap Dinle"
           },
           {
@@ -205,7 +205,7 @@ module.exports = function(pageTemplate) {
             name: "Şiir Vahası: Şiir Antolojisi",
             icon: "📜",
             desc: "PoetryDB açık arşivi ile Shakespeare, Poe, Dickinson ve usta şairlerin 3.000+ eseri ve tipografik okuyucu.",
-            url: "/app/siir-antolojisi",
+            url: "/siir-antolojisi",
             action: "Şiirleri Oku"
           }
         ]
@@ -221,7 +221,7 @@ module.exports = function(pageTemplate) {
             name: "Kültür Arenası & Trivia",
             icon: "🌍",
             desc: "Solo yarışma, 1v1 canlı düello odaları, başarımlar, XP seviyeleri ve detaylı karşılaşma geçmişi.",
-            url: "/app/kultur-arena",
+            url: "/kultur-arena",
             action: "Arenaya Gir"
           },
           {
@@ -229,7 +229,7 @@ module.exports = function(pageTemplate) {
             name: "Steam & Epic Fırsat Avcısı",
             icon: "🏷️",
             desc: "CheapShark & GamerPower ile anlık büyük indirimler, %100 ücretsiz kalıcı hediyeler ve istek listesi.",
-            url: "/app/oyun-radar",
+            url: "/oyun-radar",
             action: "Fırsatları Yakala"
           },
           {
@@ -237,7 +237,7 @@ module.exports = function(pageTemplate) {
             name: "Oyun Keşif Kütüphanesi",
             icon: "🕹️",
             desc: "FreeToGame ve açık oyun veritabanı ile PC ve tarayıcı tabanlı yüzlerce oyun, tür filtreleri ve detaylar.",
-            url: "/app/oyun-arsivi",
+            url: "/oyun-arsivi",
             action: "Oyunları Keşfet"
           },
           {
@@ -245,7 +245,7 @@ module.exports = function(pageTemplate) {
             name: "Speedrun Oyun Rekorları",
             icon: "⚡",
             desc: "Speedrun.com açık veritabanı ile popüler video oyunlarının dünya rekoru bitirme süreleri ve liderleri.",
-            url: "/app/oyun-rekorlari",
+            url: "/oyun-rekorlari",
             action: "Rekorları Gör"
           }
         ]
@@ -261,7 +261,7 @@ module.exports = function(pageTemplate) {
             name: "Dizi & Sezon Takipçisi",
             icon: "🎬",
             desc: "IMDb & TVmaze ile bölüm bazlı sezon takibi, izleme ajandası ve IMDb linkiyle özel yapım ekleme.",
-            url: "/app/dizi-rehberi",
+            url: "/dizi-rehberi",
             action: "Rehberi Başlat"
           },
           {
@@ -269,7 +269,7 @@ module.exports = function(pageTemplate) {
             name: "Sözden Şarkıya",
             icon: "🎵",
             desc: "LRCLIB & iTunes ile aklınızda kalan sözlerden şarkı tespiti, tam şarkı sözleri ve 30 saniyelik ses önizlemesi.",
-            url: "/app/sozden-sarkiya",
+            url: "/sozden-sarkiya",
             action: "Dedektifi Başlat"
           },
           {
@@ -277,7 +277,7 @@ module.exports = function(pageTemplate) {
             name: "Lezzet Atölyesi",
             icon: "🍹",
             desc: "TheMealDB, Forkify ve TheCocktailDB ile mutfak & miksoloji barı, malzeme arama ve tarif defteri.",
-            url: "/app/lezzet-atolyesi",
+            url: "/lezzet-atolyesi",
             action: "Atölyeyi Başlat"
           },
           {
@@ -285,7 +285,7 @@ module.exports = function(pageTemplate) {
             name: "Gıda Dedektifi & Alerjen Kalkanı",
             icon: "🏷️",
             desc: "Open Food Facts ile barkod tarama, Nutri-Score, besin değerleri ve kişisel alerji uyarısı.",
-            url: "/app/gida-alerji",
+            url: "/gida-alerji",
             action: "Ürünü İncele"
           },
           {
@@ -293,7 +293,7 @@ module.exports = function(pageTemplate) {
             name: "Dünya Radyo Kulesi",
             icon: "📻",
             desc: "Radio Browser API ile 30.000+ küresel canlı radyo yayını, ülke ve müzik türü filtreleri ve Web Audio çaları.",
-            url: "/app/dunya-radyo",
+            url: "/dunya-radyo",
             action: "Radyoyu Dinle"
           },
           {
@@ -301,7 +301,7 @@ module.exports = function(pageTemplate) {
             name: "Evcil Dostlar Ansiklopedisi",
             icon: "🐾",
             desc: "TheCatAPI & Dog CEO ile 150+ kedi ve köpek ırkı, mizaç analizi, yaşam süresi ve çocuk dostluğu rehberi.",
-            url: "/app/evcil-rehber",
+            url: "/evcil-rehber",
             action: "Irkları Keşfet"
           },
           {
@@ -309,7 +309,7 @@ module.exports = function(pageTemplate) {
             name: "Akustik: Gitar Akor & Tab",
             icon: "🎸",
             desc: "Gitar akor şemaları, parmak basış rehberi, canlı transpoze (ton değiştirici) ve otomatik sayfa kaydırma.",
-            url: "/app/gitar-akor",
+            url: "/gitar-akor",
             action: "Stüdyoyu Başlat"
           }
         ]
@@ -325,7 +325,7 @@ module.exports = function(pageTemplate) {
             name: "Anlık Döviz Çevirici",
             icon: "💱",
             desc: "Frankfurter & ECB resmi kurları ile 30+ para birimi, anlık çapraz kur çevirisi, Chart.js trend grafikleri ve getiri analizi.",
-            url: "/app/doviz-cevirici",
+            url: "/doviz-cevirici",
             action: "Çeviriciyi Başlat"
           },
           {
@@ -333,7 +333,7 @@ module.exports = function(pageTemplate) {
             name: "Küresel Refah Göstergesi",
             icon: "📊",
             desc: "World Bank resmi verileriyle son 30 yıllık GSYİH, ömür, enflasyon, enerji ve refah endeksi analizi.",
-            url: "/app/kuresel-gostergeler",
+            url: "/kuresel-gostergeler",
             action: "Göstergeleri İncele"
           },
           {
@@ -341,7 +341,7 @@ module.exports = function(pageTemplate) {
             name: "Kripto Trend & Piyasa Radarı",
             icon: "🪙",
             desc: "CoinGecko API ile anlık kripto para fiyatları, 24 saatlik değişimler, trend tokenlar ve dönüştürücü.",
-            url: "/app/kripto-trend",
+            url: "/kripto-trend",
             action: "Piyasayı İzle"
           }
         ]
@@ -358,7 +358,7 @@ module.exports = function(pageTemplate) {
             name: "GitHub Profil Analitiği",
             icon: `<i class="fa-brands fa-github" style="color: rgb(0, 0, 0);"></i>`,
             desc: "Repo yıldızları, dil dağılımı, geliştirici kıdemi ve profillere gömülebilir dinamik SVG kartı üretimi.",
-            url: "/app/github-analitik",
+            url: "/github-analitik",
             action: "Profili İncele"
           },
           {
@@ -366,7 +366,7 @@ module.exports = function(pageTemplate) {
             name: "DNS Kontrol & Ağ Teşhisi",
             icon: "🌐",
             desc: "Cloudflare & Google DoH ile anlık A, MX, TXT, NS kayıtları, küresel yayılım, SPF/DMARC ve gecikme testi.",
-            url: "/app/dns-kontrol",
+            url: "/dns-kontrol",
             action: "Kayıtları Çözümle"
           },
           {
@@ -374,7 +374,7 @@ module.exports = function(pageTemplate) {
             name: "Sızıntı Kontrolü & Güvenlik",
             icon: "🛡️",
             desc: "HaveIBeenPwned k-Anonymity (SHA-1) protokolü ile sıfır bilgi garantili şifre sızıntı denetimi ve entropi analizi.",
-            url: "/app/sizinti-kontrol",
+            url: "/sizinti-kontrol",
             action: "Güvenliği Test Et"
           },
           {
@@ -382,7 +382,7 @@ module.exports = function(pageTemplate) {
             name: "IP Coğrafi Konum & İstihbarat",
             icon: "📍",
             desc: "ip-api ve SSRF korumalı altyapıyla IP lokasyonu, İnternet Servis Sağlayıcı (ISP), ASN ve harita koordinatları.",
-            url: "/app/ip-konum",
+            url: "/ip-konum",
             action: "Konumu Bul"
           },
           {
@@ -390,7 +390,7 @@ module.exports = function(pageTemplate) {
             name: "Harmoni: Renk & Kontrast Stüdyosu",
             icon: "🎨",
             desc: "The Color API ile analog, komplementer renk şemaları, WCAG erişilebilirlik kontrast analizi ve CSS dışa aktarımı.",
-            url: "/app/renk-studyosu",
+            url: "/renk-studyosu",
             action: "Palet Üret"
           },
           {
@@ -398,7 +398,7 @@ module.exports = function(pageTemplate) {
             name: "HTTP Sözlüğü & Cihaz Röntgeni",
             icon: "💻",
             desc: "1xx-5xx HTTP durum kodları referansı, çözüm rehberi, cURL örnekleri ve canlı donanım/GPU parmak izi analizi.",
-            url: "/app/http-status",
+            url: "/http-status",
             action: "Teşhisi Aç"
           }
         ]
@@ -414,7 +414,7 @@ module.exports = function(pageTemplate) {
             name: "QR Studio",
             icon: "📱",
             desc: "Vektörel, logolu, gradyan renkli ve çok formatlı (URL, Wi-Fi, vCard) profesyonel QR üretici.",
-            url: "/app/qr-studio",
+            url: "/qr-studio",
             action: "Stüdyoyu Başlat"
           }
         ]
@@ -612,7 +612,7 @@ module.exports = function(pageTemplate) {
                 Aşağıdaki kategorilerde yer alan kartların sağ üstündeki yıldız (☆) simgesine tıklayarak sık kullandığınız araçları bu alana sabitleyebilirsiniz.
               </p>
               <p class="text-xs text-amber-700/80 mt-3 font-medium">
-                💡 İpucu: Favorilerinizi tüm cihazlarınızda eşitlemek için <a href="/app/auth" class="text-mistral-orange underline font-semibold">giriş yapabilirsiniz</a>.
+                💡 İpucu: Favorilerinizi tüm cihazlarınızda eşitlemek için <a href="/auth" class="text-mistral-orange underline font-semibold">giriş yapabilirsiniz</a>.
               </p>
             </div>
 
@@ -625,6 +625,34 @@ module.exports = function(pageTemplate) {
 
         <!-- DİĞER 8 KATEGORİ -->
         ${accordionHtml}
+      </div>
+
+      <!-- Vitrin Auth Required Modal (Giriş Yapılmamışsa Açılan Modal) -->
+      <div id="vitrin-auth-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4" style="display: none;">
+        <div class="bg-white max-w-md w-full rounded-2xl border border-mistral-hairline p-8 shadow-2xl text-center animate-in fade-in zoom-in-95 duration-200">
+          <div class="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center text-2xl mb-4 mx-auto shadow-2xs">
+            🔒
+          </div>
+          <h3 class="text-2xl font-bold font-editorial text-mistral-ink mb-2">
+            Giriş Yapmanız Gerekiyor
+          </h3>
+          <p class="text-mistral-slate text-sm leading-relaxed mb-6">
+            <strong id="vitrin-modal-app-name" class="text-mistral-ink">Bu uygulamayı</strong> kullanabilmek ve verilerinizi tüm cihazlarınızda senkronize edebilmek için lütfen giriş yapın.
+          </p>
+          <div class="space-y-3">
+            <a id="vitrin-modal-gh-btn" href="/auth/v1/authorize?provider=github" class="flex items-center justify-center gap-3 w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-black text-white font-medium transition shadow-sm cursor-pointer">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+              <span>GitHub ile Giriş Yap</span>
+            </a>
+            <a id="vitrin-modal-gg-btn" href="/auth/v1/authorize?provider=google" class="flex items-center justify-center gap-3 w-full py-3 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-medium transition border border-mistral-hairline shadow-sm cursor-pointer">
+              <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+              <span>Google ile Giriş Yap</span>
+            </a>
+            <button type="button" onclick="closeVitrinAuthModal()" class="w-full py-2.5 px-4 rounded-xl bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink text-xs font-semibold transition border border-mistral-beige-deep cursor-pointer">
+              Vazgeç
+            </button>
+          </div>
+        </div>
       </div>
 
       <script>
@@ -904,7 +932,48 @@ module.exports = function(pageTemplate) {
         document.addEventListener('DOMContentLoaded', () => {
           updateFavoriteUI();
           fetchFavoritesFromAPI();
+
+          // Giriş Yapmamış Kullanıcılar İçin Kart Tıklama Koruması
+          document.addEventListener('click', function(e) {
+            var cardLink = e.target.closest('a[href^="/app/"], a[href^="/nobetci-"], a[href^="/ilac-"], a[href^="/kas-"], a[href^="/qr-"], a[href^="/doviz-"], a[href^="/lezzet-"], a[href^="/sozden-"], a[href^="/kultur-"], a[href^="/dizi-"], a[href^="/sanat-"], a[href^="/tatil-"], a[href^="/karbon-"], a[href^="/tarim-"], a[href^="/klasik-"], a[href^="/kuresel-"], a[href^="/oyun-"], a[href^="/sizinti-"], a[href^="/dns-"], a[href^="/github-"], a[href^="/doga-"], a[href^="/molekul-"], a[href^="/iss-"], a[href^="/cografya-"], a[href^="/hava-"], a[href^="/kripto-"], a[href^="/ip-"], a[href^="/gida-"], a[href^="/dunya-"], a[href^="/sehir-"], a[href^="/renk-"], a[href^="/sayilar-"], a[href^="/evcil-"], a[href^="/deniz-"], a[href^="/unesco-"], a[href^="/sesli-"], a[href^="/nobel-"], a[href^="/gitar-"], a[href^="/siir-"], a[href^="/http-"], a[href^="/dso-"], a[href^="/klinik-"]');
+            if (cardLink && !cardLink.getAttribute('href').includes('/auth')) {
+              var user = getVitrinUser();
+              if (!user) {
+                e.preventDefault();
+                e.stopPropagation();
+                var targetUrl = cardLink.getAttribute('href');
+                var appCard = cardLink.closest('.group');
+                var appName = appCard ? (appCard.querySelector('h3')?.innerText || 'Uygulama') : 'Uygulama';
+                openVitrinAuthModal(appName, targetUrl);
+              }
+            }
+          });
         });
+
+        function openVitrinAuthModal(appName, targetUrl) {
+          var modal = document.getElementById('vitrin-auth-modal');
+          var nameEl = document.getElementById('vitrin-modal-app-name');
+          var gh = document.getElementById('vitrin-modal-gh-btn');
+          var gg = document.getElementById('vitrin-modal-gg-btn');
+
+          if (nameEl) nameEl.innerText = appName;
+          var encodedTarget = encodeURIComponent(targetUrl);
+          if (gh) gh.href = '/auth/v1/authorize?provider=github&redirect_to=' + encodedTarget;
+          if (gg) gg.href = '/auth/v1/authorize?provider=google&redirect_to=' + encodedTarget;
+
+          if (modal) {
+            modal.style.display = 'flex';
+          }
+        }
+
+        function closeVitrinAuthModal() {
+          var modal = document.getElementById('vitrin-auth-modal');
+          if (modal) {
+            modal.style.display = 'none';
+          }
+        }
+
+        window.closeVitrinAuthModal = closeVitrinAuthModal;
 
         // Hemen başlat
         updateFavoriteUI();

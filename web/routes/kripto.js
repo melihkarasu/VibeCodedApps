@@ -10,7 +10,7 @@ module.exports = function(pageTemplate) {
       <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/app" class="text-mistral-slate hover:text-mistral-orange transition text-sm flex items-center gap-1 font-medium">
+            <a href="/" class="text-mistral-slate hover:text-mistral-orange transition text-sm flex items-center gap-1 font-medium">
               &larr; Vitrine Dön
             </a>
             <span class="text-mistral-hairline">|</span>

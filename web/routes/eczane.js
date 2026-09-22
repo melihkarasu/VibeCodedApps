@@ -74,7 +74,7 @@ module.exports = function(pageTemplate) {
           line-height: 1.4;
         }
       </style>
-      <script src="/static/apps/eczane/app.js?v=3.5" defer></script>
+      <script src="/static/apps/eczane/app.js?v=4.0" defer></script>
     `;
 
     const content = `
@@ -82,7 +82,7 @@ module.exports = function(pageTemplate) {
       <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/app" class="text-mistral-slate hover:text-mistral-orange transition text-sm flex items-center gap-1 font-medium">
+            <a href="/" class="text-mistral-slate hover:text-mistral-orange transition text-sm flex items-center gap-1 font-medium">
               &larr; Vitrine Dön
             </a>
             <span class="text-mistral-hairline">|</span>
@@ -123,7 +123,7 @@ module.exports = function(pageTemplate) {
               onchange="onPresetLocationChange()" 
               class="w-full px-3 py-2.5 rounded-lg bg-white border border-mistral-hairline text-xs sm:text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange transition">
               <option value="gps">🎯 Canlı GPS Konumum</option>
-              <option value="konak" selected>📍 Konak Meydanı / Saat Kulesi</option>
+              <option value="konak" selected>📍 Konak, İzmir (C4PQ+8Q)</option>
               <option value="alsancak">📍 Alsancak / Kıbrıs Şehitleri</option>
               <option value="karsiyaka">📍 Karşıyaka Çarşı / İskele</option>
               <option value="bornova">📍 Bornova Meydan / Küçükpark</option>

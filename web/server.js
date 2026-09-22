@@ -26,73 +26,67 @@ app.get('/health', (req, res) => {
 app.use('/api', require('./routes/api'));
 
 // -------------------------------------------------------------
-// 2. Vitrin & SSO Auth Sayfaları
+// 2. Vitrin & SSO Auth Sayfaları (Ana Sayfa Doğrudan /)
 // -------------------------------------------------------------
-app.get(['/', '/app'], require('./routes/vitrin')(pageTemplate));
-app.get('/app/auth', require('./routes/auth')(pageTemplate));
+app.get('/', require('./routes/vitrin')(pageTemplate));
+app.get('/app', (req, res) => res.redirect(301, '/'));
+
+app.get(['/auth', '/app/auth'], require('./routes/auth')(pageTemplate));
 
 // -------------------------------------------------------------
-// 3. Mikro Uygulama Modülleri (/app/*)
+// 3. Mikro Uygulama Modülleri (Hem /:name hem /app/:name destekli)
 // -------------------------------------------------------------
-app.get('/app/qr-studio', require('./routes/qr')(pageTemplate));
-app.get('/app/doviz-cevirici', require('./routes/doviz')(pageTemplate));
-app.get('/app/lezzet-atolyesi', require('./routes/lezzet')(pageTemplate));
-app.get('/app/sozden-sarkiya', require('./routes/muzik')(pageTemplate));
-app.get('/app/kultur-arena', require('./routes/kultur')(pageTemplate));
-app.get('/app/dizi-rehberi', require('./routes/dizi')(pageTemplate));
-app.get('/app/sanat-galerisi', require('./routes/sanat')(pageTemplate));
-app.get('/app/tatil-takvimi', require('./routes/tatil')(pageTemplate));
-app.get('/app/karbon-metre', require('./routes/karbon')(pageTemplate));
-app.get('/app/tarim-hava', require('./routes/tarim')(pageTemplate));
-app.get('/app/klasik-kutuphane', require('./routes/kutuphane')(pageTemplate));
-app.get('/app/kuresel-gostergeler', require('./routes/refah')(pageTemplate));
-app.get('/app/oyun-radar', require('./routes/oyun')(pageTemplate));
-app.get('/app/sizinti-kontrol', require('./routes/sizinti')(pageTemplate));
-app.get('/app/dns-kontrol', require('./routes/dns')(pageTemplate));
-app.get('/app/github-analitik', require('./routes/github')(pageTemplate));
-app.get('/app/doga-sesleri', require('./routes/doga')(pageTemplate));
-app.get('/app/molekul-studyosu', require('./routes/molekul')(pageTemplate));
+const routeMap = [
+  { paths: ['/qr-studio', '/app/qr-studio'], route: './routes/qr' },
+  { paths: ['/doviz-cevirici', '/app/doviz-cevirici'], route: './routes/doviz' },
+  { paths: ['/lezzet-atolyesi', '/app/lezzet-atolyesi'], route: './routes/lezzet' },
+  { paths: ['/sozden-sarkiya', '/app/sozden-sarkiya'], route: './routes/muzik' },
+  { paths: ['/kultur-arena', '/app/kultur-arena'], route: './routes/kultur' },
+  { paths: ['/dizi-rehberi', '/app/dizi-rehberi'], route: './routes/dizi' },
+  { paths: ['/sanat-galerisi', '/app/sanat-galerisi'], route: './routes/sanat' },
+  { paths: ['/tatil-takvimi', '/app/tatil-takvimi'], route: './routes/tatil' },
+  { paths: ['/karbon-metre', '/app/karbon-metre'], route: './routes/karbon' },
+  { paths: ['/tarim-hava', '/app/tarim-hava'], route: './routes/tarim' },
+  { paths: ['/klasik-kutuphane', '/app/klasik-kutuphane'], route: './routes/kutuphane' },
+  { paths: ['/kuresel-gostergeler', '/app/kuresel-gostergeler'], route: './routes/refah' },
+  { paths: ['/oyun-radar', '/app/oyun-radar'], route: './routes/oyun' },
+  { paths: ['/sizinti-kontrol', '/app/sizinti-kontrol'], route: './routes/sizinti' },
+  { paths: ['/dns-kontrol', '/app/dns-kontrol'], route: './routes/dns' },
+  { paths: ['/github-analitik', '/app/github-analitik'], route: './routes/github' },
+  { paths: ['/doga-sesleri', '/app/doga-sesleri'], route: './routes/doga' },
+  { paths: ['/molekul-studyosu', '/app/molekul-studyosu'], route: './routes/molekul' },
+  { paths: ['/iss-takip', '/app/iss-takip'], route: './routes/iss' },
+  { paths: ['/cografya-atlasi', '/app/cografya-atlasi'], route: './routes/atlas' },
+  { paths: ['/hava-kalitesi', '/app/hava-kalitesi'], route: './routes/havakalite' },
+  { paths: ['/oyun-arsivi', '/app/oyun-arsivi'], route: './routes/oyunlib' },
+  { paths: ['/kripto-trend', '/app/kripto-trend'], route: './routes/kripto' },
+  { paths: ['/ip-konum', '/app/ip-konum'], route: './routes/ipgeo' },
+  { paths: ['/gida-alerji', '/app/gida-alerji'], route: './routes/gida' },
+  { paths: ['/dunya-radyo', '/app/dunya-radyo'], route: './routes/radyo' },
+  { paths: ['/sehir-bisiklet', '/app/sehir-bisiklet'], route: './routes/bisiklet' },
+  { paths: ['/renk-studyosu', '/app/renk-studyosu'], route: './routes/renk' },
+  { paths: ['/sayilar-atlasi', '/app/sayilar-atlasi'], route: './routes/sayilar' },
+  { paths: ['/evcil-rehber', '/app/evcil-rehber'], route: './routes/evcil' },
+  { paths: ['/deniz-dalga', '/app/deniz-dalga'], route: './routes/deniz' },
+  { paths: ['/unesco-miras', '/app/unesco-miras'], route: './routes/unesco' },
+  { paths: ['/sesli-kitap', '/app/sesli-kitap'], route: './routes/seslikitap' },
+  { paths: ['/nobel-arsivi', '/app/nobel-arsivi'], route: './routes/nobel' },
+  { paths: ['/oyun-rekorlari', '/app/oyun-rekorlari'], route: './routes/speedrun' },
+  { paths: ['/gitar-akor', '/app/gitar-akor'], route: './routes/akor' },
+  { paths: ['/siir-antolojisi', '/app/siir-antolojisi'], route: './routes/siir' },
+  { paths: ['/http-status', '/app/http-status'], route: './routes/httpstatus' },
+  { paths: ['/nobetci-eczane', '/app/nobetci-eczane'], route: './routes/eczane' },
+  { paths: ['/ilac-rehberi', '/app/ilac-rehberi'], route: './routes/ilac' },
+  { paths: ['/kas-anatomisi', '/app/kas-anatomisi'], route: './routes/egzersiz' },
+  { paths: ['/klinik-arastirma', '/app/klinik-arastirma'], route: './routes/klinik' },
+  { paths: ['/dso-saglik', '/app/dso-saglik'], route: './routes/dso' },
+  { paths: ['/lezzet-atolyesi', '/app/lezzet-atolyesi'], route: './routes/lezzet' }
+];
 
-// 9 Yeni Mikro Uygulama Rotası
-app.get('/app/iss-takip', require('./routes/iss')(pageTemplate));
-app.get('/app/cografya-atlasi', require('./routes/atlas')(pageTemplate));
-app.get('/app/hava-kalitesi', require('./routes/havakalite')(pageTemplate));
-app.get('/app/oyun-arsivi', require('./routes/oyunlib')(pageTemplate));
-app.get('/app/kripto-trend', require('./routes/kripto')(pageTemplate));
-app.get('/app/ip-konum', require('./routes/ipgeo')(pageTemplate));
-app.get('/app/gida-alerji', require('./routes/gida')(pageTemplate));
-app.get('/app/dunya-radyo', require('./routes/radyo')(pageTemplate));
-app.get('/app/sehir-bisiklet', require('./routes/bisiklet')(pageTemplate));
-app.get('/app/renk-studyosu', require('./routes/renk')(pageTemplate));
-app.get('/app/sayilar-atlasi', require('./routes/sayilar')(pageTemplate));
-app.get('/app/evcil-rehber', require('./routes/evcil')(pageTemplate));
-app.get('/app/deniz-dalga', require('./routes/deniz')(pageTemplate));
-
-// 4 Yeni Mikro Uygulama Rotası
-app.get('/app/unesco-miras', require('./routes/unesco')(pageTemplate));
-app.get('/app/sesli-kitap', require('./routes/seslikitap')(pageTemplate));
-app.get('/app/nobel-arsivi', require('./routes/nobel')(pageTemplate));
-app.get('/app/oyun-rekorlari', require('./routes/speedrun')(pageTemplate));
-
-// 3 Yeni Mikro Uygulama Rotası (Akor, Şiir, HTTP Status)
-app.get('/app/gitar-akor', require('./routes/akor')(pageTemplate));
-app.get('/app/siir-antolojisi', require('./routes/siir')(pageTemplate));
-app.get('/app/http-status', require('./routes/httpstatus')(pageTemplate));
-
-// İzmir Büyükşehir Belediyesi Nöbetçi Eczane Radarı
-app.get('/app/nobetci-eczane', require('./routes/eczane')(pageTemplate));
-
-// İlaç & Prospektüs Rehberi (openFDA & RxNorm)
-app.get('/app/ilac-rehberi', require('./routes/ilac')(pageTemplate));
-
-// İnteraktif Kas Anatomisi & Egzersiz Rehberi (workout-cool & Wger)
-app.get('/app/kas-anatomisi', require('./routes/egzersiz')(pageTemplate));
-
-// Tıp Bilimi & Klinik Araştırmalar Radarı (NIH ClinicalTrials.gov v2)
-app.get('/app/klinik-arastirma', require('./routes/klinik')(pageTemplate));
-
-// Küresel Sağlık Atlası (Dünya Sağlık Örgütü - WHO GHO OData API)
-app.get('/app/dso-saglik', require('./routes/dso')(pageTemplate));
+routeMap.forEach(item => {
+  const handler = require(item.route)(pageTemplate);
+  app.get(item.paths, handler);
+});
 
 // Sunucuyu Başlat
 app.listen(port, () => {
