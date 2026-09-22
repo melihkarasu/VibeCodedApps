@@ -1,37 +1,31 @@
-// İzmir Nöbetçi Eczane Radarı - Client Application
-// İzmir Büyükşehir Belediyesi Açık Veri Portalı & OpenStreetMap (Leaflet) Entegrasyonu
+// Nöbetçi Eczaneler (Türkiye Geneli) - Client Application
+// EczaneAPI.com (81 İl & İlçe) & OpenStreetMap (Leaflet) Entegrasyonu
 
 let eczaneMap = null;
 let userMarker = null;
 let userAccuracyCircle = null;
 let pharmacyLayerGroup = null;
 let allPharmacies = [];
-let districtsList = [];
+let allCities = [];
+let currentDistricts = [];
 
-// Varsayılan Konum: C4PQ+8Q Konak, İzmir (38.435813, 27.139438)
+// Varsayılan Konum: Anıtkabir / Çankaya / Ankara (39.925054, 32.836944)
 const DEFAULT_LOCATION = {
-  lat: 38.435813,
-  lng: 27.139438,
-  name: 'C4PQ+8Q Konak, İzmir',
+  lat: 39.925054,
+  lng: 32.836944,
+  name: 'Anıtkabir, Çankaya / Ankara',
+  city: 'ankara',
+  district: 'cankaya',
   isGPS: false
 };
 
 let currentUserLocation = { ...DEFAULT_LOCATION };
-
-const PRESET_LOCATIONS = {
-  konak: { lat: 38.435813, lng: 27.139438, name: 'C4PQ+8Q Konak, İzmir' },
-  alsancak: { lat: 38.4385, lng: 27.1432, name: 'Alsancak / Kıbrıs Şehitleri' },
-  karsiyaka: { lat: 38.4556, lng: 27.1102, name: 'Karşıyaka Çarşı / İskele' },
-  bornova: { lat: 38.4650, lng: 27.2162, name: 'Bornova Meydan / Küçükpark' },
-  buca: { lat: 38.3842, lng: 27.1645, name: 'Buca Heykel / Çevik Bir' },
-  balcova: { lat: 38.3902, lng: 27.0543, name: 'Balçova / Ekonomi Ünv.' },
-  cigli: { lat: 38.4965, lng: 27.0671, name: 'Çiğli / Anadolu Caddesi' },
-  gaziemir: { lat: 38.3245, lng: 27.1350, name: 'Gaziemir / Optimum' },
-  bayrakli: { lat: 38.4612, lng: 27.1725, name: 'Bayraklı / Adliye' }
-};
+let selectedCitySlug = 'ankara';
+let selectedDistrictSlug = 'cankaya';
 
 // Haversine Formülü ile İki Koordinat Arası Metre Cinsinden Mesafe
 function calculateDistanceMeters(lat1, lon1, lat2, lon2) {
+  if (!lat1 || !lon1 || !lat2 || !lon2) return null;
   const R = 6371000; // metre
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
@@ -58,13 +52,13 @@ function initMap() {
 
   eczaneMap = L.map('eczane-map', {
     center: [currentUserLocation.lat, currentUserLocation.lng],
-    zoom: 13,
+    zoom: 14,
     zoomControl: true
   });
 
   // OpenStreetMap Tile Katmanı
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors | İzmir BB Açık Veri',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors | EczaneAPI',
     maxZoom: 19
   }).addTo(eczaneMap);
 
@@ -72,9 +66,9 @@ function initMap() {
 
   // Haritaya tıklayarak konumu değiştirme özelliği
   eczaneMap.on('click', function(e) {
-    setUserLocation(e.latlng.lat, e.latlng.lng, 'Haritada İşaretlenen Konum', false);
+    setUserLocation(e.latlng.lat, e.latlng.lng, 'Haritada Seçilen Nokta', false);
     if (typeof showToast === 'function') {
-      showToast('Konumunuz seçilen noktaya güncellendi.', 'info');
+      showToast('Referans konumunuz seçilen noktaya taşındı.', 'info');
     }
   });
 
@@ -103,16 +97,19 @@ function updateUserMapMarker() {
 
   userMarker.bindPopup(`
     <div style="font-family: inherit; font-size: 13px;">
-      <div style="font-weight: 700; color: #1f1f1f; margin-bottom: 2px;">🔵 Referans Konumunuz</div>
-      <div style="color: #4a4a4a; font-size: 12px;">${currentUserLocation.name}</div>
-      <div style="color: #8a8a8a; font-size: 11px; margin-top: 4px;">En yakın nöbetçi eczaneler bu noktaya göre hesaplanır.</div>
+      <div style="font-weight: 700; color: #1f1f1f; margin-bottom: 2px;">🔵 Referans Konum</div>
+      <div style="color: #4a4a4a; font-size: 12px;">${escapeHtml(currentUserLocation.name)}</div>
+      <div style="color: #8a8a8a; font-size: 11px; margin-top: 4px;">En yakın nöbetçi eczaneler bu merkeze göre hesaplanır.</div>
     </div>
   `);
 }
 
 // Konumu Güncelle ve Mesafeleri Yeniden Hesapla
 function setUserLocation(lat, lng, name, isGPS) {
-  currentUserLocation = { lat, lng, name, isGPS };
+  currentUserLocation.lat = lat;
+  currentUserLocation.lng = lng;
+  currentUserLocation.name = name;
+  currentUserLocation.isGPS = isGPS;
 
   try {
     localStorage.setItem('vibe_eczane_loc', JSON.stringify({ lat, lng, name, isGPS }));
@@ -122,38 +119,31 @@ function setUserLocation(lat, lng, name, isGPS) {
   const locLabel = document.getElementById('stat-loc-label');
   const locSource = document.getElementById('stat-loc-source');
   if (locLabel) locLabel.innerText = name;
-  if (locSource) locSource.innerText = isGPS ? 'GPS Canlı Uydu Konumu' : 'Referans Merkez Nokta';
-
-  if (!isGPS) {
-    const sel = document.getElementById('select-preset-location');
-    if (sel && sel.value === 'gps') {
-      sel.value = 'konak';
-    }
-  }
+  if (locSource) locSource.innerText = isGPS ? 'GPS Canlı Uydu Konumu' : 'Referans Nokta';
 
   updateUserMapMarker();
   refreshPharmacyData();
 }
 
-// Tek "Konumum" Butonu Tıklama İşleyicisi
+// "Konumum" Butonu Tıklama İşleyicisi
 function handleMyLocationClick() {
   if (currentUserLocation.isGPS && eczaneMap) {
     eczaneMap.setView([currentUserLocation.lat, currentUserLocation.lng], 14, { animate: true });
     if (userMarker) userMarker.openPopup();
     if (typeof showToast === 'function') {
-      showToast('Konumunuza odaklanıldı.', 'info');
+      showToast('Mevcut GPS konumunuza odaklanıldı.', 'info');
     }
   } else {
     requestUserLocation(false);
   }
 }
 
-// Kullanıcının Canlı GPS Konumunu İste (Yalnızca Cihaz Konum Servisleri)
+// Kullanıcının Canlı GPS Konumunu İste (Cihaz Konum Servisleri)
 function requestUserLocation(silent = false) {
   const btn = document.getElementById('btn-get-gps');
   const originalHtml = '<i class="fa-solid fa-location-crosshairs text-base"></i><span>Konumum</span>';
   if (btn && !silent) {
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Konum Alınıyor...</span>';
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Alınıyor...</span>';
     btn.disabled = true;
   }
 
@@ -163,9 +153,10 @@ function requestUserLocation(silent = false) {
       btn.innerHTML = originalHtml;
       btn.disabled = false;
     }
+    // Konum alınamıyorsa varsayılan Anıtkabir
     setUserLocation(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng, DEFAULT_LOCATION.name, false);
     if (!silent && typeof showToast === 'function') {
-      showToast('Cihazınız konum servisini desteklemiyor. Varsayılan konum (C4PQ+8Q Konak, İzmir) kullanılıyor.', 'warning');
+      showToast('Cihazınız konum servisini desteklemiyor. Varsayılan konum (Anıtkabir) yüklendi.', 'warning');
     }
     return;
   }
@@ -180,7 +171,6 @@ function requestUserLocation(silent = false) {
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
 
-      // Doğruluk dairesi çiz
       if (userAccuracyCircle && eczaneMap) {
         eczaneMap.removeLayer(userAccuracyCircle);
       }
@@ -194,35 +184,32 @@ function requestUserLocation(silent = false) {
         }).addTo(eczaneMap);
       }
 
-      const sel = document.getElementById('select-preset-location');
-      if (sel) sel.value = 'gps';
-
       setUserLocation(lat, lng, 'Mevcut Konumunuz', true);
       if (eczaneMap) {
         eczaneMap.setView([lat, lng], 14, { animate: true });
       }
 
       if (!silent && typeof showToast === 'function') {
-        showToast('Konumunuz cihaz servisleri üzerinden başarıyla tespit edildi.', 'success');
+        showToast('Canlı GPS konumunuz başarıyla tespit edildi.', 'success');
       }
     },
     function(err) {
-      console.warn('GPS Geolocation Uyarısı (İzin verilmedi veya erişilemedi):', err);
+      console.warn('GPS Geolocation Uyarısı:', err);
       if (btn && !silent) {
         btn.innerHTML = originalHtml;
         btn.disabled = false;
       }
 
-      // Konum servislerine izin verilmemişse varsayılan konuma yerleştir (C4PQ+8Q Konak, İzmir)
+      // Konum alınamıyorsa varsayılan konum olarak Anıtkabir yüklenir
       setUserLocation(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng, DEFAULT_LOCATION.name, false);
       if (eczaneMap) {
         eczaneMap.setView([DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng], 14, { animate: true });
       }
 
       if (!silent && typeof showToast === 'function') {
-        let msg = 'Konum servislerine erişilemedi. Varsayılan konum (C4PQ+8Q Konak, İzmir) kullanılıyor.';
+        let msg = 'Konum servislerine erişilemedi. Varsayılan konum (Anıtkabir) yüklendi.';
         if (err.code === 1) {
-          msg = 'Konum izni reddedildi. Varsayılan konum (C4PQ+8Q Konak, İzmir) gösteriliyor.';
+          msg = 'Konum izni reddedildi. Varsayılan konum olarak Anıtkabir / Çankaya gösteriliyor.';
         }
         showToast(msg, 'warning');
       }
@@ -231,76 +218,155 @@ function requestUserLocation(silent = false) {
   );
 }
 
-// Hazır Semt / Merkez Seçimi Değiştiğinde
-function onPresetLocationChange() {
-  const val = document.getElementById('select-preset-location').value;
-  if (val === 'gps') {
-    requestUserLocation();
-  } else if (PRESET_LOCATIONS[val]) {
-    const p = PRESET_LOCATIONS[val];
-    if (userAccuracyCircle) {
-      eczaneMap.removeLayer(userAccuracyCircle);
-      userAccuracyCircle = null;
+// -------------------------------------------------------------
+// İl ve İlçe Yükleme Fonksiyonları
+// -------------------------------------------------------------
+
+// 1. İlleri API'den Yükle
+async function loadCities() {
+  const citySelect = document.getElementById('select-city');
+  if (!citySelect) return;
+
+  try {
+    const res = await fetch('/api/nobetci-eczane/cities');
+    const data = await res.json();
+
+    if (data.success && Array.isArray(data.cities)) {
+      allCities = data.cities;
+      citySelect.innerHTML = allCities.map(c => 
+        `<option value="${c.slug}" ${c.slug === selectedCitySlug ? 'selected' : ''}>📍 ${c.name} (${c.plateCode})</option>`
+      ).join('');
+
+      await loadDistricts(selectedCitySlug);
     }
-    setUserLocation(p.lat, p.lng, p.name, false);
-    eczaneMap.setView([p.lat, p.lng], 13, { animate: true });
+  } catch(e) {
+    console.error('İller yüklenemedi:', e);
   }
 }
 
-// İzmir BB API'den Nöbetçi Eczaneleri Çek
-async function fetchDutyPharmacies() {
-  const statusEl = document.getElementById('eczane-status-label');
-  if (statusEl) statusEl.innerText = 'Eczaneler Güncelleniyor...';
+// 2. İlçeleri API'den Yükle
+async function loadDistricts(citySlug) {
+  const districtSelect = document.getElementById('select-district');
+  if (!districtSelect) return;
+
+  districtSelect.innerHTML = '<option value="">İlçeler Yükleniyor...</option>';
 
   try {
-    const res = await fetch('/api/nobetci-eczane');
+    const res = await fetch(`/api/nobetci-eczane/districts?city=${encodeURIComponent(citySlug)}`);
+    const data = await res.json();
+
+    if (data.success && Array.isArray(data.districts)) {
+      currentDistricts = data.districts;
+      districtSelect.innerHTML = '<option value="">Tüm İlçeler</option>' +
+        currentDistricts.map(d => 
+          `<option value="${d.slug}" ${d.slug === selectedDistrictSlug ? 'selected' : ''}>${d.name}</option>`
+        ).join('');
+
+      // Seçili ilçe varsa onu koru
+      if (selectedDistrictSlug && currentDistricts.some(d => d.slug === selectedDistrictSlug)) {
+        districtSelect.value = selectedDistrictSlug;
+      } else {
+        selectedDistrictSlug = '';
+      }
+    }
+  } catch(e) {
+    console.error('İlçeler yüklenemedi:', e);
+    districtSelect.innerHTML = '<option value="">İlçeler Alınamadı</option>';
+  }
+}
+
+// İl Değiştiğinde
+async function onCityChange() {
+  const citySelect = document.getElementById('select-city');
+  selectedCitySlug = citySelect.value;
+  selectedDistrictSlug = ''; // İlçeyi sıfırla
+
+  await loadDistricts(selectedCitySlug);
+  fetchDutyPharmacies();
+}
+
+// İlçe Değiştiğinde
+function onDistrictChange() {
+  const districtSelect = document.getElementById('select-district');
+  selectedDistrictSlug = districtSelect.value;
+  fetchDutyPharmacies();
+}
+
+// Arama Girişi
+function onSearchInput() {
+  refreshPharmacyData();
+}
+
+// -------------------------------------------------------------
+// Nöbetçi Eczaneleri Çekme
+// -------------------------------------------------------------
+async function fetchDutyPharmacies() {
+  const statusEl = document.getElementById('eczane-status-label');
+  const cityLabelEl = document.getElementById('stat-duty-city-label');
+  if (statusEl) statusEl.innerText = 'Eczaneler Güncelleniyor...';
+
+  const cityName = document.getElementById('select-city')?.selectedOptions[0]?.text || selectedCitySlug;
+  if (cityLabelEl) cityLabelEl.innerText = `${cityName} Genelinde`;
+
+  try {
+    let url = `/api/nobetci-eczane?city=${encodeURIComponent(selectedCitySlug)}`;
+    if (selectedDistrictSlug) {
+      url += `&district=${encodeURIComponent(selectedDistrictSlug)}`;
+    }
+    if (currentUserLocation.lat && currentUserLocation.lng) {
+      url += `&lat=${currentUserLocation.lat}&lng=${currentUserLocation.lng}`;
+    }
+
+    const res = await fetch(url);
     const data = await res.json();
 
     if (!data.success) {
-      throw new Error(data.error || 'API yanıt veremedi');
+      throw new Error(data.error || 'Nöbetçi eczaneler alınamadı');
     }
 
     allPharmacies = data.pharmacies || [];
-    districtsList = data.districts || [];
-
-    // İlçe dropdown'ını doldur
-    populateDistrictSelect(districtsList);
 
     // Tarih istatistiği
-    if (allPharmacies.length > 0 && allPharmacies[0].date) {
-      const d = new Date(allPharmacies[0].date);
+    if (data.dutyDate) {
+      const d = new Date(data.dutyDate);
       const options = { day: 'numeric', month: 'long', year: 'numeric' };
-      document.getElementById('stat-duty-date').innerText = d.toLocaleDateString('tr-TR', options);
+      const dateStr = d.toLocaleDateString('tr-TR', options);
+      const dateEl = document.getElementById('stat-duty-date');
+      if (dateEl) dateEl.innerText = dateStr !== 'Invalid Date' ? dateStr : 'Bugün';
     }
 
-    document.getElementById('stat-total-pharmacies').innerText = allPharmacies.length;
-    if (statusEl) statusEl.innerText = 'İzmir BB Açık Veri Canlı';
+    const totalEl = document.getElementById('stat-total-pharmacies');
+    if (totalEl) totalEl.innerText = allPharmacies.length;
+    if (statusEl) statusEl.innerText = 'Türkiye Geneli Canlı Nöbet';
 
     refreshPharmacyData();
+
+    // Haritayı eczanelere göre odakla
+    if (allPharmacies.length > 0 && eczaneMap) {
+      setTimeout(() => fitAllPharmacies(), 300);
+    }
   } catch (err) {
     console.error('Nöbetçi eczaneler alınırken hata:', err);
-    if (statusEl) statusEl.innerText = '● Liste Alınamadı (Dünün Verisi Gösterilmez)';
-    
-    // Haritadaki eski/dünden kalan işaretçileri tamamen kaldır
+    if (statusEl) statusEl.innerText = '● Veri Alınamadı';
+
     if (pharmacyLayerGroup) pharmacyLayerGroup.clearLayers();
     allPharmacies = [];
 
-    const dateStatEl = document.getElementById('stat-duty-date');
-    if (dateStatEl) dateStatEl.innerText = 'Veri Alınamadı';
-    const totalStatEl = document.getElementById('stat-total-pharmacies');
-    if (totalStatEl) totalStatEl.innerText = '0';
+    const totalEl = document.getElementById('stat-total-pharmacies');
+    if (totalEl) totalEl.innerText = '0';
+    const nearestDistEl = document.getElementById('stat-nearest-dist');
+    if (nearestDistEl) nearestDistEl.innerText = '--';
+    const nearestNameEl = document.getElementById('stat-nearest-name');
+    if (nearestNameEl) nearestNameEl.innerText = 'Bulunamadı';
 
     const errorBanner = `
       <div class="col-span-full p-6 rounded-2xl bg-amber-50 border-2 border-amber-400 text-amber-950 space-y-3">
         <div class="flex items-center gap-2">
           <span class="text-2xl">⚠️</span>
-          <h3 class="font-bold text-base text-amber-900">Bugünün Nöbetçi Eczane Listesi Alınamadı</h3>
+          <h3 class="font-bold text-base text-amber-900">Bu Bölge İçin Nöbetçi Listesi Alınamadı</h3>
         </div>
         <p class="text-xs leading-relaxed text-amber-900">
-          Nöbetçi eczaneler her gün değiştiğinden, hastalarımızın kapalı eczanelere yönlendirilmesini önlemek adına <strong>dünün veya geçmiş günlerin nöbetçi listeleri kesinlikle gösterilmemektedir</strong>.
-        </p>
-        <p class="text-[11px] text-amber-800">
-          Belediye açık veri sunucusunda anlık bir gecikme yaşanıyor olabilir. Lütfen birazdan tekrar deneyiniz veya acil ilaç ihtiyaçlarınız için resmi sağlık hatlarını arayınız.
+          Seçilen il veya ilçe için nöbetçi eczane kayıtları henüz yayınlanmamış veya API kotasında anlık bir gecikme yaşanıyor olabilir.
         </p>
         <div class="pt-2 flex flex-wrap items-center gap-2 text-xs">
           <button type="button" onclick="fetchDutyPharmacies()" class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold transition flex items-center gap-1.5 cursor-pointer shadow-xs">
@@ -322,61 +388,38 @@ async function fetchDutyPharmacies() {
     const listEl = document.getElementById('nearest-pharmacies-list');
     if (listEl) listEl.innerHTML = errorBanner;
 
-    const gridEl = document.getElementById('pharmacies-grid');
-    if (gridEl) gridEl.innerHTML = errorBanner;
+    const boxEl = document.getElementById('all-pharmacies-box');
+    if (boxEl) boxEl.innerHTML = errorBanner;
   }
 }
 
-// İlçe Select Menüsünü Doldur
-function populateDistrictSelect(districts) {
-  const select = document.getElementById('select-district');
-  if (!select) return;
-
-  const currentVal = select.value;
-  select.innerHTML = '<option value="">Tüm İlçeler / Bölgeler (' + districts.length + ' Bölge)</option>' +
-    districts.map(d => `<option value="${d}">${d}</option>`).join('');
-
-  if (currentVal && districts.includes(currentVal)) {
-    select.value = currentVal;
-  }
-}
-
-// İlçe Filtresi Değişince
-function onDistrictFilterChange() {
-  refreshPharmacyData();
-}
-
-// Arama Girişi Yapılınca
-function onSearchInput() {
-  refreshPharmacyData();
-}
-
-// Eczane Verilerini Filtrele, Mesafeleri Hesapla, Sırala ve Haritaya Bas
+// -------------------------------------------------------------
+// Filtreleme, Sıralama ve Render
+// -------------------------------------------------------------
 function refreshPharmacyData() {
-  if (!allPharmacies || allPharmacies.length === 0) return;
+  if (!allPharmacies) return;
 
-  const districtFilter = (document.getElementById('select-district')?.value || '').trim().toUpperCase();
   const searchFilter = (document.getElementById('search-input')?.value || '').trim().toLowerCase();
 
-  // Her eczaneye referans kullanıcı konumuna olan mesafeyi hesapla
+  // Her eczaneye mesafeyi yeniden hesapla
   const processed = allPharmacies.map(pharmacy => {
-    const distance = calculateDistanceMeters(
-      currentUserLocation.lat,
-      currentUserLocation.lng,
-      pharmacy.latitude,
-      pharmacy.longitude
-    );
+    let distance = null;
+    if (currentUserLocation.lat && currentUserLocation.lng && pharmacy.latitude && pharmacy.longitude) {
+      distance = calculateDistanceMeters(
+        currentUserLocation.lat,
+        currentUserLocation.lng,
+        pharmacy.latitude,
+        pharmacy.longitude
+      );
+    }
     return {
       ...pharmacy,
       calculatedDistance: distance
     };
   });
 
-  // Filtreleme (İlçe ve Arama)
+  // İsim veya Adres ile arama
   let filtered = processed.filter(p => {
-    if (districtFilter && p.district.toUpperCase() !== districtFilter) {
-      return false;
-    }
     if (searchFilter) {
       const matchName = (p.name || '').toLowerCase().includes(searchFilter);
       const matchAddr = (p.address || '').toLowerCase().includes(searchFilter);
@@ -387,31 +430,28 @@ function refreshPharmacyData() {
   });
 
   // Mesafeye göre küçükten büyüğe sırala
-  filtered.sort((a, b) => a.calculatedDistance - b.calculatedDistance);
+  filtered.sort((a, b) => (a.calculatedDistance ?? Infinity) - (b.calculatedDistance ?? Infinity));
 
-  // En Yakın 5 Eczane (Filtrelenmiş sonuçlar içinden)
+  // En Yakın 5 Eczane
   const top5 = filtered.slice(0, 5);
 
-  // En Yakın Eczane İstatistiğini Güncelle
-  if (top5.length > 0) {
+  if (top5.length > 0 && top5[0].calculatedDistance !== null) {
     document.getElementById('stat-nearest-dist').innerText = formatDistance(top5[0].calculatedDistance);
-    document.getElementById('stat-nearest-name').innerText = `${top5[0].name} (${top5[0].district})`;
+    document.getElementById('stat-nearest-name').innerText = `${top5[0].name} (${top5[0].district || top5[0].city})`;
+  } else if (top5.length > 0) {
+    document.getElementById('stat-nearest-dist').innerText = '--';
+    document.getElementById('stat-nearest-name').innerText = top5[0].name;
   } else {
     document.getElementById('stat-nearest-dist').innerText = '--';
     document.getElementById('stat-nearest-name').innerText = 'Eczane Bulunamadı';
   }
 
-  // En Yakın 5 Eczaneyi Render Et
   renderTop5List(top5);
-
-  // Kalan / Diğer Eczaneleri Render Et
   renderAllPharmaciesList(filtered);
-
-  // Haritadaki Markerları Güncelle
   renderMapMarkers(filtered, top5);
 }
 
-// En Yakın 5 Eczane Listesini Render Et
+// En Yakın 5 Eczaneyi Render Et
 function renderTop5List(top5) {
   const container = document.getElementById('nearest-pharmacies-list');
   if (!container) return;
@@ -443,7 +483,7 @@ function renderTop5List(top5) {
                 ${escapeHtml(item.name)}
               </h4>
               <span class="text-[11px] font-semibold text-mistral-stone bg-mistral-cream px-2 py-0.5 rounded border border-mistral-beige-deep inline-block mt-0.5">
-                ${escapeHtml(item.district)}
+                ${escapeHtml(item.district)} / ${escapeHtml(item.city)}
               </span>
             </div>
           </div>
@@ -467,7 +507,6 @@ function renderTop5List(top5) {
         ` : ''}
 
         <div class="flex items-center justify-between gap-2 pt-2 border-t border-mistral-hairline text-xs">
-          <!-- Telefon Butonu -->
           ${item.phone ? `
             <a href="tel:${cleanPhone}" class="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 font-semibold flex items-center gap-1 transition">
               <i class="fa-solid fa-phone text-[10px]"></i> ${escapeHtml(item.phone)}
@@ -475,15 +514,12 @@ function renderTop5List(top5) {
           ` : '<span class="text-mistral-stone text-[11px]">Telefon Yok</span>'}
 
           <div class="flex items-center gap-1.5">
-            <!-- Haritada Göster Butonu -->
             <button 
               type="button" 
               onclick="focusPharmacyOnMap(${item.latitude}, ${item.longitude}, '${escapeHtml(item.name)}')" 
               class="px-2.5 py-1 rounded-md bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep font-medium transition cursor-pointer">
               <i class="fa-solid fa-eye text-[10px]"></i> Harita
             </button>
-
-            <!-- Yol Tarifi Butonu -->
             <a 
               href="${mapsUrl}" 
               target="_blank" 
@@ -498,7 +534,7 @@ function renderTop5List(top5) {
   }).join('');
 }
 
-// Diğer Nöbetçi Eczaneler Listesi (Tüm Liste)
+// Tüm Eczaneler Listesi
 function renderAllPharmaciesList(filteredList) {
   const container = document.getElementById('all-pharmacies-box');
   const countEl = document.getElementById('filtered-pharmacies-count');
@@ -508,13 +544,13 @@ function renderAllPharmaciesList(filteredList) {
   if (filteredList.length === 0) {
     container.innerHTML = `
       <div class="p-3 text-center text-xs text-mistral-stone">
-        Gösterilecek eczane yok.
+        Gösterilecek nöbetçi eczane bulunamadı.
       </div>
     `;
     return;
   }
 
-  container.innerHTML = filteredList.map((item, idx) => {
+  container.innerHTML = filteredList.map(item => {
     const cleanPhone = (item.phone || '').replace(/[^0-9]/g, '');
     const dist = formatDistance(item.calculatedDistance);
     return `
@@ -531,7 +567,7 @@ function renderAllPharmaciesList(filteredList) {
           <button 
             type="button" 
             onclick="focusPharmacyOnMap(${item.latitude}, ${item.longitude}, '${escapeHtml(item.name)}')" 
-            class="text-mistral-slate hover:text-mistral-orange p-1" title="Haritada Odaklan">
+            class="text-mistral-slate hover:text-mistral-orange p-1 cursor-pointer" title="Haritada Odaklan">
             <i class="fa-solid fa-location-crosshairs"></i>
           </button>
           ${item.phone ? `
@@ -545,7 +581,6 @@ function renderAllPharmaciesList(filteredList) {
   }).join('');
 }
 
-// Tüm Liste Akordiyonunu Aç/Kapa
 function toggleAllPharmaciesList() {
   const box = document.getElementById('all-pharmacies-box');
   const btn = document.getElementById('btn-toggle-all');
@@ -560,13 +595,12 @@ function toggleAllPharmaciesList() {
   }
 }
 
-// Haritadaki Markerları Oluştur ve Çiz
+// Haritadaki Markerları Çiz
 function renderMapMarkers(filteredPharmacies, top5) {
   if (!pharmacyLayerGroup) return;
 
   pharmacyLayerGroup.clearLayers();
 
-  // Top 5 ID seti
   const top5IdSet = new Set(top5.map(p => p.id));
   const top5RankMap = new Map();
   top5.forEach((p, index) => {
@@ -574,6 +608,8 @@ function renderMapMarkers(filteredPharmacies, top5) {
   });
 
   filteredPharmacies.forEach(item => {
+    if (!item.latitude || !item.longitude) return;
+
     const isTop5 = top5IdSet.has(item.id);
     const rank = top5RankMap.get(item.id);
 
@@ -588,7 +624,7 @@ function renderMapMarkers(filteredPharmacies, top5) {
       iconHtml = `<span>${rank}</span>`;
       iconSize = [32, 32];
       iconAnchor = [16, 16];
-      zIndex = 500 - rank; // 1 numara en üstte görünsün
+      zIndex = 500 - rank;
     } else {
       iconClass = 'pharmacy-badge-marker pharmacy-standard-marker';
       iconHtml = '<span>+</span>';
@@ -620,7 +656,7 @@ function renderMapMarkers(filteredPharmacies, top5) {
           ${isTop5 ? `<span style="background: #ecfdf5; color: #047857; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 9999px; border: 1px solid #a7f3d0;">#${rank} En Yakın</span>` : ''}
         </div>
         <div style="font-size: 12px; color: #fa520f; font-weight: 600; margin-bottom: 4px;">
-          📍 ${escapeHtml(item.district)} &bull; ${distStr}
+          📍 ${escapeHtml(item.district)} / ${escapeHtml(item.city)} &bull; ${distStr}
         </div>
         <div style="font-size: 12px; color: #4a4a4a; margin-bottom: 8px; line-height: 1.3;">
           ${escapeHtml(item.address)}
@@ -648,16 +684,14 @@ function renderMapMarkers(filteredPharmacies, top5) {
   });
 }
 
-// Haritada Belirli Bir Eczaneye Odaklan
 function focusPharmacyOnMap(lat, lng, name) {
-  if (!eczaneMap) return;
+  if (!eczaneMap || !lat || !lng) return;
 
   eczaneMap.flyTo([lat, lng], 16, {
     animate: true,
     duration: 1.0
   });
 
-  // İlgili marker'ın popup'ını aç
   if (pharmacyLayerGroup) {
     pharmacyLayerGroup.eachLayer(layer => {
       const pos = layer.getLatLng();
@@ -668,7 +702,6 @@ function focusPharmacyOnMap(lat, lng, name) {
   }
 }
 
-// Kullanıcının Mevcut Referans Konumuna Odaklan
 function recenterOnUser() {
   if (!eczaneMap) return;
   eczaneMap.flyTo([currentUserLocation.lat, currentUserLocation.lng], 14, { animate: true });
@@ -677,19 +710,18 @@ function recenterOnUser() {
   }
 }
 
-// Tüm Eczaneleri Kapsayacak Şekilde Haritayı Genişlet
 function fitAllPharmacies() {
   if (!eczaneMap || !pharmacyLayerGroup) return;
 
-  const group = new L.featureGroup(pharmacyLayerGroup.getLayers());
+  const layers = pharmacyLayerGroup.getLayers();
+  if (layers.length === 0) return;
+
+  const group = new L.featureGroup(layers);
   if (userMarker) group.addLayer(userMarker);
 
-  if (group.getLayers().length > 0) {
-    eczaneMap.fitBounds(group.getBounds().pad(0.08), { animate: true });
-  }
+  eczaneMap.fitBounds(group.getBounds().pad(0.08), { animate: true });
 }
 
-// HTML Kaçış Yardımcısı
 function escapeHtml(text) {
   if (!text) return '';
   return String(text)
@@ -700,19 +732,19 @@ function escapeHtml(text) {
     .replace(/'/g, '&#039;');
 }
 
-// Tüm global fonksiyonları window üzerine açıkça bağla (Cache ve scope sorunlarını önler)
+// Window global fonksiyon bağlamaları
 window.handleMyLocationClick = handleMyLocationClick;
 window.requestUserLocation = requestUserLocation;
-window.onPresetLocationChange = onPresetLocationChange;
-window.onDistrictFilterChange = onDistrictFilterChange;
+window.onCityChange = onCityChange;
+window.onDistrictChange = onDistrictChange;
 window.onSearchInput = onSearchInput;
 window.focusPharmacyOnMap = focusPharmacyOnMap;
 window.recenterOnUser = recenterOnUser;
 window.fitAllPharmacies = fitAllPharmacies;
 window.toggleAllPharmaciesList = toggleAllPharmaciesList;
 
-// Sayfa Yüklendiğinde Başlat
-document.addEventListener('DOMContentLoaded', () => {
+// Başlatıcı
+document.addEventListener('DOMContentLoaded', async () => {
   // Önceki kayıtlı konum varsa ve GPS konumuysa yükle
   try {
     const savedLoc = localStorage.getItem('vibe_eczane_loc');
@@ -727,16 +759,18 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch(e) {}
 
   initMap();
-  fetchDutyPharmacies();
 
-  // Otomatik Konum Belirleme:
-  // Yalnızca cihazın konum servisleri kullanılır. İzin verilmişse GPS çağrılır,
-  // izin yoksa/verilmemişse varsayılan konum (C4PQ+8Q Konak, İzmir) kullanılır.
+  // 1. İlleri ve Çankaya / Ankara varsayılanını yükle
+  await loadCities();
+  await fetchDutyPharmacies();
+
+  // 2. Canlı GPS Kontrolü (İzin verilmişse otomatik GPS al; verilmemişse Anıtkabir kalır)
   if (navigator.permissions && navigator.permissions.query) {
     navigator.permissions.query({ name: 'geolocation' }).then(permissionStatus => {
       if (permissionStatus.state === 'granted') {
         requestUserLocation(true);
       } else {
+        // İzin yoksa veya sorulmamışsa varsayılan Anıtkabir konumu korunur
         setUserLocation(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng, DEFAULT_LOCATION.name, false);
       }
       permissionStatus.onchange = function() {

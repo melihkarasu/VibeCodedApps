@@ -48,6 +48,7 @@ services:
       - SUPABASE_ANON_KEY=${ANON_KEY}
       - SERVICE_ROLE_KEY=${SERVICE_ROLE_KEY}
       - JWT_SECRET=${JWT_SECRET}
+      - ECZANE_API_KEY=${ECZANE_API_KEY}
     networks:
       - vibe-network
     expose:
