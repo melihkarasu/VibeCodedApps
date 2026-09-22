@@ -32,6 +32,7 @@ app.get('/', require('./routes/vitrin')(pageTemplate));
 app.get('/app', (req, res) => res.redirect(301, '/'));
 
 app.get(['/auth', '/app/auth'], require('./routes/auth')(pageTemplate));
+app.get(['/admin', '/app/admin'], require('./routes/admin')(pageTemplate));
 
 // -------------------------------------------------------------
 // 3. Mikro Uygulama Modülleri (Hem /:name hem /app/:name destekli)

@@ -51,6 +51,7 @@ router.use('/', require('./api/httpstatus'));
 router.use('/', require('./api/auth'));
 router.use('/', require('./api/favorites'));
 router.use('/', require('./api/user-data'));
+router.use('/admin', require('./api/admin'));
 router.use('/', require('./api/eczane'));
 router.use('/', require('./api/ilac'));
 router.use('/', require('./api/egzersiz'));
