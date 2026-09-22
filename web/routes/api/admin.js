@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const SUPABASE_URL = process.env.APP_URL || 'http://0.0.0.0:8088';
-const SERVICE_ROLE_KEY = ***
+const SERVICE_ROLE_KEY = process.env.SERVICE_ROLE_KEY;
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || 'REDACTED')
   .split(',')
   .map(e => e.trim().toLowerCase());
@@ -12,8 +12,8 @@ async function supabaseRequest(path, options = {}) {
   const url = SUPABASE_URL.replace(/\/app$/, '') + '/rest/v1' + path;
   const headers = {
     'Content-Type': 'application/json',
-    'apikey': ***,
-    'Authorization': '***' *** SERVICE_ROLE_KEY,
+    'apikey': SERVICE_ROLE_KEY,
+    'Authorization': 'Bearer ' + SERVICE_ROLE_KEY,
     'Prefer': 'return=representation',
     ...options.headers
   };
@@ -27,13 +27,13 @@ async function supabaseRequest(path, options = {}) {
 
 // Admin Yetki Doğrulama Middleware
 function adminGuard(req, res, next) {
-  let token = ***;
+  let token = null;
   const authHeader = req.headers.authorization;
   if (authHeader && authHeader.startsWith('Bearer ')) {
-    token = ***);
+    token = authHeader.slice(7);
   } else if (req.headers.cookie) {
     const match = req.headers.cookie.match(/vibe_token=([^;]+)/);
-    if (match) token = ***]);
+    if (match) token = decodeURIComponent(match[1]);
   }
 
   if (!token) {
