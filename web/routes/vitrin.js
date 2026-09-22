@@ -629,10 +629,7 @@ module.exports = function(pageTemplate) {
         // Tüm Uygulama Tanımları
         const APPS_DATA = ${JSON.stringify(appsMap)};
 
-        function getAuthUser() {
-          if (window.getAuthUser) {
-            return window.getAuthUser();
-          }
+        function getVitrinUser() {
           try {
             const raw = localStorage.getItem('vibe_user');
             return raw ? JSON.parse(raw) : null;
@@ -643,7 +640,7 @@ module.exports = function(pageTemplate) {
 
         // Senkron (localStorage) favori listesi
         function getFavoritesSync() {
-          const user = getAuthUser();
+          const user = getVitrinUser();
           const candidateKeys = ['vibe_favorite_apps', 'vibe_favs_user'];
           if (user && user.id) candidateKeys.push('vibe_favs_' + user.id);
           if (user && user.email) candidateKeys.push('vibe_favs_' + user.email);
@@ -669,7 +666,7 @@ module.exports = function(pageTemplate) {
         let isFetchingFavorites = false;
 
         async function fetchFavoritesFromAPI() {
-          const user = getAuthUser();
+          const user = getVitrinUser();
           if (!user) return;
           const token = localStorage.getItem('vibe_token');
           if (!token) return;
@@ -728,7 +725,7 @@ module.exports = function(pageTemplate) {
         }
 
         function saveFavorites(list) {
-          const user = getAuthUser();
+          const user = getVitrinUser();
           try {
             const json = JSON.stringify(list);
             if (user && user.id) localStorage.setItem('vibe_favs_' + user.id, json);
