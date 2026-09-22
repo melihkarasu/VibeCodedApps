@@ -12,42 +12,6 @@ const pageTemplate = (title, content, extraHead = '') => `
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <!-- Precompiled Tailwind CSS (Zero Runtime / No CDN Delay) -->
   <link rel="stylesheet" href="/static/css/tailwind.min.css">
-  <script data-cfasync="false" src="https://cdn.tailwindcss.com"></script>
-  <script data-cfasync="false">
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            mistral: {
-              orange: '#fa520f',
-              'orange-deep': '#cc3a05',
-              cream: '#fff8e0',
-              'cream-light': '#fffaeb',
-              'cream-deeper': '#fff0c2',
-              'beige-deep': '#e6d5a8',
-              canvas: '#fffdf9',
-              surface: '#fafafa',
-              ink: '#1f1f1f',
-              'ink-tint': '#3d3d3d',
-              charcoal: '#2c2c2c',
-              slate: '#4a4a4a',
-              steel: '#6a6a6a',
-              stone: '#8a8a8a',
-              hairline: '#e5e5e5',
-              'hairline-soft': '#ededed',
-              sunshine: '#ffd06a',
-              yellow: '#ffd900'
-            }
-          },
-          fontFamily: {
-            serif: ['Newsreader', 'Georgia', 'serif'],
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace']
-          }
-        }
-      }
-    }
-  </script>
   <!-- Global Mistral AI Theme (Cache Destekli Statik CSS) -->
   <link rel="stylesheet" href="/static/css/mistral-theme.css">
   <!-- Font Awesome Icons -->
