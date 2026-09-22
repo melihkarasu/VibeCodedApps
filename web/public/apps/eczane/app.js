@@ -23,10 +23,9 @@ const DEFAULT_LOCATION = {
 
 let currentUserLocation = { ...DEFAULT_LOCATION };
 let selectedCitySlug = 'ankara';
-let selectedDistrictSlug = 'cankaya';
-let isInitialLocationChecked = false;
+let selectedDistrictSlug = ''; // Varsayılan olarak tüm il genelinde en yakınlar taranır
 
-// 81 İl Merkez Koordinatları (GPS ile en yakın ili saptamak için)
+// 81 İl Merkez Koordinatları (Matematiksel yedek mesafe hesaplayıcı)
 const CITY_CENTERS = [
   { slug: 'adana', name: 'Adana', lat: 37.0000, lng: 35.3213 },
   { slug: 'adiyaman', name: 'Adıyaman', lat: 37.7648, lng: 38.2786 },
@@ -127,21 +126,16 @@ function calculateDistanceMeters(lat1, lon1, lat2, lon2) {
 
 // Koordinata en yakın ili ve ilçeyi bul
 async function detectCityAndDistrict(lat, lng) {
-  // 1. Önce ters jeokodlama (Nominatim OpenStreetMap) dene
+  // 1. Önce sunucumuz üzerinden güvenilir ters jeokodlama yap (CORS / Adblocker engeline takılmaz)
   try {
-    const geoUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
-    const res = await fetch(geoUrl, {
-      headers: { 'Accept-Language': 'tr' }
-    });
+    const res = await fetch(`/api/nobetci-eczane/reverse-geo?lat=${lat}&lng=${lng}`);
     if (res.ok) {
       const data = await res.json();
-      const addr = data.address || {};
-      const provName = (addr.province || addr.state || '').replace(' İli', '').trim();
-      const districtName = (addr.town || addr.county || addr.city_district || addr.suburb || '').replace(' İlçesi', '').trim();
+      if (data.success && data.province) {
+        const provName = data.province.trim();
+        const distName = (data.district || '').trim();
 
-      if (provName) {
-        // İller listesinden eşleştir
-        const matchedCity = allCities.find(c => 
+        const matchedCity = (allCities.length > 0 ? allCities : CITY_CENTERS).find(c => 
           c.name.localeCompare(provName, 'tr', { sensitivity: 'base' }) === 0 ||
           provName.toLocaleLowerCase('tr').includes(c.name.toLocaleLowerCase('tr')) ||
           c.name.toLocaleLowerCase('tr').includes(provName.toLocaleLowerCase('tr'))
@@ -151,13 +145,13 @@ async function detectCityAndDistrict(lat, lng) {
           return {
             citySlug: matchedCity.slug,
             cityName: matchedCity.name,
-            districtName: districtName || ''
+            districtName: distName
           };
         }
       }
     }
   } catch (e) {
-    console.warn('Reverse geocode hatası, matematiksel mesafeye geçiliyor:', e);
+    console.warn('Backend reverse-geo hatası:', e);
   }
 
   // 2. Fallback: 81 il merkezine göre en yakın il merkezini hesapla
@@ -254,27 +248,24 @@ async function applyDetectedLocation(lat, lng, detected, labelName, isGPS) {
   currentUserLocation.cityName = detected.cityName;
   currentUserLocation.isGPS = isGPS;
 
-  // İlgili şehri seç
+  // 1. Şehri güncelle
   selectedCitySlug = detected.citySlug;
   const citySelect = document.getElementById('select-city');
   if (citySelect) {
     citySelect.value = selectedCitySlug;
   }
 
-  // İlçeleri yükle
+  // 2. KRİTİK: İlçe seçimini mutlaka sıfırla!
+  // GPS açıkken kullanıcıya il genelindeki en yakın eczaneler mesafeye göre listelenir.
+  selectedDistrictSlug = '';
+
+  // 3. İlçeleri arka planda yükle
   await loadDistricts(selectedCitySlug);
 
-  // İlçe eşleştirmesi varsa seç
-  if (detected.districtName && currentDistricts.length > 0) {
-    const matchedDistrict = currentDistricts.find(d => 
-      d.name.localeCompare(detected.districtName, 'tr', { sensitivity: 'base' }) === 0 ||
-      d.name.toLocaleLowerCase('tr').includes(detected.districtName.toLocaleLowerCase('tr'))
-    );
-    if (matchedDistrict) {
-      selectedDistrictSlug = matchedDistrict.slug;
-      const districtSelect = document.getElementById('select-district');
-      if (districtSelect) districtSelect.value = selectedDistrictSlug;
-    }
+  // İlçe dropdown'ını "Tüm İlçeler" (İl Geneli) yap
+  const districtSelect = document.getElementById('select-district');
+  if (districtSelect) {
+    districtSelect.value = '';
   }
 
   // Arayüz etiketlerini güncelle
@@ -293,11 +284,20 @@ async function applyDetectedLocation(lat, lng, detected, labelName, isGPS) {
     eczaneMap.setView([lat, lng], 14, { animate: true });
   }
 
-  // Eczaneleri o şehir ve koordinatlara göre çek
+  // 4. Eczaneleri il genelinde (district='') koordinat sıralı olarak çek
   await fetchDutyPharmacies();
+
+  // 5. En yakın eczaneden kesin ilçe bilgisini doğrula
+  if (allPharmacies && allPharmacies.length > 0) {
+    const nearestPharmacy = allPharmacies[0];
+    const resolvedDistrict = detected.districtName || nearestPharmacy.district;
+    if (resolvedDistrict && locLabel) {
+      locLabel.innerText = `${detected.cityName} / ${resolvedDistrict}`;
+    }
+  }
 }
 
-// "Konumum" Butonu Tıklama İşleyicisi (Kullanıcı etkileşimi - tarayıcı izin diyaloğu tetikler)
+// "Konumum" Butonu Tıklama İşleyicisi
 function handleMyLocationClick() {
   requestUserLocation(false);
 }
@@ -362,7 +362,7 @@ function requestUserLocation(silent = false) {
       await applyDetectedLocation(lat, lng, detected, 'Mevcut Konumunuz', true);
 
       if (typeof showToast === 'function') {
-        showToast(`📍 Konumunuz saptandı: ${detected.cityName} ${detected.districtName ? ('/ ' + detected.districtName) : ''}`, 'success');
+        showToast(`📍 Konumunuz saptandı: ${detected.cityName}`, 'success');
       }
     },
     function(err) {
@@ -436,7 +436,7 @@ async function loadDistricts(citySlug) {
 
     if (data.success && Array.isArray(data.districts)) {
       currentDistricts = data.districts;
-      districtSelect.innerHTML = '<option value="">Tüm İlçeler</option>' +
+      districtSelect.innerHTML = '<option value="">Tüm İlçeler (İl Geneli En Yakın)</option>' +
         currentDistricts.map(d => 
           `<option value="${d.slug}" ${d.slug === selectedDistrictSlug ? 'selected' : ''}>${d.name}</option>`
         ).join('');
@@ -445,18 +445,19 @@ async function loadDistricts(citySlug) {
         districtSelect.value = selectedDistrictSlug;
       } else {
         selectedDistrictSlug = '';
+        districtSelect.value = '';
       }
     }
   } catch(e) {
     console.error('İlçeler yüklenemedi:', e);
-    districtSelect.innerHTML = '<option value="">Tüm İlçeler</option>';
+    districtSelect.innerHTML = '<option value="">Tüm İlçeler (İl Geneli En Yakın)</option>';
   }
 }
 
 async function onCityChange() {
   const citySelect = document.getElementById('select-city');
   selectedCitySlug = citySelect.value;
-  selectedDistrictSlug = '';
+  selectedDistrictSlug = ''; // İlçeyi sıfırla
 
   // Şehrin merkez koordinatına haritayı kaydır
   const center = CITY_CENTERS.find(c => c.slug === selectedCitySlug);
@@ -926,23 +927,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 1. İlleri yükle
   await loadCities();
 
-  // 2. Canlı GPS İstemi dene:
+  // 2. Canlı GPS İstemi:
   if (navigator.geolocation) {
-    // Tarayıcı izin durumunu kontrol et
     if (navigator.permissions && navigator.permissions.query) {
       try {
         const status = await navigator.permissions.query({ name: 'geolocation' });
         if (status.state === 'granted') {
-          // İzin zaten varsa doğrudan konumu al ve şehri saptayıp eczaneleri çek
           requestUserLocation(true);
           return;
         } else if (status.state === 'prompt') {
-          // İzin henüz sorulmamış, izin çubuğunu göster
           showLocationPermissionBanner('📍 Size en yakın nöbetçi eczaneleri göstermek için konum izni gereklidir.');
-          // Aynı zamanda otomatik istemeyi de tetikle
           requestUserLocation(true);
         } else {
-          // İzin reddedilmiş (denied)
           showLocationPermissionBanner('Konum izni kapalı. Yakınınızdaki nöbetçileri görmek için tarayıcı ayarlarından izin verebilir veya listeden il seçebilirsiniz.');
         }
 

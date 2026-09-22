@@ -145,6 +145,46 @@ router.get('/nobetci-eczane/districts', async (req, res) => {
 });
 
 // -------------------------------------------------------------
+// 2.5. Koordinattan İl ve İlçe Tespiti (Ters Jeokodlama)
+// -------------------------------------------------------------
+router.get('/nobetci-eczane/reverse-geo', async (req, res) => {
+  const lat = parseFloat(req.query.lat);
+  const lng = parseFloat(req.query.lng);
+
+  if (isNaN(lat) || isNaN(lng)) {
+    return res.status(400).json({ success: false, error: 'Geçersiz koordinat' });
+  }
+
+  try {
+    const geoUrl = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
+    const response = await fetch(geoUrl, {
+      headers: {
+        'User-Agent': 'VibeCodedApps/1.0 (melihkarasu.com)',
+        'Accept-Language': 'tr'
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const addr = data.address || {};
+      const provName = (addr.province || addr.state || addr.city || '').replace(' İli', '').trim();
+      const districtName = (addr.town || addr.county || addr.city_district || addr.suburb || addr.district || '').replace(' İlçesi', '').replace(' Belediyesi', '').trim();
+
+      return res.json({
+        success: true,
+        province: provName,
+        district: districtName,
+        displayName: data.display_name
+      });
+    }
+  } catch (err) {
+    console.warn('[Reverse-Geo Error]:', err.message);
+  }
+
+  return res.json({ success: false, error: 'Konum çözümlenemedi' });
+});
+
+// -------------------------------------------------------------
 // 3. Nöbetçi Eczaneler (/api/nobetci-eczane)
 // -------------------------------------------------------------
 router.get('/nobetci-eczane', async (req, res) => {
