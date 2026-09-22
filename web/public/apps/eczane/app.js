@@ -8,16 +8,18 @@ let pharmacyLayerGroup = null;
 let allPharmacies = [];
 let districtsList = [];
 
-// Varsayılan Konum: İzmir Saat Kulesi / Konak Meydanı
-let currentUserLocation = {
-  lat: 38.4189,
-  lng: 27.1287,
-  name: 'Konak Meydanı / Saat Kulesi',
+// Varsayılan Konum: C4PQ+8Q Konak, İzmir (38.435813, 27.139438)
+const DEFAULT_LOCATION = {
+  lat: 38.435813,
+  lng: 27.139438,
+  name: 'C4PQ+8Q Konak, İzmir',
   isGPS: false
 };
 
+let currentUserLocation = { ...DEFAULT_LOCATION };
+
 const PRESET_LOCATIONS = {
-  konak: { lat: 38.4189, lng: 27.1287, name: 'Konak Meydanı / Saat Kulesi' },
+  konak: { lat: 38.435813, lng: 27.139438, name: 'C4PQ+8Q Konak, İzmir' },
   alsancak: { lat: 38.4385, lng: 27.1432, name: 'Alsancak / Kıbrıs Şehitleri' },
   karsiyaka: { lat: 38.4556, lng: 27.1102, name: 'Karşıyaka Çarşı / İskele' },
   bornova: { lat: 38.4650, lng: 27.2162, name: 'Bornova Meydan / Küçükpark' },
@@ -133,34 +135,6 @@ function setUserLocation(lat, lng, name, isGPS) {
   refreshPharmacyData();
 }
 
-// IP Üzerinden Konum Belirleme (HTTP ve GPS Erişilemediğinde Otomatik Devreye Girer)
-async function fallbackToIpLocation(silent = false) {
-  const btn = document.getElementById('btn-get-gps');
-  try {
-    const res = await fetch('/api/ip/lookup');
-    const data = await res.json();
-    if (data && data.success && data.lat && data.lon) {
-      const cityName = data.city ? `${data.city} (Ağ/IP Konumu)` : 'Mevcut Konumunuz';
-      setUserLocation(data.lat, data.lon, cityName, true);
-      if (eczaneMap) {
-        eczaneMap.setView([data.lat, data.lon], 14, { animate: true });
-      }
-      if (!silent && typeof showToast === 'function') {
-        showToast(`Konumunuz ağ üzerinden (${data.city || 'İzmir'}) belirlendi.`, 'success');
-      }
-      return true;
-    }
-  } catch(e) {
-    console.warn('IP tabanlı konum belirleme hatası:', e);
-  } finally {
-    if (btn && !silent) {
-      btn.innerHTML = '<i class="fa-solid fa-location-crosshairs text-base"></i><span>Konumum</span>';
-      btn.disabled = false;
-    }
-  }
-  return false;
-}
-
 // Tek "Konumum" Butonu Tıklama İşleyicisi
 function handleMyLocationClick() {
   if (currentUserLocation.isGPS && eczaneMap) {
@@ -174,7 +148,7 @@ function handleMyLocationClick() {
   }
 }
 
-// Kullanıcının Canlı GPS Konumunu İste
+// Kullanıcının Canlı GPS Konumunu İste (Yalnızca Cihaz Konum Servisleri)
 function requestUserLocation(silent = false) {
   const btn = document.getElementById('btn-get-gps');
   const originalHtml = '<i class="fa-solid fa-location-crosshairs text-base"></i><span>Konumum</span>';
@@ -185,7 +159,14 @@ function requestUserLocation(silent = false) {
 
   // Tarayıcı Geolocation kontrolü
   if (!navigator.geolocation) {
-    fallbackToIpLocation(silent);
+    if (btn && !silent) {
+      btn.innerHTML = originalHtml;
+      btn.disabled = false;
+    }
+    setUserLocation(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng, DEFAULT_LOCATION.name, false);
+    if (!silent && typeof showToast === 'function') {
+      showToast('Cihazınız konum servisini desteklemiyor. Varsayılan konum (C4PQ+8Q Konak, İzmir) kullanılıyor.', 'warning');
+    }
     return;
   }
 
@@ -222,28 +203,31 @@ function requestUserLocation(silent = false) {
       }
 
       if (!silent && typeof showToast === 'function') {
-        showToast('Konumunuz başarıyla tespit edildi.', 'success');
+        showToast('Konumunuz cihaz servisleri üzerinden başarıyla tespit edildi.', 'success');
       }
     },
-    async function(err) {
-      console.warn('GPS Geolocation Uyarısı (Tarayıcı/HTTP engeli):', err);
-      // HTTP ortamında veya GPS zaman aşımında sessizce IP fallback'e geç
-      const ipOk = await fallbackToIpLocation(silent);
-      if (!ipOk && !silent) {
-        if (btn) {
-          btn.innerHTML = originalHtml;
-          btn.disabled = false;
-        }
-        let msg = 'Konumunuza ulaşılamadı. Listeden merkez seçebilir veya haritaya tıklayabilirsiniz.';
+    function(err) {
+      console.warn('GPS Geolocation Uyarısı (İzin verilmedi veya erişilemedi):', err);
+      if (btn && !silent) {
+        btn.innerHTML = originalHtml;
+        btn.disabled = false;
+      }
+
+      // Konum servislerine izin verilmemişse varsayılan konuma yerleştir (C4PQ+8Q Konak, İzmir)
+      setUserLocation(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng, DEFAULT_LOCATION.name, false);
+      if (eczaneMap) {
+        eczaneMap.setView([DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng], 14, { animate: true });
+      }
+
+      if (!silent && typeof showToast === 'function') {
+        let msg = 'Konum servislerine erişilemedi. Varsayılan konum (C4PQ+8Q Konak, İzmir) kullanılıyor.';
         if (err.code === 1) {
-          msg = 'Tarayıcı HTTP ortamında GPS kısıtlaması uyguluyor olabilir. Listeden bir ilçe seçebilirsiniz.';
+          msg = 'Konum izni reddedildi. Varsayılan konum (C4PQ+8Q Konak, İzmir) gösteriliyor.';
         }
-        if (typeof showToast === 'function') {
-          showToast(msg, 'warning');
-        }
+        showToast(msg, 'warning');
       }
     },
-    { enableHighAccuracy: false, timeout: 5000, maximumAge: 300000 }
+    { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
   );
 }
 
@@ -719,7 +703,6 @@ function escapeHtml(text) {
 // Tüm global fonksiyonları window üzerine açıkça bağla (Cache ve scope sorunlarını önler)
 window.handleMyLocationClick = handleMyLocationClick;
 window.requestUserLocation = requestUserLocation;
-window.fallbackToIpLocation = fallbackToIpLocation;
 window.onPresetLocationChange = onPresetLocationChange;
 window.onDistrictFilterChange = onDistrictFilterChange;
 window.onSearchInput = onSearchInput;
@@ -730,13 +713,15 @@ window.toggleAllPharmaciesList = toggleAllPharmaciesList;
 
 // Sayfa Yüklendiğinde Başlat
 document.addEventListener('DOMContentLoaded', () => {
-  // Önceki kayıtlı konum varsa anında yükle (Sıfır bekleme)
+  // Önceki kayıtlı konum varsa ve GPS konumuysa yükle
   try {
     const savedLoc = localStorage.getItem('vibe_eczane_loc');
     if (savedLoc) {
       const parsed = JSON.parse(savedLoc);
-      if (parsed && parsed.lat && parsed.lng) {
+      if (parsed && parsed.lat && parsed.lng && parsed.isGPS) {
         currentUserLocation = parsed;
+      } else {
+        currentUserLocation = { ...DEFAULT_LOCATION };
       }
     }
   } catch(e) {}
@@ -745,15 +730,14 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchDutyPharmacies();
 
   // Otomatik Konum Belirleme:
-  // 1. Tarayıcı izin vermişse doğrudan GPS çağır
-  // 2. HTTP veya tarayıcı kısıtlaması varsa otomatik IP servisiyle (/api/ip/lookup) odaklan
+  // Yalnızca cihazın konum servisleri kullanılır. İzin verilmişse GPS çağrılır,
+  // izin yoksa/verilmemişse varsayılan konum (C4PQ+8Q Konak, İzmir) kullanılır.
   if (navigator.permissions && navigator.permissions.query) {
     navigator.permissions.query({ name: 'geolocation' }).then(permissionStatus => {
       if (permissionStatus.state === 'granted') {
         requestUserLocation(true);
       } else {
-        // İzin henüz verilmemişse veya HTTP kısıtı varsa IP fallback'i dene
-        fallbackToIpLocation(true);
+        setUserLocation(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng, DEFAULT_LOCATION.name, false);
       }
       permissionStatus.onchange = function() {
         if (this.state === 'granted') {
@@ -761,22 +745,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       };
     }).catch(() => {
-      fallbackToIpLocation(true);
+      setUserLocation(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng, DEFAULT_LOCATION.name, false);
     });
-  } else if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      function(pos) {
-        setUserLocation(pos.coords.latitude, pos.coords.longitude, 'Mevcut Konumunuz', true);
-        if (eczaneMap) {
-          eczaneMap.setView([pos.coords.latitude, pos.coords.longitude], 14, { animate: true });
-        }
-      },
-      function() {
-        fallbackToIpLocation(true);
-      },
-      { enableHighAccuracy: false, timeout: 4000, maximumAge: 300000 }
-    );
   } else {
-    fallbackToIpLocation(true);
+    setUserLocation(DEFAULT_LOCATION.lat, DEFAULT_LOCATION.lng, DEFAULT_LOCATION.name, false);
   }
 });
