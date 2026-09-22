@@ -7,7 +7,7 @@ const { isPrivateAddress } = require('./utils');
 // =============================================================
 // 35. Kullanıcı Favori Uygulamaları API (Supabase PostgREST)
 // =============================================================
-const SUPABASE_URL = process.env.APP_URL || 'http://0.0.0.0:8088';
+const SUPABASE_URL = process.env.INTERNAL_SUPABASE_URL || process.env.SUPABASE_URL || 'http://vibe-supabase-kong:8000';
 const SERVICE_ROLE_KEY = process.env.SERVICE_ROLE_KEY;
 
 async function supabaseRequest(path, options = {}) {

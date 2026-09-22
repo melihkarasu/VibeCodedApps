@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const SUPABASE_URL = process.env.APP_URL || 'http://0.0.0.0:8088';
+const SUPABASE_URL = process.env.INTERNAL_SUPABASE_URL || process.env.SUPABASE_URL || 'http://vibe-supabase-kong:8000';
 const SERVICE_ROLE_KEY = process.env.SERVICE_ROLE_KEY;
 const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || 'REDACTED')
   .split(',')
@@ -65,19 +65,12 @@ router.use(adminGuard);
 // -------------------------------------------------------------
 router.get('/stats', async (req, res) => {
   try {
-    const [categories, apps, favorites] = await Promise.all([
+    const [categories, apps, favorites, users] = await Promise.all([
       supabaseRequest('/categories?select=id'),
       supabaseRequest('/apps?select=id,status'),
-      supabaseRequest('/user_favorites?select=id')
+      supabaseRequest('/user_favorites?select=id'),
+      supabaseRequest('/rpc/get_admin_users', { method: 'POST' }).catch(() => [])
     ]);
-
-    // auth.users sorgusu
-    const users = await supabaseRequest('/users?select=id', {
-      headers: { 'Accept-Profile': 'auth' }
-    }).catch(async () => {
-      // Eğer auth şeması doğrudan erişilemiyorsa rpc veya fallback
-      return [];
-    });
 
     res.json({
       success: true,
@@ -100,19 +93,7 @@ router.get('/stats', async (req, res) => {
 // -------------------------------------------------------------
 router.get('/users', async (req, res) => {
   try {
-    // GoTrue / Auth users listesi (Service role ile auth.users ve auth.identities)
-    // PostgREST genelde public şemasını açar; auth şemasını güvenle sorgulamak için
-    // supabaseRequest veya doğrudan sorgulama
-    let users = [];
-    try {
-      users = await supabaseRequest('/users?select=id,email,created_at,last_sign_in_at,raw_user_meta_data,raw_app_meta_data', {
-        headers: { 'Accept-Profile': 'auth' }
-      });
-    } catch(e) {
-      // Fallback: auth.identities üzerinden kullanıcı profilleri
-      users = [];
-    }
-
+    const users = await supabaseRequest('/rpc/get_admin_users', { method: 'POST' });
     res.json({ success: true, users: Array.isArray(users) ? users : [] });
   } catch (err) {
     console.error('[AdminAPI] Users error:', err.message);
