@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const SUPABASE_URL = process.env.APP_URL || 'http://0.0.0.0:8088';
+const SUPABASE_URL = process.env.INTERNAL_SUPABASE_URL || process.env.SUPABASE_URL || 'http://vibe-supabase-kong:8000';
 const SERVICE_ROLE_KEY = process.env.SERVICE_ROLE_KEY;
 
 // PostgREST Client Helper (Service Role Bypass with Strict Backend Validation)

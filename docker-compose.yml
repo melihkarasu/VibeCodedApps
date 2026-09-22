@@ -46,6 +46,7 @@ services:
       - PORT=3000
       - SUPABASE_URL=http://vibe-supabase-kong:8000
       - SUPABASE_ANON_KEY=${ANON_KEY}
+      - SERVICE_ROLE_KEY=${SERVICE_ROLE_KEY}
     networks:
       - vibe-network
     expose:
