@@ -475,23 +475,25 @@ module.exports = function(pageTemplate) {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
               ${c.apps.map(app => `
                 <div class="relative p-6 rounded-xl bg-white border-2 border-stone-200 hover:border-mistral-orange hover:shadow-lg transition duration-200 group flex flex-col justify-between ring-1 ring-black/5">
-                  <!-- Favori Butonu (Yıldız) -->
-                  <button 
-                    type="button"
-                    onclick="toggleFav(event, '${app.id}')"
-                    id="star-btn-${app.id}"
-                    title="Favorilere Ekle / Çıkar"
-                    class="absolute top-4 right-4 w-8 h-8 rounded-md border transition flex items-center justify-center text-sm z-10 cursor-pointer bg-white/90 hover:bg-mistral-cream border-mistral-hairline text-mistral-stone hover:text-amber-500">
-                    <span id="star-icon-${app.id}">☆</span>
-                  </button>
-
                   <div>
-                    <div class="w-12 h-12 rounded-md bg-mistral-cream border border-mistral-beige-deep flex items-center justify-center text-2xl mb-4 group-hover:scale-105 transition-transform duration-200">
-                      ${app.icon}
+                    <!-- Üst Satır: İkon + İsim (2 satır) + Büyütülmüş Fav Butonu -->
+                    <div class="flex items-center gap-3 mb-4">
+                      <div class="w-11 h-11 shrink-0 rounded-xl bg-mistral-cream border border-mistral-beige-deep flex items-center justify-center text-2xl group-hover:scale-105 transition-transform duration-200 shadow-2xs">
+                        ${app.icon}
+                      </div>
+                      <h3 class="text-base sm:text-lg font-bold font-editorial text-mistral-ink tracking-tight leading-snug line-clamp-2 flex-1 min-w-0" title="${app.name}">
+                        ${app.name}
+                      </h3>
+                      <button 
+                        type="button"
+                        onclick="toggleFav(event, '${app.id}')"
+                        id="star-btn-${app.id}"
+                        title="Favorilere Ekle / Çıkar"
+                        class="shrink-0 w-10 h-10 rounded-xl border transition flex items-center justify-center cursor-pointer bg-stone-50 hover:bg-amber-50 border-stone-200 hover:border-amber-300 text-stone-400 hover:text-amber-500 shadow-2xs">
+                        <span id="star-icon-${app.id}" class="text-xl leading-none select-none">☆</span>
+                      </button>
                     </div>
-                    <h3 class="text-lg sm:text-xl font-bold font-editorial mb-2 text-mistral-ink tracking-tight pr-8">
-                      ${app.name}
-                    </h3>
+
                     <p class="text-mistral-slate text-sm leading-relaxed mb-6">
                       ${app.desc}
                     </p>
@@ -512,11 +514,11 @@ module.exports = function(pageTemplate) {
       <!-- Mistral Hero Banner -->
       <div class="mb-12 pt-4 text-center max-w-3xl mx-auto">
         <h1 class="text-4xl sm:text-6xl font-normal font-editorial tracking-tight text-mistral-ink mb-5 leading-tight">
-          Yenilikçi Mikro Uygulamalar.<br>
-          <span class="italic text-mistral-orange">Elinizin Altında.</span>
+          Yenilikçi Mikro Uygulamalar<br>
+          <span class="italic text-mistral-orange">Tamamen Ücretsiz</span>
         </h1>
         <p class="text-mistral-slate text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-8 font-normal">
-          Uzaydan moleküllere, coğrafyadan finans ve kelime düellolarına kadar ${totalApps} adet bağımsız mikro web uygulaması. 8 odak kategoride, açılır kapanır modüler mimaride.
+          Uzaydan moleküllere, coğrafyadan finans ve kelime düellolarına kadar bağımsız mikro web uygulamaları. Odak kategorilerde, açılır kapanır modüler mimaride.
         </p>
 
         <!-- Stat Callout Bar (Mistral Editorial Style) -->
@@ -531,7 +533,7 @@ module.exports = function(pageTemplate) {
           </div>
           <div>
             <div class="text-2xl sm:text-3xl font-bold font-editorial text-mistral-orange">%100</div>
-            <div class="text-xs text-mistral-slate font-medium mt-0.5">Ücretsiz API</div>
+            <div class="text-xs text-mistral-slate font-medium mt-0.5">Ücretsiz</div>
           </div>
         </div>
       </div>
@@ -547,7 +549,7 @@ module.exports = function(pageTemplate) {
             type="button"
             onclick="expandAllAccordions()" 
             class="px-3.5 py-1.5 rounded-md bg-mistral-ink hover:bg-mistral-ink-tint text-white text-xs font-medium transition shadow-xs flex items-center gap-1.5 cursor-pointer">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7m0 0l-7 7m7-7v12"></path></svg>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             Tümünü Aç
           </button>
           <button 
@@ -783,10 +785,10 @@ module.exports = function(pageTemplate) {
 
             if (btn && icon) {
               if (isFav) {
-                btn.className = 'absolute top-4 right-4 w-8 h-8 rounded-md border transition flex items-center justify-center text-sm z-10 cursor-pointer bg-amber-50 border-amber-300 text-amber-500 shadow-2xs';
+                btn.className = 'shrink-0 w-10 h-10 rounded-xl border transition flex items-center justify-center cursor-pointer bg-amber-50 border-amber-300 text-amber-500 shadow-2xs';
                 icon.innerText = '★';
               } else {
-                btn.className = 'absolute top-4 right-4 w-8 h-8 rounded-md border transition flex items-center justify-center text-sm z-10 cursor-pointer bg-stone-50 hover:bg-amber-50 border-stone-200 hover:border-amber-300 text-stone-400 hover:text-amber-500';
+                btn.className = 'shrink-0 w-10 h-10 rounded-xl border transition flex items-center justify-center cursor-pointer bg-stone-50 hover:bg-amber-50 border-stone-200 hover:border-amber-300 text-stone-400 hover:text-amber-500 shadow-2xs';
                 icon.innerText = '☆';
               }
             }
@@ -809,14 +811,16 @@ module.exports = function(pageTemplate) {
             grid.classList.add('grid');
             grid.style.display = 'grid';
 
-                                    grid.innerHTML = favs.map(id => {
+            grid.innerHTML = favs.map(id => {
               const app = APPS_DATA[id];
               if (!app) return '';
-              return '<div class="relative p-6 rounded-xl bg-white border-2 border-stone-200 hover:border-amber-400 hover:shadow-lg transition duration-200 group flex flex-col justify-between ring-1 ring-black/5">' +
-                '<button type="button" onclick="toggleFav(event, \\'' + app.id + '\\')" title="Favorilerden Çıkar" class="absolute top-4 right-4 w-8 h-8 rounded-md border transition flex items-center justify-center text-sm z-10 cursor-pointer bg-amber-50 border-amber-300 text-amber-500 hover:bg-rose-50 hover:text-rose-500 hover:border-rose-300 shadow-2xs">★</button>' +
+              return '<div class="p-6 rounded-xl bg-white border-2 border-stone-200 hover:border-amber-400 hover:shadow-lg transition duration-200 group flex flex-col justify-between ring-1 ring-black/5">' +
                 '<div>' +
-                  '<div class="w-12 h-12 rounded-md bg-amber-100/60 border border-amber-200 text-amber-700 flex items-center justify-center text-2xl mb-4 group-hover:scale-105 transition-transform duration-200">' + app.icon + '</div>' +
-                  '<h3 class="text-lg sm:text-xl font-bold font-editorial mb-2 text-mistral-ink tracking-tight pr-8">' + app.name + '</h3>' +
+                  '<div class="flex items-center gap-3 mb-4">' +
+                    '<div class="w-11 h-11 shrink-0 rounded-xl bg-amber-100/60 border border-amber-200 text-amber-700 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform duration-200 shadow-2xs">' + app.icon + '</div>' +
+                    '<h3 class="text-base sm:text-lg font-bold font-editorial text-mistral-ink tracking-tight leading-snug line-clamp-2 flex-1 min-w-0" title="' + app.name + '">' + app.name + '</h3>' +
+                    '<button type="button" onclick="toggleFav(event, \\'' + app.id + '\\')" title="Favorilerden Çıkar" class="shrink-0 w-10 h-10 rounded-xl border transition flex items-center justify-center cursor-pointer bg-amber-50 border-amber-300 text-amber-500 hover:bg-rose-50 hover:text-rose-500 hover:border-rose-300 shadow-2xs"><span class="text-xl leading-none select-none">★</span></button>' +
+                  '</div>' +
                   '<p class="text-mistral-slate text-sm leading-relaxed mb-6">' + app.desc + '</p>' +
                 '</div>' +
                 '<a href="' + app.url + '" class="inline-flex items-center gap-2 text-mistral-orange hover:text-mistral-orange-deep text-sm font-semibold pt-2 border-t border-stone-100 group-hover:border-mistral-orange/20 transition">' +
