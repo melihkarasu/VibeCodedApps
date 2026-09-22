@@ -9,9 +9,9 @@ module.exports = function(pageTemplate) {
         apps: [
           {
             id: "nobetci-eczane",
-            name: "İzmir Nöbetçi Eczane Radarı",
+            name: "Nöbetçi Eczaneler",
             icon: "💊",
-            desc: "İzmir BB Açık Veri API'si ve OpenStreetMap ile canlı konum, en yakın 5 nöbetçi eczane, mesafe ve tek tıkla arama/yol tarifi.",
+            desc: "Türkiye genelinde 81 il ve tüm ilçelerde güncel nöbetçi eczaneler, canlı konum, en yakın 5 eczane ve tek tıkla arama/yol tarifi.",
             url: "/nobetci-eczane",
             action: "Eczaneleri Bul"
           },
