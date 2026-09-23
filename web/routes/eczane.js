@@ -71,6 +71,17 @@ module.exports = function(pageTemplate) {
             display: grid !important;
             grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
             gap: 2rem !important;
+            align-items: stretch !important;
+          }
+          #all-pharmacies-card {
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100% !important;
+          }
+          #all-pharmacies-box {
+            flex: 1 1 0% !important;
+            min-height: 0 !important;
+            overflow-y: auto !important;
           }
         }
         @media (max-width: 767px) {
@@ -79,10 +90,14 @@ module.exports = function(pageTemplate) {
             grid-template-columns: minmax(0, 1fr) !important;
             gap: 1.5rem !important;
           }
+          #all-pharmacies-box {
+            max-height: 480px !important;
+            overflow-y: auto !important;
+          }
         }
       </style>
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/eczane/app.js?v=12.0" defer></script>
+      <script src="/static/apps/eczane/app.js?v=13.0" defer></script>
     `;
 
     const content = `
@@ -228,10 +243,10 @@ module.exports = function(pageTemplate) {
       </div>
 
       <!-- HARİTANIN ALTINDA YAN YANA: EN YAKIN 5 NÖBETÇİ ECZANE & BÖLGEDEKİ TÜM NÖBETÇİLER -->
-      <div class="eczane-lists-grid items-start mb-8">
+      <div class="eczane-lists-grid items-stretch mb-8">
         
         <!-- Sol: EN YAKIN 5 ECZANE KARTI -->
-        <div class="p-6 rounded-2xl bg-white border border-emerald-500/30 shadow-sm space-y-4">
+        <div id="nearest-pharmacies-card" class="p-6 rounded-2xl bg-white border border-emerald-500/30 shadow-sm space-y-4">
           <div class="flex items-center justify-between">
             <div>
               <span class="text-xs uppercase tracking-wider text-emerald-600 font-bold block mb-0.5 flex items-center gap-1">
@@ -255,8 +270,8 @@ module.exports = function(pageTemplate) {
         </div>
 
         <!-- Sağ: DİĞER / TÜM ECZANELER LİSTESİ -->
-        <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm space-y-4">
-          <div class="flex items-center justify-between">
+        <div id="all-pharmacies-card" class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm flex flex-col">
+          <div id="all-pharmacies-header" class="flex items-center justify-between pb-3 shrink-0">
             <div>
               <span class="text-xs uppercase tracking-wider text-mistral-slate font-bold block mb-0.5 flex items-center gap-1">
                 <i class="fa-solid fa-list-check"></i> LİSTE
@@ -275,7 +290,7 @@ module.exports = function(pageTemplate) {
             </button>
           </div>
 
-          <div id="all-pharmacies-box" class="space-y-2 max-h-[560px] overflow-y-auto pr-1 text-xs">
+          <div id="all-pharmacies-box" class="space-y-2 flex-1 min-h-0 overflow-y-auto pr-1 text-xs">
             <!-- JS ile doldurulur -->
           </div>
         </div>
