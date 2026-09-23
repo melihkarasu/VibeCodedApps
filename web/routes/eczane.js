@@ -66,9 +66,23 @@ module.exports = function(pageTemplate) {
           margin: 12px 14px;
           line-height: 1.4;
         }
+        @media (min-width: 768px) {
+          .eczane-lists-grid {
+            display: grid !important;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+            gap: 2rem !important;
+          }
+        }
+        @media (max-width: 767px) {
+          .eczane-lists-grid {
+            display: grid !important;
+            grid-template-columns: minmax(0, 1fr) !important;
+            gap: 1.5rem !important;
+          }
+        }
       </style>
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/eczane/app.js?v=11.0" defer></script>
+      <script src="/static/apps/eczane/app.js?v=12.0" defer></script>
     `;
 
     const content = `
@@ -214,7 +228,7 @@ module.exports = function(pageTemplate) {
       </div>
 
       <!-- HARİTANIN ALTINDA YAN YANA: EN YAKIN 5 NÖBETÇİ ECZANE & BÖLGEDEKİ TÜM NÖBETÇİLER -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start mb-8">
+      <div class="eczane-lists-grid items-start mb-8">
         
         <!-- Sol: EN YAKIN 5 ECZANE KARTI -->
         <div class="p-6 rounded-2xl bg-white border border-emerald-500/30 shadow-sm space-y-4">
