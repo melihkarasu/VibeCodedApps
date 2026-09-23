@@ -68,7 +68,7 @@ module.exports = function(pageTemplate) {
         }
       </style>
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/eczane/app.js?v=9.0" defer></script>
+      <script src="/static/apps/eczane/app.js?v=10.0" defer></script>
     `;
 
     const content = `
@@ -116,51 +116,81 @@ module.exports = function(pageTemplate) {
 
       <!-- KONTROL & KONUM & FİLTRE PANELİ -->
       <div class="p-5 sm:p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm mb-8 space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
+        
+        <!-- Üst Satır: Konum, İl ve İlçe Seçimi (Ferah 3 Kolon) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
           
           <!-- Konum Butonu (GPS) -->
-          <div class="sm:col-span-1 lg:col-span-3">
+          <div class="sm:col-span-2 lg:col-span-4">
+            <label class="block text-xs font-semibold text-mistral-slate mb-1.5 flex items-center gap-1.5">
+              <i class="fa-solid fa-location-crosshairs text-mistral-orange"></i>
+              <span>Canlı Konum</span>
+            </label>
             <button 
               type="button" 
               onclick="handleMyLocationClick()" 
               id="btn-get-gps" 
-              class="w-full px-4 py-2.5 rounded-xl bg-mistral-orange hover:bg-mistral-orange-deep text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition shadow-xs cursor-pointer whitespace-nowrap">
+              class="w-full h-11 px-4 rounded-xl bg-mistral-orange hover:bg-mistral-orange-deep text-white text-sm font-semibold flex items-center justify-center gap-2.5 transition shadow-xs cursor-pointer whitespace-nowrap">
               <i class="fa-solid fa-location-crosshairs text-base"></i>
-              <span>Konumum</span>
+              <span class="tracking-wide">Konumumu Tespit Et</span>
             </button>
           </div>
 
           <!-- İl Seçimi (81 İl) -->
-          <div class="sm:col-span-1 lg:col-span-3">
-            <select 
-              id="select-city" 
-              onchange="onCityChange()" 
-              class="w-full px-3 py-2.5 rounded-xl bg-white border border-mistral-hairline text-xs sm:text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange transition">
-              <option value="ankara" selected>📍 Ankara (Başkent)</option>
-              <option value="istanbul">📍 İstanbul</option>
-              <option value="izmir">📍 İzmir</option>
-            </select>
+          <div class="sm:col-span-1 lg:col-span-4">
+            <label for="select-city" class="block text-xs font-semibold text-mistral-slate mb-1.5 flex items-center gap-1.5">
+              <i class="fa-solid fa-city text-mistral-orange"></i>
+              <span>İl Seçin</span>
+            </label>
+            <div class="relative">
+              <select 
+                id="select-city" 
+                onchange="onCityChange()" 
+                class="w-full h-11 px-3.5 pr-9 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange focus:ring-2 focus:ring-mistral-orange/20 transition cursor-pointer appearance-none">
+                <option value="ankara" selected>📍 Ankara (Başkent)</option>
+                <option value="istanbul">📍 İstanbul</option>
+                <option value="izmir">📍 İzmir</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-mistral-stone">
+                <i class="fa-solid fa-chevron-down text-xs"></i>
+              </div>
+            </div>
           </div>
 
           <!-- İlçe / Bölge Filtresi -->
-          <div class="sm:col-span-1 lg:col-span-3">
-            <select 
-              id="select-district" 
-              onchange="onDistrictChange()" 
-              class="w-full px-3 py-2.5 rounded-xl bg-white border border-mistral-hairline text-xs sm:text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange transition">
-              <option value="cankaya" selected>Çankaya</option>
-            </select>
+          <div class="sm:col-span-1 lg:col-span-4">
+            <label for="select-district" class="block text-xs font-semibold text-mistral-slate mb-1.5 flex items-center gap-1.5">
+              <i class="fa-solid fa-map-pin text-mistral-orange"></i>
+              <span>İlçe / Bölge</span>
+            </label>
+            <div class="relative">
+              <select 
+                id="select-district" 
+                onchange="onDistrictChange()" 
+                class="w-full h-11 px-3.5 pr-9 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange focus:ring-2 focus:ring-mistral-orange/20 transition cursor-pointer appearance-none">
+                <option value="cankaya" selected>Çankaya</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-mistral-stone">
+                <i class="fa-solid fa-chevron-down text-xs"></i>
+              </div>
+            </div>
           </div>
+        </div>
 
-          <!-- İsimle Arama -->
-          <div class="sm:col-span-1 lg:col-span-3 relative">
+        <!-- Alt Satır: Geniş Arama Kutusu (Tam Genişlik) -->
+        <div>
+          <label for="search-input" class="block text-xs font-semibold text-mistral-slate mb-1.5 flex items-center gap-1.5">
+            <i class="fa-solid fa-magnifying-glass text-mistral-orange"></i>
+            <span>Eczane veya Sokak Ara</span>
+          </label>
+          <div class="relative">
             <input 
               type="text" 
               id="search-input" 
-              placeholder="Eczane adı veya sokak ara..." 
+              placeholder="Eczane adı, mahalle, cadde veya sokak adı yazarak anında filtreleyin..." 
               oninput="onSearchInput()"
-              class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white border border-mistral-hairline text-xs sm:text-sm text-mistral-ink placeholder:text-mistral-stone focus:outline-none focus:border-mistral-orange transition">
-            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3.5 text-mistral-stone text-xs"></i>
+              class="w-full h-11 pl-11 pr-4 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder:text-mistral-stone focus:outline-none focus:border-mistral-orange focus:ring-2 focus:ring-mistral-orange/20 transition shadow-inner-sm">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-mistral-stone text-sm"></i>
           </div>
         </div>
 

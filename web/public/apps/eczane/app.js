@@ -306,7 +306,7 @@ function handleMyLocationClick() {
 function requestUserLocation(silent = false) {
   const btn = document.getElementById('btn-get-gps');
   const bannerBtn = document.getElementById('btn-banner-gps');
-  const originalHtml = '<i class="fa-solid fa-location-crosshairs text-base"></i><span>Konumum</span>';
+  const originalHtml = '<i class="fa-solid fa-location-crosshairs text-base"></i><span class="tracking-wide">Konumumu Tespit Et</span>';
 
   if (btn && !silent) {
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Alınıyor...</span>';
