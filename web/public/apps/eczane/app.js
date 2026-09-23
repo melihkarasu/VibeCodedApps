@@ -758,6 +758,36 @@ function renderAllPharmaciesList(filteredList) {
       </div>
     `;
   }).join('');
+
+  setTimeout(syncListsHeight, 50);
+}
+
+function syncListsHeight() {
+  if (window.innerWidth >= 768) {
+    const leftCard = document.getElementById('nearest-pharmacies-card');
+    const rightCard = document.getElementById('all-pharmacies-card');
+    const rightBox = document.getElementById('all-pharmacies-box');
+    const rightHeader = document.getElementById('all-pharmacies-header');
+
+    if (leftCard && rightCard && rightBox && rightHeader) {
+      const leftHeight = leftCard.offsetHeight;
+      if (leftHeight > 0) {
+        rightCard.style.height = `${leftHeight}px`;
+        const headerHeight = rightHeader.offsetHeight;
+        const availableHeight = leftHeight - headerHeight - 56;
+        rightBox.style.maxHeight = `${Math.max(220, availableHeight)}px`;
+        rightBox.style.height = `${Math.max(220, availableHeight)}px`;
+      }
+    }
+  } else {
+    const rightCard = document.getElementById('all-pharmacies-card');
+    const rightBox = document.getElementById('all-pharmacies-box');
+    if (rightCard) rightCard.style.height = 'auto';
+    if (rightBox) {
+      rightBox.style.maxHeight = '480px';
+      rightBox.style.height = 'auto';
+    }
+  }
 }
 
 function toggleAllPharmaciesList() {
@@ -959,4 +989,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!currentUserLocation.isGPS) {
     await fetchDutyPharmacies(false);
   }
+
+  window.addEventListener('resize', syncListsHeight);
 });
