@@ -24,7 +24,15 @@ async function supabaseRequest(path, options = {}) {
     const err = await res.text().catch(() => '');
     throw new Error('Supabase error: ' + res.status + ' ' + err);
   }
-  return res.json();
+  const text = await res.text().catch(() => '');
+  if (!text || !text.trim()) {
+    return null;
+  }
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    return text;
+  }
 }
 
 // Token Doğrulama & User ID Çıkarma (Bearer Header veya vibe_token Çerezi)
@@ -84,7 +92,7 @@ router.post('/favorites', async (req, res) => {
         await supabaseRequest('/user_favorites', {
           method: 'POST',
           headers: {
-            'Prefer': 'resolution=merge-duplicates'
+            'Prefer': 'return=representation, resolution=merge-duplicates'
           },
           body: JSON.stringify({ user_id: userId, app_id })
         });
