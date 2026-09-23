@@ -22,6 +22,9 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'user_favorites_delete') THEN
         CREATE POLICY user_favorites_delete ON public.user_favorites FOR DELETE USING ((auth.uid() = user_id));
     END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'user_favorites_service_role') THEN
+        CREATE POLICY user_favorites_service_role ON public.user_favorites FOR ALL TO service_role USING (true) WITH CHECK (true);
+    END IF;
 END
 $$;
 
@@ -45,8 +48,14 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'user_app_data_all') THEN
         CREATE POLICY user_app_data_all ON public.user_app_data FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
     END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'user_app_data_service_role') THEN
+        CREATE POLICY user_app_data_service_role ON public.user_app_data FOR ALL TO service_role USING (true) WITH CHECK (true);
+    END IF;
 END
 $$;
+
+-- Ensure service_role has BYPASSRLS
+ALTER ROLE service_role BYPASSRLS;
 
 -- Grant permissions to PostgREST roles
 GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;

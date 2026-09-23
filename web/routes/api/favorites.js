@@ -27,60 +27,83 @@ async function supabaseRequest(path, options = {}) {
   return res.json();
 }
 
+// Token Doğrulama & User ID Çıkarma (Bearer Header veya vibe_token Çerezi)
+function getUserIdFromReq(req) {
+  let token = null;
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.slice(7);
+  } else if (req.headers.cookie) {
+    const match = req.headers.cookie.match(/vibe_token=([^;]+)/);
+    if (match) token = decodeURIComponent(match[1]);
+  }
+
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString());
+    return payload.sub || null;
+  } catch (e) {
+    return null;
+  }
+}
+
 // GET /api/favorites - Kullanıcının favorilerini getir
 router.get('/favorites', async (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  const userId = getUserIdFromReq(req);
+  if (!userId) {
     return res.status(401).json({ success: false, error: 'Yetkilendirme gerekli' });
   }
-  const token = authHeader.slice(7);
-  try {
-    // Token'dan user_id çıkar (JWT parse)
-    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString());
-    const userId = payload.sub;
-    if (!userId) return res.status(401).json({ success: false, error: 'Geçersiz token' });
 
+  try {
     const favorites = await supabaseRequest(
       `/user_favorites?user_id=eq.${userId}&select=app_id,created_at&order=created_at.desc`
     );
-    res.json({ success: true, favorites: favorites.map(f => f.app_id) });
+    res.json({ success: true, favorites: Array.isArray(favorites) ? favorites.map(f => f.app_id) : [] });
   } catch (err) {
     console.error('Favoriler getirme hatası:', err.message);
-    res.status(500).json({ success: false, error: 'Favoriler alınamadı' });
+    res.status(500).json({ success: false, error: 'Favoriler alınamadı', details: err.message });
   }
 });
 
 // POST /api/favorites - Favori ekle/çıkar
 router.post('/favorites', async (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  const userId = getUserIdFromReq(req);
+  if (!userId) {
     return res.status(401).json({ success: false, error: 'Yetkilendirme gerekli' });
   }
-  const token = authHeader.slice(7);
+
   const { app_id, action } = req.body; // action: 'add' | 'remove'
   if (!app_id || !['add', 'remove'].includes(action)) {
     return res.status(400).json({ success: false, error: 'Geçersiz istek' });
   }
-  try {
-    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString());
-    const userId = payload.sub;
-    if (!userId) return res.status(401).json({ success: false, error: 'Geçersiz token' });
 
+  try {
     if (action === 'add') {
-      await supabaseRequest('/user_favorites', {
-        method: 'POST',
-        body: JSON.stringify({ user_id: userId, app_id })
-      });
+      try {
+        await supabaseRequest('/user_favorites', {
+          method: 'POST',
+          headers: {
+            'Prefer': 'resolution=merge-duplicates'
+          },
+          body: JSON.stringify({ user_id: userId, app_id })
+        });
+      } catch (insertErr) {
+        // Eğer zaten mevcutsa (409 conflict veya duplicate key), hata fırlatmak yerine başarı dön
+        if (!insertErr.message.includes('409') && !insertErr.message.includes('duplicate')) {
+          throw insertErr;
+        }
+      }
     } else {
       await supabaseRequest(
-        `/user_favorites?user_id=eq.${userId}&app_id=eq.${app_id}`,
+        `/user_favorites?user_id=eq.${userId}&app_id=eq.${encodeURIComponent(app_id)}`,
         { method: 'DELETE' }
       );
     }
     res.json({ success: true });
   } catch (err) {
     console.error('Favori güncelleme hatası:', err.message);
-    res.status(500).json({ success: false, error: 'Favori güncellenemedi' });
+    res.status(500).json({ success: false, error: 'Favori güncellenemedi', details: err.message });
   }
 });
 
