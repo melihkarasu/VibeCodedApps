@@ -68,7 +68,7 @@ module.exports = function(pageTemplate) {
         }
       </style>
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/eczane/app.js?v=8.0" defer></script>
+      <script src="/static/apps/eczane/app.js?v=9.0" defer></script>
     `;
 
     const content = `
@@ -116,22 +116,22 @@ module.exports = function(pageTemplate) {
 
       <!-- KONTROL & KONUM & FİLTRE PANELİ -->
       <div class="p-5 sm:p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm mb-8 space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
           
           <!-- Konum Butonu (GPS) -->
-          <div class="sm:col-span-2">
+          <div class="sm:col-span-1 lg:col-span-3">
             <button 
               type="button" 
               onclick="handleMyLocationClick()" 
               id="btn-get-gps" 
-              class="w-full px-4 py-2.5 rounded-xl bg-mistral-orange hover:bg-mistral-orange-deep text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition shadow-xs cursor-pointer">
+              class="w-full px-4 py-2.5 rounded-xl bg-mistral-orange hover:bg-mistral-orange-deep text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition shadow-xs cursor-pointer whitespace-nowrap">
               <i class="fa-solid fa-location-crosshairs text-base"></i>
               <span>Konumum</span>
             </button>
           </div>
 
           <!-- İl Seçimi (81 İl) -->
-          <div class="sm:col-span-3">
+          <div class="sm:col-span-1 lg:col-span-3">
             <select 
               id="select-city" 
               onchange="onCityChange()" 
@@ -143,7 +143,7 @@ module.exports = function(pageTemplate) {
           </div>
 
           <!-- İlçe / Bölge Filtresi -->
-          <div class="sm:col-span-3">
+          <div class="sm:col-span-1 lg:col-span-3">
             <select 
               id="select-district" 
               onchange="onDistrictChange()" 
@@ -153,7 +153,7 @@ module.exports = function(pageTemplate) {
           </div>
 
           <!-- İsimle Arama -->
-          <div class="sm:col-span-4 relative">
+          <div class="sm:col-span-1 lg:col-span-3 relative">
             <input 
               type="text" 
               id="search-input" 
@@ -279,7 +279,7 @@ module.exports = function(pageTemplate) {
         <div class="p-5 rounded-xl bg-white border border-mistral-hairline shadow-xs">
           <div class="text-xs text-mistral-slate font-medium mb-1">Nöbetçi Tarihi</div>
           <div class="text-base sm:text-lg font-bold font-editorial text-mistral-orange truncate mt-1" id="stat-duty-date">Bugün</div>
-          <div class="text-[11px] text-mistral-stone mt-0.5">08:00 - Ertesi Gün 08:00</div>
+          <div class="text-[11px] text-mistral-stone mt-0.5">Resmi Nöbet Çizelgesi</div>
         </div>
       </div>
     `;
