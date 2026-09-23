@@ -306,7 +306,7 @@ function handleMyLocationClick() {
 function requestUserLocation(silent = false) {
   const btn = document.getElementById('btn-get-gps');
   const bannerBtn = document.getElementById('btn-banner-gps');
-  const originalHtml = '<i class="fa-solid fa-location-crosshairs text-base"></i><span class="tracking-wide">Konumumu Tespit Et</span>';
+  const originalHtml = '<i class="fa-solid fa-location-crosshairs text-base"></i><span>Konumum</span>';
 
   if (btn && !silent) {
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Alınıyor...</span>';
@@ -436,7 +436,7 @@ async function loadDistricts(citySlug) {
 
     if (data.success && Array.isArray(data.districts)) {
       currentDistricts = data.districts;
-      districtSelect.innerHTML = '<option value="">Tüm İlçeler (İl Geneli En Yakın)</option>' +
+      districtSelect.innerHTML = '<option value="">Tüm İlçeler</option>' +
         currentDistricts.map(d => 
           `<option value="${d.slug}" ${d.slug === selectedDistrictSlug ? 'selected' : ''}>${d.name}</option>`
         ).join('');
@@ -450,7 +450,7 @@ async function loadDistricts(citySlug) {
     }
   } catch(e) {
     console.error('İlçeler yüklenemedi:', e);
-    districtSelect.innerHTML = '<option value="">Tüm İlçeler (İl Geneli En Yakın)</option>';
+    districtSelect.innerHTML = '<option value="">Tüm İlçeler</option>';
   }
 }
 

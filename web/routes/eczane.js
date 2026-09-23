@@ -68,7 +68,7 @@ module.exports = function(pageTemplate) {
         }
       </style>
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/eczane/app.js?v=10.0" defer></script>
+      <script src="/static/apps/eczane/app.js?v=11.0" defer></script>
     `;
 
     const content = `
@@ -118,30 +118,22 @@ module.exports = function(pageTemplate) {
       <div class="p-5 sm:p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm mb-8 space-y-4">
         
         <!-- Üst Satır: Konum, İl ve İlçe Seçimi (Ferah 3 Kolon) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-end">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
           
           <!-- Konum Butonu (GPS) -->
           <div class="sm:col-span-2 lg:col-span-4">
-            <label class="block text-xs font-semibold text-mistral-slate mb-1.5 flex items-center gap-1.5">
-              <i class="fa-solid fa-location-crosshairs text-mistral-orange"></i>
-              <span>Canlı Konum</span>
-            </label>
             <button 
               type="button" 
               onclick="handleMyLocationClick()" 
               id="btn-get-gps" 
-              class="w-full h-11 px-4 rounded-xl bg-mistral-orange hover:bg-mistral-orange-deep text-white text-sm font-semibold flex items-center justify-center gap-2.5 transition shadow-xs cursor-pointer whitespace-nowrap">
+              class="w-full h-11 px-4 rounded-xl bg-mistral-orange hover:bg-mistral-orange-deep text-white text-sm font-semibold flex items-center justify-center gap-2 transition shadow-xs cursor-pointer whitespace-nowrap">
               <i class="fa-solid fa-location-crosshairs text-base"></i>
-              <span class="tracking-wide">Konumumu Tespit Et</span>
+              <span>Konumum</span>
             </button>
           </div>
 
           <!-- İl Seçimi (81 İl) -->
           <div class="sm:col-span-1 lg:col-span-4">
-            <label for="select-city" class="block text-xs font-semibold text-mistral-slate mb-1.5 flex items-center gap-1.5">
-              <i class="fa-solid fa-city text-mistral-orange"></i>
-              <span>İl Seçin</span>
-            </label>
             <div class="relative">
               <select 
                 id="select-city" 
@@ -159,16 +151,12 @@ module.exports = function(pageTemplate) {
 
           <!-- İlçe / Bölge Filtresi -->
           <div class="sm:col-span-1 lg:col-span-4">
-            <label for="select-district" class="block text-xs font-semibold text-mistral-slate mb-1.5 flex items-center gap-1.5">
-              <i class="fa-solid fa-map-pin text-mistral-orange"></i>
-              <span>İlçe / Bölge</span>
-            </label>
             <div class="relative">
               <select 
                 id="select-district" 
                 onchange="onDistrictChange()" 
                 class="w-full h-11 px-3.5 pr-9 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange focus:ring-2 focus:ring-mistral-orange/20 transition cursor-pointer appearance-none">
-                <option value="cankaya" selected>Çankaya</option>
+                <option value="" selected>Tüm İlçeler</option>
               </select>
               <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-mistral-stone">
                 <i class="fa-solid fa-chevron-down text-xs"></i>
@@ -178,20 +166,14 @@ module.exports = function(pageTemplate) {
         </div>
 
         <!-- Alt Satır: Geniş Arama Kutusu (Tam Genişlik) -->
-        <div>
-          <label for="search-input" class="block text-xs font-semibold text-mistral-slate mb-1.5 flex items-center gap-1.5">
-            <i class="fa-solid fa-magnifying-glass text-mistral-orange"></i>
-            <span>Eczane veya Sokak Ara</span>
-          </label>
-          <div class="relative">
-            <input 
-              type="text" 
-              id="search-input" 
-              placeholder="Eczane adı, mahalle, cadde veya sokak adı yazarak anında filtreleyin..." 
-              oninput="onSearchInput()"
-              class="w-full h-11 pl-11 pr-4 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder:text-mistral-stone focus:outline-none focus:border-mistral-orange focus:ring-2 focus:ring-mistral-orange/20 transition shadow-inner-sm">
-            <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-mistral-stone text-sm"></i>
-          </div>
+        <div class="relative">
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Eczane adı veya sokak ara..." 
+            oninput="onSearchInput()"
+            class="w-full h-11 pl-11 pr-4 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder:text-mistral-stone focus:outline-none focus:border-mistral-orange focus:ring-2 focus:ring-mistral-orange/20 transition shadow-inner-sm">
+          <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-mistral-stone text-sm"></i>
         </div>
 
         <!-- Bilgi İpucu Şeridi -->
@@ -208,80 +190,80 @@ module.exports = function(pageTemplate) {
         </div>
       </div>
 
-      <!-- HARİTA VE EN YAKIN ECZANELER GRID -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-8">
+      <!-- HARİTA (Tam Sayfa Genişliği) -->
+      <div class="mb-8">
+        <div class="p-3 rounded-2xl bg-white border border-mistral-hairline shadow-sm relative overflow-hidden">
+          <div id="eczane-map" class="w-full h-[540px] rounded-xl z-10"></div>
+          
+          <!-- Harita Lejantı -->
+          <div class="absolute bottom-6 left-6 z-20 bg-white/95 backdrop-blur border border-mistral-hairline px-3.5 py-2.5 rounded-lg shadow-sm text-xs text-mistral-ink flex flex-wrap items-center gap-4">
+            <span class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-blue-600 border border-white shadow-xs"></span>
+              <span>Referans Konum</span>
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="w-3.5 h-3.5 rounded-full bg-emerald-600 text-white text-[9px] font-bold flex items-center justify-center border border-white">1</span>
+              <span>En Yakın 5 Eczane</span>
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-rose-600 text-white text-[9px] font-bold flex items-center justify-center border border-white">&plus;</span>
+              <span>Diğer Nöbetçiler</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- HARİTANIN ALTINDA YAN YANA: EN YAKIN 5 NÖBETÇİ ECZANE & BÖLGEDEKİ TÜM NÖBETÇİLER -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start mb-8">
         
-        <!-- Sol: OpenStreetMap Haritası (7 Kolon) -->
-        <div class="lg:col-span-7 space-y-4">
-          <div class="p-3 rounded-2xl bg-white border border-mistral-hairline shadow-sm relative overflow-hidden">
-            <div id="eczane-map" class="w-full h-[560px] rounded-xl z-10"></div>
-            
-            <!-- Harita Lejantı -->
-            <div class="absolute bottom-6 left-6 z-20 bg-white/95 backdrop-blur border border-mistral-hairline px-3.5 py-2.5 rounded-lg shadow-sm text-xs text-mistral-ink flex flex-wrap items-center gap-4">
-              <span class="flex items-center gap-1.5">
-                <span class="w-3 h-3 rounded-full bg-blue-600 border border-white shadow-xs"></span>
-                <span>Referans Konum</span>
+        <!-- Sol: EN YAKIN 5 ECZANE KARTI -->
+        <div class="p-6 rounded-2xl bg-white border border-emerald-500/30 shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-xs uppercase tracking-wider text-emerald-600 font-bold block mb-0.5 flex items-center gap-1">
+                <i class="fa-solid fa-location-dot"></i> EN YAKIN 5 NÖBETÇİ ECZANE
               </span>
-              <span class="flex items-center gap-1.5">
-                <span class="w-3.5 h-3.5 rounded-full bg-emerald-600 text-white text-[9px] font-bold flex items-center justify-center border border-white">1</span>
-                <span>En Yakın 5 Eczane</span>
-              </span>
-              <span class="flex items-center gap-1.5">
-                <span class="w-3 h-3 rounded-full bg-rose-600 text-white text-[9px] font-bold flex items-center justify-center border border-white">&plus;</span>
-                <span>Diğer Nöbetçiler</span>
-              </span>
+              <h3 class="text-xl font-bold font-editorial text-mistral-ink">
+                Mesafe Sıralı Liste
+              </h3>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">
+              Canlı Mesafe
+            </span>
+          </div>
+
+          <!-- 5 Eczane Kart Listesi -->
+          <div id="nearest-pharmacies-list" class="space-y-3">
+            <div class="p-4 rounded-xl bg-mistral-cream text-center text-xs text-mistral-slate">
+              Eczaneler yükleniyor ve mesafeler hesaplanıyor...
             </div>
           </div>
         </div>
 
-        <!-- Sağ: En Yakın 5 Eczane & Detay Listesi (5 Kolon) -->
-        <div class="lg:col-span-5 space-y-6">
-          
-          <!-- EN YAKIN 5 ECZANE KARTI -->
-          <div class="p-6 rounded-2xl bg-white border border-emerald-500/30 shadow-sm space-y-4">
-            <div class="flex items-center justify-between">
-              <div>
-                <span class="text-xs uppercase tracking-wider text-emerald-600 font-bold block mb-0.5 flex items-center gap-1">
-                  <i class="fa-solid fa-location-dot"></i> EN YAKIN 5 NÖBETÇİ ECZANE
-                </span>
-                <h3 class="text-xl font-bold font-editorial text-mistral-ink">
-                  Mesafe Sıralı Liste
-                </h3>
-              </div>
-              <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">
-                Canlı Mesafe
+        <!-- Sağ: DİĞER / TÜM ECZANELER LİSTESİ -->
+        <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-xs uppercase tracking-wider text-mistral-slate font-bold block mb-0.5 flex items-center gap-1">
+                <i class="fa-solid fa-list-check"></i> LİSTE
               </span>
-            </div>
-
-            <!-- 5 Eczane Kart Listesi -->
-            <div id="nearest-pharmacies-list" class="space-y-3">
-              <div class="p-4 rounded-xl bg-mistral-cream text-center text-xs text-mistral-slate">
-                Eczaneler yükleniyor ve mesafeler hesaplanıyor...
-              </div>
-            </div>
-          </div>
-
-          <!-- DİĞER / TÜM ECZANELER LİSTESİ -->
-          <div class="p-5 rounded-2xl bg-white border border-mistral-hairline shadow-sm space-y-3">
-            <div class="flex items-center justify-between">
-              <h4 class="text-sm font-bold font-editorial text-mistral-ink flex items-center gap-2">
+              <h3 class="text-xl font-bold font-editorial text-mistral-ink flex items-center gap-2">
                 <span>Bölgedeki Tüm Nöbetçiler</span>
-                <span id="filtered-pharmacies-count" class="px-2 py-0.5 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-[11px] font-semibold">0</span>
-              </h4>
-              <button 
-                type="button" 
-                onclick="toggleAllPharmaciesList()" 
-                id="btn-toggle-all"
-                class="text-xs text-mistral-orange hover:underline font-semibold cursor-pointer">
-                Gizle / Göster
-              </button>
+                <span id="filtered-pharmacies-count" class="px-2.5 py-0.5 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold">0</span>
+              </h3>
             </div>
-
-            <div id="all-pharmacies-box" class="space-y-2 max-h-[300px] overflow-y-auto pr-1 text-xs">
-              <!-- JS ile doldurulur -->
-            </div>
+            <button 
+              type="button" 
+              onclick="toggleAllPharmaciesList()" 
+              id="btn-toggle-all"
+              class="text-xs text-mistral-orange hover:underline font-semibold cursor-pointer">
+              Gizle / Göster
+            </button>
           </div>
 
+          <div id="all-pharmacies-box" class="space-y-2 max-h-[560px] overflow-y-auto pr-1 text-xs">
+            <!-- JS ile doldurulur -->
+          </div>
         </div>
 
       </div>
