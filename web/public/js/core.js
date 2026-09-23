@@ -372,6 +372,18 @@ window.logout = async function() {
   clearAuthCookies();
   window.__vibe_user = null;
 
+  // Favoriler ve kullanıcıya ait yerel önbellekleri tamamen temizle
+  try {
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && (k.startsWith('vibe_favs') || k === 'vibe_favorite_apps' || k.startsWith('vibe_app_data_'))) {
+        keysToRemove.push(k);
+      }
+    }
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+  } catch(e) {}
+
   const authNav = document.getElementById('auth-nav');
   if (authNav) {
     authNav.innerHTML = `

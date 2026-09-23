@@ -671,9 +671,12 @@ module.exports = function(pageTemplate) {
         // Senkron (localStorage) favori listesi
         function getFavoritesSync() {
           const user = getVitrinUser();
-          const candidateKeys = ['vibe_favorite_apps', 'vibe_favs_user'];
-          if (user && user.id) candidateKeys.push('vibe_favs_' + user.id);
-          if (user && user.email) candidateKeys.push('vibe_favs_' + user.email);
+          if (!user) return [];
+
+          const candidateKeys = [];
+          if (user.id) candidateKeys.push('vibe_favs_' + user.id);
+          if (user.email) candidateKeys.push('vibe_favs_' + user.email);
+          candidateKeys.push('vibe_favs_user', 'vibe_favorite_apps');
 
           const foundSet = new Set();
           for (const k of candidateKeys) {
@@ -733,6 +736,8 @@ module.exports = function(pageTemplate) {
         }
 
         function getFavorites() {
+          const user = getVitrinUser();
+          if (!user) return [];
           if (favoritesCache !== null) return favoritesCache;
           return getFavoritesSync();
         }
@@ -756,10 +761,11 @@ module.exports = function(pageTemplate) {
 
         function saveFavorites(list) {
           const user = getVitrinUser();
+          if (!user) return;
           try {
             const json = JSON.stringify(list);
-            if (user && user.id) localStorage.setItem('vibe_favs_' + user.id, json);
-            if (user && user.email) localStorage.setItem('vibe_favs_' + user.email, json);
+            if (user.id) localStorage.setItem('vibe_favs_' + user.id, json);
+            if (user.email) localStorage.setItem('vibe_favs_' + user.email, json);
             localStorage.setItem('vibe_favs_user', json);
             localStorage.setItem('vibe_favorite_apps', json);
           } catch(e) {}
@@ -772,6 +778,12 @@ module.exports = function(pageTemplate) {
           if (e) {
             e.preventDefault();
             e.stopPropagation();
+          }
+
+          const user = getVitrinUser();
+          if (!user) {
+            openVitrinAuthModal(APPS_DATA[appId]?.name || 'Uygulama', window.location.href);
+            return;
           }
 
           let favs = [...getFavorites()];
@@ -791,9 +803,29 @@ module.exports = function(pageTemplate) {
         }
 
         function updateFavoriteUI() {
+          const user = getVitrinUser();
           const secFav = document.getElementById('section-favorites');
+
+          if (!user) {
+            favoritesCache = null;
+            if (secFav) {
+              secFav.classList.add('hidden');
+              secFav.style.display = 'none';
+            }
+            Object.keys(APPS_DATA).forEach(id => {
+              const btn = document.getElementById('star-btn-' + id);
+              const icon = document.getElementById('star-icon-' + id);
+              if (btn && icon) {
+                btn.className = 'shrink-0 w-10 h-10 rounded-xl border transition flex items-center justify-center cursor-pointer bg-stone-50 hover:bg-amber-50 border-stone-200 hover:border-amber-300 text-stone-400 hover:text-amber-500 shadow-2xs';
+                icon.innerText = '☆';
+              }
+            });
+            return;
+          }
+
           if (secFav) {
             secFav.classList.remove('hidden');
+            secFav.style.display = 'block';
           }
 
           const favs = getFavorites();
