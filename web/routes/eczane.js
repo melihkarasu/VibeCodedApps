@@ -194,7 +194,7 @@ module.exports = function(pageTemplate) {
         </div>
 
         <!-- Alt Satır: Geniş Arama Kutusu (Tam Genişlik) -->
-        <div class="relative">
+        <div class="relative flex items-center">
           <input 
             type="text" 
             id="search-input" 
@@ -202,7 +202,9 @@ module.exports = function(pageTemplate) {
             oninput="onSearchInput()"
             style="padding-left: 2.75rem !important;"
             class="w-full h-11 pr-4 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder:text-mistral-stone focus:outline-none focus:border-mistral-orange focus:ring-2 focus:ring-mistral-orange/20 transition shadow-inner-sm">
-          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-mistral-stone text-sm pointer-events-none"></i>
+          <div style="position: absolute; left: 1rem; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; pointer-events: none;" class="text-mistral-stone text-sm">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
         </div>
 
         <!-- Bilgi İpucu Şeridi -->
