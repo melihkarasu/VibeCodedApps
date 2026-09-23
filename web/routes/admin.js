@@ -40,7 +40,7 @@ module.exports = function(pageTemplate) {
         <div class="text-4xl mb-3">⛔</div>
         <h3 class="text-xl font-bold font-editorial text-rose-900 mb-2">Erişim Yetkisi Yetersiz</h3>
         <p class="text-sm text-rose-800 leading-relaxed mb-6">
-          Bu alana yalnızca sistem yöneticisi (<strong>REDACTED</strong>) erişebilir. Lütfen yönetici hesabınızla giriş yapınız.
+          Bu alana yalnızca sistem yöneticisi erişebilir. Lütfen yönetici hesabınızla giriş yapınız.
         </p>
         <div class="flex justify-center gap-3">
           <a href="/auth" class="px-5 py-2.5 rounded-xl bg-mistral-orange hover:bg-mistral-orange-deep text-white font-medium text-xs transition shadow-sm">
@@ -325,7 +325,7 @@ module.exports = function(pageTemplate) {
           try {
             const user = JSON.parse(userRaw);
             const email = (user.email || '').trim().toLowerCase();
-            if (email !== 'REDACTED') {
+            if (email !== process.env.ADMIN_EMAIL?.toLowerCase().trim() && email !== 'REDACTED') {
               showUnauthorized();
               return;
             }
@@ -400,7 +400,7 @@ module.exports = function(pageTemplate) {
               if (users.length === 0) {
                 // Varsayılan yönetici ve bilinen kullanıcılar
                 users.push({
-                  email: 'REDACTED',
+                  email: process.env.ADMIN_EMAIL || 'Sistem Yöneticisi',
                   raw_user_meta_data: { name: 'Melih Karasu', avatar_url: 'https://avatars.githubusercontent.com/u/144457496?v=4' },
                   created_at: '2026-09-07T08:39:14Z',
                   last_sign_in_at: new Date().toISOString(),
