@@ -73,6 +73,11 @@ module.exports = function(pageTemplate) {
             gap: 2rem !important;
             align-items: stretch !important;
           }
+          #nearest-pharmacies-card {
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100% !important;
+          }
           #all-pharmacies-card {
             display: flex !important;
             flex-direction: column !important;
@@ -167,14 +172,11 @@ module.exports = function(pageTemplate) {
               <select 
                 id="select-city" 
                 onchange="onCityChange()" 
-                class="w-full h-11 px-3.5 pr-9 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange focus:ring-2 focus:ring-mistral-orange/20 transition cursor-pointer appearance-none">
+                class="w-full h-11 px-3.5 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange focus:ring-2 focus:ring-mistral-orange/20 transition cursor-pointer">
                 <option value="ankara" selected>📍 Ankara (Başkent)</option>
                 <option value="istanbul">📍 İstanbul</option>
                 <option value="izmir">📍 İzmir</option>
               </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-mistral-stone">
-                <i class="fa-solid fa-chevron-down text-xs"></i>
-              </div>
             </div>
           </div>
 
@@ -184,12 +186,9 @@ module.exports = function(pageTemplate) {
               <select 
                 id="select-district" 
                 onchange="onDistrictChange()" 
-                class="w-full h-11 px-3.5 pr-9 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange focus:ring-2 focus:ring-mistral-orange/20 transition cursor-pointer appearance-none">
+                class="w-full h-11 px-3.5 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange focus:ring-2 focus:ring-mistral-orange/20 transition cursor-pointer">
                 <option value="" selected>Tüm İlçeler</option>
               </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-mistral-stone">
-                <i class="fa-solid fa-chevron-down text-xs"></i>
-              </div>
             </div>
           </div>
         </div>
@@ -201,8 +200,9 @@ module.exports = function(pageTemplate) {
             id="search-input" 
             placeholder="Eczane adı veya sokak ara..." 
             oninput="onSearchInput()"
-            class="w-full h-11 pl-11 pr-4 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder:text-mistral-stone focus:outline-none focus:border-mistral-orange focus:ring-2 focus:ring-mistral-orange/20 transition shadow-inner-sm">
-          <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-mistral-stone text-sm"></i>
+            style="padding-left: 2.75rem !important;"
+            class="w-full h-11 pr-4 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder:text-mistral-stone focus:outline-none focus:border-mistral-orange focus:ring-2 focus:ring-mistral-orange/20 transition shadow-inner-sm">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-mistral-stone text-sm pointer-events-none"></i>
         </div>
 
         <!-- Bilgi İpucu Şeridi -->
@@ -246,7 +246,7 @@ module.exports = function(pageTemplate) {
       <div class="eczane-lists-grid items-stretch mb-8">
         
         <!-- Sol: EN YAKIN 5 ECZANE KARTI -->
-        <div id="nearest-pharmacies-card" class="p-6 rounded-2xl bg-white border border-emerald-500/30 shadow-sm space-y-4">
+        <div id="nearest-pharmacies-card" class="p-6 rounded-2xl bg-white border border-emerald-500/30 shadow-sm space-y-4 h-full">
           <div class="flex items-center justify-between">
             <div>
               <span class="text-xs uppercase tracking-wider text-emerald-600 font-bold block mb-0.5 flex items-center gap-1">
@@ -270,7 +270,7 @@ module.exports = function(pageTemplate) {
         </div>
 
         <!-- Sağ: DİĞER / TÜM ECZANELER LİSTESİ -->
-        <div id="all-pharmacies-card" class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm flex flex-col">
+        <div id="all-pharmacies-card" class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm flex flex-col h-full">
           <div id="all-pharmacies-header" class="flex items-center justify-between pb-3 shrink-0">
             <div>
               <span class="text-xs uppercase tracking-wider text-mistral-slate font-bold block mb-0.5 flex items-center gap-1">
