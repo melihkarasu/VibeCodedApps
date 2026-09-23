@@ -71,12 +71,10 @@ module.exports = function(pageTemplate) {
             display: grid !important;
             grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
             gap: 2rem !important;
-            align-items: stretch !important;
+            align-items: start !important;
           }
           #nearest-pharmacies-card {
-            display: flex !important;
-            flex-direction: column !important;
-            height: 100% !important;
+            height: auto !important;
           }
           #all-pharmacies-card {
             display: flex !important;
