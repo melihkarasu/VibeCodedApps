@@ -46,6 +46,9 @@ const CITY_COORDINATES = {
   trabzon: { lat: 41.0027, lng: 39.7168 }
 };
 
+// Eşzamanlı isteklerde mükerrer API çağrılarını önlemek için in-memory promise havuzu
+const pendingDutyFetches = new Map();
+const pendingDistrictFetches = new Map();
 // -------------------------------------------------------------
 // 1. İller Listesi (/api/nobetci-eczane/cities)
 // -------------------------------------------------------------
@@ -102,16 +105,27 @@ router.get('/nobetci-eczane/districts', async (req, res) => {
   const citySlug = (req.query.city || 'ankara').toLowerCase().trim();
   const cacheFile = path.join(CACHE_DIR, `eczane_districts_${citySlug}.json`);
 
+  // 1. Önbellekte varsa doğrudan dön (İlçeler sabittir, her gün tekrar çekmeye gerek yoktur)
   if (fs.existsSync(cacheFile)) {
     try {
       const cached = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
       if (Array.isArray(cached) && cached.length > 0) {
-        return res.json({ success: true, city: citySlug, districts: cached });
+        return res.json({ success: true, city: citySlug, districts: cached, cached: true });
       }
     } catch (e) {}
   }
 
-  try {
+  // 2. Halihazırda bu ilçe için çalışan istek varsa onu bekle
+  if (pendingDistrictFetches.has(citySlug)) {
+    try {
+      const districts = await pendingDistrictFetches.get(citySlug);
+      return res.json({ success: true, city: citySlug, districts });
+    } catch (err) {
+      // devam et ve fallback dene
+    }
+  }
+
+  const fetchPromise = (async () => {
     const response = await fetch(`${ECZANE_BASE_URL}/cities/${encodeURIComponent(citySlug)}/districts`, {
       headers: {
         'X-API-Key': ECZANE_API_KEY,
@@ -124,8 +138,13 @@ router.get('/nobetci-eczane/districts', async (req, res) => {
     }
 
     const data = await response.json();
-    if (data.success && Array.isArray(data.data)) {
-      const districts = data.data.map(d => ({
+    // EczaneAPI v1 yanıt formatı: { success: true, data: { city: {...}, districts: [...] } } veya data: [...]
+    const rawDistricts = Array.isArray(data.data) 
+      ? data.data 
+      : (Array.isArray(data.data?.districts) ? data.data.districts : []);
+
+    if (rawDistricts.length > 0) {
+      const districts = rawDistricts.map(d => ({
         name: d.name,
         slug: d.slug,
         pharmaciesCount: d.pharmaciesCount || 0
@@ -135,11 +154,49 @@ router.get('/nobetci-eczane/districts', async (req, res) => {
         fs.writeFileSync(cacheFile, JSON.stringify(districts, null, 2), 'utf8');
       } catch (e) {}
 
-      return res.json({ success: true, city: citySlug, districts });
+      return districts;
     }
     throw new Error('İlçeler listesi alınamadı');
+  })();
+
+  pendingDistrictFetches.set(citySlug, fetchPromise);
+
+  try {
+    const districts = await fetchPromise;
+    pendingDistrictFetches.delete(citySlug);
+    return res.json({ success: true, city: citySlug, districts });
   } catch (err) {
+    pendingDistrictFetches.delete(citySlug);
     console.error(`[EczaneAPI] Districts error for ${citySlug}:`, err.message);
+
+    // Fallback: Nöbetçi eczaneler önbelleğindeki kayıtlardan ilçeleri türet
+    try {
+      const todayStr = getTurkeyDateStr();
+      const files = fs.readdirSync(CACHE_DIR)
+        .filter(f => f.startsWith(`eczane_duty_${citySlug}_`))
+        .sort().reverse();
+
+      if (files.length > 0) {
+        const cachedDuty = JSON.parse(fs.readFileSync(path.join(CACHE_DIR, files[0]), 'utf8'));
+        if (Array.isArray(cachedDuty) && cachedDuty.length > 0) {
+          const districtMap = new Map();
+          cachedDuty.forEach(p => {
+            const dName = p.district?.name;
+            const dSlug = p.district?.slug;
+            if (dName && dSlug && !districtMap.has(dSlug)) {
+              districtMap.set(dSlug, { name: dName, slug: dSlug, pharmaciesCount: 0 });
+            }
+          });
+          const districts = Array.from(districtMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+          if (districts.length > 0) {
+            return res.json({ success: true, city: citySlug, districts, fallback: true });
+          }
+        }
+      }
+    } catch (fallbackErr) {
+      console.warn('[EczaneAPI] Districts fallback error:', fallbackErr.message);
+    }
+
     res.status(500).json({ success: false, error: 'İlçeler listesi yüklenemedi: ' + err.message });
   }
 });
@@ -195,15 +252,13 @@ router.get('/nobetci-eczane', async (req, res) => {
   const userLng = parseFloat(req.query.lng);
   const hasUserLoc = !isNaN(userLat) && !isNaN(userLng);
 
-  // Cache anahtarı (Günde bir güncellenir, 15 dk aralıkla canlı kalır)
-  const cacheKey = `eczane_duty_${city}_${district || 'all'}_${todayStr}`;
+  // Günde 1 kez çekim kuralı: Şehir bazında günlük tek bir önbellek dosyası tutulur
+  const cacheKey = `eczane_duty_${city}_${todayStr}`;
   const cacheFile = path.join(CACHE_DIR, `${cacheKey}.json`);
 
   const fetchDutyPharmacies = async () => {
-    let url = `${ECZANE_BASE_URL}/pharmacies/on-duty?city=${encodeURIComponent(city)}`;
-    if (district) {
-      url += `&district=${encodeURIComponent(district)}`;
-    }
+    // İl genelinde tüm eczaneler tek seferde çekilir (district filtresi sorguya eklenmez, yerelde filtrelenir)
+    const url = `${ECZANE_BASE_URL}/pharmacies/on-duty?city=${encodeURIComponent(city)}`;
 
     const response = await fetch(url, {
       headers: {
@@ -222,19 +277,33 @@ router.get('/nobetci-eczane', async (req, res) => {
       throw new Error('Nöbetçi eczane verisi formatı geçersiz');
     }
 
-    // Bugünün nöbetçi listesini seç (day === 'Bugün' veya date === todayStr veya data[1])
+    // Bugünün nöbetçi listesini seç (day === 'Bugün' veya date === todayStr veya data[1] veya data[0])
     let todayData = json.data.find(d => d.day === 'Bugün' || d.date === todayStr);
     if (!todayData && json.data.length > 0) {
-      todayData = json.data[1] || json.data[0];
+      todayData = json.data.find(d => d.date?.startsWith(todayStr)) || json.data[1] || json.data[0];
     }
 
     return todayData ? (todayData.pharmacies || []) : [];
   };
 
-  const processAndSend = (rawPharmacies) => {
+  const processAndSend = (rawPharmacies, isCached = false) => {
     const cityFallback = CITY_COORDINATES[city] || { lat: 39.925054, lng: 32.836944 };
 
-    const mapped = rawPharmacies.map((p, idx) => {
+    // Eğer ilçe seçilmişse bellek içinde filtrele
+    let filteredPharmacies = rawPharmacies;
+    if (district) {
+      filteredPharmacies = rawPharmacies.filter(p => {
+        const dSlug = (p.district?.slug || '').toLowerCase();
+        const dName = (p.district?.name || '').toLowerCase();
+        return dSlug === district || dName === district;
+      });
+      // İlçe filtresinde hiç sonuç çıkmazsa kullanıcıya boş dönmemek için tüm il listesine fallback yap
+      if (filteredPharmacies.length === 0) {
+        filteredPharmacies = rawPharmacies;
+      }
+    }
+
+    const mapped = filteredPharmacies.map((p, idx) => {
       let lat = p.location?.latitude ? parseFloat(p.location.latitude) : null;
       let lng = p.location?.longitude ? parseFloat(p.location.longitude) : null;
 
@@ -252,6 +321,18 @@ router.get('/nobetci-eczane', async (req, res) => {
       const pDistrict = p.district?.name || (district ? (district.charAt(0).toUpperCase() + district.slice(1)) : 'Merkez');
       const pCity = p.city?.name || (city.charAt(0).toUpperCase() + city.slice(1));
 
+      // 🕒 08:00 - Ertesi gün 08:00 bilgisi apiden gelmiyorsa kesinlikle üretilmez, null bırakılır
+      let cleanNotes = null;
+      if (p.notes && typeof p.notes === 'string' && !p.notes.includes('08:00')) {
+        cleanNotes = p.notes.trim();
+      } else if (p.duty?.notes && typeof p.duty.notes === 'string' && !p.duty.notes.includes('08:00')) {
+        cleanNotes = p.duty.notes.trim();
+      } else if (p.duty?.description && typeof p.duty.description === 'string' && !p.duty.description.includes('08:00')) {
+        cleanNotes = p.duty.description.trim();
+      } else if (p.duty?.isVerified) {
+        cleanNotes = 'Resmi Doğrulanmış Nöbet';
+      }
+
       return {
         id: p.id || String(idx + 1),
         name: p.name || 'Eczane',
@@ -260,7 +341,7 @@ router.get('/nobetci-eczane', async (req, res) => {
         phone2: p.phone2 || null,
         city: pCity,
         district: pDistrict,
-        notes: p.duty?.isVerified ? 'Resmi Doğrulanmış Nöbet' : (p.dataQuality?.status === 'degraded' ? 'Adres teyit ediniz' : '08:00 - Ertesi gün 08:00'),
+        notes: cleanNotes,
         date: todayStr,
         latitude: lat,
         longitude: lng,
@@ -272,8 +353,8 @@ router.get('/nobetci-eczane', async (req, res) => {
       mapped.sort((a, b) => (a.distanceMeters ?? Infinity) - (b.distanceMeters ?? Infinity));
     }
 
-    const districts = [...new Set(mapped.map(m => m.district).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'tr'));
-    const nearest = hasUserLoc ? mapped.slice(0, 5) : mapped.slice(0, 5);
+    const availableDistricts = [...new Set(rawPharmacies.map(m => m.district?.name).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'tr'));
+    const nearest = mapped.slice(0, 5);
 
     return res.json({
       success: true,
@@ -282,32 +363,70 @@ router.get('/nobetci-eczane', async (req, res) => {
       district: district,
       count: mapped.length,
       userLocation: hasUserLoc ? { lat: userLat, lng: userLng } : null,
-      districts: districts,
+      districts: availableDistricts,
       nearest: nearest,
       pharmacies: mapped,
+      cached: isCached,
       source: 'EczaneAPI.com (Türkiye Geneli 81 İl ve İlçe Canlı Nöbetçi Listesi)'
     });
   };
 
-  // 1. Önbellekte varsa hızlı dön
+  // 1. Önbellekte varsa (bugün çekilmişse) EczaneAPI'ye istek ATMADAN doğrudan önbellekten dön
   if (fs.existsSync(cacheFile)) {
     try {
       const cached = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
       if (Array.isArray(cached) && cached.length > 0) {
-        return processAndSend(cached);
+        return processAndSend(cached, true);
       }
     } catch(e) {}
   }
 
-  // 2. Dış kaynaktan çek
-  try {
+  // 2. Halihazırda bu şehir için devam eden bir API isteği varsa mükerrer istek atmayıp onu bekle
+  if (pendingDutyFetches.has(cacheKey)) {
+    try {
+      const rawList = await pendingDutyFetches.get(cacheKey);
+      return processAndSend(rawList, true);
+    } catch (err) {
+      // devam et ve fallback dene
+    }
+  }
+
+  // 3. Bugünün ilk isteği: EczaneAPI'den il genelini çek ve diske kaydet
+  const fetchTask = (async () => {
     const rawList = await fetchDutyPharmacies();
     try {
       fs.writeFileSync(cacheFile, JSON.stringify(rawList, null, 2), 'utf8');
     } catch(e) {}
-    return processAndSend(rawList);
+    return rawList;
+  })();
+
+  pendingDutyFetches.set(cacheKey, fetchTask);
+
+  try {
+    const rawList = await fetchTask;
+    pendingDutyFetches.delete(cacheKey);
+    return processAndSend(rawList, false);
   } catch (err) {
+    pendingDutyFetches.delete(cacheKey);
     console.error(`[Eczane API Hatası - ${todayStr}]:`, err.message);
+
+    // Rate limite takılma veya geçici API hatası durumunda: Bu şehir için en güncel önceki önbellek dosyasını bul ve dön
+    try {
+      const prevFiles = fs.readdirSync(CACHE_DIR)
+        .filter(f => f.startsWith(`eczane_duty_${city}_`))
+        .sort().reverse();
+
+      if (prevFiles.length > 0) {
+        const fallbackData = JSON.parse(fs.readFileSync(path.join(CACHE_DIR, prevFiles[0]), 'utf8'));
+        if (Array.isArray(fallbackData) && fallbackData.length > 0) {
+          console.warn(`[EczaneAPI] Rate limit/hata nedeniyle ${city} için önceki önbellek (${prevFiles[0]}) kullanıldı.`);
+          return processAndSend(fallbackData, true);
+        }
+      }
+    } catch (fallbackErr) {
+      console.warn('[EczaneAPI] Fallback error:', fallbackErr.message);
+    }
+
     return res.status(503).json({
       success: false,
       dutyDate: todayStr,

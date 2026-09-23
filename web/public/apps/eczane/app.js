@@ -284,8 +284,8 @@ async function applyDetectedLocation(lat, lng, detected, labelName, isGPS) {
     eczaneMap.setView([lat, lng], 14, { animate: true });
   }
 
-  // 4. Eczaneleri il genelinde (district='') koordinat sıralı olarak çek
-  await fetchDutyPharmacies();
+  // 4. Eczaneleri il genelinde (district='') koordinat sıralı olarak çek (otomatik uzaklaşmayı önle)
+  await fetchDutyPharmacies(false);
 
   // 5. En yakın eczaneden kesin ilçe bilgisini doğrula
   if (allPharmacies && allPharmacies.length > 0) {
@@ -471,13 +471,13 @@ async function onCityChange() {
   }
 
   await loadDistricts(selectedCitySlug);
-  fetchDutyPharmacies();
+  fetchDutyPharmacies(false);
 }
 
 function onDistrictChange() {
   const districtSelect = document.getElementById('select-district');
   selectedDistrictSlug = districtSelect.value;
-  fetchDutyPharmacies();
+  fetchDutyPharmacies(false);
 }
 
 function onSearchInput() {
@@ -487,7 +487,7 @@ function onSearchInput() {
 // -------------------------------------------------------------
 // Nöbetçi Eczaneleri Çekme
 // -------------------------------------------------------------
-async function fetchDutyPharmacies() {
+async function fetchDutyPharmacies(autoFit = false) {
   const statusEl = document.getElementById('eczane-status-label');
   const cityLabelEl = document.getElementById('stat-duty-city-label');
   if (statusEl) statusEl.innerText = 'Eczaneler Güncelleniyor...';
@@ -527,7 +527,7 @@ async function fetchDutyPharmacies() {
 
     refreshPharmacyData();
 
-    if (allPharmacies.length > 0 && eczaneMap) {
+    if (autoFit && allPharmacies.length > 0 && eczaneMap) {
       setTimeout(() => fitAllPharmacies(), 300);
     }
   } catch (err) {
@@ -679,7 +679,7 @@ function renderTop5List(top5) {
           ${escapeHtml(item.address)}
         </p>
 
-        ${item.notes ? `
+        ${(item.notes && !item.notes.includes('08:00')) ? `
           <div class="mb-2.5 px-2.5 py-1 rounded bg-amber-50/70 border border-amber-200 text-[11px] text-amber-800 flex items-center gap-1.5">
             <i class="fa-regular fa-clock text-amber-600"></i>
             <span>${escapeHtml(item.notes)}</span>
@@ -839,7 +839,7 @@ function renderMapMarkers(filteredPharmacies, top5) {
         <div style="font-size: 12px; color: #4a4a4a; margin-bottom: 8px; line-height: 1.3;">
           ${escapeHtml(item.address)}
         </div>
-        ${item.notes ? `
+        ${(item.notes && !item.notes.includes('08:00')) ? `
           <div style="font-size: 11px; background: #fffbeb; color: #92400e; padding: 4px 6px; border-radius: 6px; border: 1px solid #fde68a; margin-bottom: 8px;">
             🕒 ${escapeHtml(item.notes)}
           </div>
@@ -957,6 +957,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Eğer konum henüz alınmadıysa varsayılan Ankara/Çankaya eczanelerini yükle
   if (!currentUserLocation.isGPS) {
-    await fetchDutyPharmacies();
+    await fetchDutyPharmacies(false);
   }
 });
