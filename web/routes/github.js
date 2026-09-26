@@ -2,14 +2,14 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="/static/apps/github/app.css">
-      <script src="/static/apps/github/app.js" defer></script>
+      <script src="/static/apps/github/app.js?v=20260926u" defer></script>
     `;
 
     const content = `
       <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/" class="text-mistral-slate hover:text-white transition text-sm flex items-center gap-1">
+            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-sm flex items-center gap-1">
               &larr; Vitrine Dön
             </a>
             <span class="text-mistral-stone">|</span>
@@ -40,7 +40,7 @@ module.exports = function(pageTemplate) {
               <input type="text" id="input-github-user" value="melihkarasu" placeholder="GitHub kullanıcı adı girin..." onkeyup="if(event.key==='Enter') runGithubAnalysis()" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder-slate-500 focus:border-purple-400 focus:outline-none font-mono">
               <span class="absolute left-3.5 top-3 text-mistral-stone text-base">@</span>
             </div>
-            <button onclick="runGithubAnalysis()" id="btn-analyze" class="px-7 py-3 rounded-xl bg-white from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-sm transition shadow-lg shadow-purple-500/20 shrink-0 flex items-center justify-center gap-2">
+            <button onclick="runGithubAnalysis()" id="btn-analyze" class="px-7 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-sm transition shadow-lg shadow-purple-500/20 shrink-0 flex items-center justify-center gap-2">
               <span>🚀</span> Profili Analiz Et
             </button>
           </div>
@@ -125,7 +125,7 @@ module.exports = function(pageTemplate) {
                 <button onclick="switchLangTab('starred')" id="tab-lang-starred" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600 text-white transition shadow-sm flex items-center gap-1.5 cursor-pointer">
                   <span>🌟</span> Takip Edilen Projeler (İlgi Alanları)
                 </button>
-                <button onclick="switchLangTab('owned')" id="tab-lang-owned" class="px-3.5 py-1.5 rounded-xl text-xs font-medium text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition flex items-center gap-1.5 cursor-pointer">
+                <button onclick="switchLangTab('owned')" id="tab-lang-owned" class="px-3.5 py-1.5 rounded-xl text-xs font-medium text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition flex items-center gap-1.5 cursor-pointer">
                   <span>💻</span> Bizzat Yazılan Projeler
                 </button>
               </div>
@@ -160,9 +160,9 @@ module.exports = function(pageTemplate) {
             <!-- Tema Seçici -->
             <div class="flex p-1 rounded-xl bg-white border border-mistral-hairline text-xs">
               <button onclick="setCardTheme('dark')" id="ct-dark" class="px-3 py-1 rounded-lg font-bold bg-purple-600 text-white transition shadow">Dark</button>
-              <button onclick="setCardTheme('cyberpunk')" id="ct-cyberpunk" class="px-3 py-1 rounded-lg font-bold text-mistral-slate hover:text-white transition">Cyberpunk</button>
-              <button onclick="setCardTheme('emerald')" id="ct-emerald" class="px-3 py-1 rounded-lg font-bold text-mistral-slate hover:text-white transition">Emerald</button>
-              <button onclick="setCardTheme('slate')" id="ct-slate" class="px-3 py-1 rounded-lg font-bold text-mistral-slate hover:text-white transition">Slate</button>
+              <button onclick="setCardTheme('cyberpunk')" id="ct-cyberpunk" class="px-3 py-1 rounded-lg font-bold text-mistral-slate hover:text-mistral-ink transition">Cyberpunk</button>
+              <button onclick="setCardTheme('emerald')" id="ct-emerald" class="px-3 py-1 rounded-lg font-bold text-mistral-slate hover:text-mistral-ink transition">Emerald</button>
+              <button onclick="setCardTheme('slate')" id="ct-slate" class="px-3 py-1 rounded-lg font-bold text-mistral-slate hover:text-mistral-ink transition">Slate</button>
             </div>
           </div>
 
@@ -202,7 +202,7 @@ module.exports = function(pageTemplate) {
               <button onclick="switchRepoTab('starred')" id="tab-btn-starred" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-purple-600 text-white transition shadow-sm flex items-center gap-1.5 cursor-pointer">
                 <span>🌟</span> Yıldızlanan Repolar (<span id="tab-count-starred">0</span>)
               </button>
-              <button onclick="switchRepoTab('owned')" id="tab-btn-owned" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition flex items-center gap-1.5 cursor-pointer">
+              <button onclick="switchRepoTab('owned')" id="tab-btn-owned" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition flex items-center gap-1.5 cursor-pointer">
                 <span>📦</span> Kendi Repoları (<span id="tab-count-owned">0</span>)
               </button>
             </div>
