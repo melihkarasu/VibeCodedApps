@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/akor/app.js" defer></script>
+      <script src="/static/apps/akor/app.js?v=20260926l" defer></script>
     `;
 
     const content = `
@@ -59,7 +59,7 @@ module.exports = function(pageTemplate) {
               type="button" 
               onclick="toggleAutoScroll()" 
               id="btn-autoscroll" 
-              class="w-full py-2.5 px-3 rounded-lg text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
+              class="w-full py-2.5 px-3 rounded-lg text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
               <span id="scroll-icon">📜</span> <span id="scroll-text">Kaydırmayı Başlat</span>
             </button>
           </div>
