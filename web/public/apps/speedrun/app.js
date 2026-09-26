@@ -47,7 +47,7 @@ async function loadSpeedrunRecords() {
                 </div>
 
                 <div class="p-5 pt-0">
-                  <a href="${r.speedrunUrl}" target="_blank" rel="noopener" class="w-full py-2 px-3 rounded-md bg-mistral-cream-light hover:bg-mistral-orange hover:text-mistral-ink font-bold border border-mistral-beige-deep text-mistral-ink text-xs font-semibold transition flex items-center justify-center gap-1.5">
+                  <a href="${r.speedrunUrl}" target="_blank" rel="noopener" class="w-full py-2 px-3 rounded-md bg-mistral-cream-light hover:bg-mistral-orange hover:text-white font-bold border border-mistral-beige-deep text-mistral-ink text-xs font-semibold transition flex items-center justify-center gap-1.5">
                     <span>Liderlik Tablosunu Gör</span> &rarr;
                   </a>
                 </div>
