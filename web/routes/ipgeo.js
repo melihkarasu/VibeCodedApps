@@ -3,7 +3,7 @@ module.exports = function(pageTemplate) {
     const extraHead = `
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/ipgeo/app.js" defer></script>
+      <script src="/static/apps/ipgeo/app.js?v=20260926r" defer></script>
     `;
 
     const content = `
@@ -52,7 +52,7 @@ module.exports = function(pageTemplate) {
           <button 
             type="button" 
             onclick="lookupSelfIp()" 
-            class="px-4 py-2.5 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer">
+            class="px-4 py-2.5 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer">
             <span>📍</span> Kendi IP'mi Getir
           </button>
         </div>
