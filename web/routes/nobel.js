@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/nobel/app.js" defer></script>
+      <script src="/static/apps/nobel/app.js?v=20260926w" defer></script>
     `;
 
     const content = `
@@ -57,10 +57,10 @@ module.exports = function(pageTemplate) {
         <!-- Hızlı Filtre Butonları -->
         <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-mistral-hairline text-xs">
           <span class="text-mistral-stone font-medium mr-1">Tarihi İsimler:</span>
-          <button onclick="quickNobel('Aziz Sancar')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🇹🇷 Aziz Sancar (Kimya 2015)</button>
-          <button onclick="quickNobel('Orhan Pamuk')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🇹🇷 Orhan Pamuk (Edebiyat 2006)</button>
-          <button onclick="quickNobel('Curie')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">⚛️ Marie Curie (Fizik & Kimya)</button>
-          <button onclick="quickNobel('Einstein')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">💡 Albert Einstein</button>
+          <button onclick="quickNobel('Aziz Sancar')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🇹🇷 Aziz Sancar (Kimya 2015)</button>
+          <button onclick="quickNobel('Orhan Pamuk')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🇹🇷 Orhan Pamuk (Edebiyat 2006)</button>
+          <button onclick="quickNobel('Curie')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">⚛️ Marie Curie (Fizik & Kimya)</button>
+          <button onclick="quickNobel('Einstein')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">💡 Albert Einstein</button>
           <button onclick="quickNobel('')" class="px-2.5 py-1 rounded-md bg-white hover:bg-mistral-cream text-mistral-stone border border-mistral-hairline transition">Tümünü Göster</button>
         </div>
       </div>
