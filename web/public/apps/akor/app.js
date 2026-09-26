@@ -34,7 +34,7 @@ const SCALE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
         function renderChordPills() {
           const container = document.getElementById('chord-pills');
           container.innerHTML = Object.keys(chordLibrary).map(c => `
-            <button onclick="displayChordDiagram('${c}')" class="px-2 py-0.5 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep font-mono font-bold text-xs transition">
+            <button onclick="displayChordDiagram('${c}')" class="px-2 py-0.5 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep font-mono font-bold text-xs transition">
               ${c}
             </button>
           `).join('');
@@ -135,7 +135,7 @@ const SCALE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
           } else {
             icon.innerText = '📜';
             text.innerText = 'Kaydırmayı Başlat';
-            btn.className = 'w-full py-2.5 px-3 rounded-lg text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep text-xs font-semibold transition flex items-center justify-center gap-1.5 shadow-xs';
+            btn.className = 'w-full py-2.5 px-3 rounded-lg text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep text-xs font-semibold transition flex items-center justify-center gap-1.5 shadow-xs';
             if (scrollTimer) clearInterval(scrollTimer);
           }
         }
