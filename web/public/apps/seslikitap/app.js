@@ -150,7 +150,7 @@ let currentBooks = [];
             return;
           }
 
-          grid.innerHTML = list.map(b => `
+          grid.innerHTML = list.map((b, idx) => `
             <div class="p-6 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-orange/40 hover:shadow-md transition duration-200 flex flex-col justify-between group">
               <div>
                 <div class="flex items-center justify-between mb-3">
@@ -180,6 +180,11 @@ let currentBooks = [];
               </div>
             </div>
           `).join('');
+        }
+
+        function selectAndPlayBookByIdx(idx) {
+          const b = currentBooks[idx];
+          if (b) selectAndPlayBook(b);
         }
 
         // Metadata endpoint'ten MP3 bölüm listesini çek ve çalmaya başla
@@ -262,7 +267,10 @@ let currentBooks = [];
           }
           player.play().catch(err => {
             console.error('play error:', err);
-            document.getElementById('dock-status').innerText = 'OYNATMAYA HAZIR — Oynat\'a basın';
+            // Otomatik oynatma engellendiyse: hazır durumda bırak, kullanıcı Oynat'a bassın
+            document.getElementById('dock-status').innerText = 'OYNATMAYA HAZIR';
+            const panelPlay = document.getElementById('btn-panel-play');
+            if (panelPlay) panelPlay.innerText = '▶';
           });
 
           document.getElementById('dock-play-icon').innerText = '⏸';
@@ -296,6 +304,9 @@ let currentBooks = [];
           if (player.paused) {
             player.play().catch(err => {
               console.error('play error:', err);
+              document.getElementById('dock-status').innerText = 'OYNATMA HAZIR';
+              const panelPlay = document.getElementById('btn-panel-play');
+              if (panelPlay) panelPlay.innerText = '▶';
             });
           } else {
             player.pause();
@@ -524,3 +535,4 @@ let currentBooks = [];
         window.setVolume = setVolume;
         window.toggleMute = toggleMute;
         window.playTrack = playTrack;
+        window.selectAndPlayBookByIdx = selectAndPlayBookByIdx;
