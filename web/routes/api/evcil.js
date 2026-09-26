@@ -30,6 +30,22 @@ router.get('/pets/breeds', async (req, res) => {
 
     const catData = catRes.ok ? await catRes.json() : [];
 
+    // TheCatAPI anahtar istediginde (403) devreye giren gomulu kedi arsivi
+    const CAT_BREEDS_FALLBACK = [
+      { id: 'cat_van', name: 'Van Kedisi', origin: 'Türkiye (Van)', temperament: 'Zeki, Enerjik, Su Sever, Bağımsız, Sadık', description: 'İki farklı renkli gözleri ve yüzme sevgisiyle ünlü, Van Gölü yöresine özgü asil ve atletik bir kedi ırkıdır.', life_span: '12 - 17 yıl', child_friendly: 4, energy_level: 5, intelligence: 5, wikipedia_url: 'https://tr.wikipedia.org/wiki/Van_kedisi' },
+      { id: 'cat_angora', name: 'Ankara Kedisi (Turkish Angora)', origin: 'Türkiye (Ankara)', temperament: 'Zarif, Oyuncu, Sosyal, Zeki', description: 'İpek gibi tüyü ve zekasıyla bilinen, kökeni Ankara\'ya uzanan asil ve zarif bir kedi ırkıdır.', life_span: '12 - 18 yıl', child_friendly: 4, energy_level: 4, intelligence: 5, wikipedia_url: 'https://tr.wikipedia.org/wiki/Ankara_kedisi' },
+      { id: 'cat_bsh', name: 'British Shorthair', origin: 'Birleşik Krallık', temperament: 'Sakin, Bağımsız, Sevecen, Uysal', description: 'Yuvarlak yüzü, yoğun tüyü ve sakin mizacıyla apartman yaşamına son derece uygun popüler bir ırktır.', life_span: '12 - 17 yıl', child_friendly: 5, energy_level: 2, intelligence: 4, wikipedia_url: null },
+      { id: 'cat_maine', name: 'Maine Coon', origin: 'ABD (Maine)', temperament: 'Nazik Dev, Sosyal, Zeki, Oyuncu', description: 'En büyük ev kedisi ırklarından biri; köpek gibi sadakati ve koca kalbiyle nazik dev olarak anılır.', life_span: '10 - 15 yıl', child_friendly: 5, energy_level: 3, intelligence: 5, wikipedia_url: null },
+      { id: 'cat_persian', name: 'Pers (Persian)', origin: 'İran', temperament: 'Sakin, Zarif, Kucağa Düşkün', description: 'Uzun ipeksi tüyü, yassı yüzü ve sessiz asaletiyle dünya üzerindeki en bilinen klasik kedi ırkıdır.', life_span: '12 - 17 yıl', child_friendly: 4, energy_level: 2, intelligence: 3, wikipedia_url: null },
+      { id: 'cat_ragdoll', name: 'Ragdoll', origin: 'ABD (Kaliforniya)', temperament: 'Sakin, Sevecen, Kucağa Düşkün', description: 'Kucağa alınınca adeta bez bebek gibi gevşediği için bu adı alan, çok sakin ve bağlı bir ırktır.', life_span: '12 - 17 yıl', child_friendly: 5, energy_level: 2, intelligence: 4, wikipedia_url: null },
+      { id: 'cat_scottish', name: 'Scottish Fold', origin: 'İskoçya', temperament: 'Sakin, Uysal, Sevecen, Meraklı', description: 'Öne kıvrılan minik kulakları ve baykuş görünümüyle ünlü, sessiz ve çok tatlı mizaçlı bir ırktır.', life_span: '11 - 15 yıl', child_friendly: 5, energy_level: 3, intelligence: 4, wikipedia_url: null },
+      { id: 'cat_siamese', name: 'Siyam (Siamese)', origin: 'Tayland', temperament: 'Konuşkan, Sosyal, Zeki, Bağlı', description: 'Mavi gözleri, koyu maske deseni ve insanla sürekli konuşan sesli karakteriyle tanınan eski bir saray ırkıdır.', life_span: '12 - 20 yıl', child_friendly: 4, energy_level: 4, intelligence: 5, wikipedia_url: null },
+      { id: 'cat_bengal', name: 'Bengal', origin: 'ABD', temperament: 'Enerjik, Atletik, Meraklı, Cesur', description: 'Vahşi leopard deseni ve aşırı atletizmiyle dikkat çeken, suyla oynamayı seven aktif bir melez ırktır.', life_span: '12 - 16 yıl', child_friendly: 4, energy_level: 5, intelligence: 5, wikipedia_url: null },
+      { id: 'cat_sphynx', name: 'Sphynx', origin: 'Kanada', temperament: 'Sevecen, Enerjik, Sosyal, Şakacı', description: 'Tüysüz görünümü ve köpek gibi sosyal karakteriyle bilinen, sıcaklık seven eğlenceli bir ırktır.', life_span: '9 - 15 yıl', child_friendly: 5, energy_level: 4, intelligence: 5, wikipedia_url: null },
+      { id: 'cat_norwegian', name: 'Norveç Orman Kedisi', origin: 'Norveç', temperament: 'Nazik, Bağımsız, Atletik, Sabırlı', description: 'İskandinav ormanlarından gelen, kalın su itici kürklü, iri yapılı ve doğal bir tırmanıcı olan ırktır.', life_span: '12 - 16 yıl', child_friendly: 5, energy_level: 3, intelligence: 5, wikipedia_url: null },
+      { id: 'cat_abyssinian', name: 'Habeş (Abyssinian)', origin: 'Etiyopya / Güneydoğu Asya', temperament: 'Aktif, Meraklı, Zeki, Oyuncu', description: 'Tarçın tonlu tüyü ve kadife görünümüyle bilinen, insanı takip eden son derece aktif bir ırktır.', life_span: '12 - 15 yıl', child_friendly: 4, energy_level: 5, intelligence: 5, wikipedia_url: null }
+    ];
+
     const cats = catData.map(c => ({
       id: 'cat_' + c.id,
       petType: 'cat',
@@ -127,7 +143,23 @@ router.get('/pets/breeds', async (req, res) => {
       }
     ];
 
-    const allBreeds = [...cats, ...dogs];
+    // TheCatAPI basarisiz olduysa (403 veya bos) gomulu arsivi kullan
+    const finalCats = (cats.length > 0) ? cats : CAT_BREEDS_FALLBACK.map(c => ({
+      id: 'cat_' + c.id,
+      petType: 'cat',
+      name: c.name,
+      origin: c.origin,
+      temperament: c.temperament,
+      description: c.description,
+      lifeSpan: c.life_span,
+      childFriendly: c.child_friendly,
+      energyLevel: c.energy_level,
+      intelligence: c.intelligence,
+      image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&auto=format&fit=crop&q=80',
+      wikiUrl: c.wikipedia_url || null
+    }));
+
+    const allBreeds = [...finalCats, ...dogs];
     petBreedsCache = { data: allBreeds, timestamp: Date.now() };
 
     let list = allBreeds;
