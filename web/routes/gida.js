@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/gida/app.js" defer></script>
+      <script src="/static/apps/gida/app.js?v=20260926i" defer></script>
     `;
 
     const content = `
