@@ -80,7 +80,7 @@ let currentPoemData = null;
             if (poems.length > 1) {
               const grid = document.getElementById('author-poems-grid');
               grid.innerHTML = poems.slice(1).map((p, idx) => `
-                <div onclick='renderPoem(${JSON.stringify(p).replace(/'/g, "&apos;")})' class="p-4 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-orange/40 hover:shadow-sm cursor-pointer transition flex flex-col justify-between group">
+                <div onclick="renderPoemByIdx(${idx + 1})" class="p-4 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-orange/40 hover:shadow-sm cursor-pointer transition flex flex-col justify-between group">
                   <div>
                     <h4 class="font-bold text-sm font-editorial text-mistral-ink group-hover:text-mistral-orange transition truncate mb-1">${p.title}</h4>
                     <span class="text-xs text-mistral-slate block mb-2">${p.author}</span>
@@ -97,6 +97,22 @@ let currentPoemData = null;
             loading.innerHTML = '<span class="text-rose-500 font-medium text-sm">Şair sorgulanamadı: ' + err.message + '</span>';
           }
         }
+
+        function renderPoemByIdx(idx) {
+          // İndeks-tabanlı güvenli açılış: grid tam indeks geçirir (slice(1) -> idx+1)
+          const list = (typeof currentAuthorPoems !== 'undefined' && currentAuthorPoems.length > 0)
+            ? currentAuthorPoems
+            : null;
+          if (!list) {
+            // Sadece tek şiir yüklendiyse: yeniden sorgula (author zaten input'ta)
+            searchAuthorPoems();
+            return;
+          }
+          const p = list[idx];
+          if (p) renderPoem(p);
+        }
+
+        let currentAuthorPoems = [];
 
         function quickAuthor(author) {
           document.getElementById('search-author').value = author;
@@ -127,9 +143,20 @@ let currentPoemData = null;
 
         function copyPoemText() {
           if (!currentPoemData) return;
-          const txt = currentPoemData.title + ' - ' + currentPoemData.author + '\\n\\n' + (currentPoemData.lines || []).join('\\n');
-          navigator.clipboard.writeText(txt);
-          alert('✓ Şiir panoya kopyalandı!');
+          const txt = currentPoemData.title + ' - ' + currentPoemData.author + '\n\n' + (currentPoemData.lines || []).join('\n');
+          if (window.safeCopyToClipboard) {
+            window.safeCopyToClipboard(txt, 'Şiir panoya kopyalandı!');
+            return;
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(txt).then(() => alert('✓ Şiir panoya kopyalandı!')).catch(() => {});
+          } else {
+            const ta = document.createElement('textarea');
+            ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); alert('✓ Şiir panoya kopyalandı!'); } catch(e) {}
+            document.body.removeChild(ta);
+          }
         }
 
         function savePoemToFavorites() {
