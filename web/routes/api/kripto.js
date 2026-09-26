@@ -12,6 +12,7 @@ let kriptoCache = { data: null, timestamp: 0 };
 
 router.get('/kripto/trend', async (req, res) => {
   if (kriptoCache.data && Date.now() - kriptoCache.timestamp < 60 * 1000) {
+    res.set('Access-Control-Allow-Origin', 'https://melihkarasu.github.io');
     return res.json(kriptoCache.data);
   }
 
@@ -56,9 +57,11 @@ router.get('/kripto/trend', async (req, res) => {
     };
 
     kriptoCache = { data: output, timestamp: Date.now() };
+    res.set('Access-Control-Allow-Origin', 'https://melihkarasu.github.io');
     res.json(output);
   } catch(err) {
     if (kriptoCache.data) {
+      res.set('Access-Control-Allow-Origin', 'https://melihkarasu.github.io');
       return res.json(kriptoCache.data);
     }
     // Fallback: Standart piyasa önbelleği (CoinGecko geçici kesintilerinde UI kesilmez)
@@ -74,6 +77,7 @@ router.get('/kripto/trend', async (req, res) => {
         { id: "solana", name: "Solana", symbol: "SOL", thumb: "https://assets.coingecko.com/coins/images/4128/thumb/solana.png", market_cap_rank: 5 }
       ]
     };
+    res.set('Access-Control-Allow-Origin', 'https://melihkarasu.github.io');
     res.json(fallbackData);
   }
 });
