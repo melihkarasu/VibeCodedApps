@@ -46,7 +46,7 @@ let allBreeds = [];
             <div onclick="openPetModal('${b.id}')" class="rounded-xl bg-white border border-mistral-hairline hover:border-mistral-orange/40 hover:shadow-md transition duration-200 overflow-hidden flex flex-col justify-between group cursor-pointer">
               <div>
                 <div class="relative overflow-hidden aspect-video bg-mistral-cream">
-                  <img src="${b.image}" alt="${b.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                  <img src="${b.image}" alt="${b.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&auto=format&fit=crop&q=80'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                   <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded text-[10px] font-bold bg-white/90 backdrop-blur text-mistral-ink border border-mistral-hairline shadow-2xs">
                     ${b.petType === 'cat' ? '🐱 Kedi' : '🐶 Köpek'}
                   </span>
@@ -76,7 +76,9 @@ let allBreeds = [];
           const b = allBreeds.find(x => x.id === id);
           if (!b) return;
 
-          document.getElementById('m-pet-img').src = b.image;
+          const mImg = document.getElementById('m-pet-img');
+          mImg.onerror = function() { this.src = 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&auto=format&fit=crop&q=80'; };
+          mImg.src = b.image;
           document.getElementById('m-pet-type').innerText = b.petType === 'cat' ? '🐱 KEDİ IRKI' : '🐶 KÖPEK IRKI';
           document.getElementById('m-pet-origin').innerText = '📍 ' + b.origin;
           document.getElementById('m-pet-name').innerText = b.name;
