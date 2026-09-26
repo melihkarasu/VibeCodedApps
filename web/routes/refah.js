@@ -2,14 +2,14 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <script src="/static/apps/refah/app.js" defer></script>
+      <script src="/static/apps/refah/app.js?v=20260926n" defer></script>
     `;
 
     const content = `
       <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/" class="text-mistral-slate hover:text-white transition text-sm flex items-center gap-1">
+            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-sm flex items-center gap-1">
               &larr; Vitrine Dön
             </a>
             <span class="text-mistral-stone">|</span>
@@ -43,27 +43,27 @@ module.exports = function(pageTemplate) {
               <span class="text-lg mb-1">💰</span>
               <span>Kişi Başı GSYİH</span>
             </button>
-            <button onclick="setIndicator('SP.DYN.LE00.IN', 'Beklenen Yaşam Süresi', 'Yıl')" id="ind-life" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-white font-semibold text-xs transition text-left flex flex-col justify-between">
+            <button onclick="setIndicator('SP.DYN.LE00.IN', 'Beklenen Yaşam Süresi', 'Yıl')" id="ind-life" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink font-semibold text-xs transition text-left flex flex-col justify-between">
               <span class="text-lg mb-1">⏳</span>
               <span>Yaşam Süresi</span>
             </button>
-            <button onclick="setIndicator('FP.CPI.TOTL.ZG', 'TÜFE Enflasyon Oranı', 'Yıllık %')" id="ind-cpi" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-white font-semibold text-xs transition text-left flex flex-col justify-between">
+            <button onclick="setIndicator('FP.CPI.TOTL.ZG', 'TÜFE Enflasyon Oranı', 'Yıllık %')" id="ind-cpi" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink font-semibold text-xs transition text-left flex flex-col justify-between">
               <span class="text-lg mb-1">📈</span>
               <span>Enflasyon (%)</span>
             </button>
-            <button onclick="setIndicator('IT.NET.USER.ZS', 'İnternet Erişim Oranı', '% Nüfus')" id="ind-net" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-white font-semibold text-xs transition text-left flex flex-col justify-between">
+            <button onclick="setIndicator('IT.NET.USER.ZS', 'İnternet Erişim Oranı', '% Nüfus')" id="ind-net" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink font-semibold text-xs transition text-left flex flex-col justify-between">
               <span class="text-lg mb-1">🌐</span>
               <span>İnternet Erişimi</span>
             </button>
-            <button onclick="setIndicator('EG.ELC.ACCS.ZS', 'Elektrik Erişim Oranı', '% Nüfus')" id="ind-elc" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-white font-semibold text-xs transition text-left flex flex-col justify-between">
+            <button onclick="setIndicator('EG.ELC.ACCS.ZS', 'Elektrik Erişim Oranı', '% Nüfus')" id="ind-elc" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink font-semibold text-xs transition text-left flex flex-col justify-between">
               <span class="text-lg mb-1">⚡</span>
               <span>Elektrik Erişimi</span>
             </button>
-            <button onclick="setIndicator('EG.FEC.RNEW.ZS', 'Yenilenebilir Enerji Payı', '% Toplam')" id="ind-renew" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-white font-semibold text-xs transition text-left flex flex-col justify-between">
+            <button onclick="setIndicator('EG.FEC.RNEW.ZS', 'Yenilenebilir Enerji Payı', '% Toplam')" id="ind-renew" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink font-semibold text-xs transition text-left flex flex-col justify-between">
               <span class="text-lg mb-1">🌿</span>
               <span>Yenilenebilir Enerji</span>
             </button>
-            <button onclick="setIndicator('EN.ATM.CO2E.PC', 'Kişi Başı CO2 Salımı', 'Ton / Kişi')" id="ind-co2" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-white font-semibold text-xs transition text-left flex flex-col justify-between">
+            <button onclick="setIndicator('EN.ATM.CO2E.PC', 'Kişi Başı CO2 Salımı', 'Ton / Kişi')" id="ind-co2" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink font-semibold text-xs transition text-left flex flex-col justify-between">
               <span class="text-lg mb-1">🏭</span>
               <span>Karbon Salımı</span>
             </button>
