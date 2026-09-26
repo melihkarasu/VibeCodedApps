@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="/static/apps/muzik/app.css">
-      <script src="/static/apps/muzik/app.js" defer></script>
+      <script src="/static/apps/muzik/app.js?v=20260926g" defer></script>
     `;
 
     const content = `
@@ -48,7 +48,7 @@ module.exports = function(pageTemplate) {
               <input type="text" id="input-lyrics-search" value="is this the real life" placeholder="Örn: 'mama just killed a man', 'benden öte benden ziyade', 'fly me to the moon'..." onkeyup="if(event.key==='Enter') searchMusic()" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-mistral-hairline focus:border-pink-400 focus:outline-none text-mistral-ink text-sm placeholder-slate-500">
               <span class="absolute left-3.5 top-3.5 text-mistral-stone text-base">🔍</span>
             </div>
-            <button onclick="searchMusic()" class="px-6 py-3 rounded-xl bg-white from-pink-500 to-rose-600 hover:from-pink-400 hover:to-rose-500 text-white font-bold text-sm transition shadow-lg shadow-pink-500/20 shrink-0 flex items-center justify-center gap-2">
+            <button onclick="searchMusic()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-400 hover:to-rose-500 text-white font-bold text-sm transition shadow-lg shadow-pink-500/20 shrink-0 flex items-center justify-center gap-2">
               <span>Şarkıyı Bul</span> &rarr;
             </button>
           </div>
