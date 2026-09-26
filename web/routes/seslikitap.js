@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/seslikitap/app.js" defer></script>
+      <script src="/static/apps/seslikitap/app.js?v=20260926" defer></script>
     `;
 
     const content = `
@@ -52,10 +52,6 @@ module.exports = function(pageTemplate) {
             <span id="dock-play-icon">▶</span>
             <span id="dock-play-text">Oynat</span>
           </button>
-          
-          <a id="btn-dock-external" href="#" target="_blank" rel="noopener" class="hidden px-4 py-2.5 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep text-xs font-semibold transition items-center gap-1.5">
-            <span>📥</span> LibriVox Sayfası &rarr;
-          </a>
         </div>
 
         <audio id="audiobook-player" class="hidden"></audio>
