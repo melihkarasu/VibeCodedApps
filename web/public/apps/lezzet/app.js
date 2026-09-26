@@ -182,7 +182,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
           container.innerHTML = activeIngredients.map((item, idx) => `
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-medium">
               <span>${item.raw}</span>
-              <button onclick="removeActiveIngredient(${idx})" class="hover:text-white text-rose-400 font-bold ml-0.5 text-xs" title="Kaldır">✕</button>
+              <button onclick="removeActiveIngredient(${idx})" class="hover:text-mistral-ink text-rose-400 font-bold ml-0.5 text-xs" title="Kaldır">✕</button>
             </span>
           `).join('');
         }
@@ -243,9 +243,9 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
           const btnF = document.getElementById('btn-src-forkify');
           const btnM = document.getElementById('btn-src-themealdb');
           if (btnAll && btnF && btnM) {
-            btnAll.className = src === 'all' ? 'px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500 text-white transition' : 'px-3 py-1.5 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition';
-            btnF.className = src === 'forkify' ? 'px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500 text-white transition' : 'px-3 py-1.5 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition';
-            btnM.className = src === 'themealdb' ? 'px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500 text-white transition' : 'px-3 py-1.5 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition';
+            btnAll.className = src === 'all' ? 'px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500 text-white transition' : 'px-3 py-1.5 rounded-xl text-xs font-bold text-mistral-slate hover:text-mistral-ink transition';
+            btnF.className = src === 'forkify' ? 'px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500 text-white transition' : 'px-3 py-1.5 rounded-xl text-xs font-bold text-mistral-slate hover:text-mistral-ink transition';
+            btnM.className = src === 'themealdb' ? 'px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500 text-white transition' : 'px-3 py-1.5 rounded-xl text-xs font-bold text-mistral-slate hover:text-mistral-ink transition';
           }
           if (activeIngredients.length > 0) {
             const last = activeIngredients[activeIngredients.length - 1];
@@ -275,7 +275,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
           if (mode === 'kitchen') {
             if (srcSelector) srcSelector.classList.remove('hidden');
             btnK.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-rose-500 text-white transition flex items-center gap-2 shadow';
-            btnB.className = 'px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-2';
+            btnB.className = 'px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-mistral-ink transition flex items-center gap-2';
             pTitle.innerText = '🧺 Dolapta Ne Var? (Evdeki Malzemelerle Pişir)';
             pDesc.innerText = 'Elinizdeki malzemeleri metin kutusuna yazarak ekleyin veya hazır etiketlere tıklayın:';
             rLabel.innerText = 'Ne Yesem? (Rastgele Sürpriz)';
@@ -284,7 +284,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
           } else {
             if (srcSelector) srcSelector.classList.add('hidden');
             btnB.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-rose-500 text-white transition flex items-center gap-2 shadow';
-            btnK.className = 'px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-2';
+            btnK.className = 'px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-mistral-ink transition flex items-center gap-2';
             pTitle.innerText = '🍸 Barda Ne Var? (Evdeki İçeceklerle Karıştır)';
             pDesc.innerText = 'Elinizdeki içecek veya garnitür malzemesini yazın veya seçin:';
             rLabel.innerText = 'Ne İçsem? (Rastgele Kokteyl)';
@@ -307,7 +307,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
           const container = document.getElementById('pantry-tags-container');
           const items = PANTRY_ITEMS[currentMode];
           container.innerHTML = items.map(item => `
-            <button onclick="addCustomIngredient('${item.name}')" class="px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline hover:border-rose-400 text-xs text-mistral-slate hover:text-white transition flex items-center gap-1.5">
+            <button onclick="addCustomIngredient('${item.name}')" class="px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline hover:border-rose-400 text-xs text-mistral-slate hover:text-mistral-ink transition flex items-center gap-1.5">
               <span>+</span> ${item.name}
             </button>
           `).join('');
@@ -543,7 +543,8 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
           emptyEl.classList.add('hidden');
           countEl.innerText = `${items.length} tarif listelendi (${contextTitle})`;
 
-          grid.innerHTML = items.map(item => {
+          window.__renderedRecipes = items;
+          grid.innerHTML = items.map((item, idx) => {
             const id = item.idMeal || item.idDrink;
             const name = item.strMeal || item.strDrink;
             const thumb = item.strMealThumb || item.strDrinkThumb;
@@ -561,7 +562,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
                 <div class="cursor-pointer" onclick="openRecipeModal('${id}', '${type}', '${source}')">
                   <div class="w-full h-48 rounded-xl overflow-hidden mb-3 bg-white relative">
                     <img src="${thumb}" alt="${name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=600&q=80'">
-                    <div class="absolute inset-0 bg-white from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition"></div>
                     <div class="absolute top-2 left-2">
                       ${sourceBadge}
                     </div>
@@ -572,7 +573,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
                   <button onclick="openRecipeModal('${id}', '${type}', '${source}')" class="text-xs text-rose-400 hover:text-rose-300 font-semibold transition">
                     Tarifi İncele &rarr;
                   </button>
-                  <button onclick="quickSaveRecipe('${id}', '${name.replace(/'/g, '\'')}', '${thumb}', '${type}', '${source}')" class="text-xs text-mistral-slate hover:text-amber-400 transition p-1" title="Deftere Kaydet">
+                  <button onclick="quickSaveRecipeByRenderedIdx(${idx})"" class="text-xs text-mistral-slate hover:text-amber-400 transition p-1" title="Deftere Kaydet">
                     🔖
                   </button>
                 </div>
@@ -618,7 +619,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
 
               if (recipe.source_url) {
                 videoBox.innerHTML = `
-                  <a href="${recipe.source_url}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-xl bg-white from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white text-xs font-semibold flex items-center gap-1.5 transition shadow">
+                  <a href="${recipe.source_url}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white text-xs font-semibold flex items-center gap-1.5 transition shadow">
                     <span>📖</span> Orijinal Tarifi Aç (${recipe.publisher}) &rarr;
                   </a>
                 `;
@@ -755,6 +756,18 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
             txt.innerText = 'Tarif Defterime Kaydet';
             btn.className = 'px-4 py-2 rounded-xl bg-white hover:bg-mistral-cream text-xs font-semibold text-mistral-ink transition flex items-center gap-1.5 border border-mistral-hairline';
           }
+        }
+
+        // Indeks-tabanli güvenli defter kaydi (apostroflu tarif adlari HTML'i kiramaz)
+        function quickSaveRecipeByRenderedIdx(idx) {
+          const item = (window.__renderedRecipes || [])[idx];
+          if (!item) return;
+          const id = item.idMeal || item.idDrink;
+          const name = item.strMeal || item.strDrink;
+          const thumb = item.strMealThumb || item.strDrinkThumb;
+          const type = item.idMeal ? 'meal' : 'drink';
+          const source = item._source || (item.idMeal ? 'themealdb' : 'cocktaildb');
+          quickSaveRecipe(id, name, thumb, type, source);
         }
 
         function quickSaveRecipe(id, title, thumb, type, source) {
