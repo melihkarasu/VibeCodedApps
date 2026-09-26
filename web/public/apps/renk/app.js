@@ -172,10 +172,10 @@ let currentColors = [];
           const btnTw = document.getElementById('btn-fmt-tailwind');
           if (fmt === 'css') {
             btnCss.className = 'px-2.5 py-1 rounded-md bg-mistral-orange text-white font-semibold transition';
-            btnTw.className = 'px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition';
+            btnTw.className = 'px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition';
           } else {
             btnTw.className = 'px-2.5 py-1 rounded-md bg-mistral-orange text-white font-semibold transition';
-            btnCss.className = 'px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition';
+            btnCss.className = 'px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition';
           }
           updateCodeExport();
         }

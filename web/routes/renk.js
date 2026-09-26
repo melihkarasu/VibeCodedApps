@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/renk/app.js" defer></script>
+      <script src="/static/apps/renk/app.js?v=20260926s" defer></script>
     `;
 
     const content = `
@@ -71,7 +71,7 @@ module.exports = function(pageTemplate) {
               type="button" 
               onclick="randomColor()" 
               title="Rastgele Renk Üret"
-              class="flex-1 py-2.5 px-3 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep font-semibold text-xs transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+              class="flex-1 py-2.5 px-3 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep font-semibold text-xs transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
               <span>🎲</span> Rastgele
             </button>
             <button 
@@ -86,11 +86,11 @@ module.exports = function(pageTemplate) {
         <!-- Hazır İlham Paletleri -->
         <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-mistral-hairline text-xs">
           <span class="text-mistral-stone font-medium mr-1">İlham Presetleri:</span>
-          <button onclick="setPreset('#FA520F', 'analogic')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🌅 Mistral Sunset</button>
-          <button onclick="setPreset('#0F766E', 'triad')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🌲 Orman Zümrütü</button>
-          <button onclick="setPreset('#6366F1', 'complement')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🌌 Gece Göğü</button>
-          <button onclick="setPreset('#EC4899', 'quad')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🍬 Neon Şeker</button>
-          <button onclick="setPreset('#D97706', 'monochrome')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🍂 Sonbahar Kehribar</button>
+          <button onclick="setPreset('#FA520F', 'analogic')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🌅 Mistral Sunset</button>
+          <button onclick="setPreset('#0F766E', 'triad')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🌲 Orman Zümrütü</button>
+          <button onclick="setPreset('#6366F1', 'complement')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🌌 Gece Göğü</button>
+          <button onclick="setPreset('#EC4899', 'quad')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🍬 Neon Şeker</button>
+          <button onclick="setPreset('#D97706', 'monochrome')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🍂 Sonbahar Kehribar</button>
         </div>
       </div>
 
@@ -156,7 +156,7 @@ module.exports = function(pageTemplate) {
               </h3>
               <div class="flex gap-1.5 text-xs">
                 <button onclick="setExportFormat('css')" id="btn-fmt-css" class="px-2.5 py-1 rounded-md bg-mistral-orange text-white font-semibold transition">CSS Vars</button>
-                <button onclick="setExportFormat('tailwind')" id="btn-fmt-tailwind" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Tailwind</button>
+                <button onclick="setExportFormat('tailwind')" id="btn-fmt-tailwind" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Tailwind</button>
               </div>
             </div>
 
