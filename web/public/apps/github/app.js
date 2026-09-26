@@ -168,13 +168,13 @@ let currentCardTheme = 'dark';
 
           if (tab === 'starred') {
             btnStarred.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-purple-600 text-white transition shadow-sm flex items-center gap-1.5 cursor-pointer';
-            btnOwned.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition flex items-center gap-1.5 cursor-pointer';
+            btnOwned.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition flex items-center gap-1.5 cursor-pointer';
             gridStarred.classList.remove('hidden');
             gridOwned.classList.add('hidden');
             if (hint) hint.innerText = 'Geliştiricinin yıldızladığı (starred) favori projeler';
           } else {
             btnOwned.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-purple-600 text-white transition shadow-sm flex items-center gap-1.5 cursor-pointer';
-            btnStarred.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition flex items-center gap-1.5 cursor-pointer';
+            btnStarred.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition flex items-center gap-1.5 cursor-pointer';
             gridOwned.classList.remove('hidden');
             gridStarred.classList.add('hidden');
             if (hint) hint.innerText = 'Geliştiricinin bizzat sahip olduğu herkese açık repolar';
@@ -226,12 +226,12 @@ let currentCardTheme = 'dark';
 
           if (tab === 'starred') {
             if (btnStarred) btnStarred.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600 text-white transition shadow-sm flex items-center gap-1.5 cursor-pointer';
-            if (btnOwned) btnOwned.className = 'px-3.5 py-1.5 rounded-xl text-xs font-medium text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition flex items-center gap-1.5 cursor-pointer';
+            if (btnOwned) btnOwned.className = 'px-3.5 py-1.5 rounded-xl text-xs font-medium text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition flex items-center gap-1.5 cursor-pointer';
             if (desc) desc.innerText = 'Geliştiricinin GitHub üzerinde yıldızladığı (starred) açık kaynak projelerin teknoloji ve dil dağılımı:';
             renderLanguageBreakdown(currentStatsData.starredLanguages || {}, true);
           } else {
             if (btnOwned) btnOwned.className = 'px-3.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600 text-white transition shadow-sm flex items-center gap-1.5 cursor-pointer';
-            if (btnStarred) btnStarred.className = 'px-3.5 py-1.5 rounded-xl text-xs font-medium text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition flex items-center gap-1.5 cursor-pointer';
+            if (btnStarred) btnStarred.className = 'px-3.5 py-1.5 rounded-xl text-xs font-medium text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition flex items-center gap-1.5 cursor-pointer';
             if (desc) desc.innerText = 'Geliştiricinin bizzat kod yazdığı ve sahip olduğu herkese açık repolarındaki dil dağılımı:';
             renderLanguageBreakdown(currentStatsData.languages || {}, false);
           }
