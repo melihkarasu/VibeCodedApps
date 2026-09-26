@@ -2,14 +2,14 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="/static/apps/dns/app.css">
-      <script src="/static/apps/dns/app.js" defer></script>
+      <script src="/static/apps/dns/app.js?v=20260926p" defer></script>
     `;
 
     const content = `
       <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/" class="text-mistral-slate hover:text-white transition text-sm flex items-center gap-1">
+            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-sm flex items-center gap-1">
               &larr; Vitrine Dön
             </a>
             <span class="text-mistral-stone">|</span>
@@ -42,7 +42,7 @@ module.exports = function(pageTemplate) {
               <input type="text" id="input-domain" value="github.com" placeholder="Örn: google.com, cloudflare.com, turkiye.gov.tr..." onkeyup="if(event.key==='Enter') executeDnsLookup()" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-mistral-hairline text-sm font-mono text-mistral-ink placeholder-slate-500 focus:border-cyan-400 focus:outline-none">
               <span class="absolute left-3.5 top-3.5 text-mistral-stone text-base">🌐</span>
             </div>
-            <button onclick="executeDnsLookup()" id="btn-lookup" class="px-7 py-3 rounded-xl bg-white from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-sm transition shadow-lg shadow-cyan-500/20 shrink-0 flex items-center justify-center gap-2">
+            <button onclick="executeDnsLookup()" id="btn-lookup" class="px-7 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-black text-sm transition shadow-lg shadow-cyan-500/20 shrink-0 flex items-center justify-center gap-2">
               <span>⚡</span> Kayıtları Çözümle
             </button>
           </div>
@@ -61,13 +61,13 @@ module.exports = function(pageTemplate) {
         <!-- Kayıt Türü Sekmeleri (A, AAAA, MX, TXT, NS, SOA, ALL) -->
         <div class="pt-3 border-t border-mistral-hairline flex flex-wrap gap-2">
           <button onclick="setRecordType('A')" id="btn-type-A" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-cyan-500 text-slate-950 transition shadow">A (IPv4)</button>
-          <button onclick="setRecordType('AAAA')" id="btn-type-AAAA" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition">AAAA (IPv6)</button>
-          <button onclick="setRecordType('CNAME')" id="btn-type-CNAME" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition">CNAME</button>
-          <button onclick="setRecordType('MX')" id="btn-type-MX" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition">MX (Mail)</button>
-          <button onclick="setRecordType('TXT')" id="btn-type-TXT" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition">TXT (SPF/DMARC)</button>
-          <button onclick="setRecordType('NS')" id="btn-type-NS" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition">NS (Nameserver)</button>
-          <button onclick="setRecordType('SOA')" id="btn-type-SOA" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition">SOA</button>
-          <button onclick="setRecordType('ALL')" id="btn-type-ALL" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition">Kapsamlı Özet</button>
+          <button onclick="setRecordType('AAAA')" id="btn-type-AAAA" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink transition">AAAA (IPv6)</button>
+          <button onclick="setRecordType('CNAME')" id="btn-type-CNAME" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink transition">CNAME</button>
+          <button onclick="setRecordType('MX')" id="btn-type-MX" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink transition">MX (Mail)</button>
+          <button onclick="setRecordType('TXT')" id="btn-type-TXT" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink transition">TXT (SPF/DMARC)</button>
+          <button onclick="setRecordType('NS')" id="btn-type-NS" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink transition">NS (Nameserver)</button>
+          <button onclick="setRecordType('SOA')" id="btn-type-SOA" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink transition">SOA</button>
+          <button onclick="setRecordType('ALL')" id="btn-type-ALL" class="type-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink transition">Kapsamlı Özet</button>
         </div>
 
       </div>
@@ -122,7 +122,7 @@ module.exports = function(pageTemplate) {
               </h3>
               <p class="text-mistral-slate text-xs mt-0.5" id="records-table-sub">Domain ve kayıt tipi dökümü</p>
             </div>
-            <span class="px-3 py-1 rounded-xl bg-white border border-mistral-hairline text-xs font-mono font-bold text-cyan-400" id="records-count-badge">
+            <span class="px-3 py-1 rounded-xl bg-white border border-mistral-hairline text-xs font-mono font-bold text-cyan-700" id="records-count-badge">
               0 Kayıt
             </span>
           </div>
@@ -138,7 +138,7 @@ module.exports = function(pageTemplate) {
                   <th class="pb-2.5 text-right pr-2">İşlem</th>
                 </tr>
               </thead>
-              <tbody id="dns-records-tbody" class="divide-y divide-slate-700/60">
+              <tbody id="dns-records-tbody" class="divide-y divide-mistral-hairline">
                 <!-- JS ile satırlar -->
               </tbody>
             </table>
