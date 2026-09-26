@@ -56,25 +56,43 @@ function getUserIdFromReq(req) {
 
 router.get('/librivox/audiobooks', async (req, res) => {
   const query = (req.query.q || 'classic').trim().slice(0, 50);
-  const cacheKey = 'librivox_' + query.toLowerCase().replace(/[^a-z0-9]/g, '_');
+  const cacheKey = 'librivoxv2_' + query.toLowerCase().replace(/[^a-z0-9]/g, '_');
   try {
     const output = await getCachedJson(cacheKey, async () => {
-      const url = `https://librivox.org/api/feed/audiobooks/?format=json&limit=25&${encodeURIComponent(query).includes('author') ? 'author=' : 'title='}^${encodeURIComponent(query)}`;
-      const response = await fetch(url, { signal: AbortSignal.timeout(8000) });
-      if (!response.ok) throw new Error('LibriVox API yanıt vermedi');
+      // archive.org librivoxaudio koleksiyonu (librivox.org/api sunucudan zaman aşımı veriyordu)
+      let searchQuery = 'collection:librivoxaudio AND mediatype:audio';
+      if (query && query !== 'classic') {
+        searchQuery += ' AND (title:(' + query + ') OR creator:(' + query + '))';
+      } else {
+        searchQuery += ' AND (title:(sherlock) OR title:(dracula) OR title:(frankenstein) OR title:(alice) OR title:(monte cristo))';
+      }
+
+      const url = 'https://archive.org/advancedsearch.php?q=' + encodeURIComponent(searchQuery) +
+        '&fl%5B%5D=identifier&fl%5B%5D=title&fl%5B%5D=creator&fl%5B%5D=description&fl%5B%5D=downloads&fl%5B%5D=language' +
+        '&rows=24&output=json&sort%5B%5D=downloads+desc';
+      const response = await fetch(url, { signal: AbortSignal.timeout(10000) });
+      if (!response.ok) throw new Error('Arşiv servisi yanıt vermedi (HTTP ' + response.status + ')');
       const data = await response.json();
-      const rawBooks = data.books || [];
-      const books = rawBooks.map(b => ({
-        id: b.id,
-        title: b.title || 'Başlıksız Eser',
-        author: (b.authors || []).map(a => `${a.first_name || ''} ${a.last_name || ''}`.trim()).join(', ') || 'Bilinmiyor',
-        description: (b.description || 'Açıklama bulunmuyor.').replace(/<[^>]+>/g, '').slice(0, 300),
-        duration: b.totaltime || 'Belirtilmemiş',
-        language: b.language || 'English',
-        urlZip: b.url_zip_file || '',
-        urlLibrivox: b.url_librivox || ''
-      }));
-      return { success: true, count: books.length, books, source: 'LibriVox (Günde 1 Kez Güncellenen Kalıcı JSON Önbellek)' };
+      const docs = (data.response && data.response.docs) || [];
+      const strip = (s) => String(s || '').replace(/<[^>]+>/g, '').trim();
+      const books = docs.map(d => {
+        const authors = (Array.isArray(d.creator) ? d.creator.join(', ') : (d.creator || 'Bilinmiyor')).toString() || 'Bilinmiyor';
+        const detailsUrl = 'https://archive.org/details/' + d.identifier;
+        return {
+          id: d.identifier,
+          title: strip(d.title) || 'Başlıksız Eser',
+          author: authors,
+          authors: authors,
+          description: strip(d.description).slice(0, 300) || 'Açıklama bulunmuyor.',
+          language: Array.isArray(d.language) ? d.language[0] : (d.language || 'English'),
+          downloads: Number(d.downloads) || 0,
+          urlZip: '',
+          urlLibrivox: detailsUrl,
+          listenUrl: detailsUrl,
+          detailsUrl: detailsUrl
+        };
+      });
+      return { success: true, count: books.length, books, source: 'archive.org LibriVox koleksiyonu (kalıcı önbellek)' };
     });
     res.json(output);
   } catch(err) {
