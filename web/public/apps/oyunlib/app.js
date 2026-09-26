@@ -47,7 +47,7 @@ async function loadGames() {
                 </div>
 
                 <div class="p-4 pt-0">
-                  <a href="${g.game_url}" target="_blank" rel="noopener" class="w-full py-2 px-3 rounded-md bg-mistral-cream-light hover:bg-mistral-orange hover:text-mistral-ink font-bold border border-mistral-beige-deep text-mistral-ink text-xs font-semibold transition flex items-center justify-center gap-1.5">
+                  <a href="${g.game_url}" target="_blank" rel="noopener" class="w-full py-2 px-3 rounded-md bg-mistral-cream-light hover:bg-mistral-orange hover:text-white font-bold border border-mistral-beige-deep text-mistral-ink text-xs font-semibold transition flex items-center justify-center gap-1.5">
                     <span>Oyna & Sayfaya Git</span> &rarr;
                   </a>
                 </div>
