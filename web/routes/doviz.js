@@ -2,14 +2,14 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <script src="/static/apps/doviz/app.js" defer></script>
+      <script src="/static/apps/doviz/app.js?v=20260926m" defer></script>
     `;
 
     const content = `
       <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/" class="text-mistral-slate hover:text-white transition text-sm flex items-center gap-1">
+            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-sm flex items-center gap-1">
               &larr; Vitrine Dön
             </a>
             <span class="text-mistral-stone">|</span>
@@ -29,7 +29,7 @@ module.exports = function(pageTemplate) {
             <button onclick="setDataSource('tcmb')" id="btn-src-tcmb" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500 text-slate-950 transition flex items-center gap-1.5 shadow">
               <span>🏛️</span> TCMB Kurları
             </button>
-            <button onclick="setDataSource('ecb')" id="btn-src-ecb" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-mistral-slate hover:text-white transition flex items-center gap-1.5">
+            <button onclick="setDataSource('ecb')" id="btn-src-ecb" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-mistral-slate hover:text-mistral-ink transition flex items-center gap-1.5">
               <span>🌍</span> ECB Kurları
             </button>
           </div>
@@ -60,9 +60,9 @@ module.exports = function(pageTemplate) {
               <!-- TCMB Kur Türü Seçici (Alış / Satış / Efektif) -->
               <div id="tcmb-rate-type-container" class="flex gap-1 p-0.5 rounded-lg bg-white border border-mistral-hairline text-[11px]">
                 <button onclick="setTcmbRateType('forexSelling')" id="btn-type-forexSelling" class="px-2 py-1 rounded bg-emerald-500/20 text-emerald-300 font-semibold transition">Döviz Satış</button>
-                <button onclick="setTcmbRateType('forexBuying')" id="btn-type-forexBuying" class="px-2 py-1 rounded text-mistral-slate hover:text-white transition">Döviz Alış</button>
-                <button onclick="setTcmbRateType('banknoteSelling')" id="btn-type-banknoteSelling" class="px-2 py-1 rounded text-mistral-slate hover:text-white transition">Efektif Satış</button>
-                <button onclick="setTcmbRateType('banknoteBuying')" id="btn-type-banknoteBuying" class="px-2 py-1 rounded text-mistral-slate hover:text-white transition">Efektif Alış</button>
+                <button onclick="setTcmbRateType('forexBuying')" id="btn-type-forexBuying" class="px-2 py-1 rounded text-mistral-slate hover:text-mistral-ink transition">Döviz Alış</button>
+                <button onclick="setTcmbRateType('banknoteSelling')" id="btn-type-banknoteSelling" class="px-2 py-1 rounded text-mistral-slate hover:text-mistral-ink transition">Efektif Satış</button>
+                <button onclick="setTcmbRateType('banknoteBuying')" id="btn-type-banknoteBuying" class="px-2 py-1 rounded text-mistral-slate hover:text-mistral-ink transition">Efektif Alış</button>
               </div>
 
               <button onclick="toggleFavorite()" id="btn-fav-star" class="text-xs text-mistral-slate hover:text-amber-400 transition flex items-center gap-1">
@@ -134,10 +134,10 @@ module.exports = function(pageTemplate) {
               
               <!-- Periyot Filtreleri -->
               <div class="flex gap-1.5 p-1 rounded-xl bg-white border border-mistral-hairline">
-                <button onclick="setChartPeriod('7d')" id="btn-period-7d" class="period-btn px-3 py-1 rounded-lg text-xs font-semibold text-mistral-slate hover:text-white transition">7G</button>
+                <button onclick="setChartPeriod('7d')" id="btn-period-7d" class="period-btn px-3 py-1 rounded-lg text-xs font-semibold text-mistral-slate hover:text-mistral-ink transition">7G</button>
                 <button onclick="setChartPeriod('1m')" id="btn-period-1m" class="period-btn px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-500 text-slate-950 transition">1A</button>
-                <button onclick="setChartPeriod('3m')" id="btn-period-3m" class="period-btn px-3 py-1 rounded-lg text-xs font-semibold text-mistral-slate hover:text-white transition">3A</button>
-                <button onclick="setChartPeriod('1y')" id="btn-period-1y" class="period-btn px-3 py-1 rounded-lg text-xs font-semibold text-mistral-slate hover:text-white transition">1Y</button>
+                <button onclick="setChartPeriod('3m')" id="btn-period-3m" class="period-btn px-3 py-1 rounded-lg text-xs font-semibold text-mistral-slate hover:text-mistral-ink transition">3A</button>
+                <button onclick="setChartPeriod('1y')" id="btn-period-1y" class="period-btn px-3 py-1 rounded-lg text-xs font-semibold text-mistral-slate hover:text-mistral-ink transition">1Y</button>
               </div>
             </div>
 
