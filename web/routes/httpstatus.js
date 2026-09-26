@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/httpstatus/app.js" defer></script>
+      <script src="/static/apps/httpstatus/app.js?v=20260926t" defer></script>
     `;
 
     const content = `
@@ -40,7 +40,7 @@ module.exports = function(pageTemplate) {
               Tarayıcınızın donanım, grafik kartı (GPU), çözünürlük ve ağ yeteneklerinin canlı teşhisi.
             </p>
           </div>
-          <button onclick="detectHardware()" class="px-3 py-1.5 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep text-xs font-semibold transition">
+          <button onclick="detectHardware()" class="px-3 py-1.5 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep text-xs font-semibold transition">
             Yenile
           </button>
         </div>
@@ -106,7 +106,7 @@ module.exports = function(pageTemplate) {
       <!-- KOD DETAY MODALI -->
       <div id="status-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
         <div class="relative w-full max-w-xl bg-white border border-mistral-hairline rounded-2xl shadow-2xl p-6 sm:p-8 space-y-5">
-          <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-slate hover:text-mistral-ink flex items-center justify-center text-sm font-bold transition">✕</button>
+          <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-slate hover:text-mistral-ink flex items-center justify-center text-sm font-bold transition">✕</button>
 
           <div class="flex items-center gap-4">
             <span class="px-4 py-2 rounded-xl bg-mistral-cream border border-mistral-beige-deep text-2xl font-bold font-mono text-mistral-orange" id="m-code">404</span>
