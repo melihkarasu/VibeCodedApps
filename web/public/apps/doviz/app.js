@@ -88,7 +88,7 @@ const CURRENCIES = {
 
           if (source === 'tcmb') {
             btnTcmb.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500 text-slate-950 transition flex items-center gap-1.5 shadow';
-            btnEcb.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold text-mistral-slate hover:text-white transition flex items-center gap-1.5';
+            btnEcb.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold text-mistral-slate hover:text-mistral-ink transition flex items-center gap-1.5';
             tcmbTypeBox.classList.remove('hidden');
             convSourceLabel.innerText = '🏛️ TCMB Resmi Kurları';
             document.getElementById('matrix-title').innerHTML = '<span>🏛️</span> TCMB Gösterge Kurları';
@@ -100,7 +100,7 @@ const CURRENCIES = {
             updateSourceBadge();
           } else {
             btnEcb.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500 text-slate-950 transition flex items-center gap-1.5 shadow';
-            btnTcmb.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold text-mistral-slate hover:text-white transition flex items-center gap-1.5';
+            btnTcmb.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold text-mistral-slate hover:text-mistral-ink transition flex items-center gap-1.5';
             tcmbTypeBox.classList.add('hidden');
             convSourceLabel.innerText = '🌍 ECB Uluslararası Kurlar';
             document.getElementById('matrix-title').innerHTML = '<span>🌐</span> Çoklu Kur Matrisi';
@@ -124,7 +124,7 @@ const CURRENCIES = {
             if (t === type) {
               btn.className = 'px-2 py-1 rounded bg-emerald-500/20 text-emerald-300 font-semibold transition';
             } else {
-              btn.className = 'px-2 py-1 rounded text-mistral-slate hover:text-white transition';
+              btn.className = 'px-2 py-1 rounded text-mistral-slate hover:text-mistral-ink transition';
             }
           });
           calculateConversion();
@@ -391,7 +391,7 @@ const CURRENCIES = {
         function setChartPeriod(period) {
           currentPeriod = period;
           document.querySelectorAll('.period-btn').forEach(b => {
-            b.className = 'period-btn px-3 py-1 rounded-lg text-xs font-semibold text-mistral-slate hover:text-white transition';
+            b.className = 'period-btn px-3 py-1 rounded-lg text-xs font-semibold text-mistral-slate hover:text-mistral-ink transition';
           });
           const active = document.getElementById('btn-period-' + period);
           if (active) active.className = 'period-btn px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-500 text-slate-950 transition';
@@ -681,7 +681,7 @@ const CURRENCIES = {
             fetchTcmbRates(),
             fetchEcbRates('USD')
           ]);
-          setDataSource('tcmb');
+          setDataSource(tcmbData ? 'tcmb' : 'ecb');
           loadChartData();
           runSimulation();
           renderFavorites();

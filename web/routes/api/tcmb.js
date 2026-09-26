@@ -77,6 +77,8 @@ router.get('/tcmb', async (req, res) => {
     const data = await getCachedJson(`tcmb_today_${todayStr}`, async () => {
       return await fetchTcmbXml();
     });
+    // Standalone (melihkarasu.github.io) kullanicilari icin CORS erisimi
+    res.set('Access-Control-Allow-Origin', 'https://melihkarasu.github.io');
     res.json(data);
   } catch (err) {
     res.status(502).json({ error: 'TCMB döviz kurları alınamadı: ' + err.message });
