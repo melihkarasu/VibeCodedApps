@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="/static/apps/kultur/app.css">
-      <script src="/static/apps/kultur/app.js" defer></script>
+      <script src="/static/apps/kultur/app.js?v=20260926b" defer></script>
     `;
 
     const content = `
