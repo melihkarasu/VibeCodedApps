@@ -175,7 +175,7 @@ const STORAGE_KEY = 'vibe_w…hlist';
             if (t === tab) {
               btn.className = 'px-4 py-1.5 rounded-lg text-xs font-bold bg-blue-500 text-white transition flex items-center gap-1.5 shadow';
             } else {
-              btn.className = 'px-4 py-1.5 rounded-lg text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-1.5';
+              btn.className = 'px-4 py-1.5 rounded-lg text-xs font-bold text-mistral-slate hover:text-mistral-ink transition flex items-center gap-1.5';
             }
           });
 
@@ -198,7 +198,8 @@ const STORAGE_KEY = 'vibe_w…hlist';
           }
 
           empty.classList.add('hidden');
-          grid.innerHTML = list.map(show => {
+          window.__renderedList = list;
+          grid.innerHTML = list.map((show, idx) => {
             const inWatchlist = watchlist.find(w => w.id === show.id);
             const total = show.totalEpisodes || 1;
             const watched = show.watchedEpisodes ? show.watchedEpisodes.length : 0;
@@ -232,7 +233,7 @@ const STORAGE_KEY = 'vibe_w…hlist';
                         <span class="text-blue-400 font-bold">%${pct}</span>
                       </div>
                       <div class="w-full h-1.5 rounded-full bg-white overflow-hidden">
-                        <div class="h-full bg-white from-blue-500 to-indigo-500 rounded-full" style="width: ${pct}%;"></div>
+                        <div class="h-full bg-blue-500 rounded-full" style="width: ${pct}%;"></div>
                       </div>
                     </div>
                   ` : ''}
@@ -240,7 +241,7 @@ const STORAGE_KEY = 'vibe_w…hlist';
 
                 <div class="pt-3 border-t border-mistral-hairline flex items-center justify-between mt-3">
                   ${isSearch ? `
-                    <button onclick="addSearchResultToWatchlist('${show.id}', '${show.title.replace(/'/g, "\\\\'")}', '${show.poster}', '${show.imdbRating}', '${show.year}')" class="w-full py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition flex items-center justify-center gap-1.5">
+                    <button onclick="addSearchResultByRenderedIdx(${idx})"" class="w-full py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition flex items-center justify-center gap-1.5">
                       <span>+</span> İzleme Listeme Ekle
                     </button>
                   ` : `
@@ -255,6 +256,13 @@ const STORAGE_KEY = 'vibe_w…hlist';
               </div>
             `;
           }).join('');
+        }
+
+        // İndeks-tabanlı güvenli ekleme (apostroflu dizi adları HTML'i kıramaz)
+        function addSearchResultByRenderedIdx(idx) {
+          const show = (window.__renderedList || [])[idx];
+          if (!show) return;
+          addSearchResultToWatchlist(show.id, show.title, show.poster, show.imdbRating, show.year);
         }
 
         function addSearchResultToWatchlist(id, title, poster, rating, year) {
@@ -335,7 +343,7 @@ const STORAGE_KEY = 'vibe_w…hlist';
           // Sezon sekmeleri
           const tabsBox = document.getElementById('modal-seasons-tabs');
           tabsBox.innerHTML = seasons.map(sn => `
-            <button onclick="switchModalSeason(${sn})" class="px-3 py-1.5 rounded-xl text-xs font-bold ${sn === activeModalSeason ? 'bg-blue-600 text-white' : 'bg-white text-mistral-slate hover:text-white'} transition">
+            <button onclick="switchModalSeason(${sn})" class="px-3 py-1.5 rounded-xl text-xs font-bold ${sn === activeModalSeason ? 'bg-blue-600 text-white' : 'bg-white text-mistral-slate hover:text-mistral-ink'} transition">
               Sezon ${sn}
             </button>
           `).join('');

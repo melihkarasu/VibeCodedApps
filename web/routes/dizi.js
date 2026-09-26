@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="/static/apps/dizi/app.css">
-      <script src="/static/apps/dizi/app.js" defer></script>
+      <script src="/static/apps/dizi/app.js?v=20260926f" defer></script>
     `;
 
     const content = `
@@ -80,7 +80,7 @@ module.exports = function(pageTemplate) {
               <input type="text" id="input-title-search" placeholder="Dizi adı yazın (Örn: Succession, Dark, The Last of Us, Peaky Blinders)..." onkeyup="if(event.key==='Enter') searchShowsByName()" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder-slate-500 focus:border-blue-400 focus:outline-none">
               <span class="absolute left-3.5 top-3 text-mistral-stone text-sm">🔍</span>
             </div>
-            <button onclick="searchShowsByName()" class="px-5 py-2.5 rounded-xl text-mistral-ink font-boldbg-mistral-cream-light hover:bg-mistral-cream-deeper text-mistral-ink font-bold font-semibold text-xs transition shrink-0">
+            <button onclick="searchShowsByName()" class="px-5 py-2.5 rounded-xl text-mistral-ink font-bold bg-mistral-cream-light hover:bg-mistral-cream-deeper text-mistral-ink font-bold font-semibold text-xs transition shrink-0">
               Dizi Ara
             </button>
           </div>
