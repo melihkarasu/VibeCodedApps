@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="/static/apps/lezzet/app.css">
-      <script src="/static/apps/lezzet/app.js" defer></script>
+      <script src="/static/apps/lezzet/app.js?v=20260926h" defer></script>
     `;
 
     const content = `
@@ -62,7 +62,7 @@ module.exports = function(pageTemplate) {
           </div>
 
           <!-- Sürpriz Tarif Butonu (Şans Çarkı) -->
-          <button onclick="fetchRandomRecipe()" class="px-4 py-2.5 rounded-xl bg-white from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-bold text-xs transition shadow-lg shadow-rose-500/20 flex items-center justify-center gap-2 shrink-0">
+          <button onclick="fetchRandomRecipe()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-bold text-xs transition shadow-lg shadow-rose-500/20 flex items-center justify-center gap-2 shrink-0">
             <span>🎲</span> <span id="btn-random-label">Ne Yesem? (Rastgele Sürpriz)</span>
           </button>
         </div>
@@ -73,7 +73,7 @@ module.exports = function(pageTemplate) {
             <input type="text" id="input-ingredient" placeholder="Malzeme yazın (Örn: patates, tavuk, sarımsak, soğan, cheese, mint)..." onkeyup="if(event.key==='Enter') addCustomIngredient()" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder-slate-500 focus:border-rose-400 focus:outline-none">
             <span class="absolute left-3.5 top-3 text-mistral-stone text-sm">🥕</span>
           </div>
-          <button onclick="addCustomIngredient()" class="px-5 py-2.5 rounded-xl bg-white from-rose-500 to-pink-600 hover:from-rose-400 hover:to-pink-500 text-white font-bold text-xs transition shadow-md shadow-rose-500/20 flex items-center justify-center gap-1.5 shrink-0">
+          <button onclick="addCustomIngredient()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-400 hover:to-pink-500 text-white font-bold text-xs transition shadow-md shadow-rose-500/20 flex items-center justify-center gap-1.5 shrink-0">
             <span>+</span> <span>Malzemeyi Ekle & Ara</span>
           </button>
         </div>
