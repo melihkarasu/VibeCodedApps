@@ -3,7 +3,7 @@ module.exports = function(pageTemplate) {
     const extraHead = `
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/iss/app.js?v=20260927a" defer></script>
+      <script src="/static/apps/iss/app.js?v=20260927b" defer></script>
     `;
 
     const content = `
@@ -100,8 +100,8 @@ module.exports = function(pageTemplate) {
             </div>
 
             <div class="pt-2">
-              <button onclick="centerOnIss()" class="w-full py-2.5 px-4 rounded-md bg-mistral-orange hover:bg-mistral-orange-deep text-white font-medium text-xs transition shadow-xs flex items-center justify-center gap-2 cursor-pointer">
-                <span>🎯</span> İstasyonu Haritada Ortala
+              <button onclick="centerOnIss()" class="w-full py-3 px-4 rounded-lg bg-mistral-orange hover:bg-mistral-orange-deep text-white font-bold text-sm transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
+                <span class="text-base">🎯</span> ISS'in Anlık Konumunu Haritada Ortala
               </button>
             </div>
           </div>
