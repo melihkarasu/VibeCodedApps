@@ -3,7 +3,7 @@ module.exports = function(pageTemplate) {
     const extraHead = `
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/unesco/app.js?v=20260926x" defer></script>
+      <script src="/static/apps/unesco/app.js?v=20260927a" defer></script>
     `;
 
     const content = `
