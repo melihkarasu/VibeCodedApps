@@ -187,30 +187,63 @@ function copyPoemText() {
   safeCopyToClipboard(txt, 'Şiir panoya kopyalandı!');
 }
 
-function savePoemToFavorites() {
-  if (!currentPoemData) return;
-  const favs = getAnthology();
+// ===== ŞİİR ANTOLOJİM (Veritabanı Senkronizasyonu - user_app_data) =====
+const APP_ID = 'siir-antolojisi';
+const DATA_KEY = 'siir_antolojim';
+let userAnthology = [];
 
-  if (!favs.some(x => x.title === currentPoemData.title)) {
-    favs.unshift({ title: currentPoemData.title, author: currentPoemData.author, date: new Date().toLocaleDateString('tr-TR') });
-    localStorage.setItem(ANTHOLOGY_KEY, JSON.stringify(favs));
-    showToast('✓ "' + currentPoemData.title + '" antolojinize kaydedildi!');
-    renderMyAnthology();
-  } else {
-    showToast('Bu şiir zaten antolojinizde kayıtlı.');
+function getAuthHeader() {
+  const token = (typeof localStorage !== 'undefined' && localStorage.getItem('vibe_token')) || '';
+  return token ? { 'Authorization': 'Bearer ' + token } : {};
+}
+
+async function loadAnthologyFromDb() {
+  try {
+    const res = await fetch('/api/user-data/' + encodeURIComponent(APP_ID), {
+      headers: getAuthHeader()
+    });
+    if (res.ok) {
+      const json = await res.json();
+      if (json && json.success && json.data && Array.isArray(json.data[DATA_KEY])) {
+        userAnthology = json.data[DATA_KEY];
+      }
+    }
+  } catch(e) {
+    console.warn('[SiirAntolojisi] Veritabanından veri alınamadı:', e.message);
+  }
+  renderMyAnthology();
+}
+
+async function persistAnthologyToDb() {
+  try {
+    await fetch('/api/user-data/' + encodeURIComponent(APP_ID), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeader()
+      },
+      body: JSON.stringify({ key: DATA_KEY, value: userAnthology })
+    });
+  } catch(e) {
+    console.error('[SiirAntolojisi] Veritabanına kaydetme hatası:', e.message);
   }
 }
 
-// ===== ŞİİR ANTolojim (yerel koleksiyon) =====
-const ANTHOLOGY_KEY = '***';
+async function savePoemToFavorites() {
+  if (!currentPoemData) return;
 
-function getAnthology() {
-  let favs = [];
-  try {
-    favs = JSON.parse(localStorage.getItem(ANTHOLOGY_KEY) || '[]');
-    if (!Array.isArray(favs)) favs = [];
-  } catch(e) { favs = []; }
-  return favs;
+  if (!userAnthology.some(x => x.title === currentPoemData.title)) {
+    userAnthology.unshift({
+      title: currentPoemData.title,
+      author: currentPoemData.author,
+      date: new Date().toLocaleDateString('tr-TR')
+    });
+    renderMyAnthology();
+    showToast('✓ "' + currentPoemData.title + '" antolojinize kaydedildi!');
+    await persistAnthologyToDb();
+  } else {
+    showToast('Bu şiir zaten antolojinizde kayıtlı.');
+  }
 }
 
 function renderMyAnthology() {
@@ -219,16 +252,15 @@ function renderMyAnthology() {
   const count = document.getElementById('my-anthology-count');
   if (!grid || !empty || !count) return;
 
-  const favs = getAnthology();
-  count.innerText = String(favs.length);
+  count.innerText = String(userAnthology.length);
 
-  if (favs.length === 0) {
+  if (userAnthology.length === 0) {
     grid.innerHTML = '';
     empty.classList.remove('hidden');
     return;
   }
   empty.classList.add('hidden');
-  grid.innerHTML = favs.map((p, i) => `
+  grid.innerHTML = userAnthology.map((p, i) => `
     <div class="p-4 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-orange/40 hover:shadow-sm transition flex flex-col justify-between group">
       <div>
         <h4 class="font-bold text-sm font-editorial text-mistral-ink group-hover:text-mistral-orange transition truncate mb-1 cursor-pointer" onclick="openAnthologyItem(${i})">${escapeHtml(p.title)}</h4>
@@ -247,7 +279,7 @@ function renderMyAnthology() {
 
 // Kayıtlı şiir yalnızca başlık/şair/date saklar — tam metin PoetryDB'den yeniden çekilir
 async function openAnthologyItem(idx) {
-  const p = getAnthology()[idx];
+  const p = userAnthology[idx];
   if (!p) return;
 
   const loading = document.getElementById('poem-loading');
@@ -279,25 +311,29 @@ async function openAnthologyItem(idx) {
   }
 }
 
-function removeMyAnthologyItem(idx) {
-  const favs = getAnthology();
-  const removed = favs.splice(idx, 1)[0];
-  localStorage.setItem(ANTHOLOGY_KEY, JSON.stringify(favs));
+async function removeMyAnthologyItem(idx) {
+  const removed = userAnthology.splice(idx, 1)[0];
   renderMyAnthology();
   if (removed) showToast('"' + removed.title + '" antolojiden çıkarıldı.');
+  await persistAnthologyToDb();
 }
 
-function clearMyAnthology() {
-  const favs = getAnthology();
-  if (favs.length === 0) { showToast('Antolojin zaten boş.'); return; }
-  if (!confirm('Antolojindeki ' + favs.length + ' şiirin tamamı silinecek. Emin misin?')) return;
-  localStorage.removeItem(ANTHOLOGY_KEY);
+async function clearMyAnthology() {
+  if (userAnthology.length === 0) { showToast('Antolojin zaten boş.'); return; }
+  if (!confirm('Antolojindeki ' + userAnthology.length + ' şiirin tamamı silinecek. Emin misin?')) return;
+  userAnthology = [];
   renderMyAnthology();
+  try {
+    await fetch('/api/user-data/' + encodeURIComponent(APP_ID) + '/' + encodeURIComponent(DATA_KEY), {
+      method: 'DELETE',
+      headers: getAuthHeader()
+    });
+  } catch(e) {}
   showToast('Antolojin temizlendi.');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  renderMyAnthology();
+  loadAnthologyFromDb();
   loadRandomPoem();
 });
 
