@@ -58,7 +58,7 @@ router.get('/carbon/analyze', async (req, res) => {
     try {
       const response = await fetch(targetUrl, {
         headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; VibeCodedAppsCarbonBot/1.0; +http://0.0.0.0:8088)',
+          'User-Agent': 'Mozilla/5.0 (compatible; VibeCodedAppsCarbonBot/1.0)',
           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
           'Accept-Encoding': 'gzip, deflate, br'
         },

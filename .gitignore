@@ -25,3 +25,8 @@ Thumbs.db
 
 # Dynamic API Caches
 web/cache/*.json
+
+# Security: never track code backups or internal security reports
+*.bak
+security-report/
+security/reports/

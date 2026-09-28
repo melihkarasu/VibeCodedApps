@@ -3,7 +3,7 @@ const router = express.Router();
 const crypto = require('crypto');
 
 const SUPABASE_URL = process.env.INTERNAL_SUPABASE_URL || process.env.SUPABASE_URL || 'http://vibe-supabase-kong:8000';
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || 'REDACTED')
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
   .split(',')
   .map(e => e.trim().toLowerCase());
 

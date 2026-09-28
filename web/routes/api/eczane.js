@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { CACHE_DIR } = require('./cache');
 
-const ECZANE_API_KEY = process.env.ECZANE_API_KEY || 'REDACTED';
+const ECZANE_API_KEY = process.env.ECZANE_API_KEY;
 const ECZANE_BASE_URL = 'https://eczaneapi.com/api/v1';
 
 // Haversine Formülü ile İki Nokta Arası Metre Hesabı

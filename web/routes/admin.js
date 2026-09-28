@@ -325,7 +325,7 @@ module.exports = function(pageTemplate) {
           try {
             const user = JSON.parse(userRaw);
             const email = (user.email || '').trim().toLowerCase();
-            if (email !== process.env.ADMIN_EMAIL?.toLowerCase().trim() && email !== 'REDACTED') {
+            if (email !== process.env.ADMIN_EMAIL?.toLowerCase().trim()) {
               showUnauthorized();
               return;
             }

@@ -49,6 +49,8 @@ services:
       - SERVICE_ROLE_KEY=${SERVICE_ROLE_KEY}
       - JWT_SECRET=${JWT_SECRET}
       - ECZANE_API_KEY=${ECZANE_API_KEY}
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-}
+      - ADMIN_EMAILS=${ADMIN_EMAILS:-}
     networks:
       - vibe-network
     expose:
@@ -96,8 +98,8 @@ services:
       GOTRUE_DB_DRIVER: postgres
       GOTRUE_DB_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@vibe-supabase-db:5432/postgres?sslmode=disable
 
-      GOTRUE_SITE_URL: ${APP_URL:-http://0.0.0.0:8088}
-      GOTRUE_URI_ALLOW_LIST: "${APP_URL:-http://0.0.0.0:8088}/*,http://localhost:8088/*,http://127.0.0.1:8088/*,http://0.0.0.0:8088/*"
+      GOTRUE_SITE_URL: ${APP_URL:-http://localhost:8088}
+      GOTRUE_URI_ALLOW_LIST: "${APP_URL:-http://localhost:8088}/*,http://localhost:8088/*,http://127.0.0.1:8088/*"
 
       GOTRUE_JWT_SECRET: ${JWT_SECRET}
       GOTRUE_JWT_EXP: 2592000

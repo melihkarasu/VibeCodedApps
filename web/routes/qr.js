@@ -67,7 +67,7 @@ module.exports = function(pageTemplate) {
             <div class="flex items-center gap-2">
               <button onclick="document.getElementById('input-url').value='https://github.com/melihkarasu'; updateQR();" class="text-xs text-teal-400 hover:underline">Örnek: GitHub Profilim</button>
               <span class="text-mistral-stone">•</span>
-              <button onclick="document.getElementById('input-url').value='http://0.0.0.0:8088/app'; updateQR();" class="text-xs text-teal-400 hover:underline">Örnek: VibeCodedApps</button>
+              <button onclick="document.getElementById('input-url').value='https://github.com/melihkarasu/VibeCodedApps'; updateQR();" class="text-xs text-teal-400 hover:underline">Örnek: VibeCodedApps</button>
             </div>
           </div>
 
