@@ -26,8 +26,127 @@ const COUNTRY_FLAGS = {
           'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
         ];
 
+        const DAY_NAMES_SHORT = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
+
+        // Yaygın tatil adlarının Türkçe çevirileri (Nager.Date name → Türkçe)
+        const HOLIDAY_TR_MAP = {
+          "new year's day": 'Yılbaşı',
+          "new year day": 'Yılbaşı',
+          "eid al-fitr first day": 'Ramazan Bayramı 1. Gün',
+          "eid al-fitr second day": 'Ramazan Bayramı 2. Gün',
+          "eid al-fitr third day": 'Ramazan Bayramı 3. Gün',
+          "eid al-fitr fourth day": 'Ramazan Bayramı 4. Gün',
+          "eid al-fitr": 'Ramazan Bayramı',
+          "eid al-adha first day": 'Kurban Bayramı 1. Gün',
+          "eid al-adha second day": 'Kurban Bayramı 2. Gün',
+          "eid al-adha third day": 'Kurban Bayramı 3. Gün',
+          "eid al-adha fourth day": 'Kurban Bayramı 4. Gün',
+          "eid al-adha": 'Kurban Bayramı',
+          "national independence & children's day": 'Ulusal Egemenlik ve Çocuk Bayramı',
+          "national sovereignty and children's day": 'Ulusal Egemenlik ve Çocuk Bayramı',
+          "commemoration of atatürk, youth and sports day": "Atatürk'ü Anma, Gençlik ve Spor Bayramı",
+          "atatürk commemoration & youth day": "Atatürk'ü Anma, Gençlik ve Spor Bayramı",
+          "ataturk commemoration & youth day": "Atatürk'ü Anma, Gençlik ve Spor Bayramı",
+          "democracy and national unity day": 'Demokrasi ve Millî Birlik Günü',
+          "labour day": 'İşçi Bayramı',
+          "labor day": 'İşçi Bayramı',
+          "good friday": "Kutsal Cuma",
+          "easter monday": 'Paskalya Pazartesisi',
+          "easter sunday": 'Paskalya',
+          "easter": 'Paskalya',
+          "ascension day": "Mesih'in Yükselişi",
+          "pentecost": 'Hamsin Yortusu',
+          "whit monday": 'Hamsin Yortusu (Pazartesi)',
+          "christmas day": 'Noel',
+          "christmas eve": 'Noel Arifesi',
+          "second day of christmas": 'Noel 2. Gün',
+          "boxing day": 'Noel Sonrası Kutlama Günü',
+          "epiphany": 'Epifanya',
+          "assumption day": "Meryem'in Göğe Yükselişi",
+          "assumption of mary": "Meryem'in Göğe Yükselişi",
+          "all saints' day": 'Azizler Günü',
+          "all souls' day": 'Ölüler Günü',
+          "immaculate conception": "Lekesiz Geçme",
+          "independence day": 'Bağımsızlık Günü',
+          "victory day": 'Zafer Bayramı',
+          "republic day": 'Cumhuriyet Bayramı',
+          "constitution day": 'Anayasa Günü',
+          "national day": 'Ulusal Gün',
+          "liberation day": 'Kurtuluş Günü',
+          "unity day": 'Birlik Günü',
+          "freedom day": 'Özgürlük Günü',
+          "midsummer day": 'Yaz Ortası Günü',
+          "midsummer eve": 'Yaz Ortası Arifesi',
+          "saint stephen's day": 'Aziz Stefan Günü',
+          "st. patrick's day": "Aziz Patrik Günü",
+          "st george's day": 'Aziz Giorgi Günü',
+          "spring bank holiday": 'İlkbahar Tatili',
+          "summer bank holiday": 'Yaz Tatili',
+          "queen's birthday": "Kraliçenin Doğum Günü",
+          "king's birthday": "Kralın Doğum Günü",
+          "king's day": "Kral Günü",
+          "remembrance day": 'Anma Günü',
+          "armistice day": 'Mütareke Günü',
+          "thanksgiving day": "Şükran Günü",
+          "columbus day": "Kolomb Günü",
+          "martin luther king jr. day": "Martin Luther King Jr. Günü",
+          "memorial day": "Şehitleri Anma Günü",
+          "presidents' day": "Başkanlar Günü",
+          "juneteenth": "Juneteenth (Özgürlük Günü)",
+          "family day": "Aile Günü",
+          "heritage day": "Miras Günü",
+          "canada day": "Kanada Günü",
+          "australia day": "Avustralya Günü",
+          "anzac day": "Anzak Günü",
+          "orthodox christmas day": "Ortodoks Noel",
+          "orthodox easter monday": "Ortodoks Paskalya Pazartesisi",
+          "orthodox easter": "Ortodoks Paskalya",
+          "women's day": "Kadınlar Günü",
+          "international women's day": "Dünya Kadınlar Günü",
+          "children's day": "Çocuk Bayramı",
+          "youth day": "Gençlik ve Spor Bayramı",
+          "mother's day": "Anneler Günü",
+          "father's day": "Babalar Günü",
+          "new year's eve": "Yılbaşı Arifesi",
+          "new year holiday": "Yılbaşı Tatili",
+          "day after new year's day": "Yılbaşı Sonrası",
+          "restore the independence of lithuania": "Litvanya Bağımsızlığının Yeniden Tesisi",
+          "day of restoration of the state of lithuania": "Litvanya Devletinin Yeniden Kuruluşu",
+          "german unity day": "Alman Birlik Günü",
+          "reformation day": "Reformasyon Günü",
+          "victory in europe day": "Avrupa Zafer Günü",
+          "bastille day": "Bastille Günü",
+          "veterans day": "Gaziler Günü",
+          "washington's birthday": "Washington'un Doğum Günü",
+          "thanksgiving": "Şükran Günü",
+          "early may bank holiday": "Mayıs Başı Banka Tatili"
+        };
+
+        // Tek noktadan Türkçe tatil adı çözümü: localName → sözlük → İngilizce name
+        function trHolidayName(h) {
+          if (!h) return '';
+          // 1. Yerel ad Türkçe karakterli mi? (TR/AZ gibi ülkelerde API zaten Türkçe döner)
+          const local = h.localName || '';
+          const english = h.name || '';
+          const hasTrChars = /[çğıöşüÇĞİÖŞÜ]/.test(local) || /ıst|Bayram|Günü|Bayramı/.test(local);
+          // Türkçe ad zaten yerelse doğrudan kullan
+          if (hasTrChars) return local;
+          // 2. Sözlükte İngilizce adın karşılığı var mı?
+          const key = english.toLowerCase().trim();
+          if (HOLIDAY_TR_MAP[key]) return HOLIDAY_TR_MAP[key];
+          // 3. Yerel ad da İngilizce ad da çevrilemediyse yerel adı göster
+          return local || english;
+        }
+
+        // Kısa hafta günü adı (Pzt, Sal, Çar...)
+        function shortWeekday(dateStr) {
+          const d = new Date(dateStr);
+          const names = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
+          return names[d.getDay()] || '';
+        }
+
         let selectedCountries = ['TR']; // Varsayılan Türkiye
-        let currentYear = 2026;
+        let currentYear = new Date().getFullYear(); // Dinamik: her zaman güncel yıl
         let currentView = 'timeline'; // 'timeline' | 'matrix' | 'calendar'
         let holidaysCache = {}; // { '2026_TR': [...] }
         let allAvailableCountries = [];
@@ -84,10 +203,26 @@ const COUNTRY_FLAGS = {
           document.getElementById('bridge-country-badge').innerText = `${primaryInfo.flag} ${primaryInfo.name}`;
         }
 
+        // Dinamik yıl listesi: güncel yıl + sonraki 2 yıl (kod güncellemesi gerektirmez)
+        function getAvailableYears() {
+          const y = new Date().getFullYear();
+          return [y, y + 1, y + 2];
+        }
+
+        function renderYearButtons() {
+          const container = document.getElementById('year-buttons');
+          if (!container) return;
+          container.innerHTML = getAvailableYears().map(y => {
+            const active = (y === currentYear);
+            return `<button onclick="setYear(${y})" id="btn-year-${y}" class="px-3 py-1.5 rounded-xl text-xs font-bold ${active ? 'bg-amber-500 text-slate-950 transition shadow' : 'text-mistral-slate hover:text-white transition'}">${y}</button>`;
+          }).join('');
+        }
+
         function setYear(yr) {
           currentYear = yr;
-          [2025, 2026, 2027].forEach(y => {
+          getAvailableYears().forEach(y => {
             const btn = document.getElementById('btn-year-' + y);
+            if (!btn) return;
             if (y === yr) {
               btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 transition shadow';
             } else {
@@ -258,8 +393,7 @@ const COUNTRY_FLAGS = {
                           <div class="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-xl bg-white border border-mistral-hairline">
                             <div class="flex items-center gap-2">
                               <span class="text-base">${cInfo.flag}</span>
-                              <span class="font-bold text-xs text-white">${item.localName || item.name}</span>
-                              ${item.name && item.name !== item.localName ? `<span class="text-[11px] text-mistral-slate hidden md:inline">(${item.name})</span>` : ''}
+                              <span class="font-bold text-xs text-mistral-ink">${trHolidayName(item)}</span>
                             </div>
                             <span class="text-[10px] px-2 py-0.5 rounded-md bg-white text-mistral-slate font-mono">
                               ${cInfo.name}
@@ -302,11 +436,11 @@ const COUNTRY_FLAGS = {
                         const d = new Date(h.date);
                         return `
                           <div class="p-2.5 rounded-xl bg-white border border-mistral-hairline text-xs">
-                            <div class="flex items-center justify-between text-mistral-slate font-mono text-[10px] mb-1">
-                              <span>${h.date}</span>
-                              <span>${d.toLocaleDateString('tr-TR', { weekday: 'short' })}</span>
+                            <div class="flex items-center justify-between mb-1">
+                              <span class="text-mistral-slate font-mono text-[10px]">${h.date}</span>
+                              <span class="font-bold text-mistral-ink bg-mistral-cream px-1.5 py-0.5 rounded text-[11px]">${shortWeekday(h.date)}</span>
                             </div>
-                            <div class="font-bold text-mistral-ink">${h.localName || h.name}</div>
+                            <div class="font-bold text-mistral-ink">${trHolidayName(h)}</div>
                           </div>
                         `;
                       }).join('')}
@@ -352,9 +486,12 @@ const COUNTRY_FLAGS = {
                               <div class="p-2 rounded-xl bg-white border border-mistral-hairline flex items-center justify-between text-xs">
                                 <div class="flex items-center gap-2 truncate">
                                   <span>${cInfo.flag}</span>
-                                  <span class="font-semibold text-mistral-ink truncate">${h.localName || h.name}</span>
+                                  <span class="font-semibold text-mistral-ink truncate">${trHolidayName(h)}</span>
                                 </div>
-                                <span class="text-amber-400 font-bold font-mono ml-2 shrink-0">${d} ${MONTH_NAMES[mIdx].slice(0,3)}</span>
+                                <span class="text-right shrink-0 ml-2">
+                                  <span class="block text-amber-400 font-bold font-mono text-[11px]">${d} ${MONTH_NAMES[mIdx].slice(0,3)}</span>
+                                  <span class="block text-mistral-slate font-bold text-[10px]">${shortWeekday(h.date)}</span>
+                                </span>
                               </div>
                             `;
                           }).join('')}
@@ -386,14 +523,14 @@ const COUNTRY_FLAGS = {
           allHolidays.forEach(h => {
             const dateClean = h.date.replace(/-/g, '');
             const cInfo = COUNTRY_FLAGS[h.countryCode] || { name: h.countryCode };
-            const summary = `${cInfo.name} Tatili: ${h.localName || h.name}`;
+            const summary = `${cInfo.name} Tatili: ${trHolidayName(h)}`;
 
             icsContent += "BEGIN:VEVENT\\n";
             icsContent += `UID:${h.date}-${h.countryCode}@vibecodedapps\\n`;
             icsContent += `DTSTAMP:${dateClean}T000000Z\\n`;
             icsContent += `DTSTART;VALUE=DATE:${dateClean}\\n`;
             icsContent += `SUMMARY:${summary}\\n`;
-            icsContent += `DESCRIPTION:${h.name || h.localName} - ${cInfo.name} Resmi Tatili\\n`;
+            icsContent += `DESCRIPTION:${trHolidayName(h)} - ${cInfo.name} Resmi Tatili\\n`;
             icsContent += "STATUS:CONFIRMED\\n";
             icsContent += "TRANSP:TRANSPARENT\\n";
             icsContent += "END:VEVENT\\n";
@@ -422,6 +559,8 @@ const COUNTRY_FLAGS = {
 
         // Başlangıç
         document.addEventListener('DOMContentLoaded', async () => {
+          currentYear = new Date().getFullYear();
+          renderYearButtons();
           renderSelectedCountryTags();
           await fetchAvailableCountries();
           await loadData();

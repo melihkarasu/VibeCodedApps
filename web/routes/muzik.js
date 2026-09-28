@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="/static/apps/muzik/app.css">
-      <script src="/static/apps/muzik/app.js?v=20260926g" defer></script>
+      <script src="/static/apps/muzik/app.js?v=20260928a" defer></script>
     `;
 
     const content = `
@@ -36,6 +36,31 @@ module.exports = function(pageTemplate) {
         </div>
       </div>
 
+      <!-- KAYITLI ÇALMA LİSTEM (MY PLAYLIST) -->
+      <div class="mb-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-2xl font-bold text-mistral-ink flex items-center gap-2">
+              <span>💿</span> Favori Çalma Listem & Şarkılarım
+            </h2>
+            <p class="text-mistral-slate text-xs mt-1">
+              Beğendiğiniz şarkıları tek tıkla koleksiyonunuza ekleyip dilediğiniz zaman dinleyebilir ve sözlerini açabilirsiniz.
+            </p>
+          </div>
+          <button onclick="clearAllSavedSongs()" class="text-xs text-rose-400 hover:underline px-3 py-1.5 rounded-lg border border-rose-500/20 hover:bg-rose-500/10 transition">
+            Listeyi Temizle
+          </button>
+        </div>
+
+        <div id="saved-songs-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <!-- JS ile favoriler -->
+        </div>
+        <div id="saved-songs-empty" class="p-8 text-center rounded-2xl bg-white border border-mistral-hairline text-mistral-stone text-xs">
+          Henüz çalma listenize bir parça eklemediniz. Şarkı kartlarındaki 🔖 simgesine tıklayarak favorilerinize ekleyebilirsiniz.
+        </div>
+      </div>
+
+      
       <!-- ARAMA VE ŞARKI BULUCU KARTI -->
       <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xl mb-8 space-y-4">
         <div>
@@ -48,7 +73,7 @@ module.exports = function(pageTemplate) {
               <input type="text" id="input-lyrics-search" value="is this the real life" placeholder="Örn: 'mama just killed a man', 'benden öte benden ziyade', 'fly me to the moon'..." onkeyup="if(event.key==='Enter') searchMusic()" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-mistral-hairline focus:border-pink-400 focus:outline-none text-mistral-ink text-sm placeholder-slate-500">
               <span class="absolute left-3.5 top-3.5 text-mistral-stone text-base">🔍</span>
             </div>
-            <button onclick="searchMusic()" class="px-6 py-3 rounded-xl bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-400 hover:to-rose-500 text-white font-bold text-sm transition shadow-lg shadow-pink-500/20 shrink-0 flex items-center justify-center gap-2">
+            <button onclick="searchMusic()" class="px-6 py-3 rounded-xl bg-pink-500 hover:bg-pink-400 text-white font-bold text-sm transition shadow-lg shadow-pink-500/20 shrink-0 flex items-center justify-center gap-2">
               <span>Şarkıyı Bul</span> &rarr;
             </button>
           </div>
@@ -96,30 +121,6 @@ module.exports = function(pageTemplate) {
       <div id="empty-state" class="hidden py-16 text-center text-mistral-slate text-sm">
         <div class="text-4xl mb-2">🎶</div>
         <span>Bu sözlerle eşleşen bir şarkı bulunamadı. Lütfen kelimeleri kontrol edip tekrar deneyin.</span>
-      </div>
-
-      <!-- KAYITLI ÇALMA LİSTEM (MY PLAYLIST) -->
-      <div class="mt-14 pt-8 border-t border-mistral-hairline">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <div>
-            <h2 class="text-2xl font-bold text-mistral-ink flex items-center gap-2">
-              <span>💿</span> Favori Çalma Listem & Şarkılarım
-            </h2>
-            <p class="text-mistral-slate text-xs mt-1">
-              Beğendiğiniz şarkıları tek tıkla koleksiyonunuza ekleyip dilediğiniz zaman dinleyebilir ve sözlerini açabilirsiniz.
-            </p>
-          </div>
-          <button onclick="clearAllSavedSongs()" class="text-xs text-rose-400 hover:underline px-3 py-1.5 rounded-lg border border-rose-500/20 hover:bg-rose-500/10 transition">
-            Listeyi Temizle
-          </button>
-        </div>
-
-        <div id="saved-songs-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          <!-- JS ile favoriler -->
-        </div>
-        <div id="saved-songs-empty" class="p-8 text-center rounded-2xl bg-white border border-mistral-hairline text-mistral-stone text-xs">
-          Henüz çalma listenize bir parça eklemediniz. Şarkı kartlarındaki 🔖 simgesine tıklayarak favorilerinize ekleyebilirsiniz.
-        </div>
       </div>
 
       <!-- ŞARKI VE SÖZ DETAY MODALI -->
