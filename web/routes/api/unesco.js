@@ -28,7 +28,7 @@ router.get('/unesco/sites', async (req, res) => {
       lat: 37.223,
       lon: 38.922,
       description: 'M.Ö. 9600 civarına tarihlenen, insanlık tarihinin bilinen en eski anıtsal tapınak kompleksi. Tarım öncesi avcı-toplayıcıların inanç dünyasını kökten değiştirdi.',
-      image: 'https://images.unsplash.com/photo-1608889825205-eebdb9fc5806?w=600&auto=format&fit=crop&q=80'
+      image: 'https://images.unsplash.com/photo-1771692822834-1ae0564af77f?w=600&auto=format&fit=crop&q=80'
     },
     {
       id: 'site_efes',
@@ -39,7 +39,7 @@ router.get('/unesco/sites', async (req, res) => {
       lat: 37.940,
       lon: 27.341,
       description: 'Celsus Kütüphanesi, Antik Tiyatro ve Artemis Tapınağı ile Doğu Akdeniz’in en görkemli Roma metropollerinden biri.',
-      image: 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=600&auto=format&fit=crop&q=80'
+      image: 'https://images.unsplash.com/photo-1675373181258-681d11e0e4c5?w=600&auto=format&fit=crop&q=80'
     },
     {
       id: 'site_kapadokya',
@@ -61,7 +61,7 @@ router.get('/unesco/sites', async (req, res) => {
       lat: 37.925,
       lon: 29.121,
       description: 'Kalsiyum oksit içeren termal suların oluşturduğu bembeyaz basamaklı traverten terasları ve antik şifa kenti Hierapolis.',
-      image: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=600&auto=format&fit=crop&q=80'
+      image: 'https://images.unsplash.com/photo-1720974613069-690834d3d08d?w=600&auto=format&fit=crop&q=80'
     },
     {
       id: 'site_nemrut',
@@ -72,7 +72,7 @@ router.get('/unesco/sites', async (req, res) => {
       lat: 37.980,
       lon: 38.740,
       description: 'Kommagene Kralı I. Antiochos’un tanrılara ve atalarına minnettarlık anıtı olarak 2150 metre zirveye diktirdiği devasa heykeller ve tümülüs.',
-      image: 'https://images.unsplash.com/photo-1548625361-19597753bfcf?w=600&auto=format&fit=crop&q=80'
+      image: 'https://images.unsplash.com/photo-1642667857358-aeb08be02e81?w=600&auto=format&fit=crop&q=80'
     },
     {
       id: 'site_machu',
@@ -105,7 +105,7 @@ router.get('/unesco/sites', async (req, res) => {
       lat: 30.328,
       lon: 35.444,
       description: 'Kızıl kumtaşı kayalıklara oyulmuş El-Hazne (Hazine) tapınağı ve Nabati krallığının çöl su kanalları harikası.',
-      image: 'https://images.unsplash.com/photo-1579606032822-04e43cf52243?w=600&auto=format&fit=crop&q=80'
+      image: 'https://images.unsplash.com/photo-1771692675339-12fa69ed0a59?w=600&auto=format&fit=crop&q=80'
     },
     {
       id: 'site_colosseum',

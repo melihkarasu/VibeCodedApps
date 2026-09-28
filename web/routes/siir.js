@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/siir/app.js?v=20260926" defer></script>
+      <script src="/static/apps/siir/app.js?v=20260928a" defer></script>
     `;
 
     const content = `
@@ -117,6 +117,25 @@ module.exports = function(pageTemplate) {
         <h3 class="text-xl font-bold font-editorial text-mistral-ink">Şairin Diğer Eserleri</h3>
         <div id="author-poems-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <!-- JS ile doldurulur -->
+        </div>
+      </div>
+
+      <!-- ŞİİR ANTOLOJİM (Kullanıcı Koleksiyonu) -->
+      <div id="my-anthology-container" class="mb-16 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h3 class="text-xl font-bold font-editorial text-mistral-ink flex items-center gap-2">
+            <span>⭐</span> Şiir Antolojim
+            <span id="my-anthology-count" class="px-2 py-0.5 rounded bg-mistral-cream border border-mistral-beige-deep text-mistral-ink font-mono text-xs font-bold">0</span>
+          </h3>
+          <button onclick="clearMyAnthology()" class="text-xs text-rose-500 hover:underline px-3 py-1.5 rounded-lg border border-rose-500/20 hover:bg-rose-500/10 transition">
+            Tümünü Temizle
+          </button>
+        </div>
+        <div id="my-anthology-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- JS ile doldurulur -->
+        </div>
+        <div id="my-anthology-empty" class="p-8 text-center rounded-2xl bg-white border border-mistral-hairline text-mistral-stone text-xs">
+          Antolojiniz henüz boş. Bir şiir okurken “Antolojime Ekle” butonuna tıklayarak koleksiyonunuza ekleyebilirsiniz.
         </div>
       </div>
     `;
