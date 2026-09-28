@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/siir/app.js?v=20260928a" defer></script>
+      <script src="/static/apps/siir/app.js?v=20260928b" defer></script>
     `;
 
     const content = `

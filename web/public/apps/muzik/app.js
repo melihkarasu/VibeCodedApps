@@ -307,27 +307,61 @@ let currentResults = [];
           currentModalSong = null;
         }
 
-        // 5. Kayıtlı Çalma Listem (Playlist & LocalStorage)
-        const PLAYLIST_STORAGE_KEY = 'vibe_s…ylist';
+        // 5. Kayıtlı Çalma Listem (Veritabanı Senkronizasyonu - user_app_data)
+        const APP_ID = 'sozden-sarkiya';
+        const PLAYLIST_KEY = 'sarki_playlist_v1';
+        let savedPlaylist = [];
 
-        function getSavedSongs() {
+        function getAuthHeader() {
+          const token = (typeof localStorage !== 'undefined' && localStorage.getItem('vibe_token')) || '';
+          return token ? { 'Authorization': 'Bearer ' + token } : {};
+        }
+
+        async function loadPlaylistFromDb() {
           try {
-            return JSON.parse(localStorage.getItem(PLAYLIST_STORAGE_KEY) || '[]');
+            const res = await fetch('/api/user-data/' + encodeURIComponent(APP_ID), {
+              headers: getAuthHeader()
+            });
+            if (res.ok) {
+              const json = await res.json();
+              if (json && json.success && json.data && Array.isArray(json.data[PLAYLIST_KEY])) {
+                savedPlaylist = json.data[PLAYLIST_KEY];
+              }
+            }
           } catch(e) {
-            return [];
+            console.warn('[SozdenSarkiya] Veritabanından çalma listesi alınamadı:', e.message);
+          }
+          renderSavedSongs();
+        }
+
+        async function persistPlaylistToDb() {
+          try {
+            await fetch('/api/user-data/' + encodeURIComponent(APP_ID), {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                ...getAuthHeader()
+              },
+              body: JSON.stringify({ key: PLAYLIST_KEY, value: savedPlaylist })
+            });
+          } catch(e) {
+            console.error('[SozdenSarkiya] Veritabanına kaydetme hatası:', e.message);
           }
         }
 
-        function toggleModalFavorite() {
+        function getSavedSongs() {
+          return savedPlaylist;
+        }
+
+        async function toggleModalFavorite() {
           if (!currentModalSong) return;
-          let list = getSavedSongs();
-          const exists = list.some(s => s.trackName === currentModalSong.trackName && s.artistName === currentModalSong.artistName);
+          const exists = savedPlaylist.some(s => s.trackName === currentModalSong.trackName && s.artistName === currentModalSong.artistName);
 
           if (exists) {
-            list = list.filter(s => !(s.trackName === currentModalSong.trackName && s.artistName === currentModalSong.artistName));
+            savedPlaylist = savedPlaylist.filter(s => !(s.trackName === currentModalSong.trackName && s.artistName === currentModalSong.artistName));
             showToast('Çalma listesinden çıkarıldı.');
           } else {
-            list.unshift({
+            savedPlaylist.unshift({
               trackName: currentModalSong.trackName,
               artistName: currentModalSong.artistName,
               albumName: currentModalSong.albumName,
@@ -339,22 +373,21 @@ let currentResults = [];
             showToast('✓ Çalma listenize eklendi!');
           }
 
-          localStorage.setItem(PLAYLIST_STORAGE_KEY, JSON.stringify(list));
           updateModalFavButtonState();
           renderSavedSongs();
+          await persistPlaylistToDb();
         }
 
-        function quickSaveSong(idx) {
+        async function quickSaveSong(idx) {
           const song = currentResults[idx];
           if (!song) return;
 
-          let list = getSavedSongs();
-          if (list.some(s => s.trackName === song.trackName && s.artistName === song.artistName)) {
+          if (savedPlaylist.some(s => s.trackName === song.trackName && s.artistName === song.artistName)) {
             showToast('Bu parça zaten listenizde var.');
             return;
           }
 
-          list.unshift({
+          savedPlaylist.unshift({
             trackName: song.trackName,
             artistName: song.artistName,
             albumName: song.albumName,
@@ -364,21 +397,20 @@ let currentResults = [];
             date: new Date().toLocaleDateString('tr-TR')
           });
 
-          localStorage.setItem(PLAYLIST_STORAGE_KEY, JSON.stringify(list));
           showToast(`✓ "${song.trackName}" çalma listenize eklendi!`);
           renderSavedSongs();
+          await persistPlaylistToDb();
         }
 
         function updateModalFavButtonState() {
           if (!currentModalSong) return;
-          const list = getSavedSongs();
-          const isSaved = list.some(s => s.trackName === currentModalSong.trackName && s.artistName === currentModalSong.artistName);
+          const isSaved = savedPlaylist.some(s => s.trackName === currentModalSong.trackName && s.artistName === currentModalSong.artistName);
           const icon = document.getElementById('modal-fav-icon');
           const text = document.getElementById('modal-fav-text');
 
           if (isSaved) {
             icon.innerText = '✓';
-            text.innerText = 'Çalma Listenizde';
+            text.innerText = 'Listenizde Kayıtlı';
           } else {
             icon.innerText = '🔖';
             text.innerText = 'Listeme Ekle';
@@ -388,18 +420,17 @@ let currentResults = [];
         function renderSavedSongs() {
           const grid = document.getElementById('saved-songs-grid');
           const empty = document.getElementById('saved-songs-empty');
-          const list = getSavedSongs();
+          if (!grid || !empty) return;
 
-          if (list.length === 0) {
+          if (savedPlaylist.length === 0) {
             grid.innerHTML = '';
             empty.classList.remove('hidden');
             return;
           }
 
           empty.classList.add('hidden');
-          window.__renderedPlaylist = list;
-          grid.innerHTML = list.map((song, idx) => `
-            <div class="p-3 rounded-2xl bg-white border border-mistral-hairline hover:border-pink-500/40 transition flex items-center gap-3">
+          grid.innerHTML = savedPlaylist.map((song, idx) => `
+            <div class="p-3 rounded-2xl bg-white border border-mistral-hairline flex items-center justify-between gap-3 group hover:border-pink-300 transition">
               <div class="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-white">
                 <img src="${song.cover}" class="w-full h-full object-cover">
                 ${song.previewUrl ? `
@@ -408,29 +439,35 @@ let currentResults = [];
                   </button>
                 ` : ''}
               </div>
-              <div class="flex-1 min-w-0">
-                <h4 class="font-bold text-xs text-mistral-ink truncate">${song.trackName}</h4>
-                <p class="text-[10px] text-pink-400 truncate">${song.artistName}</p>
-                <span class="text-[9px] text-mistral-stone">${song.date}</span>
+              <div class="flex-1 min-w-0 cursor-pointer" onclick="openLyricsFromSong(${JSON.stringify(song).replace(/"/g, '&quot;')})">
+                <h4 class="font-bold text-xs text-mistral-ink truncate group-hover:text-pink-600 transition">${escapeHtml(song.trackName)}</h4>
+                <p class="text-[11px] text-mistral-slate truncate">${escapeHtml(song.artistName)}</p>
               </div>
-              <button onclick="removeSavedSong(${idx})" class="text-xs text-mistral-stone hover:text-rose-400 p-1 transition" title="Kaldır">
+              <button onclick="removeSavedSong(${idx})" class="text-mistral-stone hover:text-rose-500 p-1 rounded-lg hover:bg-rose-50 transition" title="Listeden çıkar">
                 ✕
               </button>
             </div>
           `).join('');
         }
 
-        function removeSavedSong(idx) {
-          let list = getSavedSongs();
-          list.splice(idx, 1);
-          localStorage.setItem(PLAYLIST_STORAGE_KEY, JSON.stringify(list));
+        async function removeSavedSong(idx) {
+          savedPlaylist.splice(idx, 1);
           renderSavedSongs();
+          await persistPlaylistToDb();
         }
 
-        function clearAllSavedSongs() {
+        async function clearAllSavedSongs() {
+          if (savedPlaylist.length === 0) { showToast('Çalma listeniz zaten boş.'); return; }
           if (!confirm('Tüm çalma listenizi silmek istediğinize emin misiniz?')) return;
-          localStorage.removeItem(PLAYLIST_STORAGE_KEY);
+          savedPlaylist = [];
           renderSavedSongs();
+          try {
+            await fetch('/api/user-data/' + encodeURIComponent(APP_ID) + '/' + encodeURIComponent(PLAYLIST_KEY), {
+              method: 'DELETE',
+              headers: getAuthHeader()
+            });
+          } catch(e) {}
+          showToast('Çalma listeniz temizlendi.');
         }
 
         function copyLyrics() {
@@ -448,5 +485,5 @@ let currentResults = [];
         // Başlangıç
         document.addEventListener('DOMContentLoaded', () => {
           searchMusic();
-          renderSavedSongs();
+          loadPlaylistFromDb();
         });

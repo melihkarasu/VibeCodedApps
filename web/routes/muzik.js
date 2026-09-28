@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="/static/apps/muzik/app.css">
-      <script src="/static/apps/muzik/app.js?v=20260928a" defer></script>
+      <script src="/static/apps/muzik/app.js?v=20260928b" defer></script>
     `;
 
     const content = `
