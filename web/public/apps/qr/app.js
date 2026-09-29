@@ -18,7 +18,7 @@ let currentTab = 'url';
         });
         const activeBtn = document.getElementById('tab-' + tab);
         if (activeBtn) {
-          activeBtn.className = 'tab-btn py-2 px-3 rounded-xl text-xs font-medium border border-teal-500 bg-teal-500/20 text-teal-300 transition flex flex-col items-center gap-1';
+          activeBtn.className = 'tab-btn py-2 px-3 rounded-xl text-xs font-medium border border-teal-500 bg-teal-500/20 text-teal-700 transition flex flex-col items-center gap-1';
         }
         document.querySelectorAll('.tab-pane').forEach(p => p.classList.add('hidden'));
         const activePane = document.getElementById('pane-' + tab);
@@ -43,7 +43,9 @@ let currentTab = 'url';
             const em = document.getElementById('vc-email').value.trim();
             const org = document.getElementById('vc-org').value.trim();
             const ti = document.getElementById('vc-title').value.trim();
-            return `BEGIN:VCARD\\nVERSION:3.0\\nN:${ln};${fn}\\nFN:${fn} ${ln}\\nORG:${org}\\nTITLE:${ti}\\nTEL:${ph}\\nEMAIL:${em}\\nEND:VCARD`;
+            const vu = document.getElementById('vc-url')?.value.trim() || '';
+            const va = document.getElementById('vc-addr')?.value.trim() || '';
+            return `BEGIN:VCARD\nVERSION:3.0\nN:${ln};${fn}\nFN:${fn} ${ln}\nORG:${org}\nTITLE:${ti}\nTEL:${ph}\nEMAIL:${em}\nURL:${vu}\nADR:;;${va}\nEND:VCARD`;
           case 'text':
             return document.getElementById('input-text').value.trim() || 'VibeCodedApps QR Studio';
           case 'email':
@@ -54,7 +56,9 @@ let currentTab = 'url';
           case 'crypto':
             const ctype = document.getElementById('crypto-type').value;
             const addr = document.getElementById('crypto-address').value.trim();
-            return addr ? `${ctype}:${addr}` : 'bitcoin:1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa';
+            if (!addr) return 'bitcoin:1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa';
+            const amt = document.getElementById('crypto-amount')?.value.trim() || '';
+            return amt ? `${ctype}:${addr}?amount=${amt}` : `${ctype}:${addr}`;
           default:
             return 'https://github.com/melihkarasu';
         }
@@ -256,16 +260,70 @@ let currentTab = 'url';
       }
 
       // -------------------------------------------------------------
-      // Kayıtlı QR Kodlarım (Storage & Management)
+      // Kayıtlı QR Kodlarım (Veritabanı - user_app_data)
       // -------------------------------------------------------------
-      const STORAGE_KEY = 'vibe_saved_qrs';
+      const QR_DB_APP_ID = 'qr-studio';
+      const QR_DB_KEY = 'saved_qrs';
+      let savedQrsCache = [];
+
+      function getAuthHeader() {
+        const t = (typeof localStorage !== 'undefined' && localStorage.getItem('vibe_token')) || '';
+        return t ? { 'Authorization': 'Bearer ' + t } : {};
+      }
+
+      // Eski localStorage koleksiyonunu bir kez veritabanına tasir (kural: monorepoda localStorage kullanılmaz)
+      async function migrateLegacyQrs() {
+        try {
+          const legacyRaw = localStorage.getItem('vibe_saved_qrs');
+          if (!legacyRaw) return;
+          let legacy;
+          try { legacy = JSON.parse(legacyRaw); } catch(e2) { localStorage.removeItem('vibe_saved_qrs'); return; }
+          if (Array.isArray(legacy) && legacy.length > 0 && savedQrsCache.length === 0) {
+            savedQrsCache = legacy;
+            renderSavedQrs();
+            const ok = await persistSavedQrsToDb();
+            if (ok) localStorage.removeItem('vibe_saved_qrs'); // yalnizca DB'ye yazildiyca yereli sil
+          } else {
+            localStorage.removeItem('vibe_saved_qrs'); // DB zaten dolu ya da legacy bos: yerel kopya gereksiz
+          }
+        } catch(e) {}
+      }
+
+      async function loadSavedQrsFromDb() {
+        try {
+          const res = await fetch('/api/user-data/' + QR_DB_APP_ID, { headers: getAuthHeader(), credentials: 'include' });
+          if (res.ok) {
+            const json = await res.json();
+            if (json && json.success && json.data && Array.isArray(json.data[QR_DB_KEY])) {
+              savedQrsCache = json.data[QR_DB_KEY];
+            }
+          }
+          await migrateLegacyQrs();
+        } catch(e) {
+          console.warn('[QR Studio] Koleksiyon veritabanından alınamadı:', e.message);
+        }
+        renderSavedQrs();
+      }
+
+      async function persistSavedQrsToDb() {
+        try {
+          const res = await fetch('/api/user-data/' + QR_DB_APP_ID, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+            credentials: 'include',
+            body: JSON.stringify({ key: QR_DB_KEY, value: savedQrsCache })
+          });
+          if (res.status === 401) { showToast('Koleksiyonunuzun kaydedilmesi için giriş yapmanız gerekiyor.'); return false; }
+            if (!res.ok) return false;
+            return true;
+        } catch(e) {
+          console.error('[QR Studio] Veritabanına kaydedilemedi:', e.message);
+          return false;
+        }
+      }
 
       function getSavedQrs() {
-        try {
-          return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        } catch(e) {
-          return [];
-        }
+        return savedQrsCache;
       }
 
       function saveCurrentQR() {
@@ -300,7 +358,7 @@ let currentTab = 'url';
             text: document.getElementById('input-text')?.value || '',
             email: {
               to: document.getElementById('mail-to')?.value || '',
-              sub: document.getElementById('mail-sub')?.value || '',
+              sub: document.getElementById('mail-subject')?.value || '',
               body: document.getElementById('mail-body')?.value || ''
             },
             crypto: {
@@ -325,8 +383,9 @@ let currentTab = 'url';
         };
 
         qrs.unshift(item);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(qrs));
+        savedQrsCache = qrs;
         renderSavedQrs();
+        persistSavedQrsToDb();
         showToast('✓ "' + title + '" tüm bilgileriyle koleksiyonunuza kaydedildi!');
       }
 
@@ -346,14 +405,14 @@ let currentTab = 'url';
           <div class="p-4 rounded-xl bg-white border border-mistral-hairline hover:border-teal-500/50 transition flex flex-col justify-between">
             <div>
               <div class="flex items-center justify-between mb-2">
-                <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-teal-500/20 text-teal-300 uppercase">${qr.tab}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-teal-500/20 text-teal-700 uppercase">${qr.tab}</span>
                 <span class="text-[10px] text-mistral-stone">${qr.date}</span>
               </div>
               <h4 class="font-semibold text-sm text-mistral-ink mb-1 truncate">${qr.title}</h4>
               <p class="text-xs text-mistral-slate font-mono truncate mb-4">${qr.data}</p>
             </div>
             <div class="flex items-center justify-between gap-2 pt-3 border-t border-mistral-hairline">
-              <button onclick="restoreSavedQR('${qr.id}')" class="text-xs px-2.5 py-1.5 rounded-lg bg-teal-600/30 hover:bg-teal-600/50 text-teal-300 font-medium transition">
+              <button onclick="restoreSavedQR('${qr.id}')" class="text-xs px-2.5 py-1.5 rounded-lg bg-teal-600/30 hover:bg-teal-600/50 text-teal-700 font-medium transition">
                 Yükle & Düzenle
               </button>
               <button onclick="deleteSavedQR('${qr.id}')" class="text-xs text-mistral-stone hover:text-rose-400 transition">
@@ -394,7 +453,7 @@ let currentTab = 'url';
             document.getElementById('input-text').value = qr.formData.text || qr.data || '';
           } else if (qr.tab === 'email') {
             document.getElementById('mail-to').value = qr.formData.email?.to || '';
-            document.getElementById('mail-sub').value = qr.formData.email?.sub || '';
+            document.getElementById('mail-subject').value = qr.formData.email?.sub || '';
             document.getElementById('mail-body').value = qr.formData.email?.body || '';
           } else if (qr.tab === 'crypto') {
             document.getElementById('crypto-type').value = qr.formData.crypto?.type || 'bitcoin';
@@ -426,7 +485,7 @@ let currentTab = 'url';
               if (p.startsWith('MATMSG:TO:') || p.startsWith('TO:')) {
                 document.getElementById('mail-to').value = p.replace(/^MATMSG:TO:|^TO:/, '');
               } else if (p.startsWith('SUB:')) {
-                document.getElementById('mail-sub').value = p.substring(4);
+                document.getElementById('mail-subject').value = p.substring(4);
               } else if (p.startsWith('BODY:')) {
                 document.getElementById('mail-body').value = p.substring(5);
               }
@@ -507,16 +566,18 @@ let currentTab = 'url';
 
       function deleteSavedQR(id) {
         if (!confirm('Bu kayıtlı QR kodunu silmek istediğinize emin misiniz?')) return;
-        let qrs = getSavedQrs();
-        qrs = qrs.filter(q => q.id !== id);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(qrs));
+        savedQrsCache = savedQrsCache.filter(q => q.id !== id);
         renderSavedQrs();
+        persistSavedQrsToDb();
       }
 
-      function clearAllSavedQrs() {
+      async function clearAllSavedQrs() {
         if (!confirm('Tüm kayıtlı QR kodlarını silmek istediğinize emin misiniz?')) return;
-        localStorage.removeItem(STORAGE_KEY);
+        savedQrsCache = [];
         renderSavedQrs();
+        try {
+          await fetch('/api/user-data/' + QR_DB_APP_ID + '/' + QR_DB_KEY, { method: 'DELETE', headers: getAuthHeader(), credentials: 'include' });
+        } catch(e) {}
       }
 
       // Kullanıcı oturumu açıkken badge güncelle
@@ -535,13 +596,13 @@ let currentTab = 'url';
       document.addEventListener('DOMContentLoaded', function() {
         handleBgChange();
         updateQR();
-        renderSavedQrs();
+        loadSavedQrsFromDb();
       });
       // Fallback
       setTimeout(() => {
         if (!qrCodeInstance) {
           handleBgChange();
           updateQR();
-          renderSavedQrs();
+          loadSavedQrsFromDb();
         }
       }, 300);

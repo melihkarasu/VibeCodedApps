@@ -3,41 +3,13 @@ let currentBooks = [];
         let currentTrackIndex = 0;
         let isSeeking = false;
         const player = document.getElementById('audiobook-player');
-        const LOCAL_PROGRESS_KEY = 'sesli_audio_progress_v1';
-
-        // 7. Dinleme İlerlemesi (Veritabanı + localStorage fallback)
-        // Kullanıcı kimliği sunucu tarafında vibe_token çerezinden çözülür (getUserIdFromReq)
-        function getLocalProgressMap() {
-          try {
-            const raw = JSON.parse(localStorage.getItem(LOCAL_PROGRESS_KEY) || '{}');
-            return (raw && typeof raw === 'object') ? raw : {};
-          } catch(e) {
-            return {};
-          }
-        }
-
-        function saveLocalProgress() {
-          if (!activeBook || !activeBook.id) return;
-          try {
-            const map = getLocalProgressMap();
-            map[activeBook.id] = {
-              trackIndex: currentTrackIndex,
-              positionSec: Math.floor(player.currentTime || 0),
-              title: activeBook.title,
-              authors: activeBook.authors,
-              updated: Date.now()
-            };
-            localStorage.setItem(LOCAL_PROGRESS_KEY, JSON.stringify(map));
-          } catch(e) {}
-        }
-
-        // Veritabanına kaydet (giriş yapmış kullanıcı) + her durumda localStorage
+        // 7. Dinleme İlerlemesi (Veritabanı — user_audio_progress tablosu)
+        // Kullanıcı kimliği sunucu tarafında vibe_token çerezinden çözülür (getUserIdFromReq).
+        // Kural: monorepoda localStorage kullanılmaz; ilerleme yalnızca veritabanında tutulur.
         async function saveProgress() {
           if (!activeBook || !activeBook.id) return;
-          saveLocalProgress();
-
           try {
-            await fetch('/api/seslikitap/progress', {
+            const res = await fetch('/api/seslikitap/progress', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               credentials: 'include',
@@ -49,12 +21,14 @@ let currentBooks = [];
                 authors: activeBook.authors
               })
             });
-          } catch(e) {
-            // Veritabanı erişilemedi: localStorage kaydı yeterli
-          }
+            if (res.ok) {
+              const data = await res.json().catch(() => null);
+              if (data && data.saved) upsertLibraryEntry(); // Kitaplığım görünümünü tazele
+            }
+          } catch(e) {}
         }
 
-        // Kaldığı yeri getir: önce veritabanı, yoksa localStorage
+        // Kaldığı yeri getir (veritabanı)
         async function getSavedProgress(bookId) {
           try {
             const res = await fetch('/api/seslikitap/progress?bookId=' + encodeURIComponent(bookId), { credentials: 'include' });
@@ -65,10 +39,126 @@ let currentBooks = [];
               }
             }
           } catch(e) {}
-
-          const local = getLocalProgressMap()[bookId];
-          if (local) return { trackIndex: local.trackIndex, positionSec: local.positionSec, source: 'local' };
           return null;
+        }
+
+        // ===== KİTAPLIĞIM (dinlenen kitapların listesi ve yönetimi — veritabanı) =====
+        let libraryCache = [];
+        let libraryAuthenticated = false;
+
+        function escapeHtml(s) {
+          return String(s == null ? '' : s)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+        }
+
+        async function loadMyLibrary() {
+          try {
+            const res = await fetch('/api/seslikitap/library', { credentials: 'include' });
+            if (res.ok) {
+              const data = await res.json();
+              if (data.success && Array.isArray(data.library)) {
+                libraryCache = data.library;
+                libraryAuthenticated = !!data.authenticated;
+              }
+            }
+          } catch(e) {}
+          renderMyLibrary();
+        }
+
+        // saveProgress başarılı olduğunda önbelleği yerinde güncelle (yeniden fetch yok)
+        function upsertLibraryEntry() {
+          if (!libraryAuthenticated || !activeBook || !activeBook.id) return;
+          const patch = {
+            bookId: activeBook.id,
+            trackIndex: currentTrackIndex,
+            positionSec: Math.floor(player.currentTime || 0),
+            bookTitle: activeBook.title,
+            authors: activeBook.authors,
+            updatedAt: new Date().toISOString()
+          };
+          const entry = libraryCache.find(x => x.bookId === activeBook.id);
+          if (entry) {
+            // en üste taşı (son dinlenen önce)
+            libraryCache = libraryCache.filter(x => x.bookId !== activeBook.id);
+            libraryCache.unshift(Object.assign(entry, patch));
+          } else {
+            libraryCache.unshift(patch);
+          }
+          renderMyLibrary();
+        }
+
+        function renderMyLibrary() {
+          const section = document.getElementById('my-library-section');
+          const grid = document.getElementById('my-library-grid');
+          const count = document.getElementById('my-library-count');
+          if (!section || !grid || !count) return;
+
+          if (!libraryAuthenticated || libraryCache.length === 0) {
+            section.classList.add('hidden');
+            grid.innerHTML = '';
+            return;
+          }
+          section.classList.remove('hidden');
+          count.innerText = String(libraryCache.length);
+
+          grid.innerHTML = libraryCache.map((p, idx) => {
+            const trackNo = (p.trackIndex || 0) + 1;
+            const pos = formatTime(p.positionSec || 0);
+            const when = p.updatedAt ? new Date(p.updatedAt).toLocaleDateString('tr-TR') : '';
+            const isPlaying = activeBook && activeBook.id === p.bookId;
+            return `
+            <div class="p-4 rounded-xl bg-white border ${isPlaying ? 'border-mistral-orange/40' : 'border-mistral-hairline hover:border-mistral-orange/40'} hover:shadow-md transition duration-200 flex flex-col justify-between gap-3">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep">🔖 Bölüm ${trackNo}</span>
+                  <span class="text-[10px] text-mistral-stone">${escapeHtml(pos)}</span>
+                </div>
+                <h3 class="text-sm font-bold text-mistral-ink leading-snug mb-0.5">${escapeHtml(p.bookTitle || p.bookId)}</h3>
+                <span class="text-xs text-mistral-slate block truncate">✍️ ${escapeHtml(p.authors || 'Bilinmiyor')}</span>
+                ${when ? `<span class="text-[10px] text-mistral-stone block mt-1">Son dinlenme: ${when}</span>` : ''}
+              </div>
+              <div class="pt-2 border-t border-mistral-hairline flex items-center justify-between gap-2">
+                <button onclick="resumeFromLibrary(${idx})" class="px-3 py-1.5 rounded-md bg-mistral-orange hover:bg-mistral-orange-deep text-white text-xs font-semibold transition">▶ Devam Et</button>
+                <button onclick="removeFromLibrary(${idx})" class="text-xs text-rose-500 hover:text-rose-600 hover:underline transition">Kaldır</button>
+              </div>
+            </div>`;
+          }).join('');
+        }
+
+        async function resumeFromLibrary(idx) {
+          const p = libraryCache[idx];
+          if (!p) return;
+          let b = currentBooks.find(x => x.id === p.bookId);
+          if (!b) {
+            b = {
+              id: p.bookId,
+              title: p.bookTitle || 'Başlıksız Eser',
+              authors: p.authors || 'Bilinmiyor',
+              description: '',
+              downloads: 0,
+              language: 'English',
+              detailsUrl: 'https://archive.org/details/' + p.bookId,
+              tracks: null
+            };
+            currentBooks.unshift(b);
+          }
+          await selectAndPlayBook(b, true);
+        }
+
+        async function removeFromLibrary(idx) {
+          const p = libraryCache[idx];
+          if (!p) return;
+          if (!confirm('"' + (p.bookTitle || p.bookId) + '" kitaplığından kaldırılsın mı?')) return;
+          try {
+            const res = await fetch('/api/seslikitap/progress?bookId=' + encodeURIComponent(p.bookId), { method: 'DELETE', credentials: 'include' });
+            if (res.ok) {
+              libraryCache.splice(idx, 1);
+              renderMyLibrary();
+            }
+          } catch(e) {}
         }
 
         function formatTime(sec) {
@@ -185,7 +275,7 @@ let currentBooks = [];
         }
 
         // Metadata endpoint'ten MP3 bölüm listesini çek ve çalmaya başla
-        async function selectAndPlayBook(b) {
+        async function selectAndPlayBook(b, autoResume) {
           activeBook = b;
           document.getElementById('dock-status').innerText = 'SESLİ KİTAP SEÇİLDİ';
           document.getElementById('dock-title').innerText = b.title;
@@ -229,10 +319,14 @@ let currentBooks = [];
           renderTrackList();
           updateTrackButtons();
 
-          // Kaldığım yerden devam (veritabanı/localStorage)
+          // Kaldığım yerden devam (veritabanı; Kitaplığım'daki "Devam Et"ten gelinirse onaysız)
           const saved = await getSavedProgress(b.id);
           if (saved && (saved.trackIndex > 0 || saved.positionSec > 15)) {
             const tIdx = Math.min(saved.trackIndex || 0, b.tracks.length - 1);
+            if (autoResume) {
+              playTrack(tIdx, saved.positionSec);
+              return;
+            }
             const src = saved.source === 'db' ? 'hesabınızdan' : 'cihazınızdan';
             const resume = confirm('Bu kitabı daha önce dinlemiştiniz (' + src + '):\n\nBölüm ' + (tIdx + 1) + ', ' + formatTime(saved.positionSec) + ' pozisyonundan devam edilsin mi?\n\n(Tamam = Kaldığım yerden devam / İptal = Baştan başla)');
             if (resume) {
@@ -511,6 +605,7 @@ let currentBooks = [];
 
         document.addEventListener('DOMContentLoaded', () => {
           loadAudiobooks();
+          loadMyLibrary();
         });
 
         // Window globals for inline onclicks
@@ -528,3 +623,5 @@ let currentBooks = [];
         window.toggleMute = toggleMute;
         window.playTrack = playTrack;
         window.selectAndPlayBookByIdx = selectAndPlayBookByIdx;
+        window.resumeFromLibrary = resumeFromLibrary;
+        window.removeFromLibrary = removeFromLibrary;

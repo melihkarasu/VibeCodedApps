@@ -3,7 +3,7 @@ module.exports = function(pageTemplate) {
   const extraHead = `
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js"></script>
       <link rel="stylesheet" href="/static/apps/qr/app.css">
-      <script src="/static/apps/qr/app.js" defer></script>
+      <script src="/static/apps/qr/app.js?v=20260929a" defer></script>
     `;
 
   const content = `
@@ -37,7 +37,7 @@ module.exports = function(pageTemplate) {
         <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm">
           <label class="block text-xs font-semibold uppercase tracking-wider text-mistral-slate mb-3">1. İçerik Türü</label>
           <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-5">
-            <button onclick="setTab('url')" id="tab-url" class="tab-btn py-2 px-3 rounded-xl text-xs font-medium border border-teal-500 bg-teal-500/20 text-teal-300 transition flex flex-col items-center gap-1">
+            <button onclick="setTab('url')" id="tab-url" class="tab-btn py-2 px-3 rounded-xl text-xs font-medium border border-teal-500 bg-teal-500/20 text-teal-700 transition flex flex-col items-center gap-1">
               <span class="text-base">🔗</span> URL
             </button>
             <button onclick="setTab('wifi')" id="tab-wifi" class="tab-btn py-2 px-3 rounded-xl text-xs font-medium border border-mistral-hairline bg-white hover:bg-mistral-cream text-mistral-slate transition flex flex-col items-center gap-1">
@@ -129,6 +129,16 @@ module.exports = function(pageTemplate) {
                 <input type="text" id="vc-title" placeholder="Yazılım Mühendisi" oninput="updateQR()" class="w-full px-4 py-2 rounded-xl bg-white border border-mistral-hairline text-sm">
               </div>
             </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-mistral-slate mb-1">Web Sitesi</label>
+                <input type="url" id="vc-url" placeholder="https://example.com" oninput="updateQR()" class="w-full px-4 py-2 rounded-xl bg-white border border-mistral-hairline text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-mistral-slate mb-1">Adres</label>
+                <input type="text" id="vc-addr" placeholder="Şehir, Ülke" oninput="updateQR()" class="w-full px-4 py-2 rounded-xl bg-white border border-mistral-hairline text-sm">
+              </div>
+            </div>
           </div>
 
           <!-- Plain Text Pane -->
@@ -170,6 +180,10 @@ module.exports = function(pageTemplate) {
                 <label class="block text-xs font-medium text-mistral-slate mb-1">Cüzdan Adresi</label>
                 <input type="text" id="crypto-address" placeholder="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" oninput="updateQR()" class="w-full px-4 py-2 rounded-xl bg-white border border-mistral-hairline text-sm">
               </div>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-mistral-slate mb-1">Miktar (Opsiyonel)</label>
+              <input type="text" id="crypto-amount" placeholder="0.05" oninput="updateQR()" class="w-full px-4 py-2 rounded-xl bg-white border border-mistral-hairline text-sm">
             </div>
           </div>
 
@@ -216,16 +230,16 @@ module.exports = function(pageTemplate) {
           <div class="pt-2 border-t border-mistral-hairline flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <span class="text-mistral-slate">Hata Düzeltme Seviyesi (Error Correction):</span>
             <div class="flex gap-2">
-              <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-mistral-hairline bg-white has-[:checked]:border-teal-500 has-[:checked]:bg-teal-500/20 has-[:checked]:text-teal-300">
+              <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-mistral-hairline bg-white has-[:checked]:border-teal-500 has-[:checked]:bg-teal-500/20 has-[:checked]:text-teal-700">
                 <input type="radio" name="ec-level" value="L" onchange="updateQR()" class="hidden"> L (%7)
               </label>
-              <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-mistral-hairline bg-white has-[:checked]:border-teal-500 has-[:checked]:bg-teal-500/20 has-[:checked]:text-teal-300">
+              <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-mistral-hairline bg-white has-[:checked]:border-teal-500 has-[:checked]:bg-teal-500/20 has-[:checked]:text-teal-700">
                 <input type="radio" name="ec-level" value="M" onchange="updateQR()" class="hidden"> M (%15)
               </label>
-              <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-mistral-hairline bg-white has-[:checked]:border-teal-500 has-[:checked]:bg-teal-500/20 has-[:checked]:text-teal-300">
+              <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-mistral-hairline bg-white has-[:checked]:border-teal-500 has-[:checked]:bg-teal-500/20 has-[:checked]:text-teal-700">
                 <input type="radio" name="ec-level" value="Q" checked onchange="updateQR()" class="hidden"> Q (%25)
               </label>
-              <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-mistral-hairline bg-white has-[:checked]:border-teal-500 has-[:checked]:bg-teal-500/20 has-[:checked]:text-teal-300">
+              <label class="cursor-pointer px-2.5 py-1 rounded-lg border border-mistral-hairline bg-white has-[:checked]:border-teal-500 has-[:checked]:bg-teal-500/20 has-[:checked]:text-teal-700">
                 <input type="radio" name="ec-level" value="H" onchange="updateQR()" class="hidden"> H (%30 - Logo)
               </label>
             </div>
@@ -246,12 +260,12 @@ module.exports = function(pageTemplate) {
           <div>
             <span class="block text-xs text-mistral-slate mb-2">Hazır Gradyan Paletleri:</span>
             <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
-              <button onclick="applyPreset('#14b8a6', '#6366f1')" class="py-1.5 px-2 rounded-lg bg-white from-teal-500 to-indigo-500 text-[10px] font-semibold text-white shadow hover:scale-105 transition">Cyberpunk</button>
-              <button onclick="applyPreset('#f97316', '#ec4899')" class="py-1.5 px-2 rounded-lg bg-white from-orange-500 to-pink-500 text-[10px] font-semibold text-white shadow hover:scale-105 transition">Sunset</button>
-              <button onclick="applyPreset('#10b981', '#06b6d4')" class="py-1.5 px-2 rounded-lg bg-white from-emerald-500 to-cyan-500 text-[10px] font-semibold text-white shadow hover:scale-105 transition">Emerald</button>
-              <button onclick="applyPreset('#8b5cf6', '#3b82f6')" class="py-1.5 px-2 rounded-lg bg-white from-violet-500 to-blue-500 text-[10px] font-semibold text-white shadow hover:scale-105 transition">Royal</button>
-              <button onclick="applyPreset('#eab308', '#ef4444')" class="py-1.5 px-2 rounded-lg bg-white from-yellow-500 to-red-500 text-[10px] font-semibold text-white shadow hover:scale-105 transition">Amber Fire</button>
-              <button onclick="applyPreset('#0f172a', '#334155', '#ffffff')" class="py-1.5 px-2 rounded-lg bg-white border border-mistral-hairline text-[10px] font-semibold text-white shadow hover:scale-105 transition">Monokrom</button>
+              <button onclick="applyPreset('#14b8a6', '#6366f1')" style="background-image: linear-gradient(135deg, #14b8a6, #6366f1)" class="py-1.5 px-2 rounded-lg text-[10px] font-semibold text-white shadow hover:scale-105 transition">Cyberpunk</button>
+              <button onclick="applyPreset('#f97316', '#ec4899')" style="background-image: linear-gradient(135deg, #f97316, #ec4899)" class="py-1.5 px-2 rounded-lg text-[10px] font-semibold text-white shadow hover:scale-105 transition">Sunset</button>
+              <button onclick="applyPreset('#10b981', '#06b6d4')" style="background-image: linear-gradient(135deg, #10b981, #06b6d4)" class="py-1.5 px-2 rounded-lg text-[10px] font-semibold text-white shadow hover:scale-105 transition">Emerald</button>
+              <button onclick="applyPreset('#8b5cf6', '#3b82f6')" style="background-image: linear-gradient(135deg, #8b5cf6, #3b82f6)" class="py-1.5 px-2 rounded-lg text-[10px] font-semibold text-white shadow hover:scale-105 transition">Royal</button>
+              <button onclick="applyPreset('#eab308', '#ef4444')" style="background-image: linear-gradient(135deg, #eab308, #ef4444)" class="py-1.5 px-2 rounded-lg text-[10px] font-semibold text-white shadow hover:scale-105 transition">Amber Fire</button>
+              <button onclick="applyPreset('#0f172a', '#334155', '#ffffff')" style="background-color: #0f172a" class="py-1.5 px-2 rounded-lg border border-mistral-hairline text-[10px] font-semibold text-white shadow hover:scale-105 transition">Monokrom</button>
             </div>
           </div>
 
@@ -369,10 +383,10 @@ module.exports = function(pageTemplate) {
 
           <!-- Aksiyon Butonları -->
           <div class="w-full grid grid-cols-2 gap-3 mt-4">
-            <button onclick="downloadQR('png')" class="py-3 px-4 rounded-xl bg-white from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 text-white font-medium text-sm transition shadow-md shadow-teal-500/20 flex items-center justify-center gap-2">
+            <button onclick="downloadQR('png')" class="py-3 px-4 rounded-xl bg-teal-500 hover:bg-teal-400 text-white font-medium text-sm transition shadow-md shadow-teal-500/20 flex items-center justify-center gap-2">
               <span>📥</span> PNG İndir
             </button>
-            <button onclick="downloadQR('svg')" class="py-3 px-4 rounded-xl text-mistral-ink font-boldbg-mistral-cream-light hover:bg-mistral-cream-deeper text-mistral-ink font-bold font-medium text-sm transition flex items-center justify-center gap-2">
+            <button onclick="downloadQR('svg')" class="py-3 px-4 rounded-xl bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep font-medium text-sm transition flex items-center justify-center gap-2">
               <span>📐</span> SVG İndir
             </button>
           </div>
@@ -381,12 +395,12 @@ module.exports = function(pageTemplate) {
             <button onclick="copyToClipboard()" id="btn-copy" class="py-2.5 px-3 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-hairline text-mistral-slate text-xs transition flex items-center justify-center gap-1.5">
               <span>📋</span> Panoya Kopyala
             </button>
-            <button onclick="saveCurrentQR()" id="btn-save-qr" class="py-2.5 px-3 rounded-xl bg-white border border-teal-500/40 hover:border-teal-400 text-teal-300 text-xs transition flex items-center justify-center gap-1.5">
+            <button onclick="saveCurrentQR()" id="btn-save-qr" class="py-2.5 px-3 rounded-xl bg-white border border-teal-500/40 hover:border-teal-400 text-teal-700 text-xs transition flex items-center justify-center gap-1.5">
               <span>💾</span> Koleksiyonuma Kaydet
             </button>
           </div>
 
-          <div id="status-toast" class="hidden mt-3 w-full py-2 px-3 rounded-xl bg-teal-500/20 border border-teal-500/40 text-teal-300 text-xs text-center transition"></div>
+          <div id="status-toast" class="hidden mt-3 w-full py-2 px-3 rounded-xl bg-teal-500/20 border border-teal-500/40 text-teal-700 text-xs text-center transition"></div>
 
         </div>
       </div>

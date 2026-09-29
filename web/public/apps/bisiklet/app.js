@@ -171,8 +171,18 @@ let bikeMap = null;
 
         function selectCityById(id) {
           const select = document.getElementById('select-network');
-          select.value = id;
-          loadNetworkStations(id);
+          let targetId = id;
+
+          // CityBikes API esleme notlari (2026-09-29 canli dogrulama):
+          // - Istanbul (Isbike) API'de YOK; TR'de yalnizca baksi-antalya, baksi-cabis, baksi-nilesplit var.
+          // - Paris butonu 'velib-metropole' gonderiyor; API'deki guncel id 'velib'.
+          if (targetId === 'velib-metropole') {
+            const fr = allNetworks.find(n => n.id === 'velib' || String(n.name || '').toLowerCase().includes('velib'));
+            if (fr) targetId = fr.id;
+          }
+
+          select.value = targetId;
+          loadNetworkStations(targetId);
         }
 
         document.addEventListener('DOMContentLoaded', () => {

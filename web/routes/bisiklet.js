@@ -3,7 +3,7 @@ module.exports = function(pageTemplate) {
     const extraHead = `
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/bisiklet/app.js?v=20260927a" defer></script>
+      <script src="/static/apps/bisiklet/app.js?v=20260929a" defer></script>
     `;
 
     const content = `
@@ -53,7 +53,7 @@ module.exports = function(pageTemplate) {
         <!-- Hızlı Popüler Metropoller -->
         <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-mistral-hairline text-xs">
           <span class="text-mistral-stone font-medium mr-1">Popüler Şehirler:</span>
-          <button onclick="selectCityById('isbike')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🇹🇷 İstanbul (İsbike)</button>
+          <button onclick="selectCityById('baksi-antalya')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🇹🇷 Antalya (Baksi)</button>
           <button onclick="selectCityById('velib-metropole')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🇫🇷 Paris (Vélib')</button>
           <button onclick="selectCityById('santander-cycles')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🇬🇧 Londra (Santander)</button>
           <button onclick="selectCityById('citi-bike-nyc')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🇺🇸 New York (Citi Bike)</button>

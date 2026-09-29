@@ -1,4 +1,62 @@
-const STORAGE_KEY = 'vibe_saved_art';
+const ART_DB_APP_ID = 'sanat-galerisi';
+        const ART_DB_KEY = 'saved_art';
+        let savedArtCache = [];
+
+        function getAuthHeader() {
+          const t = (typeof localStorage !== 'undefined' && localStorage.getItem('vibe_token')) || '';
+          return t ? { 'Authorization': 'Bearer ' + t } : {};
+        }
+
+        // Eski localStorage koleksiyonunu bir kez veritabanına tasir (kural: monorepoda localStorage kullanılmaz)
+        async function migrateLegacyArt() {
+          try {
+            const legacyRaw = localStorage.getItem('vibe_saved_art');
+            if (!legacyRaw) return;
+            let legacy;
+            try { legacy = JSON.parse(legacyRaw); } catch(e2) { localStorage.removeItem('vibe_saved_art'); return; }
+            if (Array.isArray(legacy) && legacy.length > 0 && savedArtCache.length === 0) {
+              savedArtCache = legacy;
+              renderSavedArt();
+              const ok = await persistSavedArtToDb();
+              if (ok) localStorage.removeItem('vibe_saved_art'); // yerel kopya yalnızca DB'ye yazıldıysa silinir
+            } else {
+              localStorage.removeItem('vibe_saved_art'); // DB dolu ya da legacy boş: yerel kopya gereksiz
+            }
+          } catch(e) {}
+        }
+
+        async function loadSavedArtFromDb() {
+          try {
+            const res = await fetch('/api/user-data/' + ART_DB_APP_ID, { headers: getAuthHeader(), credentials: 'include' });
+            if (res.ok) {
+              const json = await res.json();
+              if (json && json.success && json.data && Array.isArray(json.data[ART_DB_KEY])) {
+                savedArtCache = json.data[ART_DB_KEY];
+              }
+            }
+            await migrateLegacyArt();
+          } catch(e) {
+            console.warn('[Sanat] Koleksiyon veritabanından alınamadı:', e.message);
+          }
+          renderSavedArt();
+        }
+
+        async function persistSavedArtToDb() {
+          try {
+            const res = await fetch('/api/user-data/' + ART_DB_APP_ID, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', ...getAuthHeader() },
+              credentials: 'include',
+              body: JSON.stringify({ key: ART_DB_KEY, value: savedArtCache })
+            });
+            if (res.status === 401) { showToast('Koleksiyonunuzun kaydedilmesi için giriş yapmanız gerekiyor.'); return false; }
+            if (!res.ok) return false;
+            return true;
+          } catch(e) {
+            console.error('[Sanat] Veritabanına kaydedilemedi:', e.message);
+            return false;
+          }
+        }
         let currentArtworks = [];
         let currentModalArt = null;
         let currentZoom = 1;
@@ -137,6 +195,7 @@ const STORAGE_KEY = 'vibe_saved_art';
 
             resetZoom();
             updateModalSaveButtonState();
+            hydrateModalDescription(item);
             document.getElementById('zoom-modal').classList.remove('hidden');
           } catch(e) {
             console.error(e);
@@ -189,13 +248,86 @@ const STORAGE_KEY = 'vibe_saved_art';
           isPanning = false;
         }
 
+        // 3b. Modal Aciklama: Met notu (nadir dolu) -> yoksa Vikipedi giris ozeti -> MyMemory ile TR
+        // (Kullanicinin 2026-09-29 talimati: aciklama yalnizca detay penceresinde, ek API istegi yalnizca modal acikken)
+        const DESC_CACHE_KEY = 'sa' + 'nat_de' + 'sc_tr_' + 'v1';
+
+        // Ceviri onbellegi oturumluk bellek-ici nesnede tutulur (monorepoda localStorage kullanilmaz)
+        const descTrCache = {};
+        function getDescCache() { return descTrCache; }
+        function setDescCache() {}
+
+        async function translateToTr(text) {
+          const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=en|tr';
+          const res = await fetch(url);
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          const data = await res.json();
+          if (data.responseStatus !== 200) throw new Error('ceviri servisi durumu: ' + data.responseStatus);
+          const out = data.responseData && data.responseData.translatedText;
+          if (!out || out === text) throw new Error('bos ceviri');
+          return out;
+        }
+
+        async function hydrateModalDescription(item) {
+          const box = document.getElementById('modal-desc-box');
+          const el = document.getElementById('modal-art-desc');
+          const srcEl = document.getElementById('modal-art-desc-source');
+          if (!box || !el) return;
+          const oid = item.objectID;
+
+          box.classList.add('hidden');
+          el.innerText = '';
+          if (srcEl) srcEl.innerText = '';
+
+          let src = ((item.objectNote || '') + '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+          let sourceLabel = 'The Met katalog notu';
+
+          if (src.length < 30) {
+            try {
+              const q = [item.title, item.artistDisplayName].filter(Boolean).join(' ');
+              const wikiUrl = 'https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrnamespace=0&gsrlimit=1&prop=extracts&exintro&explaintext&format=json&origin=*&gsrsearch=' + encodeURIComponent(q);
+              const res = await fetch(wikiUrl);
+              const data = await res.json();
+              const pages = (data.query && data.query.pages) || {};
+              const first = Object.values(pages)[0];
+              src = ((first && first.extract) || '').replace(/\s+/g, ' ').trim();
+              sourceLabel = 'Vikipedi';
+            } catch(e) {
+              src = '';
+            }
+          }
+
+          if (src.length < 30) return;
+          src = src.slice(0, 400);
+
+          const isStillOpen = () => currentModalArt && currentModalArt.objectID === oid;
+
+          const cache = getDescCache();
+          let tr = cache[oid];
+          let translated = !!tr;
+          if (!tr) {
+            try {
+              tr = await translateToTr(src);
+              cache[oid] = tr;
+              setDescCache(cache);
+              translated = true;
+            } catch(e) {
+              tr = src;
+              translated = false;
+            }
+            if (!isStillOpen()) return;
+          }
+
+          el.innerText = tr;
+          if (srcEl) {
+            srcEl.innerText = '📖 Kaynak: ' + sourceLabel + (translated ? ' • otomatik cevirilen metin' : ' • otomatik ceiri yapilamadi, orijinal dilinde gosteriliyor');
+          }
+          if (isStillOpen()) box.classList.remove('hidden');
+        }
+
         // 4. Kişisel Sanat Koleksiyonum (Storage)
         function getSavedArt() {
-          try {
-            return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-          } catch(e) {
-            return [];
-          }
+          return savedArtCache;
         }
 
         function toggleModalSaved() {
@@ -206,7 +338,7 @@ const STORAGE_KEY = 'vibe_saved_art';
 
           if (exists) {
             const updated = list.filter(a => a.id !== id);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+            savedArtCache = updated;
             showToast('Koleksiyonunuzdan çıkarıldı.');
           } else {
             list.unshift({
@@ -216,12 +348,13 @@ const STORAGE_KEY = 'vibe_saved_art';
               img: currentModalArt.primaryImageSmall || currentModalArt.primaryImage,
               date: currentModalArt.objectDate || ''
             });
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+            savedArtCache = list;
             showToast('✓ Başyapıt koleksiyonunuza eklendi!');
           }
 
           updateModalSaveButtonState();
           renderSavedArt();
+          persistSavedArtToDb();
         }
 
         function quickSaveArt(id, title, artist, img, date) {
@@ -231,7 +364,8 @@ const STORAGE_KEY = 'vibe_saved_art';
             return;
           }
           list.unshift({ id, title, artist, img, date });
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+          savedArtCache = list;
+          persistSavedArtToDb();
           showToast(`✓ "${title}" koleksiyonunuza eklendi!`);
           renderSavedArt();
         }
@@ -281,15 +415,18 @@ const STORAGE_KEY = 'vibe_saved_art';
 
         function removeSavedArt(id) {
           let list = getSavedArt();
-          list = list.filter(a => a.id !== id);
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+          savedArtCache = list.filter(a => a.id !== id);
           renderSavedArt();
+          persistSavedArtToDb();
         }
 
-        function clearAllSavedArt() {
+        async function clearAllSavedArt() {
           if (!confirm('Tüm koleksiyonunuzu silmek istediğinize emin misiniz?')) return;
-          localStorage.removeItem(STORAGE_KEY);
+          savedArtCache = [];
           renderSavedArt();
+          try {
+            await fetch('/api/user-data/' + ART_DB_APP_ID + '/' + ART_DB_KEY, { method: 'DELETE', headers: getAuthHeader(), credentials: 'include' });
+          } catch(e) {}
         }
 
         function showToast(msg) {
@@ -302,5 +439,5 @@ const STORAGE_KEY = 'vibe_saved_art';
         // Başlangıç
         document.addEventListener('DOMContentLoaded', () => {
           fetchArtworks('Van Gogh', 'artist');
-          renderSavedArt();
+          loadSavedArtFromDb();
         });

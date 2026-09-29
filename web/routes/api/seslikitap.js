@@ -168,4 +168,52 @@ router.post('/seslikitap/progress', async (req, res) => {
   }
 });
 
+// GET /api/seslikitap/library - Kullanıcının tüm dinleme kayıtları (Kitaplığım)
+router.get('/seslikitap/library', async (req, res) => {
+  const userId = getUserIdFromReq(req);
+  if (!userId) {
+    return res.json({ success: true, authenticated: false, library: [] });
+  }
+
+  try {
+    const rows = await supabaseRequest(
+      `/user_audio_progress?user_id=eq.${userId}&select=book_id,track_index,position_sec,book_title,authors,updated_at&order=updated_at.desc&limit=200`
+    );
+    const library = (Array.isArray(rows) ? rows : []).map(r => ({
+      bookId: r.book_id,
+      trackIndex: r.track_index || 0,
+      positionSec: r.position_sec || 0,
+      bookTitle: r.book_title || '',
+      authors: r.authors || '',
+      updatedAt: r.updated_at || null
+    }));
+    res.json({ success: true, authenticated: true, library });
+  } catch(err) {
+    res.status(500).json({ success: false, error: 'Kitaplık okunamadı: ' + err.message });
+  }
+});
+
+// DELETE /api/seslikitap/progress?bookId=... - Tek kitabın ilerleme kaydını sil
+router.delete('/seslikitap/progress', async (req, res) => {
+  const userId = getUserIdFromReq(req);
+  if (!userId) {
+    return res.status(401).json({ success: false, error: 'Oturum açmanız gerekiyor' });
+  }
+
+  const bookId = (req.query.bookId || '').trim().slice(0, 120);
+  if (!bookId) {
+    return res.status(400).json({ success: false, error: 'bookId gerekli' });
+  }
+
+  try {
+    await supabaseRequest(
+      `/user_audio_progress?user_id=eq.${userId}&book_id=eq.${encodeURIComponent(bookId)}`,
+      { method: 'DELETE' }
+    );
+    res.json({ success: true });
+  } catch(err) {
+    res.status(500).json({ success: false, error: 'Kayıt silinemedi: ' + err.message });
+  }
+});
+
 module.exports = router;
