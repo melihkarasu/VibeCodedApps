@@ -201,20 +201,7 @@ Tüm uygulamalar `/` vitrininde kategoriler altında hiyerarşik olarak listelen
 
 ---
 
-## 📦 6. Yeni / Canlı Sunucuya Taşıma Rehberi (Production Migration Checklist)
-
-| Adım | İşlem | Neden Önemli? |
-| :--- | :--- | :--- |
-| **1. `.env` Dosyası** | `.env.example` üzerinden `.env` dosyasını yeni sunucuya kopyalayın, `JWT_SECRET`, GitHub ve Google OAuth istemci bilgilerini tanımlayın. | Kod içerisindeki sabit yedek anahtarlar kaldırıldığı için eksik anahtarda sistem fail-fast durur. |
-| **2. Ortam Modu & İzinler** | `NODE_ENV=production` tanımlayın ve `.env` dosya izinlerini `chmod 600` yapın. | Hassas kimlik bilgilerinin ve veritabanı anahtarlarının korunmasını sağlar. |
-| **3. OAuth Callback URL'leri** | GitHub ve Google Cloud Console üzerindeki **Authorized Redirect URI** alanlarını `https://app.melihkarasu.com/auth/v1/callback` olarak ayarlayın. | Kullanıcıların onay sonrası doğru adrese geri dönebilmesini sağlar. |
-| **4. Supabase Veritabanı** | `user_favorites` ve `user_app_data` tablolarını Postgres veritabanında oluşturun ve RLS politikalarını açın (`01-init.sql`). | Kullanıcı favorilerinin ve kişisel uygulama verilerinin veritabanına yazılabilmesi için şarttır. |
-| **5. Portlar & Güvenlik Duvarı** | Yalnızca `80` (HTTP) ve `443` (HTTPS) portlarını web trafiğine açın; `5432` (Postgres) ve dahili portları dışa kapatın. | Veritabanının doğrudan internete maruz kalmasını engeller. |
-| **6. Docker Başlatma** | `docker compose up -d --build` komutuyla konteynerları ayağa kaldırın. | Güvenli ve deterministik bağımlılıkların derlenmesini sağlar. |
-
----
-
-## 🏆 7. Krediler & Açık Kaynak Teşekkürleri (Credits & Attributions)
+## 🏆 6. Krediler & Açık Kaynak Teşekkürleri (Credits & Attributions)
 
 - **[OpenClaw](https://github.com/openclaw/openclaw):** Bu projedeki tüm sistem mimarisini, Docker altyapısını, servis entegrasyonlarını, refactoring ve deployment süreçlerini yalnızca Telegram üzerinden doğal dille mesajlaşarak otonom olarak yöneten ve hayata geçiren yapay zeka ajan platformu.
 - **[Google Gemini](https://github.com/google-gemini):** Projenin kodlanması, modüler mikro servislerin inşası, güvenlik açıklarının onarımı ve full-stack geliştirme süreçlerinde kullanılan **Gemini 3.8 Flash** temel yapay zeka modeli.
