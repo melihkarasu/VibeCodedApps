@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/seslikitap/app.js?v=20260926" defer></script>
+      <script src="/static/apps/seslikitap/app.js?v=20260929a" defer></script>
     `;
 
     const content = `
@@ -101,6 +101,22 @@ module.exports = function(pageTemplate) {
         <div class="space-y-2 pt-2">
           <h4 class="text-sm font-bold font-editorial text-mistral-ink">Bölümler (<span id="track-count">0</span>)</h4>
           <div id="track-list" class="space-y-1.5 max-h-[300px] overflow-y-auto pr-1"></div>
+        </div>
+      </div>
+
+      <!-- KİTAPLIĞIM (Dinlenen Kitaplar — Veritabanı) -->
+      <div id="my-library-section" class="hidden mb-8">
+        <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-bold font-editorial text-mistral-ink flex items-center gap-2">
+              <span>📚</span> Kitaplığım
+              <span id="my-library-count" class="px-2 py-0.5 rounded bg-mistral-cream border border-mistral-beige-deep text-mistral-ink font-mono text-xs font-bold">0</span>
+            </h2>
+          </div>
+          <p class="text-xs text-mistral-slate -mt-2">Hesabınızda dinlediğiniz kitaplar — kaldığınız yerden devam edebilir veya listeden kaldırabilirsiniz.</p>
+          <div id="my-library-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- JS ile çizilir -->
+          </div>
         </div>
       </div>
 

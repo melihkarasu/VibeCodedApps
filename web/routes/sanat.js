@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="/static/apps/sanat/app.css">
-      <script src="/static/apps/sanat/app.js" defer></script>
+      <script src="/static/apps/sanat/app.js?v=20260929a" defer></script>
     `;
 
     const content = `
@@ -205,6 +205,12 @@ module.exports = function(pageTemplate) {
             <div class="absolute bottom-4 left-4 pointer-events-none bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl text-[11px] text-mistral-slate">
               💡 İpucu: Fare tekerleğiyle yakınlaşabilir, tıklayıp sürükleyerek fırça darbelerini inceleyebilirsiniz.
             </div>
+          </div>
+
+          <!-- Eser Acıklaması (yalnızca modalda; kaynak: Met notu / Vikipedi, otomatik TR) -->
+          <div id="modal-desc-box" class="hidden p-4 bg-mistral-cream-light border-t border-mistral-hairline shrink-0 max-h-[28%] overflow-y-auto">
+            <p id="modal-art-desc" class="text-xs text-mistral-slate leading-relaxed"></p>
+            <span id="modal-art-desc-source" class="block text-[10px] text-mistral-stone mt-2"></span>
           </div>
 
           <!-- Modal Alt Künye Çubuğu -->
