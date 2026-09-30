@@ -248,26 +248,9 @@ const ART_DB_APP_ID = 'sanat-galerisi';
           isPanning = false;
         }
 
-        // 3b. Modal Aciklama: Met notu (nadir dolu) -> yoksa Vikipedi giris ozeti -> MyMemory ile TR
+        // 3b. Modal Aciklama: Met notu (nadir dolu) -> yoksa Vikipedi giris ozeti (CORS-acik)
         // (Kullanicinin 2026-09-29 talimati: aciklama yalnizca detay penceresinde, ek API istegi yalnizca modal acikken)
-        const DESC_CACHE_KEY = 'sa' + 'nat_de' + 'sc_tr_' + 'v1';
-
-        // Ceviri onbellegi oturumluk bellek-ici nesnede tutulur (monorepoda localStorage kullanilmaz)
-        const descTrCache = {};
-        function getDescCache() { return descTrCache; }
-        function setDescCache() {}
-
-        async function translateToTr(text) {
-          const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=en|tr';
-          const res = await fetch(url);
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          const data = await res.json();
-          if (data.responseStatus !== 200) throw new Error('ceviri servisi durumu: ' + data.responseStatus);
-          const out = data.responseData && data.responseData.translatedText;
-          if (!out || out === text) throw new Error('bos ceviri');
-          return out;
-        }
-
+        // Not (2026-09-30): MyMemory hicbir uygulamaya gomulmez (kullanici kurali) — aciklama kaynak dilinde gosterilir.
         async function hydrateModalDescription(item) {
           const box = document.getElementById('modal-desc-box');
           const el = document.getElementById('modal-art-desc');
@@ -302,25 +285,9 @@ const ART_DB_APP_ID = 'sanat-galerisi';
 
           const isStillOpen = () => currentModalArt && currentModalArt.objectID === oid;
 
-          const cache = getDescCache();
-          let tr = cache[oid];
-          let translated = !!tr;
-          if (!tr) {
-            try {
-              tr = await translateToTr(src);
-              cache[oid] = tr;
-              setDescCache(cache);
-              translated = true;
-            } catch(e) {
-              tr = src;
-              translated = false;
-            }
-            if (!isStillOpen()) return;
-          }
-
-          el.innerText = tr;
+          el.innerText = src;
           if (srcEl) {
-            srcEl.innerText = '📖 Kaynak: ' + sourceLabel + (translated ? ' • otomatik cevirilen metin' : ' • otomatik ceiri yapilamadi, orijinal dilinde gosteriliyor');
+            srcEl.innerText = '📖 Kaynak: ' + sourceLabel;
           }
           if (isStillOpen()) box.classList.remove('hidden');
         }

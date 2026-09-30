@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="/static/apps/sanat/app.css">
-      <script src="/static/apps/sanat/app.js?v=20260929a" defer></script>
+      <script src="/static/apps/sanat/app.js?v=20260930d" defer></script>
     `;
 
     const content = `
