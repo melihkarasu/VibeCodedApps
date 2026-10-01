@@ -19,6 +19,7 @@ router.use('/', require('./api/unesco'));
 router.use('/', require('./api/nobel'));
 
 // 3. Eğlence, Medya & Oyun
+router.use('/', require('./api/sudoku'));
 router.use('/', require('./api/dizi'));
 router.use('/', require('./api/radyo'));
 router.use('/', require('./api/gitar'));

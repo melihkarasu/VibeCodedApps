@@ -217,6 +217,14 @@ module.exports = function(pageTemplate) {
         desc: "İnteraktif bilgi yarışmaları, çok oyunculu düellolar ve dijital oyun kütüphanesi",
         apps: [
           {
+            id: "sudoku-arena",
+            name: "Sudoku Arena",
+            icon: "🧩",
+            desc: "Deterministik tohum motoru, Günün Sudokusu ortak yarışması, süreli liderlik tablosu ve not modu.",
+            url: "/sudoku",
+            action: "Bulmacayı Çöz"
+          },
+          {
             id: "kultur-arena",
             name: "Kültür Arenası & Trivia",
             icon: "🌍",
