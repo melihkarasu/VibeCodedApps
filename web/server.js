@@ -38,6 +38,7 @@ app.get(['/admin', '/app/admin'], require('./routes/admin')(pageTemplate));
 // 3. Mikro Uygulama Modülleri (Hem /:name hem /app/:name destekli)
 // -------------------------------------------------------------
 const routeMap = [
+  { paths: ['/sudoku', '/app/sudoku'], route: './routes/sudoku' },
   { paths: ['/qr-studio', '/app/qr-studio'], route: './routes/qr' },
   { paths: ['/doviz-cevirici', '/app/doviz-cevirici'], route: './routes/doviz' },
   { paths: ['/lezzet-atolyesi', '/app/lezzet-atolyesi'], route: './routes/lezzet' },
