@@ -3,11 +3,7 @@ const router = express.Router();
 const crypto = require('crypto');
 
 const SUPABASE_URL = process.env.INTERNAL_SUPABASE_URL || process.env.SUPABASE_URL || 'http://vibe-supabase-kong:8000';
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || '')
-  .split(',')
-  .map(e => e.trim().toLowerCase())
-  .filter(Boolean);
-const ADMIN_USER = (process.env.ADMIN_USER || 'melihkarasu').trim().toLowerCase();
+// Yetkilendirme tamamen veritabanındaki kullanıcı rolü (auth.users raw_app_meta_data->role) ile yapılır
 
 // PostgREST ile tam uyumlu dinamik Service Role anahtarı üretici
 function getServiceRoleKey() {
@@ -40,8 +36,8 @@ async function supabaseRequest(path, options = {}) {
   return res.json();
 }
 
-// Admin Yetki Doğrulama Middleware
-function adminGuard(req, res, next) {
+// Admin Yetki Doğrulama Middleware (Saf Veritabanı Rolü / RBAC)
+async function adminGuard(req, res, next) {
   let token = null;
   const authHeader = req.headers.authorization;
   if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -57,23 +53,36 @@ function adminGuard(req, res, next) {
 
   try {
     const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString());
-    const meta = payload.user_metadata || {};
-    const email = (payload.email || meta.email || '').trim().toLowerCase();
-    const username = (meta.user_name || meta.preferred_username || meta.name || '').trim().toLowerCase();
-    
-    const isAdmin = (email && ADMIN_EMAILS.includes(email)) ||
-                    (username && username === ADMIN_USER) ||
-                    (ADMIN_EMAILS.length === 0 && username === 'melihkarasu');
+    const appMeta = payload.app_metadata || {};
+    const userRole = appMeta.role || payload.role;
+    const isSuperAdmin = payload.is_super_admin === true;
 
-    if (!isAdmin) {
-      return res.status(403).json({ 
-        success: false, 
-        error: 'Erişim reddedildi. Bu alana yalnızca sistem yöneticileri erişebilir.' 
-      });
+    // 1) Token claims içinde rol 'admin' mi?
+    if (userRole === 'admin' || userRole === 'super_admin' || isSuperAdmin) {
+      req.adminUser = { id: payload.sub, role: userRole };
+      return next();
     }
 
-    req.adminUser = { id: payload.sub, email };
-    next();
+    // 2) Token henüz yenilenmediyse, veritabanından doğrudan kullanıcının güncel rolünü sorgula
+    if (payload.sub) {
+      try {
+        const dbRole = await supabaseRequest('/rpc/get_user_role', {
+          method: 'POST',
+          body: JSON.stringify({ uid: payload.sub })
+        });
+        if (dbRole === 'admin' || dbRole === 'super_admin') {
+          req.adminUser = { id: payload.sub, role: dbRole };
+          return next();
+        }
+      } catch (dbErr) {
+        console.warn('[AdminGuard] DB rol sorgulama hatası:', dbErr.message);
+      }
+    }
+
+    return res.status(403).json({ 
+      success: false, 
+      error: 'Erişim reddedildi. Bu alana yalnızca veritabanında yönetici rolüne (admin) sahip kullanıcılar erişebilir.' 
+    });
   } catch (e) {
     return res.status(401).json({ success: false, error: 'Geçersiz oturum anahtarı' });
   }
