@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="/static/apps/sudoku/app.css?v=20261001b">
-      <script src="/static/apps/sudoku/app.js?v=20261001b" defer></script>
+      <script src="/static/apps/sudoku/app.js?v=20261001c" defer></script>
     `;
 
     const content = `
@@ -209,7 +209,7 @@ module.exports = function(pageTemplate) {
                 <span>✏️</span>
                 <span id="note-mode-label">Not</span>
               </button>
-              <button onclick="actionHint()" class="py-2 px-1 sm:px-2 rounded-xl bg-white border border-mistral-hairline hover:bg-mistral-cream text-mistral-ink font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm" title="Doğru sayıyı aç (-150 puan)">
+              <button onclick="actionHint()" id="btn-hint" class="py-2 px-1 sm:px-2 rounded-xl bg-white border border-mistral-hairline hover:bg-mistral-cream text-mistral-ink font-bold text-xs transition flex items-center justify-center gap-1.5 shadow-sm" title="Doğru sayıyı aç (-150 puan)">
                 <span>💡</span>
                 <span id="hint-btn-label">İpucu (3)</span>
               </button>

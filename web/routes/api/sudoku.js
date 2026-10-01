@@ -63,18 +63,8 @@ function maskUsername(raw) {
   return `${first}*****${last}`;
 }
 
-// Bellek-içi önbellek (Veritabanı erişilemezse veya hızlı yanıt için yedek havuz)
+// Bellek-içi önbellek (Sadece bu çalışma zamanında çözülen gerçek kayıtlar)
 const dailyMemoryCache = new Map();
-
-function getMockDailyRecords(date) {
-  return [
-    { username_masked: 'm*****u', time_seconds: 185, score: 3820, mistakes: 0, date },
-    { username_masked: 'a*****r', time_seconds: 224, score: 3510, mistakes: 1, date },
-    { username_masked: 'k*****a', time_seconds: 260, score: 3340, mistakes: 0, date },
-    { username_masked: 's*****r', time_seconds: 310, score: 2950, mistakes: 2, date },
-    { username_masked: 'e*****n', time_seconds: 385, score: 2640, mistakes: 1, date }
-  ];
-}
 
 // =============================================================
 // 1. GET /api/sudoku/daily-leaderboard?date=YYYYMMDD
@@ -116,10 +106,7 @@ router.get('/sudoku/daily-leaderboard', async (req, res) => {
       }
     }
 
-    // Hiç kayıt yoksa gösterim için dengeli mock liste ekle
-    if (rows.length === 0) {
-      rows = getMockDailyRecords(cleanDate);
-    }
+// Hiç kayıt yoksa boş liste döndür (mock veri yok)
 
     // Kural: En kısa sürede çözüme göre sırala (ASC)
     rows.sort((a, b) => a.time_seconds - b.time_seconds || b.score - a.score);
@@ -191,7 +178,7 @@ router.post('/sudoku/daily-complete', async (req, res) => {
 
     // 1) Bellek-içi önbelleğe ekle veya güncelle (daha hızlıysa)
     if (!dailyMemoryCache.has(cleanDate)) {
-      dailyMemoryCache.set(cleanDate, getMockDailyRecords(cleanDate));
+      dailyMemoryCache.set(cleanDate, []);
     }
     const memList = dailyMemoryCache.get(cleanDate);
     const existingMemIdx = memList.findIndex(m => m.userId === newRecord.userId);
