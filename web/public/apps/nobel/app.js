@@ -1,4 +1,7 @@
 let allPrizes = [];
+        const RENDER_BATCH = 60;
+        let filteredPrizes = [];
+        let renderBatch = RENDER_BATCH;
 
         async function loadNobelPrizes() {
           try {
@@ -30,7 +33,14 @@ let allPrizes = [];
             return matchCat && matchQ;
           });
 
+          filteredPrizes = list;
+          renderBatch = RENDER_BATCH;
           renderGrid(list);
+        }
+
+        function showMoreNobel() {
+          renderBatch += RENDER_BATCH;
+          renderGrid(filteredPrizes);
         }
 
         function quickNobel(term) {
@@ -45,7 +55,8 @@ let allPrizes = [];
             return;
           }
 
-          grid.innerHTML = list.map(p => {
+          const visible = list.slice(0, renderBatch);
+          grid.innerHTML = visible.map(p => {
             const laureatesHtml = (p.laureates || []).map(l => `
               <div class="p-3 rounded-lg bg-mistral-cream/50 border border-mistral-beige-deep/80 space-y-1">
                 <h4 class="font-bold text-sm font-editorial text-mistral-ink flex items-center gap-1.5">
@@ -83,6 +94,14 @@ let allPrizes = [];
               </div>
             `;
           }).join('');
+
+          if (list.length > renderBatch) {
+            grid.innerHTML += `
+              <button onclick="showMoreNobel()" class="col-span-full mx-auto px-6 py-3 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-orange/40 text-sm font-bold text-mistral-ink transition">
+                ${list.length - renderBatch} kaydı daha göster ▾
+              </button>
+            `;
+          }
         }
 
         document.addEventListener('DOMContentLoaded', loadNobelPrizes);

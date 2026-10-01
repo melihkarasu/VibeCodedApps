@@ -136,6 +136,10 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
           return { raw: rawInput.trim(), query: clean.replace(/\s+/g, '_') };
         }
 
+        function labelNames() {
+          return activeIngredients.map(i => i.raw.trim()).filter(Boolean).join(' + ');
+        }
+
         function addCustomIngredient(forcedText) {
           const inputEl = document.getElementById('input-ingredient');
           const val = forcedText || (inputEl ? inputEl.value.trim() : '');

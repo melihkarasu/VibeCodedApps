@@ -13,13 +13,13 @@ const WISHLIST_KEY = '***';
 
           if (tab === 'free') {
             btnFree.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-violet-600 text-white transition flex items-center gap-1.5 shadow';
-            btnDeals.className = 'px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-1.5';
+            btnDeals.className = 'px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-mistral-ink hover:bg-mistral-cream transition flex items-center gap-1.5';
             storesBox.classList.add('hidden');
             listTitle.innerHTML = '<span>🎁</span> Şu An %100 Ücretsiz Olan Oyunlar (Kalıcı Hediyeler)';
             fetchFreeGames();
           } else {
             btnDeals.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-violet-600 text-white transition flex items-center gap-1.5 shadow';
-            btnFree.className = 'px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-1.5';
+            btnFree.className = 'px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-mistral-ink hover:bg-mistral-cream transition flex items-center gap-1.5';
             storesBox.classList.remove('hidden');
             listTitle.innerHTML = '<span>🔥</span> En Büyük İndirim Fırsatları (Steam & Epic Games)';
             fetchDiscountDeals();
@@ -37,13 +37,26 @@ const WISHLIST_KEY = '***';
             selectedStores.push(storeId);
           }
 
+          const storeStyles = {
+            '1': {
+              active: 'store-tag-btn px-2.5 py-1 rounded-lg bg-[#171a21] border border-[#2a475e] text-white font-bold transition shadow-sm',
+              inactive: 'store-tag-btn px-2.5 py-1 rounded-lg bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink hover:bg-mistral-cream font-medium transition'
+            },
+            '25': {
+              active: 'store-tag-btn px-2.5 py-1 rounded-lg bg-[#202020] border border-[#3f3f46] text-white font-bold transition shadow-sm',
+              inactive: 'store-tag-btn px-2.5 py-1 rounded-lg bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink hover:bg-mistral-cream font-medium transition'
+            },
+            '7': {
+              active: 'store-tag-btn px-2.5 py-1 rounded-lg bg-[#4c1d95] border border-[#6b21a8] text-white font-bold transition shadow-sm',
+              inactive: 'store-tag-btn px-2.5 py-1 rounded-lg bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink hover:bg-mistral-cream font-medium transition'
+            }
+          };
+
           ['1', '25', '7'].forEach(s => {
             const btn = document.getElementById('st-' + s);
-            if (selectedStores.includes(s)) {
-              btn.className = 'store-tag-btn px-2.5 py-1 rounded-lg bg-violet-500/20 border border-violet-500/50 text-violet-300 font-bold transition';
-            } else {
-              btn.className = 'store-tag-btn px-2.5 py-1 rounded-lg bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition';
-            }
+            if (!btn) return;
+            const style = storeStyles[s];
+            btn.className = selectedStores.includes(s) ? style.active : style.inactive;
           });
 
           fetchDiscountDeals();
@@ -160,7 +173,7 @@ const WISHLIST_KEY = '***';
                   <a href="${url}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs transition flex items-center gap-1">
                     <span>🎁</span> Oyunu Al &rarr;
                   </a>
-                  <button onclick="saveToWishlistRendered(${idx}, 'free', '${worth}')"" class="p-1.5 text-mistral-slate hover:text-amber-400 transition" title="İstek Listeme Kaydet">
+                  <button onclick="saveToWishlistRendered(${idx}, 'free', '${worth}')" class="p-1.5 text-mistral-slate hover:text-amber-400 transition" title="İstek Listeme Kaydet">
                     🔖
                   </button>
                 </div>
@@ -224,7 +237,7 @@ const WISHLIST_KEY = '***';
                   <a href="${dealUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs transition flex items-center gap-1">
                     <span>Fırsatı Gör</span> &rarr;
                   </a>
-                  <button onclick="saveToWishlistRendered(${idx}, 'deals')"" class="p-1.5 text-mistral-slate hover:text-amber-400 transition" title="İstek Listeme Kaydet">
+                  <button onclick="saveToWishlistRendered(${idx}, 'deals')" class="p-1.5 text-mistral-slate hover:text-amber-400 transition" title="İstek Listeme Kaydet">
                     🔖
                   </button>
                 </div>
@@ -304,7 +317,7 @@ const WISHLIST_KEY = '***';
             <div class="p-3 rounded-2xl bg-white border border-mistral-hairline hover:border-violet-500/40 transition flex items-center gap-3">
               <img src="${item.thumb}" class="w-14 h-14 rounded-xl object-cover shrink-0 shadow bg-white">
               <div class="flex-1 min-w-0">
-                <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="font-bold text-xs text-white truncate block hover:text-violet-400 transition">${item.title}</a>
+                <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="font-bold text-xs text-mistral-ink truncate block hover:text-violet-600 transition">${item.title}</a>
                 <div class="flex items-center gap-1.5 text-[11px] font-mono mt-0.5">
                   <span class="text-emerald-400 font-bold">${item.price}</span>
                   <span class="text-mistral-stone line-through">${item.oldPrice}</span>

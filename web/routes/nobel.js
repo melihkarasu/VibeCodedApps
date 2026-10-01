@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/nobel/app.js?v=20260926w" defer></script>
+      <script src="/static/apps/nobel/app.js?v=20261001a" defer></script>
     `;
 
     const content = `
@@ -46,7 +46,7 @@ module.exports = function(pageTemplate) {
               <option value="all" selected>Tüm Kategoriler (1901 - Günümüz)</option>
               <option value="Chemistry">🧪 Kimya (Chemistry)</option>
               <option value="Physics">⚛️ Fizik (Physics)</option>
-              <option value="Medicine">🧬 Fizyoloji / Tıp (Medicine)</option>
+              <option value="Physiology or Medicine">🧬 Fizyoloji / Tıp (Medicine)</option>
               <option value="Literature">✍️ Edebiyat (Literature)</option>
               <option value="Peace">🕊️ Barış (Peace)</option>
               <option value="Economic Sciences">📊 Ekonomi (Economic Sciences)</option>

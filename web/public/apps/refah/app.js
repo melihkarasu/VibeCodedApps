@@ -76,14 +76,13 @@ const COUNTRY_META = {
             'IT.NET.USER.ZS': 'ind-net',
             'EG.ELC.ACCS.ZS': 'ind-elc',
             'EG.FEC.RNEW.ZS': 'ind-renew',
-            'EN.ATM.CO2E.PC': 'ind-co2'
           };
           const activeBtn = document.getElementById(map[indKey]);
           if (activeBtn) {
             activeBtn.className = 'ind-btn p-3 rounded-2xl bg-blue-600 text-white font-bold text-xs transition shadow text-left flex flex-col justify-between';
           }
 
-          document.getElementById('chart-main-title').innerText = `${name} Tarihsel Trendi (1995 - 2024)`;
+          document.getElementById('chart-main-title').innerText = `${name} Tarihsel Trendi (1995 - ${new Date().getFullYear()})`;
           document.getElementById('chart-sub-title').innerText = `Birim: ${unit}`;
 
           loadIndicatorData();
@@ -96,7 +95,7 @@ const COUNTRY_META = {
 
           try {
             const countriesParam = selectedCountries.join(';');
-            const url = `https://api.worldbank.org/v2/country/${countriesParam}/indicator/${activeIndicator}?format=json&date=1995:2024&per_page=300`;
+            const url = `https://api.worldbank.org/v2/country/${countriesParam}/indicator/${activeIndicator}?format=json&date=1995:2026&per_page=300`;
             
             const res = await fetch(url);
             const data = await res.json();
