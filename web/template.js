@@ -89,11 +89,24 @@ const pageTemplate = (title, content, extraHead = '') => `
                 var name = p.name || 'Kullanıcı';
                 var avatar = p.avatar || '';
                 nav.innerHTML = '<div class="flex items-center gap-2.5 sm:gap-3">' +
-                  (p.email && p.email.toLowerCase() === process.env.ADMIN_EMAIL ? '<a href="/admin" class="text-xs px-2.5 py-1.5 rounded-md bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 font-semibold transition flex items-center gap-1 shadow-2xs"><span>⚙️</span><span>Yönetim</span></a>' : '') +
+                  '<a href="/admin" id="admin-nav-btn" class="hidden text-xs px-2.5 py-1.5 rounded-md bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 font-semibold transition flex items-center gap-1 shadow-2xs"><span>⚙️</span><span>Yönetim</span></a>' +
                   (avatar ? '<img src="' + avatar + '" class="w-7 h-7 rounded-full border border-mistral-orange shadow-sm object-cover" alt="Avatar">' : '<div class="w-7 h-7 rounded-full bg-mistral-cream border border-mistral-beige-deep text-mistral-ink flex items-center justify-center text-xs font-bold">👤</div>') +
                   '<span class="text-xs sm:text-sm font-semibold text-mistral-ink max-w-[120px] sm:max-w-[180px] truncate">' + name + '</span>' +
                   '<button type="button" onclick="logout()" class="text-xs px-2.5 py-1.5 rounded-md bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition font-medium cursor-pointer">Çıkış</button>' +
                 '</div>';
+              // Admin yetki kontrolü (sıfır e-posta sızıntısı)
+              var token = localStorage.getItem('vibe_token');
+              if (token) {
+                fetch('/api/admin/check', { headers: { 'Authorization': 'Bearer ' + token } })
+                  .then(function(r) { return r.json(); })
+                  .then(function(d) {
+                    if (d && d.isAdmin) {
+                      var btn = document.getElementById('admin-nav-btn');
+                      if (btn) btn.classList.remove('hidden');
+                    }
+                  })
+                  .catch(function() {});
+              }
               }
             }
           } catch(e) {}

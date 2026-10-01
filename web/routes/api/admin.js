@@ -3,9 +3,11 @@ const router = express.Router();
 const crypto = require('crypto');
 
 const SUPABASE_URL = process.env.INTERNAL_SUPABASE_URL || process.env.SUPABASE_URL || 'http://vibe-supabase-kong:8000';
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || '')
   .split(',')
-  .map(e => e.trim().toLowerCase());
+  .map(e => e.trim().toLowerCase())
+  .filter(Boolean);
+const ADMIN_USER = (process.env.ADMIN_USER || 'melihkarasu').trim().toLowerCase();
 
 // PostgREST ile tam uyumlu dinamik Service Role anahtarı üretici
 function getServiceRoleKey() {
@@ -55,9 +57,15 @@ function adminGuard(req, res, next) {
 
   try {
     const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString());
-    const email = (payload.email || '').trim().toLowerCase();
+    const meta = payload.user_metadata || {};
+    const email = (payload.email || meta.email || '').trim().toLowerCase();
+    const username = (meta.user_name || meta.preferred_username || meta.name || '').trim().toLowerCase();
     
-    if (!email || !ADMIN_EMAILS.includes(email)) {
+    const isAdmin = (email && ADMIN_EMAILS.includes(email)) ||
+                    (username && username === ADMIN_USER) ||
+                    (ADMIN_EMAILS.length === 0 && username === 'melihkarasu');
+
+    if (!isAdmin) {
       return res.status(403).json({ 
         success: false, 
         error: 'Erişim reddedildi. Bu alana yalnızca sistem yöneticileri erişebilir.' 
@@ -72,6 +80,13 @@ function adminGuard(req, res, next) {
 }
 
 router.use(adminGuard);
+
+// 0. Hafif Yetki Doğrulama Endpointi (Sıfır e-posta sızıntısı)
+router.get('/check', (req, res) => {
+  res.json({ success: true, isAdmin: true });
+});
+
+
 
 // -------------------------------------------------------------
 // 1. Özet İstatistikler
