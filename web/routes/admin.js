@@ -313,25 +313,47 @@ module.exports = function(pageTemplate) {
           checkAdminAuth();
         });
 
-        // Yönetici Yetki Kontrolü
-        function checkAdminAuth() {
-          const userRaw = localStorage.getItem('vibe_user');
+        // Yönetici Yetki Kontrolü (Backend Onaylı)
+        async function checkAdminAuth() {
           const token = localStorage.getItem('vibe_token');
-          if (!userRaw || !token) {
+          if (!token) {
             showUnauthorized();
             return;
           }
 
           try {
-            const user = JSON.parse(userRaw);
-            const email = (user.email || '').trim().toLowerCase();
-            if (email !== process.env.ADMIN_EMAIL?.toLowerCase().trim()) {
+            // Doğrudan backend API'sine yetki sor (process.env tarayıcıda çalışmaz!)
+            const res = await fetch('/api/admin/stats', { headers: getAuthHeaders() });
+            if (!res.ok) {
+              showUnauthorized();
+              return;
+            }
+            const data = await res.json();
+            if (!data || !data.success) {
               showUnauthorized();
               return;
             }
 
-            document.getElementById('admin-user-email').innerText = email;
-            loadAdminStats();
+            // Yetki geçerli: Kullanıcı e-postasını veya adını göster
+            let displayEmail = 'Yönetici (Melih Karasu)';
+            try {
+              const userRaw = localStorage.getItem('vibe_user');
+              if (userRaw) {
+                const u = JSON.parse(userRaw);
+                displayEmail = u.email || u.name || 'Sistem Yöneticisi';
+              }
+            } catch(e) {}
+
+            document.getElementById('admin-user-email').innerText = displayEmail;
+            
+            // Verileri yükle
+            if (data.stats) {
+              document.getElementById('stat-total-categories').innerText = data.stats.totalCategories || 0;
+              document.getElementById('stat-total-apps').innerText = data.stats.totalApps || 0;
+              document.getElementById('stat-active-apps').innerText = data.stats.activeApps || 0;
+              document.getElementById('stat-total-favorites').innerText = data.stats.totalFavorites || 0;
+              document.getElementById('stat-total-users').innerText = data.stats.totalUsers || 0;
+            }
             loadAdminCategories();
             loadAdminApps();
             loadAdminUsers();
@@ -400,7 +422,7 @@ module.exports = function(pageTemplate) {
               if (users.length === 0) {
                 // Varsayılan yönetici ve bilinen kullanıcılar
                 users.push({
-                  email: process.env.ADMIN_EMAIL || 'Sistem Yöneticisi',
+                  email: 'Sistem Yöneticisi',
                   raw_user_meta_data: { name: 'Melih Karasu', avatar_url: 'https://avatars.githubusercontent.com/u/144457496?v=4' },
                   created_at: '2026-09-07T08:39:14Z',
                   last_sign_in_at: new Date().toISOString(),
