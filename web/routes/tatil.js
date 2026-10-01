@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/tatil/app.css">
-      <script src="/static/apps/tatil/app.js?v=20260928a" defer></script>
+      <link rel="stylesheet" href="/static/apps/tatil/app.css?v=20261001a">
+      <script src="/static/apps/tatil/app.js?v=20261001a" defer></script>
     `;
 
     const content = `
@@ -80,7 +80,7 @@ module.exports = function(pageTemplate) {
       </div>
 
       <!-- 2. KÖPRÜ İZİN FIRSATLARI BÖLÜMÜ (LONG WEEKENDS & BRIDGE DAYS) -->
-      <div class="p-6 rounded-3xl bg-white from-amber-500/10   border border-amber-500/30 shadow-xl mb-8 space-y-4">
+      <div class="p-6 rounded-3xl bg-amber-50 border border-amber-200 shadow-xl mb-8 space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
             <span class="text-2xl">🏖️</span>
