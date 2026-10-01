@@ -914,11 +914,29 @@
     const dBadge = document.getElementById('badge-difficulty-name');
     const mCounter = document.getElementById('mistakes-counter');
     const bestEl = document.getElementById('best-score-label');
+    const hLabel = document.getElementById('hint-btn-label');
+    const hBtn = document.getElementById('btn-hint');
 
     const cfg = DIFFICULTY_CONFIG[gameState.difficulty] || DIFFICULTY_CONFIG.medium;
     if (pBadge) pBadge.innerText = `ID: #${gameState.puzzleId}`;
     if (dBadge) dBadge.innerHTML = `<span class="${cfg.symbolColor} font-mono">${cfg.symbol}</span> ${cfg.name}`;
     if (mCounter) mCounter.innerText = `❌ ${gameState.mistakes}/3`;
+
+    // İpucu sayacı ve pasifleşme
+    if (hLabel) {
+      hLabel.innerText = `İpucu (${gameState.hintsRemaining})`;
+    }
+    if (hBtn) {
+      if (gameState.hintsRemaining <= 0) {
+        hBtn.disabled = true;
+        hBtn.classList.add('opacity-40', 'cursor-not-allowed');
+        hBtn.classList.remove('hover:bg-mistral-cream');
+      } else {
+        hBtn.disabled = false;
+        hBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+        hBtn.classList.add('hover:bg-mistral-cream');
+      }
+    }
 
     if (bestEl) {
       const records = getIdRecords();
@@ -1032,16 +1050,7 @@
       const raw = localStorage.getItem(STORAGE_LEADERBOARD);
       if (raw) return JSON.parse(raw);
     } catch(e) {}
-    // Varsayılan mock liderlik listesi — TÜM İSİMLER KULLANICI KURALINA GÖRE m*****u BİÇİMİNDE
-    return [
-      { user: 'm*****u', score: 3850, time: 245, puzzleId: 6041, diff: 'expert', date: '2026-09-29' },
-      { user: 'a*****r', score: 3420, time: 290, puzzleId: 4120, diff: 'hard', date: '2026-09-30' },
-      { user: 'k*****a', score: 3100, time: 315, puzzleId: 20261001, diff: 'daily', date: '2026-10-01' },
-      { user: 's*****r', score: 2850, time: 180, puzzleId: 1042, diff: 'medium', date: '2026-09-28' },
-      { user: 'e*****n', score: 2450, time: 145, puzzleId: 325, diff: 'easy', date: '2026-09-30' },
-      { user: 'b*****t', score: 2100, time: 390, puzzleId: 8841, diff: 'hard', date: '2026-09-27' },
-      { user: 'd*****z', score: 1950, time: 210, puzzleId: 512, diff: 'medium', date: '2026-09-29' }
-    ];
+    return []; // Mock veri tamamen kaldırıldı, sadece gerçek kullanıcı kayıtları
   }
 
   function recordToLeaderboard(puzzleId, diff, timeSec, score) {
@@ -1121,7 +1130,7 @@
     container.innerHTML = rows.map((item, idx) => {
       const rank = item.rank || (idx + 1);
       const rankBadge = rank === 1 ? '🥇 1' : rank === 2 ? '🥈 2' : rank === 3 ? '🥉 3' : `#${rank}`;
-      const isSelf = item.isSelf || item.user === 'm*****u';
+      const isSelf = Boolean(item.isSelf);
       const selfClass = isSelf ? 'bg-amber-50/70 font-bold border-l-2 border-amber-500' : 'hover:bg-mistral-cream/50';
 
       const safeMaskedUser = escapeHtml(maskUsername(item.user));
@@ -1156,7 +1165,7 @@
         myRankLabel.innerText = `Senin Durumun: #${userRank} • ${maskUsername(userRecord.user)}`;
         myRankScore.innerText = `⏱️ ${formatTime(userRecord.time)} (${userRecord.score.toLocaleString('tr-TR')} Puan)`;
       } else {
-        const myIdx = rows.findIndex(i => i.isSelf || i.user === 'm*****u');
+        const myIdx = rows.findIndex(i => i.isSelf);
         if (myIdx >= 0) {
           myRankLabel.innerText = `Senin Durumun: #${myIdx + 1} • m*****u`;
           myRankScore.innerText = `⏱️ ${formatTime(rows[myIdx].time)} (${rows[myIdx].score.toLocaleString('tr-TR')} Puan)`;
