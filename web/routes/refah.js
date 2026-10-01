@@ -63,10 +63,6 @@ module.exports = function(pageTemplate) {
               <span class="text-lg mb-1">🌿</span>
               <span>Yenilenebilir Enerji</span>
             </button>
-            <button onclick="setIndicator('EN.ATM.CO2E.PC', 'Kişi Başı CO2 Salımı', 'Ton / Kişi')" id="ind-co2" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink font-semibold text-xs transition text-left flex flex-col justify-between">
-              <span class="text-lg mb-1">🏭</span>
-              <span>Karbon Salımı</span>
-            </button>
           </div>
         </div>
 
@@ -108,7 +104,7 @@ module.exports = function(pageTemplate) {
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-              <span id="chart-main-title">Kişi Başına GSYİH Tarihsel Trendi (1995 - 2024)</span>
+              <span id="chart-main-title">Kişi Başına GSYİH Tarihsel Trendi (1995 - Günümüz)</span>
             </h3>
             <p class="text-mistral-slate text-xs mt-0.5" id="chart-sub-title">Birim: Sabit 2015 USD ($)</p>
           </div>

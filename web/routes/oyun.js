@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="/static/apps/oyun/app.css">
-      <script src="/static/apps/oyun/app.js?v=20260926c" defer></script>
+      <script src="/static/apps/oyun/app.js?v=20261001a" defer></script>
     `;
 
     const content = `
@@ -39,7 +39,7 @@ module.exports = function(pageTemplate) {
             <button onclick="switchTab('free')" id="tab-btn-free" class="px-4 py-2 rounded-xl text-xs font-bold bg-violet-600 text-white transition flex items-center gap-1.5 shadow">
               <span>🎁</span> %100 Ücretsiz Oyunlar
             </button>
-            <button onclick="switchTab('deals')" id="tab-btn-deals" class="px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-1.5">
+            <button onclick="switchTab('deals')" id="tab-btn-deals" class="px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-mistral-ink hover:bg-mistral-cream transition flex items-center gap-1.5">
               <span>🔥</span> Büyük İndirimler
             </button>
           </div>
@@ -47,9 +47,9 @@ module.exports = function(pageTemplate) {
           <!-- Mağazalar Filtresi (İndirimler Sekmesi İçin) -->
           <div id="stores-filter-box" class="hidden flex flex-wrap items-center gap-1.5 text-xs">
             <span class="text-mistral-stone text-[11px] mr-1">Mağaza:</span>
-            <button onclick="toggleStore('1')" id="st-1" class="store-tag-btn px-2.5 py-1 rounded-lg bg-violet-500/20 border border-violet-500/50 text-violet-300 font-bold transition">♨️ Steam</button>
-            <button onclick="toggleStore('25')" id="st-25" class="store-tag-btn px-2.5 py-1 rounded-lg bg-violet-500/20 border border-violet-500/50 text-violet-300 font-bold transition">⚡ Epic Games</button>
-            <button onclick="toggleStore('7')" id="st-7" class="store-tag-btn px-2.5 py-1 rounded-lg bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition">👾 GOG</button>
+            <button onclick="toggleStore('1')" id="st-1" class="store-tag-btn px-2.5 py-1 rounded-lg bg-[#171a21] border border-[#2a475e] text-white font-bold transition shadow-sm">♨️ Steam</button>
+            <button onclick="toggleStore('25')" id="st-25" class="store-tag-btn px-2.5 py-1 rounded-lg bg-[#202020] border border-[#3f3f46] text-white font-bold transition shadow-sm">⚡ Epic Games</button>
+            <button onclick="toggleStore('7')" id="st-7" class="store-tag-btn px-2.5 py-1 rounded-lg bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink hover:bg-mistral-cream font-medium transition">👾 GOG</button>
           </div>
         </div>
 

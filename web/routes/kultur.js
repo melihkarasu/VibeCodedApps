@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="/static/apps/kultur/app.css">
-      <script src="/static/apps/kultur/app.js?v=20260926b" defer></script>
+      <script src="/static/apps/kultur/app.js?v=20261001a" defer></script>
     `;
 
     const content = `
@@ -31,12 +31,12 @@ module.exports = function(pageTemplate) {
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span id="player-name" class="font-bold text-xs text-white">Misafir Yarışmacı</span>
+              <span id="player-name" class="font-bold text-xs text-mistral-ink">Misafir Yarışmacı</span>
               <span id="player-level-badge" class="px-1.5 py-0.2 rounded bg-yellow-500/20 text-yellow-300 text-[10px] font-bold">Seviye 1</span>
             </div>
             <div class="flex items-center gap-2 mt-1">
               <div class="w-24 h-1.5 rounded-full bg-white overflow-hidden border border-mistral-hairline">
-                <div id="player-xp-bar" class="h-full bg-white from-yellow-500 to-amber-400 rounded-full" style="width: 20%;"></div>
+                <div id="player-xp-bar" class="h-full bg-yellow-500 rounded-full" style="width: 20%;"></div>
               </div>
               <span id="player-xp-text" class="text-[10px] text-mistral-slate font-mono">0 XP</span>
             </div>
@@ -99,7 +99,7 @@ module.exports = function(pageTemplate) {
           </div>
 
           <div class="pt-2">
-            <button onclick="startSoloGame()" class="w-full sm:w-auto px-10 py-4 rounded-2xl bg-white from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-slate-950 font-black text-base shadow-xl shadow-yellow-500/20 transition transform hover:scale-105">
+            <button onclick="startSoloGame()" class="w-full sm:w-auto px-10 py-4 rounded-2xl bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-base shadow-xl shadow-yellow-500/20 transition transform hover:scale-105">
               🚀 Yarışmayı Başlat (10 Soru)
             </button>
           </div>

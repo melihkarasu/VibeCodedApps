@@ -62,7 +62,7 @@ module.exports = function(pageTemplate) {
           </div>
 
           <!-- Sürpriz Tarif Butonu (Şans Çarkı) -->
-          <button onclick="fetchRandomRecipe()" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-white font-bold text-xs transition shadow-lg shadow-rose-500/20 flex items-center justify-center gap-2 shrink-0">
+          <button onclick="fetchRandomRecipe()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-white font-bold text-xs transition shadow-md flex items-center justify-center gap-2 shrink-0">
             <span>🎲</span> <span id="btn-random-label">Ne Yesem? (Rastgele Sürpriz)</span>
           </button>
         </div>
@@ -73,7 +73,7 @@ module.exports = function(pageTemplate) {
             <input type="text" id="input-ingredient" placeholder="Malzeme yazın (Örn: patates, tavuk, sarımsak, soğan, cheese, mint)..." onkeyup="if(event.key==='Enter') addCustomIngredient()" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder-slate-500 focus:border-rose-400 focus:outline-none">
             <span class="absolute left-3.5 top-3 text-mistral-stone text-sm">🥕</span>
           </div>
-          <button onclick="addCustomIngredient()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-400 hover:to-pink-500 text-white font-bold text-xs transition shadow-md shadow-rose-500/20 flex items-center justify-center gap-1.5 shrink-0">
+          <button onclick="addCustomIngredient()" class="px-5 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-bold text-xs transition shadow-md flex items-center justify-center gap-1.5 shrink-0">
             <span>+</span> <span>Malzemeyi Ekle & Ara</span>
           </button>
         </div>
@@ -175,11 +175,9 @@ module.exports = function(pageTemplate) {
           <!-- Modal Başlık Resmi -->
           <div class="relative h-64 sm:h-72 w-full overflow-hidden shrink-0">
             <img id="modal-img" src="" class="w-full h-full object-cover" alt="Tarif">
-            <div class="absolute inset-0 bg-white  via-transparent to-black/30"></div>
-            
-            <div class="absolute bottom-4 left-6 right-6">
+            <div class="absolute bottom-0 left-0 right-0 px-6 pb-5 pt-16" style="background:linear-gradient(to top, rgba(0,0,0,0.6), transparent 70%)">
               <div class="flex flex-wrap gap-2 mb-2" id="modal-badges"></div>
-              <h2 id="modal-title" class="text-2xl sm:text-3xl font-extrabold text-mistral-ink"></h2>
+              <h2 id="modal-title" class="text-2xl sm:text-3xl font-extrabold text-white" style="text-shadow:0 1px 6px rgba(0,0,0,0.45)"></h2>
             </div>
           </div>
 

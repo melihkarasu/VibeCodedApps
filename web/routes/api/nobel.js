@@ -1,8 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const https = require('https');
-const crypto = require('crypto');
-const { isPrivateAddress } = require('./utils');
 const { getCachedJson } = require('./cache');
 
 // =============================================================
@@ -11,51 +8,64 @@ const { getCachedJson } = require('./cache');
 
 router.get('/nobel/prizes', async (req, res) => {
   try {
-    const output = await getCachedJson('nobel_prizes_all', async () => {
-      const response = await fetch('https://api.nobelprize.org/2.1/nobelPrizes?limit=40', {
+    const output = await getCachedJson('nobel_prizes_all_v3', async () => {
+      // 1) İlk sayfayı çek ve toplam kayıt sayısını öğren
+      const firstRes = await fetch('https://api.nobelprize.org/2.1/nobelPrizes?limit=100&offset=0', {
         headers: { 'User-Agent': 'VibeCodedApps/1.0' },
-        signal: AbortSignal.timeout(8000)
+        signal: AbortSignal.timeout(10000)
       });
+      if (!firstRes.ok) throw new Error('Nobel Vakfı API yanıt vermedi');
+      const first = await firstRes.json();
+      const total = Number(first.meta?.count) || 682;
 
-      if (!response.ok) throw new Error('Nobel Vakfı API yanıt vermedi');
-      const data = await response.json();
+      // 2) Kalan sayfaları paralel çek (offset=100..total)
+      const offsets = [];
+      for (let off = 100; off < total; off += 100) offsets.push(off);
 
-      const formatted = (data.nobelPrizes || []).map(p => {
-        const laureates = (p.laureates || []).map(l => ({
-          id: l.id,
-          name: l.knownName?.en || l.orgName?.en || 'İsimsiz',
-          motivation: l.motivation?.en || p.topMotivation?.en || 'İnsanlığa üstün katkı.'
-        }));
+      const rest = await Promise.allSettled(
+        offsets.map(off =>
+          fetch(`https://api.nobelprize.org/2.1/nobelPrizes?limit=100&offset=${off}`, {
+            headers: { 'User-Agent': 'VibeCodedApps/1.0' },
+            signal: AbortSignal.timeout(10000)
+          }).then(r => r.json())
+        )
+      );
 
-        return {
+      const rawList = [...(first.nobelPrizes || [])];
+      for (const r of rest) {
+        if (r.status === 'fulfilled' && r.value && r.value.nobelPrizes) {
+          rawList.push(...r.value.nobelPrizes);
+        }
+      }
+
+      // 3) Tekilleştir (yıl + kategori) ve en yeniden eskiye sırala
+      const seen = new Set();
+      const formatted = rawList
+        .filter(p => {
+          const key = p.awardYear + '|' + (p.category?.en || '');
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        })
+        .map(p => ({
           year: p.awardYear,
           category: p.category?.en || '',
           categoryFullName: p.categoryFullName?.en || '',
           prizeAmount: p.prizeAmount || 0,
-          laureates
-        };
-      });
+          laureates: (p.laureates || []).map(l => ({
+            id: l.id,
+            name: l.knownName?.en || l.orgName?.en || 'İsimsiz',
+            motivation: l.motivation?.en || p.topMotivation?.en || 'İnsanlığa üstün katkı.'
+          }))
+        }))
+        .sort((a, b) => Number(b.year) - Number(a.year) || String(a.category).localeCompare(String(b.category)));
 
-      // Türk Nobel Kazananlarını da arşivde sabitle (Aziz Sancar, Orhan Pamuk)
-      const turkishLaureates = [
-        {
-          year: '2015',
-          category: 'Chemistry',
-          categoryFullName: 'The Nobel Prize in Chemistry',
-          prizeAmount: 8000000,
-          laureates: [{ id: '921', name: 'Aziz Sancar', motivation: 'For mechanistic studies of DNA repair (Hasarlı DNA onarım mekanizması keşfi).' }]
-        },
-        {
-          year: '2006',
-          category: 'Literature',
-          categoryFullName: 'The Nobel Prize in Literature',
-          prizeAmount: 10000000,
-          laureates: [{ id: '808', name: 'Orhan Pamuk', motivation: 'Who in the pursuit of the melancholic soul of his native city has discovered new symbols for the clash and interlacing of cultures.' }]
-        }
-      ];
-
-      const merged = [...turkishLaureates, ...formatted];
-      return { success: true, count: merged.length, prizes: merged, source: 'Nobel Foundation (Günde 1 Kez Güncellenen Kalıcı JSON Önbellek)' };
+      return {
+        success: true,
+        count: formatted.length,
+        prizes: formatted,
+        source: 'Nobel Foundation (Günde 1 Kez Güncellenen Kalıcı JSON Önbellek)'
+      };
     });
 
     res.json(output);
