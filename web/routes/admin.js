@@ -346,14 +346,8 @@ module.exports = function(pageTemplate) {
 
             document.getElementById('admin-user-email').innerText = displayEmail;
             
-            // Verileri yükle
-            if (data.stats) {
-              document.getElementById('stat-total-categories').innerText = data.stats.totalCategories || 0;
-              document.getElementById('stat-total-apps').innerText = data.stats.totalApps || 0;
-              document.getElementById('stat-active-apps').innerText = data.stats.activeApps || 0;
-              document.getElementById('stat-total-favorites').innerText = data.stats.totalFavorites || 0;
-              document.getElementById('stat-total-users').innerText = data.stats.totalUsers || 0;
-            }
+            // Verileri yükle (loadAdminStats dogru element ID'lerini kullanir: stat-*-count)
+            loadAdminStats();
             loadAdminCategories();
             loadAdminApps();
             loadAdminUsers();
