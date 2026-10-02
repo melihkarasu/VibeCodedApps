@@ -139,6 +139,55 @@ router.get('/users', async (req, res) => {
 });
 
 // -------------------------------------------------------------
+// 2b. Kullanici Rol Yonetimi ve Askiya Alma
+// -------------------------------------------------------------
+router.post('/users/:id/role', async (req, res) => {
+  const targetUserId = req.params.id;
+  const { role } = req.body;
+  const callerId = req.adminUser && req.adminUser.id;
+
+  if (!callerId) {
+    return res.status(401).json({ success: false, error: 'Oturum bilgisi eksik' });
+  }
+  if (!role || !['admin', 'authenticated'].includes(role)) {
+    return res.status(400).json({ success: false, error: 'Rol yalnızca admin veya authenticated olabilir' });
+  }
+
+  try {
+    const result = await supabaseRequest('/rpc/admin_set_user_role', {
+      method: 'POST',
+      body: JSON.stringify({ target_uid: targetUserId, new_role: role, caller_uid: callerId })
+    });
+    res.json({ success: true, message: result.role === 'admin' ? 'Kullanıcı yönetici yapıldı' : 'Yönetici yetkisi kaldırıldı', role: result.role });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message.includes('Kendi rolunuzu') ? 'Kendi rolünüzü değiştiremezsiniz' : (err.message.includes('Son yoneticinin') ? 'Son yöneticinin yetkisi kaldırılamaz' : 'Rol güncellenemedi: ' + err.message) });
+  }
+});
+
+router.post('/users/:id/ban', async (req, res) => {
+  const targetUserId = req.params.id;
+  const { banned } = req.body;
+  const callerId = req.adminUser && req.adminUser.id;
+
+  if (!callerId) {
+    return res.status(401).json({ success: false, error: 'Oturum bilgisi eksik' });
+  }
+  if (typeof banned !== 'boolean') {
+    return res.status(400).json({ success: false, error: 'banned boolean olmalıdır' });
+  }
+
+  try {
+    const result = await supabaseRequest('/rpc/admin_set_user_ban', {
+      method: 'POST',
+      body: JSON.stringify({ target_uid: targetUserId, banned: banned, caller_uid: callerId })
+    });
+    res.json({ success: true, message: banned ? 'Kullanıcı askıya alındı' : 'Askı kaldırıldı', banned: result.banned });
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message.includes('Kendi hesabinizi') ? 'Kendi hesabınızı askıya alamazsınız' : (err.message.includes('Son yonetici') ? 'Son yönetici askıya alınamaz' : 'İşlem başarısız: ' + err.message) });
+  }
+});
+
+// -------------------------------------------------------------
 // 3. Kategoriler CRUD
 // -------------------------------------------------------------
 router.get('/categories', async (req, res) => {
