@@ -206,7 +206,7 @@ function parseJwtPayload(token) {
     }
 
     if (window.location.pathname.includes('/auth')) {
-      window.location.replace('/app');
+      window.location.replace('/');
       return;
     }
   }

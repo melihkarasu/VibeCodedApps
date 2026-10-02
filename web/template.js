@@ -6,6 +6,48 @@ const pageTemplate = (title, content, extraHead = '') => `
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+  (function() {
+    try {
+      var rawHash = window.location.hash || '';
+      var rawSearch = window.location.search || '';
+      var tokenStr = '', refreshTokenStr = '';
+      if (rawHash.indexOf('access_token=') !== -1) {
+        var hp = new URLSearchParams(rawHash.replace(/^#/, ''));
+        tokenStr = hp.get('access_token') || '';
+        refreshTokenStr = hp.get('refresh_token') || '';
+      } else if (rawSearch.indexOf('access_token=') !== -1) {
+        var sp = new URLSearchParams(rawSearch.replace(/^\?/, ''));
+        tokenStr = sp.get('access_token') || '';
+        refreshTokenStr = sp.get('refresh_token') || '';
+      }
+      var isAuthPage = window.location.pathname === '/auth' || window.location.pathname === '/app/auth';
+      if (tokenStr) {
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, null, window.location.pathname);
+        }
+        try { localStorage.setItem('vibe_token', tokenStr); } catch(e) {}
+        if (refreshTokenStr) { try { localStorage.setItem('vibe_refresh_token', refreshTokenStr); } catch(e) {} }
+        try {
+          var parts = tokenStr.split('.');
+          var b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+          var pld = JSON.parse(decodeURIComponent(escape(atob(b64))));
+          var um = pld.user_metadata || {};
+          var prof = { id: pld.sub || '', name: um.full_name || um.name || um.user_name || pld.email || 'Kullanici', avatar: um.avatar_url || '', email: pld.email || '' };
+          localStorage.setItem('vibe_user', JSON.stringify(prof));
+          document.cookie = 'vibe_user=' + encodeURIComponent(JSON.stringify(prof)) + '; path=/; max-age=31536000; SameSite=Lax';
+          document.cookie = 'vibe_token=' + encodeURIComponent(tokenStr) + '; path=/; max-age=31536000; SameSite=Lax';
+          window.__vibe_user = prof;
+        } catch(e) {}
+        if (isAuthPage) { document.documentElement.style.display = 'none'; window.location.replace('/'); return; }
+      } else if (isAuthPage) {
+        var existing = '';
+        try { existing = localStorage.getItem('vibe_token') || ''; } catch(e) {}
+        if (existing) { document.documentElement.style.display = 'none'; window.location.replace('/'); return; }
+      }
+    } catch(e) {}
+  })();
+  </script>
   <title>${title} - VibeCodedApps</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -196,7 +238,7 @@ const pageTemplate = (title, content, extraHead = '') => `
   </script>
 
   <!-- Global Core Utilities & SSO Authentication (Cache Destekli Statik JS) -->
-  <script data-cfasync="false" src="/static/js/core.js?v=20260922"></script>
+  <script data-cfasync="false" src="/static/js/core.js?v=20261002a"></script>
 </body>
 </html>
 `;
