@@ -2,6 +2,9 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <style>
+        .admin-cat-card { cursor: grab; }
+        .admin-cat-card:active { cursor: grabbing; }
+        .admin-cat-card.border-dashed { border-style: dashed !important; }
         .admin-tab-btn.active {
           background-color: #fa520f;
           color: white;
@@ -146,7 +149,7 @@ module.exports = function(pageTemplate) {
         <!-- 3. SEKME: KATEGORİLER -->
         <div id="tab-content-categories" class="hidden space-y-4">
           <div class="flex items-center justify-between">
-            <h3 class="text-xl font-bold font-editorial text-mistral-ink">Uygulama Kategorileri</h3>
+            <h3 class="text-xl font-bold font-editorial text-mistral-ink">Uygulama Kategorileri <span class="text-xs font-sans font-normal text-mistral-slate">(⠿ tutamaçtan sürükleyerek sıralayın)</span></h3>
             <button onclick="openNewCategoryModal()" class="px-3.5 py-2 rounded-xl bg-mistral-orange hover:bg-mistral-orange-deep text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer shadow-xs">
               <span>➕</span> <span>Kategori Ekle</span>
             </button>
@@ -387,6 +390,63 @@ module.exports = function(pageTemplate) {
           });
         }
 
+        // Kategori Sürükle/Bırak Motoru (HTML5 Native)
+        function initCategoryDragDrop() {
+          const grid = document.getElementById('admin-categories-grid');
+          if (!grid) return;
+          let dragEl = null;
+
+          grid.querySelectorAll('.admin-cat-card').forEach(card => {
+            card.addEventListener('dragstart', (e) => {
+              dragEl = card;
+              card.classList.add('opacity-40', 'border-dashed');
+              e.dataTransfer.effectAllowed = 'move';
+              e.dataTransfer.setData('text/plain', card.dataset.catId);
+            });
+            card.addEventListener('dragend', () => {
+              card.classList.remove('opacity-40', 'border-dashed');
+              dragEl = null;
+            });
+            card.addEventListener('dragover', (e) => {
+              e.preventDefault();
+              e.dataTransfer.dropEffect = 'move';
+              if (dragEl && card !== dragEl) {
+                const rect = card.getBoundingClientRect();
+                const before = e.clientY < rect.top + rect.height / 2;
+                grid.insertBefore(dragEl, before ? card : card.nextSibling);
+              }
+            });
+            card.addEventListener('drop', (e) => {
+              e.preventDefault();
+              if (dragEl) saveCategoryOrder();
+            });
+          });
+        }
+
+        async function saveCategoryOrder() {
+          const grid = document.getElementById('admin-categories-grid');
+          if (!grid) return;
+          const order = Array.from(grid.querySelectorAll('.admin-cat-card')).map(c => c.dataset.catId);
+          try {
+            const res = await fetch('/api/admin/categories/reorder', {
+              method: 'POST',
+              headers: getAuthHeaders(),
+              body: JSON.stringify({ order: order })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+              if (window.showToast) window.showToast('✓ Kategori sıralaması kaydedildi');
+              loadAdminCategories();
+            } else {
+              alert('Sıralama kaydedilemedi: ' + (data.error || 'Bilinmeyen hata'));
+              loadAdminCategories();
+            }
+          } catch (e) {
+            alert('Ağ hatası: ' + e.message);
+            loadAdminCategories();
+          }
+        }
+
         // 1. İstatistikleri Çek
         async function loadAdminStats() {
           try {
@@ -475,12 +535,13 @@ module.exports = function(pageTemplate) {
               // Kategori Kartlarını Çiz
               grid.innerHTML = allAdminCategories.map(c => {
                 const count = allAdminApps.filter(a => a.category_id === c.id).length;
-                return '<div class="p-5 rounded-2xl bg-white border border-mistral-hairline shadow-xs flex items-center justify-between gap-4 group hover:border-mistral-orange transition">' +
+                return '<div draggable="true" data-cat-id="' + c.id + '" class="admin-cat-card p-5 rounded-2xl bg-white border border-mistral-hairline shadow-xs flex items-center justify-between gap-4 group hover:border-mistral-orange transition">' +
                   '<div class="flex items-center gap-3">' +
+                    '<span class="text-mistral-stone/50 hover:text-mistral-orange transition select-none text-sm shrink-0" title="Sürükleyerek sırala">⠿</span>' +
                     '<span class="w-10 h-10 rounded-xl bg-mistral-cream border border-mistral-beige-deep text-mistral-ink flex items-center justify-center text-xl shrink-0">' + c.icon + '</span>' +
                     '<div>' +
                       '<h4 class="font-bold text-sm text-mistral-ink font-editorial">' + c.title + '</h4>' +
-                      '<div class="text-[11px] text-mistral-slate font-mono">ID: ' + c.id + ' • ' + count + ' Uygulama</div>' +
+                      '<div class="text-[11px] text-mistral-slate font-mono">ID: ' + c.id + ' • ' + count + ' Uygulama • Sıra #' + ((c.sort_order || 0) + 1) + '</div>' +
                     '</div>' +
                   '</div>' +
                   '<div class="flex items-center gap-1.5">' +
@@ -493,6 +554,7 @@ module.exports = function(pageTemplate) {
                   '</div>' +
                 '</div>';
               }).join('');
+              initCategoryDragDrop();
             }
           } catch(e) {
             grid.innerHTML = '<div class="col-span-full text-center py-4 text-rose-600">Kategoriler yüklenemedi</div>';

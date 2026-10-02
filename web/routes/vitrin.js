@@ -1,6 +1,6 @@
 module.exports = function(pageTemplate) {
-  return function(req, res) {
-    const categories = [
+  return async function(req, res) {
+    let categories = [
       {
         id: "saglik",
         title: "Sağlık",
@@ -428,6 +428,67 @@ module.exports = function(pageTemplate) {
         ]
       }
     ];
+
+    // ===== Veritabanı Destekli Sıralama (Admin Sürükle/Bırak) =====
+    // Sabit dizi yedek (fallback); DB erişilemezse vitrin asla kırılmaz.
+    try {
+      const dbBase = (process.env.INTERNAL_SUPABASE_URL || process.env.SUPABASE_URL || 'http://vibe-supabase-kong:8000').replace(/\/app$/, '');
+      let dbKey = process.env.SERVICE_ROLE_KEY;
+      const jwtSecret = process.env.JWT_SECRET;
+      if (jwtSecret) {
+        const h64 = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
+        const p64 = Buffer.from(JSON.stringify({ role: 'service_role', iss: 'supabase', iat: 1700000000, exp: 2100000000 })).toString('base64url');
+        const s64 = require('crypto').createHmac('sha256', jwtSecret).update(h64 + '.' + p64).digest('base64url');
+        dbKey = h64 + '.' + p64 + '.' + s64;
+      }
+      if (dbKey) {
+        const dbHeaders = { 'apikey': dbKey, 'Authorization': 'Bearer ' + dbKey };
+        const [catsRes, appsRes] = await Promise.all([
+          fetch(dbBase + '/rest/v1/categories?select=*&order=sort_order.asc,created_at.asc', { headers: dbHeaders, signal: AbortSignal.timeout(3500) }),
+          fetch(dbBase + '/rest/v1/apps?select=*&order=sort_order.asc,created_at.asc', { headers: dbHeaders, signal: AbortSignal.timeout(3500) })
+        ]);
+        if (catsRes.ok && appsRes.ok) {
+          const dbCats = await catsRes.json();
+          const dbApps = await appsRes.json();
+          if (Array.isArray(dbCats) && dbCats.length > 0 && Array.isArray(dbApps)) {
+            const descMap = {};
+            const appExtra = {};
+            categories.forEach(c => {
+              descMap[c.id] = c.desc;
+              c.apps.forEach(a => { appExtra[a.id] = a; });
+            });
+            const merged = [];
+            const seenCats = new Set();
+            for (const dc of dbCats) {
+              seenCats.add(dc.id);
+              const catApps = dbApps
+                .filter(a => a.category_id === dc.id && a.status !== 'hidden')
+                .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0) || String(a.created_at || '').localeCompare(String(b.created_at || '')))
+                .map(a => ({
+                  id: a.id,
+                  name: a.name,
+                  icon: a.icon,
+                  desc: a.desc || (appExtra[a.id] ? appExtra[a.id].desc : ''),
+                  url: a.url,
+                  action: a.action || (appExtra[a.id] ? appExtra[a.id].action : 'Uygulamayı Aç')
+                }));
+              merged.push({
+                id: dc.id,
+                title: dc.title,
+                icon: dc.icon,
+                desc: descMap[dc.id] || (dc.title + ' uygulamaları'),
+                apps: catApps
+              });
+            }
+            // DB'de olmayan sabit kategorileri sona ekle; bos kategorileri gizle
+            categories.forEach(c => { if (!seenCats.has(c.id)) merged.push(c); });
+            categories = merged.filter(c => c.apps.length > 0);
+          }
+        }
+      }
+    } catch (dbErr) {
+      console.warn('[Vitrin] DB sıralaması alınamadı, sabit sıralama kullanılıyor:', dbErr.message);
+    }
 
     const totalApps = categories.reduce((sum, c) => sum + c.apps.length, 0);
 

@@ -205,6 +205,28 @@ router.delete('/categories/:id', async (req, res) => {
   }
 });
 
+
+// -------------------------------------------------------------
+// 3b. Kategori Sıralaması (Sürükle/Bırak)
+// -------------------------------------------------------------
+router.post('/categories/reorder', async (req, res) => {
+  const { order } = req.body;
+  if (!Array.isArray(order) || order.length === 0) {
+    return res.status(400).json({ success: false, error: 'Geçersiz sıralama listesi' });
+  }
+  try {
+    await Promise.all(order.map((catId, idx) =>
+      supabaseRequest('/categories?id=eq.' + encodeURIComponent(String(catId)), {
+        method: 'PATCH',
+        body: JSON.stringify({ sort_order: idx })
+      })
+    ));
+    res.json({ success: true, message: 'Kategori sıralaması güncellendi' });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Sıralama kaydedilemedi: ' + err.message });
+  }
+});
+
 // -------------------------------------------------------------
 // 4. Uygulamalar CRUD
 // -------------------------------------------------------------
