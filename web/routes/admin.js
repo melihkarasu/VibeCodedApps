@@ -134,11 +134,14 @@ module.exports = function(pageTemplate) {
                     <th class="py-3 px-4">Giriş Sağlayıcıları</th>
                     <th class="py-3 px-4">Kayıt Tarihi</th>
                     <th class="py-3 px-4">Son Giriş</th>
+                    <th class="py-3 px-4">Rol</th>
+                    <th class="py-3 px-4">Durum</th>
+                    <th class="py-3 px-4 text-right">İşlemler</th>
                   </tr>
                 </thead>
                 <tbody id="admin-users-table-body" class="divide-y divide-mistral-hairline-soft">
                   <tr>
-                    <td colspan="5" class="py-8 text-center text-mistral-stone">Kullanıcı verileri yükleniyor...</td>
+                    <td colspan="8" class="py-8 text-center text-mistral-stone">Kullanıcı verileri yükleniyor...</td>
                   </tr>
                 </tbody>
               </table>
@@ -491,11 +494,18 @@ module.exports = function(pageTemplate) {
                 const providers = u.providers || ['oauth'];
                 const created = u.created_at ? new Date(u.created_at).toLocaleDateString('tr-TR') : '--';
                 const lastLogin = u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString('tr-TR') : '--';
+                const appMeta = u.raw_app_meta_data || {};
+                const userRole = appMeta.role === 'admin' ? 'admin' : 'authenticated';
+                const isBanned = !!(u.banned_until && new Date(u.banned_until) > new Date());
+                let myUserId = '';
+                try { myUserId = ((JSON.parse(localStorage.getItem('vibe_user') || '{}') || {}).id) || ''; } catch(e) {}
+                const isSelf = !!u.id && u.id === myUserId;
+                const hasId = !!u.id;
 
-                return '<tr class="hover:bg-mistral-cream/40 transition">' +
+                return '<tr class="hover:bg-mistral-cream/40 transition"' + (isBanned ? ' style="background:#fff7f7;opacity:0.75;"' : '') + '>' +
                   '<td class="py-3 px-4 flex items-center gap-2.5 font-semibold text-mistral-ink">' +
                     (avatar ? '<img src="' + avatar + '" class="w-6 h-6 rounded-full border border-mistral-orange object-cover">' : '<span class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs">👤</span>') +
-                    '<span>' + name + '</span>' +
+                    '<span>' + name + (isSelf ? ' <span class="px-1.5 py-0.5 rounded bg-amber-100 border border-amber-300 text-amber-800 text-[10px] font-sans">SİZ</span>' : '') + '</span>' +
                   '</td>' +
                   '<td class="py-3 px-4 font-mono text-mistral-slate">' + (u.email || '--') + '</td>' +
                   '<td class="py-3 px-4">' +
@@ -503,11 +513,80 @@ module.exports = function(pageTemplate) {
                   '</td>' +
                   '<td class="py-3 px-4 text-mistral-slate">' + created + '</td>' +
                   '<td class="py-3 px-4 text-mistral-slate">' + lastLogin + '</td>' +
+                  '<td class="py-3 px-4">' +
+                    (userRole === 'admin'
+                      ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold border border-amber-300">⚙️ Yönetici</span>'
+                      : '<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold border border-slate-200">Kullanıcı</span>') +
+                  '</td>' +
+                  '<td class="py-3 px-4">' +
+                    (isBanned
+                      ? '<span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[10px] font-bold border border-rose-300">⛔ Askıda</span>'
+                      : '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold border border-emerald-200">Aktif</span>') +
+                  '</td>' +
+                  '<td class="py-3 px-4 text-right">' +
+                    (hasId && !isSelf
+                      ? '<button type="button" onclick="adminUserAction(this)" data-user-action="' + (userRole === 'admin' ? 'demote' : 'promote') + '" data-user-id="' + u.id + '" class="px-2.5 py-1 rounded-lg text-[10px] font-semibold transition cursor-pointer border ' + (userRole === 'admin' ? 'bg-rose-50 hover:bg-rose-100 text-rose-700 border-rose-200' : 'bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200') + '">' + (userRole === 'admin' ? 'Yetkiyi Kaldır' : 'Yönetici Yap') + '</button> ' +
+                        '<button type="button" onclick="adminUserAction(this)" data-user-action="' + (isBanned ? 'unban' : 'ban') + '" data-user-id="' + u.id + '" class="px-2.5 py-1 rounded-lg text-[10px] font-semibold transition cursor-pointer border ' + (isBanned ? 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-200' : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200') + '">' + (isBanned ? 'Askıyı Kaldır' : 'Askıya Al') + '</button>'
+                      : '<span class="text-[10px] text-mistral-stone">—</span>') +
+                  '</td>' +
                 '</tr>';
               }).join('');
             }
           } catch(e) {
-            tbody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-rose-600">Kullanıcılar yüklenemedi</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" class="py-4 text-center text-rose-600">Kullanıcılar yüklenemedi</td></tr>';
+          }
+        }
+
+        // Kullanıcı Rol/Askı İşlemleri (tek nokta yönlendirici)
+        function adminUserAction(btn) {
+          const userId = btn.getAttribute('data-user-id');
+          const action = btn.getAttribute('data-user-action');
+          if (!userId || !action) return;
+          if (action === 'promote') setUserRole(userId, 'admin');
+          else if (action === 'demote') setUserRole(userId, 'authenticated');
+          else if (action === 'ban') setUserBan(userId, true);
+          else if (action === 'unban') setUserBan(userId, false);
+        }
+
+        async function setUserRole(userId, newRole) {
+          const label = newRole === 'admin' ? 'yönetici yapmak' : 'yönetici yetkisini kaldırmak';
+          if (!confirm('Bu kullanıcıyı ' + label + ' istediğinize emin misiniz?')) return;
+          try {
+            const res = await fetch('/api/admin/users/' + encodeURIComponent(userId) + '/role', {
+              method: 'POST',
+              headers: getAuthHeaders(),
+              body: JSON.stringify({ role: newRole })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+              if (window.showToast) window.showToast('✓ ' + data.message);
+              loadAdminUsers();
+            } else {
+              alert(data.error || 'İşlem başarısız');
+            }
+          } catch (e) {
+            alert('Ağ hatası: ' + e.message);
+          }
+        }
+
+        async function setUserBan(userId, banned) {
+          const label = banned ? 'askıya almak (girişi engellenir)' : 'askıdan çıkarmak';
+          if (!confirm('Bu kullanıcıyı ' + label + ' istediğinize emin misiniz?')) return;
+          try {
+            const res = await fetch('/api/admin/users/' + encodeURIComponent(userId) + '/ban', {
+              method: 'POST',
+              headers: getAuthHeaders(),
+              body: JSON.stringify({ banned: banned })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+              if (window.showToast) window.showToast('✓ ' + data.message);
+              loadAdminUsers();
+            } else {
+              alert(data.error || 'İşlem başarısız');
+            }
+          } catch (e) {
+            alert('Ağ hatası: ' + e.message);
           }
         }
 
