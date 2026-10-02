@@ -316,6 +316,29 @@ router.post('/apps', async (req, res) => {
   }
 });
 
+// Uygulama Siralamasi (surukle/birak; kategori degisimi dahil)
+router.post('/apps/reorder', async (req, res) => {
+  const { updates } = req.body;
+  if (!Array.isArray(updates) || updates.length === 0) {
+    return res.status(400).json({ success: false, error: 'Gecersiz guncelleme listesi' });
+  }
+  try {
+    await Promise.all(updates.map(u =>
+      supabaseRequest('/apps?id=eq.' + encodeURIComponent(String(u.id)), {
+        method: 'PATCH',
+        body: JSON.stringify({
+          category_id: u.category_id !== undefined ? (u.category_id || null) : undefined,
+          sort_order: Number(u.sort_order) || 0,
+          updated_at: new Date().toISOString()
+        })
+      })
+    ));
+    res.json({ success: true, message: 'Uygulama sıralaması güncellendi' });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Sıralama kaydedilemedi: ' + err.message });
+  }
+});
+
 router.put('/apps/:id', async (req, res) => {
   const appId = req.params.id;
   const { category_id, name, desc, icon, url, action, status, sort_order } = req.body;

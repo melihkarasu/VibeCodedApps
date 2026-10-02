@@ -5,6 +5,9 @@ module.exports = function(pageTemplate) {
         .admin-cat-card { cursor: grab; }
         .admin-cat-card:active { cursor: grabbing; }
         .admin-cat-card.border-dashed { border-style: dashed !important; }
+        .admin-app-item { cursor: grab; }
+        .admin-app-item:active { cursor: grabbing; }
+        .admin-app-item.border-dashed { border-style: dashed !important; }
         .admin-tab-btn.active {
           background-color: #fa520f;
           color: white;
@@ -168,7 +171,7 @@ module.exports = function(pageTemplate) {
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h3 class="text-xl font-bold font-editorial text-mistral-ink">Mikro Uygulama Yönetimi</h3>
-              <p class="text-xs text-mistral-slate">Uygulama isimlerini, açıklamalarını, kategorilerini ve durumlarını güncelleyin.</p>
+              <p class="text-xs text-mistral-slate">Uygulamalar kategori kartları içinde listelenir; ⠿ tutamaçtan sürükleyerek sıralayın, başka kategori kartına bırakarak taşıyın.</p>
             </div>
             <div class="flex items-center gap-2">
               <select id="admin-app-filter-category" onchange="filterAdminApps()" class="px-3 py-2 rounded-xl bg-white border border-mistral-hairline text-xs font-medium text-mistral-ink focus:outline-none focus:border-mistral-orange">
@@ -180,26 +183,8 @@ module.exports = function(pageTemplate) {
             </div>
           </div>
 
-          <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm overflow-hidden">
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr class="border-b border-mistral-hairline text-mistral-stone font-semibold">
-                    <th class="py-3 px-4">İkon / İsim</th>
-                    <th class="py-3 px-4">ID</th>
-                    <th class="py-3 px-4">Kategori</th>
-                    <th class="py-3 px-4">URL</th>
-                    <th class="py-3 px-4">Durum</th>
-                    <th class="py-3 px-4 text-right">İşlemler</th>
-                  </tr>
-                </thead>
-                <tbody id="admin-apps-table-body" class="divide-y divide-mistral-hairline-soft">
-                  <tr>
-                    <td colspan="6" class="py-8 text-center text-mistral-stone">Uygulamalar yükleniyor...</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <div id="admin-apps-cards" class="space-y-4">
+            <div class="p-8 text-center text-mistral-stone text-xs">Uygulamalar yükleniyor...</div>
           </div>
         </div>
 
@@ -354,7 +339,7 @@ module.exports = function(pageTemplate) {
             
             // Verileri yükle (loadAdminStats dogru element ID'lerini kullanir: stat-*-count)
             loadAdminStats();
-            loadAdminCategories();
+            await loadAdminCategories();
             loadAdminApps();
             loadAdminUsers();
           } catch(e) {
@@ -640,66 +625,201 @@ module.exports = function(pageTemplate) {
           }
         }
 
-        // 4. Uygulamaları Çek
+        // 4. Uygulamaları Çek (Kategori Kartları + Sürükle/Bırak)
         async function loadAdminApps() {
-          const tbody = document.getElementById('admin-apps-table-body');
           try {
             const res = await fetch('/api/admin/apps', { headers: getAuthHeaders() });
             if (res.ok) {
               const data = await res.json();
               allAdminApps = data.apps || [];
-              renderAdminAppsTable(allAdminApps);
+              const catId = document.getElementById('admin-app-filter-category')?.value || '';
+              renderAdminAppsCards(allAdminApps, catId || null);
             }
           } catch(e) {
-            tbody.innerHTML = '<tr><td colspan="6" class="py-4 text-center text-rose-600">Uygulamalar yüklenemedi</td></tr>';
+            const wrap = document.getElementById('admin-apps-cards');
+            if (wrap) wrap.innerHTML = '<div class="p-6 text-center text-rose-600 text-xs">Uygulamalar yüklenemedi</div>';
           }
         }
 
-        function renderAdminAppsTable(apps) {
-          const tbody = document.getElementById('admin-apps-table-body');
-          if (!tbody) return;
+        // Uygulama Kategori Kartları Render Motoru
+        function renderAdminAppsCards(apps, filterCatId) {
+          const wrap = document.getElementById('admin-apps-cards');
+          if (!wrap) return;
 
-          if (apps.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="py-6 text-center text-mistral-stone">Uygulama bulunamadı</td></tr>';
+          if (!apps || apps.length === 0) {
+            wrap.innerHTML = '<div class="p-8 text-center text-mistral-stone text-xs">Uygulama bulunamadı</div>';
             return;
           }
 
-          tbody.innerHTML = apps.map(app => {
-            const cat = allAdminCategories.find(c => c.id === app.category_id);
-            const catTitle = cat ? (cat.icon + ' ' + cat.title) : (app.category_id || '--');
-            const isActive = app.status !== 'hidden';
+          const sortedCats = [...allAdminCategories].sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+          const catCards = sortedCats
+            .filter(c => !filterCatId || c.id === filterCatId)
+            .map(c => buildAppCategoryCard(c, apps));
 
-            return '<tr class="hover:bg-mistral-cream/40 transition">' +
-              '<td class="py-3 px-4">' +
-                '<div class="flex items-center gap-2.5">' +
-                  '<span class="w-7 h-7 rounded-lg bg-mistral-cream border border-mistral-beige-deep text-mistral-ink flex items-center justify-center text-sm shrink-0">' + app.icon + '</span>' +
-                  '<div>' +
-                    '<div class="font-bold text-mistral-ink">' + app.name + '</div>' +
-                    '<div class="text-[11px] text-mistral-slate line-clamp-1 max-w-xs">' + app.desc + '</div>' +
-                  '</div>' +
+          // Kategorisiz / bilinmeyen kategorideki uygulamalar (tasima hedefi olarak da kullanilabilir)
+          if (!filterCatId) {
+            const knownIds = new Set(allAdminCategories.map(c => c.id));
+            const orphans = apps.filter(a => !a.category_id || !knownIds.has(a.category_id));
+            if (orphans.length > 0) catCards.push(buildOrphanAppCard(orphans));
+          }
+
+          wrap.innerHTML = catCards.join('');
+          initAppDragDrop();
+        }
+
+        function buildAppCategoryCard(c, apps) {
+          const catApps = apps
+            .filter(a => a.category_id === c.id)
+            .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+          const items = catApps.length > 0
+            ? catApps.map(a => buildAppItemHtml(a)).join('')
+            : '<div class="p-3 text-center text-[10px] text-mistral-stone border border-dashed border-mistral-hairline-soft rounded-xl">Uygulama yok — uygulamaları buraya sürükleyin</div>';
+          return '<div class="admin-app-cat-card p-5 rounded-2xl bg-white border-2 border-mistral-hairline shadow-xs transition" data-cat-id="' + c.id + '">' +
+            '<div class="flex items-center justify-between mb-3 pb-2 border-b border-mistral-hairline-soft">' +
+              '<div class="flex items-center gap-2.5">' +
+                '<span class="w-9 h-9 rounded-xl bg-mistral-cream border border-mistral-beige-deep text-mistral-ink flex items-center justify-center text-lg shrink-0">' + c.icon + '</span>' +
+                '<div>' +
+                  '<h4 class="font-bold text-sm text-mistral-ink font-editorial">' + c.title + '</h4>' +
+                  '<div class="text-[10px] text-mistral-slate font-mono">' + catApps.length + ' uygulama • ' + c.id + '</div>' +
                 '</div>' +
-              '</td>' +
-              '<td class="py-3 px-4 font-mono text-mistral-slate">' + app.id + '</td>' +
-              '<td class="py-3 px-4"><span class="px-2 py-0.5 rounded-full bg-mistral-cream text-[10px] font-semibold text-mistral-ink border border-mistral-beige-deep">' + catTitle + '</span></td>' +
-              '<td class="py-3 px-4 font-mono text-mistral-slate"><a href="' + app.url + '" target="_blank" class="hover:underline hover:text-mistral-orange">' + app.url + '</a></td>' +
-              '<td class="py-3 px-4">' +
-                (isActive ? '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">Aktif</span>' : '<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">Gizli</span>') +
-              '</td>' +
-              '<td class="py-3 px-4 text-right space-x-1">' +
-                '<button type="button" onclick="openEditAppModal(\\'' + app.id + '\\')" class="p-1.5 rounded-lg hover:bg-mistral-cream text-mistral-slate hover:text-mistral-orange transition cursor-pointer" title="Düzenle">✏️</button>' +
-                '<button type="button" onclick="deleteApp(\\'' + app.id + '\\')" class="p-1.5 rounded-lg hover:bg-rose-50 text-mistral-slate hover:text-rose-600 transition cursor-pointer" title="Sil">🗑️</button>' +
-              '</td>' +
-            '</tr>';
-          }).join('');
+              '</div>' +
+              '<span class="text-[10px] text-mistral-stone hidden sm:inline">⠿ sürükleyerek sırala • başka karta bırakınca taşınır</span>' +
+            '</div>' +
+            '<div class="admin-app-list space-y-2">' + items + '</div>' +
+          '</div>';
+        }
+
+        function buildOrphanAppCard(orphans) {
+          const items = orphans.map(a => buildAppItemHtml(a)).join('');
+          return '<div class="admin-app-cat-card p-5 rounded-2xl bg-white border-2 border-dashed border-mistral-hairline shadow-xs transition" data-cat-id="">' +
+            '<div class="flex items-center justify-between mb-3 pb-2 border-b border-mistral-hairline-soft">' +
+              '<div class="flex items-center gap-2.5">' +
+                '<span class="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 flex items-center justify-center text-lg shrink-0">❓</span>' +
+                '<div>' +
+                  '<h4 class="font-bold text-sm text-mistral-ink font-editorial">Kategorisiz Uygulamalar</h4>' +
+                  '<div class="text-[10px] text-mistral-slate font-mono">' + orphans.length + ' uygulama • bir kategorinin üzerine bırakın</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="admin-app-list space-y-2">' + items + '</div>' +
+          '</div>';
+        }
+
+        function buildAppItemHtml(app) {
+          const isActive = app.status !== 'hidden';
+          return '<div class="admin-app-item p-3 rounded-xl border border-mistral-hairline-soft bg-mistral-cream/30 hover:border-mistral-orange/60 transition flex items-center justify-between gap-3" draggable="true" data-app-id="' + app.id + '">' +
+            '<div class="flex items-center gap-2.5 min-w-0">' +
+              '<span class="text-mistral-stone/50 hover:text-mistral-orange transition select-none text-xs shrink-0" title="Sürükleyerek sırala">⠿</span>' +
+              '<span class="w-8 h-8 rounded-lg bg-white border border-mistral-beige-deep text-mistral-ink flex items-center justify-center text-sm shrink-0">' + app.icon + '</span>' +
+              '<div class="min-w-0">' +
+                '<div class="font-bold text-mistral-ink text-xs truncate">' + app.name + '</div>' +
+                '<div class="text-[10px] text-mistral-slate font-mono truncate max-w-xs">' + app.id + ' • ' + app.url + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="flex items-center gap-1 shrink-0">' +
+              (isActive
+                ? '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold mr-1">Aktif</span>'
+                : '<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold mr-1">Gizli</span>') +
+              '<button type="button" onclick="adminAppAction(this)" data-app-action="edit" data-app-id="' + app.id + '" class="p-1.5 rounded-lg hover:bg-mistral-cream text-mistral-slate hover:text-mistral-orange transition cursor-pointer" title="Düzenle">✏️</button>' +
+              '<button type="button" onclick="adminAppAction(this)" data-app-action="delete" data-app-id="' + app.id + '" class="p-1.5 rounded-lg hover:bg-rose-50 text-mistral-slate hover:text-rose-600 transition cursor-pointer" title="Sil">🗑️</button>' +
+            '</div>' +
+          '</div>';
+        }
+
+        // Uygulama işlem yönlendirici (data-* attribute tabanlı, escape'siz)
+        function adminAppAction(btn) {
+          const appId = btn.getAttribute('data-app-id');
+          const action = btn.getAttribute('data-app-action');
+          if (!appId || !action) return;
+          if (action === 'edit') openEditAppModal(appId);
+          else if (action === 'delete') deleteApp(appId);
+        }
+
+        // Uygulama Sürükle/Bırak Motoru (kategori içi sıralama + kategoriler arası taşıma)
+        let dragAppEl = null;
+
+        function initAppDragDrop() {
+          document.querySelectorAll('.admin-app-cat-card').forEach(card => {
+            const list = card.querySelector('.admin-app-list');
+            if (!list) return;
+
+            card.querySelectorAll('.admin-app-item').forEach(item => {
+              item.addEventListener('dragstart', (e) => {
+                dragAppEl = item;
+                item.classList.add('opacity-40', 'border-dashed');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', item.dataset.appId);
+              });
+              item.addEventListener('dragend', () => {
+                item.classList.remove('opacity-40', 'border-dashed');
+                document.querySelectorAll('.admin-app-cat-card').forEach(c => c.classList.remove('border-mistral-orange'));
+                dragAppEl = null;
+              });
+              item.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                if (!dragAppEl || item === dragAppEl) return;
+                const rect = item.getBoundingClientRect();
+                const before = e.clientY < rect.top + rect.height / 2;
+                list.insertBefore(dragAppEl, before ? item : item.nextSibling);
+              });
+            });
+
+            list.addEventListener('dragover', (e) => {
+              e.preventDefault();
+              if (!dragAppEl) return;
+              document.querySelectorAll('.admin-app-cat-card').forEach(c => c.classList.remove('border-mistral-orange'));
+              card.classList.add('border-mistral-orange');
+            });
+            list.addEventListener('dragleave', (e) => {
+              if (e.target === list) card.classList.remove('border-mistral-orange');
+            });
+            list.addEventListener('drop', (e) => {
+              e.preventDefault();
+              if (!dragAppEl) return;
+              if (!list.contains(dragAppEl)) list.appendChild(dragAppEl);
+              saveAppOrder();
+            });
+          });
+        }
+
+        async function saveAppOrder() {
+          const updates = [];
+          document.querySelectorAll('.admin-app-cat-card').forEach(card => {
+            const catId = card.dataset.catId || null;
+            card.querySelectorAll('.admin-app-item').forEach((item, idx) => {
+              const appId = item.dataset.appId;
+              const orig = allAdminApps.find(a => a.id === appId);
+              if (!orig) return;
+              if ((orig.category_id || null) !== catId || (orig.sort_order || 0) !== idx) {
+                updates.push({ id: appId, category_id: catId, sort_order: idx });
+              }
+            });
+          });
+          if (updates.length === 0) return;
+          try {
+            const res = await fetch('/api/admin/apps/reorder', {
+              method: 'POST',
+              headers: getAuthHeaders(),
+              body: JSON.stringify({ updates: updates })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+              if (window.showToast) window.showToast('✓ ' + data.message);
+              loadAdminApps();
+            } else {
+              alert('Sıralama kaydedilemedi: ' + (data.error || 'Bilinmeyen hata'));
+              loadAdminApps();
+            }
+          } catch (e) {
+            alert('Ağ hatası: ' + e.message);
+            loadAdminApps();
+          }
         }
 
         function filterAdminApps() {
-          const catId = document.getElementById('admin-app-filter-category')?.value;
-          if (!catId) {
-            renderAdminAppsTable(allAdminApps);
-          } else {
-            renderAdminAppsTable(allAdminApps.filter(a => a.category_id === catId));
-          }
+          const catId = document.getElementById('admin-app-filter-category')?.value || '';
+          renderAdminAppsCards(allAdminApps, catId || null);
         }
 
         // Modal Yönetimi - Kategori
