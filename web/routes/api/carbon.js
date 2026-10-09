@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const https = require('https');
 const crypto = require('crypto');
-const { isPrivateAddress } = require('./utils');
+const { isPrivateAddress, safeFetch } = require('./utils');
 
 // =============================================================
 // 4. Web Karbon Ayak İzi: Analiz & Gömülebilir Rozet API
@@ -21,22 +21,8 @@ router.get('/carbon/analyze', async (req, res) => {
     const parsed = new URL(targetUrl);
     const hostname = parsed.hostname.toLowerCase();
 
-    // Strix SSRF Savunması: Yerel ve iç ağ IP'lerini engelle
-    const isPrivate = 
-      hostname === 'localhost' ||
-      hostname.endsWith('.local') ||
-      hostname.endsWith('.internal') ||
-      hostname.startsWith('127.') ||
-      hostname.startsWith('10.') ||
-      hostname.startsWith('192.168.') ||
-      /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname) ||
-      hostname === '0.0.0.0' ||
-      hostname === '::1' ||
-      hostname === '169.254.169.254' ||
-      hostname.includes('vibe-') ||
-      hostname.includes('supabase');
-
-    if (isPrivate) {
+    // Strix SSRF Savunması: DNS çözümlemeli guard (CWE-918 — rebinding, hex IP, alias engellenir)
+    if (await isPrivateAddress(hostname)) {
       return res.status(403).json({ 
         success: false, 
         error: 'Güvenlik Uyarısı: Yerel ağ ve iç IP adresleri taranamamaktadır (SSRF Koruması).' 
@@ -56,13 +42,12 @@ router.get('/carbon/analyze', async (req, res) => {
     let encoding = 'none';
 
     try {
-      const response = await fetch(targetUrl, {
+      const response = await safeFetch(targetUrl, {
         headers: {
           'User-Agent': 'Mozilla/5.0 (compatible; VibeCodedAppsCarbonBot/1.0)',
           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
           'Accept-Encoding': 'gzip, deflate, br'
         },
-        redirect: 'follow',
         signal: AbortSignal.timeout(8000)
       });
       encoding = response.headers.get('content-encoding') || 'none';
