@@ -19,18 +19,8 @@ router.get('/dns/lookup', async (req, res) => {
     return res.status(400).json({ error: 'Geçersiz alan adı formatı' });
   }
 
-  // Yerel ve iç ağ domain/host koruması
-  const isPrivate = 
-    domain === 'localhost' ||
-    domain.endsWith('.local') ||
-    domain.endsWith('.internal') ||
-    domain.startsWith('127.') ||
-    domain.startsWith('10.') ||
-    domain.startsWith('192.168.') ||
-    domain.includes('vibe-') ||
-    domain.includes('supabase');
-
-  if (isPrivate) {
+  // Web Security Scanner SSRF Savunması: DNS çözümlemeli guard (CWE-918 — rebinding ve alias engellenir)
+  if (await isPrivateAddress(domain)) {
     return res.status(403).json({ error: 'Güvenlik Uyarısı: Yerel ağ adresi sorgulanamaz (SSRF Koruması)' });
   }
 

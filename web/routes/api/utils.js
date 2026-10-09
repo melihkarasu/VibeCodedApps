@@ -53,6 +53,30 @@ async function isPrivateAddress(hostnameOrIp) {
   return false;
 }
 
+// Web Security Scanner Redirect-Guvenli Fetch (CWE-918: "public -> 302 -> ic ag" zincirini kapatir)
+// Her yonlendirme adiminda hostname yeniden cozumlenir ve dogrulanir.
+async function safeFetch(rawUrl, options = {}) {
+  const MAX_HOPS = 5;
+  let currentUrl = rawUrl;
+  for (let hop = 0; hop < MAX_HOPS; hop++) {
+    const parsed = new URL(currentUrl);
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+      throw new Error('Sadece http/https protokolleri desteklenir');
+    }
+    if (await isPrivateAddress(parsed.hostname)) {
+      throw new Error('SSRF Korumasi: ic ag adresi engellendi');
+    }
+    const res = await fetch(currentUrl, { ...options, redirect: 'manual' });
+    if (res.status >= 300 && res.status < 400 && res.headers.get('location')) {
+      currentUrl = new URL(res.headers.get('location'), currentUrl).href;
+      continue;
+    }
+    return res;
+  }
+  throw new Error('Cok fazla yonlendirme (redirect limiti asildi)');
+}
+
 module.exports = {
-  isPrivateAddress
+  isPrivateAddress,
+  safeFetch
 };
