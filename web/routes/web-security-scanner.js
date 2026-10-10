@@ -281,6 +281,6 @@ module.exports = function(pageTemplate) {
       </div>
     `;
 
-    res.send(pageTemplate({ content, extraHead, title: 'Web Security Scanner — Pasif Güvenlik Denetimi' }));
+    res.send(pageTemplate('Web Security Scanner — Pasif Güvenlik Denetimi', content, extraHead));
   };
 };
