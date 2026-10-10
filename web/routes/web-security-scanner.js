@@ -19,7 +19,7 @@ module.exports = function(pageTemplate) {
             <span>🛡️</span> Web Security Scanner
           </h1>
           <p class="text-xs text-mistral-slate mt-0.5">
-            Pasif Güvenlik Başlıkları, DoH DNS & SSL Röntgeni • Sıfır WAF & Abuse Riski
+            Pasif Güvenlik Başlıkları, DoH DNS & SSL Taraması • Sıfır WAF & Abuse Riski
           </p>
         </div>
         <div class="flex items-center gap-2">
@@ -33,7 +33,7 @@ module.exports = function(pageTemplate) {
       <!-- Giriş & Arama Kutusu -->
       <div class="mb-8 bg-white border border-stone-200/80 rounded-2xl p-5 sm:p-6 shadow-xs">
         <div class="max-w-3xl mb-4">
-          <h2 class="text-xl sm:text-2xl font-bold font-editorial text-mistral-ink mb-1.5">Web Sitesi Güvenlik Röntgeni</h2>
+          <h2 class="text-xl sm:text-2xl font-bold font-editorial text-mistral-ink mb-1.5">Web Sitesi Güvenlik Taraması</h2>
           <p class="text-xs sm:text-sm text-mistral-slate">
             Hedef siteye hiçbir zararlı payload göndermeden, yalnızca açık DNS/DoH kayıtlarını ve HTTP güvenlik başlıklarını (CSP, HSTS, X-Frame-Options, DMARC) pasif yöntemlerle denetler.
           </p>
@@ -69,7 +69,7 @@ module.exports = function(pageTemplate) {
           🔍 Denetim Sonuçları & Skor
         </button>
         <button id="tab-btn-headers" onclick="switchTab('headers')" class="px-4 py-2 rounded-lg text-xs font-semibold text-mistral-slate hover:text-mistral-ink transition-all cursor-pointer">
-          📋 Ham Header Röntgeni (cURL)
+          📋 Ham Header Taraması (cURL)
         </button>
         <button id="tab-btn-checklist" onclick="switchTab('checklist')" class="px-4 py-2 rounded-lg text-xs font-semibold text-mistral-slate hover:text-mistral-ink transition-all cursor-pointer">
           🛡️ Güvenlik Kılavuzu & Checklist
@@ -174,12 +174,12 @@ module.exports = function(pageTemplate) {
 
       </div>
 
-      <!-- SEKME 2: HAM HEADER RÖNTGENİ (cURL MODU) -->
+      <!-- SEKME 2: HAM HEADER TARAMASI (cURL MODU) -->
       <div id="tab-content-headers" class="hidden space-y-6">
         <div class="bg-white border border-stone-200 rounded-2xl p-6 shadow-xs">
           <h3 class="text-lg font-bold font-editorial text-mistral-ink mb-1.5 flex items-center gap-2">
             <span>📋</span>
-            <span>Derin Header Röntgeni & cURL Çıktısı Ayrıştırma</span>
+            <span>Derin Header Taraması & cURL Çıktısı Ayrıştırma</span>
           </h3>
           <p class="text-xs text-mistral-slate mb-4">
             Terminalinizden aldığınız <code class="font-mono bg-stone-100 px-1.5 py-0.5 rounded text-stone-800">curl -I https://alanadiniz.com</code> çıktısını doğrudan buraya yapıştırarak anında derin denetim yapabilirsiniz:
