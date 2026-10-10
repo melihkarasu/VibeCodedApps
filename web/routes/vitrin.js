@@ -386,6 +386,14 @@ module.exports = function(pageTemplate) {
             action: "Güvenliği Test Et"
           },
           {
+            id: "web-security-scanner",
+            name: "Web Security Scanner",
+            icon: "🛡️",
+            desc: "Pasif HTTP güvenlik başlıkları (CSP, HSTS, X-Frame) ve DoH DNS (DMARC, SPF, DNSSEC) denetimi. Sıfır WAF & abuse riski.",
+            url: "/web-security-scanner",
+            action: "Taramayı Başlat"
+          },
+          {
             id: "ip-konum",
             name: "IP Coğrafi Konum & İstihbarat",
             icon: "📍",

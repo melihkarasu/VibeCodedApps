@@ -53,6 +53,7 @@ const routeMap = [
   { paths: ['/kuresel-gostergeler', '/app/kuresel-gostergeler'], route: './routes/refah' },
   { paths: ['/oyun-radar', '/app/oyun-radar'], route: './routes/oyun' },
   { paths: ['/sizinti-kontrol', '/app/sizinti-kontrol'], route: './routes/sizinti' },
+  { paths: ['/web-security-scanner', '/app/web-security-scanner'], route: './routes/web-security-scanner' },
   { paths: ['/dns-kontrol', '/app/dns-kontrol'], route: './routes/dns' },
   { paths: ['/github-analitik', '/app/github-analitik'], route: './routes/github' },
   { paths: ['/doga-sesleri', '/app/doga-sesleri'], route: './routes/doga' },
