@@ -16,7 +16,7 @@ module.exports = function(pageTemplate) {
             <span class="px-2.5 py-0.5 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold">Geliştirici Araçları</span>
           </div>
           <h1 class="text-3xl sm:text-4xl font-normal font-editorial tracking-tight mt-1.5 text-mistral-ink flex items-center gap-2">
-            <span>💻</span> HTTP Durum Sözlüğü & Tarayıcı Röntgeni
+            <span>💻</span> HTTP Durum Sözlüğü & Tarayıcı Taraması
           </h1>
           <p class="text-mistral-slate text-sm mt-0.5 font-normal">
             Web geliştiricileri için 1xx-5xx HTTP yanıt kodları referansı, cURL kodları ve ziyaretçinin canlı donanım/GPU parmak izi analizi.
@@ -29,12 +29,12 @@ module.exports = function(pageTemplate) {
         </div>
       </div>
 
-      <!-- CANLI TARAYICI & DONANIM RÖNTGENİ PANELİ -->
+      <!-- CANLI TARAYICI & DONANIM TARAMASI PANELİ -->
       <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm mb-8 space-y-4">
         <div class="flex items-center justify-between pb-3 border-b border-mistral-hairline">
           <div>
             <h3 class="text-base font-bold font-editorial text-mistral-ink flex items-center gap-2">
-              <span>🔍</span> Cihaz & Donanım Röntgeniniz (Live Fingerprint)
+              <span>🔍</span> Cihaz & Donanım Taraması (Live Fingerprint)
             </h3>
             <p class="text-xs text-mistral-slate mt-0.5">
               Tarayıcınızın donanım, grafik kartı (GPU), çözünürlük ve ağ yeteneklerinin canlı teşhisi.
@@ -134,6 +134,6 @@ module.exports = function(pageTemplate) {
       </div>
     `;
 
-    res.send(pageTemplate('HTTP Durum Sözlüğü & Tarayıcı Röntgeni', content, extraHead));
+    res.send(pageTemplate('HTTP Durum Sözlüğü & Tarayıcı Taraması', content, extraHead));
   };
 };

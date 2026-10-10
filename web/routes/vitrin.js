@@ -411,7 +411,7 @@ module.exports = function(pageTemplate) {
           },
           {
             id: "http-status",
-            name: "HTTP Sözlüğü & Cihaz Röntgeni",
+            name: "HTTP Sözlüğü & Cihaz Taraması",
             icon: "💻",
             desc: "1xx-5xx HTTP durum kodları referansı, çözüm rehberi, cURL örnekleri ve canlı donanım/GPU parmak izi analizi.",
             url: "/http-status",

@@ -145,7 +145,7 @@ Tüm uygulamalar `/` vitrininde kategoriler altında hiyerarşik olarak listelen
 - **🛡️ Sızıntı Kontrolü & Güvenlik** (`/sizinti-kontrol`): HaveIBeenPwned k-Anonymity (SHA-1) sıfır bilgi parola sızıntı denetimi.
 - **📍 IP Coğrafi Konum & İstihbarat** (`/ip-konum`): SSRF korumalı genel IP lokasyonu, ISS ve ASN analizi.
 - **🎨 Harmoni: Renk & Kontrast Stüdyosu** (`/renk-studyosu`): The Color API ile renk şemaları, WCAG kontrast analizi ve CSS/Tailwind export.
-- **💻 HTTP Sözlüğü & Cihaz Röntgeni** (`/http-status`): HTTP durum kodları referansı ve canlı donanım/GPU analizi.
+- **💻 HTTP Sözlüğü & Cihaz Taraması** (`/http-status`): HTTP durum kodları referansı ve canlı donanım/GPU analizi.
 
 ### 🛠️ Web Araçları
 - **📱 QR Studio** (`/qr-studio`): qr-code-styling ile vektörel QR üretici, içerik türleri ve SVG/PNG indirme.
