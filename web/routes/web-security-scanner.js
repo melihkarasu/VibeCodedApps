@@ -23,10 +23,103 @@ module.exports = function(pageTemplate) {
           </p>
         </div>
         <div class="flex items-center gap-2">
+          <a href="https://github.com/melihkarasu/web-security-scanner" target="_blank" rel="noopener" class="px-3.5 py-1.5 rounded-xl border border-stone-200 bg-mistral-ink text-white hover:bg-stone-800 text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs">
+            <span>📦</span>
+            <span>Standalone Repoyu Aç</span>
+          </a>
           <button onclick="exportMarkdownReport()" class="px-3.5 py-1.5 rounded-xl border border-stone-200 bg-white hover:bg-stone-50 text-xs font-semibold text-mistral-ink transition-all flex items-center gap-1.5 cursor-pointer shadow-xs">
             <span>📥</span>
             <span>Rapor İndir (.md)</span>
           </button>
+        </div>
+      </div>
+
+      <!-- LOKAL vs WEB VERSİYON BİLGİLENDİRME & KARŞILAŞTIRMA KARTI -->
+      <div class="mb-8 rounded-2xl border border-orange-200/90 bg-gradient-to-br from-orange-50/70 via-amber-50/40 to-white p-5 sm:p-6 shadow-xs">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4 pb-4 border-b border-orange-200/60">
+          <div>
+            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-900 border border-orange-300 font-bold text-[11px] font-mono mb-2">
+              ⚡ Asıl Güç Yerel (Standalone) Sürümde
+            </div>
+            <h2 class="text-lg sm:text-xl font-bold font-editorial text-mistral-ink">
+              Bu web vitrini yalnızca pasif bir önizlemedir. Tam güç için Lokal Sürümü çalıştırın!
+            </h2>
+            <p class="text-xs text-mistral-slate mt-1 max-w-3xl leading-relaxed">
+              Tarayıcı güvenlik sınırları (CORS) nedeniyle online vitrinde üçüncü parti sitelere aktif test veya derin kaynak kod analizi yapılamaz. <strong>SAST, Aktif İstismar Testleri ve AI Red Team</strong> yetenekleri yalnızca yerel makinenizde sıfır bağımlılıkla çalışan Standalone sürümde mevcuttur.
+            </p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-2 shrink-0">
+            <a href="https://github.com/melihkarasu/web-security-scanner" target="_blank" rel="noopener" class="px-4 py-2.5 rounded-xl bg-mistral-orange hover:bg-[#e04406] text-white text-xs font-bold transition-all shadow-sm flex items-center justify-center gap-2">
+              <span>🚀</span>
+              <span>GitHub Reposuna Git</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Karşılaştırma Tablosu -->
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-left text-xs border border-stone-200 rounded-xl overflow-hidden bg-white shadow-xs">
+            <thead class="bg-stone-50 border-b border-stone-200 text-mistral-ink font-semibold">
+              <tr>
+                <th class="py-2.5 px-3">Güvenlik Yeteneği / Modül</th>
+                <th class="py-2.5 px-3 text-center">🟡 Bu Online Vitrin</th>
+                <th class="py-2.5 px-3 text-center bg-emerald-50/60 text-emerald-950 font-bold">🟢 Standalone (Lokal Python Modu)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-100 text-stone-700">
+              <tr>
+                <td class="py-2 px-3 font-medium">DoH DNS Taraması (DMARC, SPF, DNSSEC, CAA, IPv6)</td>
+                <td class="py-2 px-3 text-center text-emerald-700 font-semibold">✅ Canlı & Tam</td>
+                <td class="py-2 px-3 text-center bg-emerald-50/30 text-emerald-800 font-bold">✅ Canlı & Tam</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3 font-medium">HTTP Güvenlik Başlıkları Analizi (CSP, HSTS, XFO)</td>
+                <td class="py-2 px-3 text-center text-amber-700">⚠️ Yarı-Otomatik (cURL Yapıştırma)</td>
+                <td class="py-2 px-3 text-center bg-emerald-50/30 text-emerald-800 font-bold">✅ %100 Otomatik (CORS Engeli Yok)</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3 font-medium">Derin Pasif Analiz (Cookies, TLS 1.0/1.1, robots.txt, Tech Fingerprint)</td>
+                <td class="py-2 px-3 text-center text-stone-400">❌ Tarayıcı Kısıtı</td>
+                <td class="py-2 px-3 text-center bg-emerald-50/30 text-emerald-800 font-bold">✅ Tam ve Ayrıntılı</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3 font-medium">SAST — Statik Kaynak Kod Analizi (42 kural, 10 kategori, Google OSV CVE)</td>
+                <td class="py-2 px-3 text-center text-stone-400">❌ Web'de Mümkün Değil</td>
+                <td class="py-2 px-3 text-center bg-emerald-50/30 text-emerald-800 font-bold">✅ Tam Tarama (Yerel Dizin)</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3 font-medium">Aktif Güvenlik Testleri (SQLi, XSS, CSRF, SSRF, IDOR, Port Scan)</td>
+                <td class="py-2 px-3 text-center text-stone-400">❌ Sıfır İstek Politikası</td>
+                <td class="py-2 px-3 text-center bg-emerald-50/30 text-emerald-800 font-bold">✅ Etik Onay & Rate Limit ile Aktif</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3 font-medium">🤖 AI Red Team Orkestrasyonu (The Scout, The Strategist, The Analyst)</td>
+                <td class="py-2 px-3 text-center text-stone-400">❌ Yok</td>
+                <td class="py-2 px-3 text-center bg-emerald-50/30 text-emerald-800 font-bold">✅ Vertex AI / OpenRouter / Ollama</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3 font-medium">Çok Formatlı Raporlama & Doğrulama</td>
+                <td class="py-2 px-3 text-center text-amber-700">⚠️ Yalnızca Temel Markdown</td>
+                <td class="py-2 px-3 text-center bg-emerald-50/30 text-emerald-800 font-bold">✅ Markdown + JSON + HTML (CVSS & CWE)</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-3 font-medium">Kurulum & Bağımlılık</td>
+                <td class="py-2 px-3 text-center text-stone-600">Sıfır Kurulum (Tarayıcı)</td>
+                <td class="py-2 px-3 text-center bg-emerald-50/30 text-emerald-800 font-bold">Tek Komutla Çalışır (Python 3 Stdlib, Sıfır pip)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Tek Komutla Çalıştırma Kılavuzu -->
+        <div class="bg-stone-900 rounded-xl p-3 sm:p-4 text-stone-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="font-mono text-xs overflow-x-auto text-emerald-400 select-all">
+            <span class="text-stone-500"># Lokal sunucuyu sıfır bağımlılıkla tek komutta başlatın:</span><br>
+            git clone https://github.com/melihkarasu/web-security-scanner.git && cd web-security-scanner && python3 server.py
+          </div>
+          <a href="https://github.com/melihkarasu/web-security-scanner#readme" target="_blank" rel="noopener" class="text-xs text-white hover:text-emerald-300 underline shrink-0 font-medium">
+            Dokümantasyonu Oku &rarr;
+          </a>
         </div>
       </div>
 
