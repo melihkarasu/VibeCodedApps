@@ -7,18 +7,14 @@ module.exports = function(pageTemplate) {
     `;
 
     const content = `
-      <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="vibe-page-header mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/" class="text-mistral-slate hover:text-white transition text-sm flex items-center gap-1">
-              &larr; Vitrine Dön
-            </a>
+            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-xs inline-flex items-center gap-1 font-semibold"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg><span>Vitrine Dön</span></a>
             <span class="text-mistral-stone">|</span>
-            <span class="px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-400 text-xs font-semibold">Yeni Seri #8</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-orange-50 border border-orange-200 text-mistral-orange text-[11px] font-mono font-bold">Uzay & Bilim</span>
           </div>
-          <h1 class="text-3xl font-extrabold tracking-tight mt-1 text-mistral-ink flex items-center gap-2">
-            <span>🧬</span> 3D Kimyasal Molekül Stüdyosu
-          </h1>
+          <div class="flex items-center gap-3.5 mt-2"><span class="vibe-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="m14.5 9.5 3-3"/><path d="m6.5 17.5 3-3"/><path d="m9.5 9.5-3-3"/><path d="m14.5 14.5 3 3"/></svg></span><h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">3D Kimyasal Molekül Stüdyosu</h1></div>
           <p class="text-mistral-slate text-sm mt-0.5">
             PubChem 3D Conformer & 3Dmol.js WebGL motoru ile kimyasalların, ilaç etken maddelerinin 3 boyutlu atomik modellemesi.
           </p>
@@ -114,7 +110,7 @@ module.exports = function(pageTemplate) {
           <div class="flex flex-col sm:flex-row gap-3">
             <div class="relative flex-1">
               <input type="text" id="input-mol-search" placeholder="Örn: Aspirin, Ibuprofen, Paracetamol, Dopamine, Serotonin, Nicotine, Glucose..." onkeyup="if(event.key==='Enter') searchMolecule()" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder-slate-500 focus:border-teal-400 focus:outline-none font-mono">
-              <span class="absolute left-3.5 top-3 text-mistral-stone text-sm">🧪</span>
+              <span class="absolute left-3.5 top-3 text-mistral-stone text-sm"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
             </div>
             <button onclick="searchMolecule()" class="px-6 py-2.5 rounded-xl text-mistral-ink font-boldbg-mistral-cream-light hover:bg-mistral-cream-deeper text-mistral-ink font-bold font-bold text-xs transition shrink-0">
               Molekülü Getir

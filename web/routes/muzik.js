@@ -6,18 +6,14 @@ module.exports = function(pageTemplate) {
     `;
 
     const content = `
-      <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="vibe-page-header mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/" class="text-mistral-slate hover:text-white transition text-sm flex items-center gap-1">
-              &larr; Vitrine Dön
-            </a>
+            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-xs inline-flex items-center gap-1 font-semibold"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg><span>Vitrine Dön</span></a>
             <span class="text-mistral-stone">|</span>
-            <span class="px-2.5 py-0.5 rounded-full bg-pink-500/20 text-pink-400 text-xs font-semibold">Mikro Uygulama #9</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-orange-50 border border-orange-200 text-mistral-orange text-[11px] font-mono font-bold">Popüler Kültür & Müzik</span>
           </div>
-          <h1 class="text-3xl font-extrabold tracking-tight mt-1 text-mistral-ink flex items-center gap-2">
-            <span>🎵</span> Sözden Şarkıya & Müzik Dedektifi
-          </h1>
+          <div class="flex items-center gap-3.5 mt-2"><span class="vibe-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span><h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">Sözden Şarkıya & Müzik Dedektifi</h1></div>
           <p class="text-mistral-slate text-sm mt-0.5">
             Aklınızda kalan bir dizeden şarkıyı bulun, sözlerini keşfedin ve 30 saniyelik önizlemesini dinleyin.
           </p>
@@ -71,7 +67,7 @@ module.exports = function(pageTemplate) {
           <div class="relative flex flex-col sm:flex-row gap-3">
             <div class="relative flex-1">
               <input type="text" id="input-lyrics-search" value="is this the real life" placeholder="Örn: 'mama just killed a man', 'benden öte benden ziyade', 'fly me to the moon'..." onkeyup="if(event.key==='Enter') searchMusic()" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-mistral-hairline focus:border-pink-400 focus:outline-none text-mistral-ink text-sm placeholder-slate-500">
-              <span class="absolute left-3.5 top-3.5 text-mistral-stone text-base">🔍</span>
+              <span class="absolute left-3.5 top-3.5 text-mistral-stone text-base"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
             </div>
             <button onclick="searchMusic()" class="px-6 py-3 rounded-xl bg-pink-500 hover:bg-pink-400 text-white font-bold text-sm transition shadow-lg shadow-pink-500/20 shrink-0 flex items-center justify-center gap-2">
               <span>Şarkıyı Bul</span> &rarr;

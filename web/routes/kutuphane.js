@@ -7,18 +7,14 @@ module.exports = function(pageTemplate) {
     `;
 
     const content = `
-      <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="vibe-page-header mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/" class="text-mistral-slate hover:text-white transition text-sm flex items-center gap-1">
-              &larr; Vitrine Dön
-            </a>
+            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-xs inline-flex items-center gap-1 font-semibold"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg><span>Vitrine Dön</span></a>
             <span class="text-mistral-stone">|</span>
-            <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold">Yeni Seri #1</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-orange-50 border border-orange-200 text-mistral-orange text-[11px] font-mono font-bold">Sanat & Edebiyat</span>
           </div>
-          <h1 class="text-3xl font-extrabold tracking-tight mt-1 text-mistral-ink flex items-center gap-2">
-            <span>📖</span> Dijital Kütüphane & Klasik E-Kitap Okuyucu
-          </h1>
+          <div class="flex items-center gap-3.5 mt-2"><span class="vibe-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">Dijital Kütüphane & Klasik E-Kitap Okuyucu</h1></div>
           <p class="text-mistral-slate text-sm mt-0.5">
             Project Gutenberg arşivindeki 70.000+ dünya klasiğini tarayıcıda doğrudan okuyun, özelleştirin ve kaldığınız yeri saklayın.
           </p>
@@ -47,7 +43,7 @@ module.exports = function(pageTemplate) {
               placeholder="Örn: Suç ve Ceza, Dostoyevski, Frankenstein, Kafka, Gurur ve Önyargı, Sherlock Holmes..." 
               onkeydown="if(event.key==='Enter') searchBooks()"
               class="w-full pl-10 pr-20 py-3 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder-slate-400 focus:border-emerald-500 focus:outline-none font-medium">
-            <span class="absolute left-3.5 top-3.5 text-mistral-stone text-sm">🔎</span>
+            <span class="absolute left-3.5 top-3.5 text-mistral-stone text-sm"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
             <button onclick="clearSearchInput()" id="btn-clear-search" class="hidden absolute right-3 top-3 text-xs text-mistral-stone hover:text-mistral-ink px-2 py-1 rounded bg-mistral-cream-light border border-mistral-hairline transition cursor-pointer">
               Temizle
             </button>

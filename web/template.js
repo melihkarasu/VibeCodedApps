@@ -55,7 +55,7 @@ const pageTemplate = (title, content, extraHead = '') => `
   <!-- Precompiled Tailwind CSS (Zero Runtime / No CDN Delay) -->
   <link rel="stylesheet" href="/static/css/tailwind.min.css">
   <!-- Global Mistral AI Theme (Cache Destekli Statik CSS) -->
-  <link rel="stylesheet" href="/static/css/mistral-theme.css?v=20261016a">
+  <link rel="stylesheet" href="/static/css/mistral-theme.css?v=20261016b">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <!-- Favicon: Premium Siyah Zemin Üzerinde Geometrik MK Monogramı -->
@@ -264,7 +264,7 @@ const pageTemplate = (title, content, extraHead = '') => `
   </script>
 
   <!-- Global Core Utilities & SSO Authentication (Cache Destekli Statik JS) -->
-  <script data-cfasync="false" src="/static/js/core.js?v=20261002a"></script>
+  <script data-cfasync="false" src="/static/js/core.js?v=20261016b"></script>
 </body>
 </html>
 `;
