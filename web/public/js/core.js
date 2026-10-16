@@ -115,13 +115,30 @@ function parseJwtPayload(token) {
     if (currentNav && profile) {
       const name = profile.name || 'Kullanıcı';
       const avatar = profile.avatar || '';
+      const userIconSvg = '<svg class="w-3.5 h-3.5 text-stone-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+      const gearIconSvg = '<svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
       currentNav.innerHTML = `
-        <div class="flex items-center gap-2.5 sm:gap-3">
-          ${avatar ? '<img src="' + avatar + '" class="w-7 h-7 rounded-full border border-mistral-orange shadow-sm object-cover" alt="Avatar">' : '<div class="w-7 h-7 rounded-full bg-mistral-cream border border-mistral-beige-deep text-mistral-ink flex items-center justify-center text-xs font-bold">👤</div>'}
-          <span class="text-xs sm:text-sm font-semibold text-mistral-ink max-w-[120px] sm:max-w-[180px] truncate">${name}</span>
-          <button type="button" onclick="logout()" class="text-xs px-2.5 py-1.5 rounded-md bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition font-medium cursor-pointer">Çıkış</button>
+        <div class="flex items-center gap-2 sm:gap-2.5">
+          <a href="/admin" id="admin-nav-btn" class="hidden vibe-btn vibe-btn-xs vibe-btn-amber">${gearIconSvg}<span>Yönetim</span></a>
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-xl bg-stone-50 border border-stone-200">
+            ${avatar ? '<img src="' + avatar + '" class="w-6 h-6 rounded-full border border-mistral-orange object-cover shrink-0" alt="Avatar">' : '<div class="w-6 h-6 rounded-full bg-orange-50 border border-orange-200 flex items-center justify-center shrink-0">' + userIconSvg + '</div>'}
+            <span class="text-xs font-semibold text-mistral-ink max-w-[96px] sm:max-w-[160px] truncate">${name}</span>
+          </div>
+          <button type="button" onclick="logout()" class="vibe-btn vibe-btn-xs vibe-btn-secondary">Çıkış</button>
         </div>
       `;
+      const tk = localStorage.getItem('vibe_token');
+      if (tk) {
+        fetch('/api/admin/check', { headers: { 'Authorization': 'Bearer ' + tk } })
+          .then(r => r.json())
+          .then(d => {
+            if (d && d.isAdmin) {
+              const btn = document.getElementById('admin-nav-btn');
+              if (btn) btn.classList.remove('hidden');
+            }
+          })
+          .catch(() => {});
+      }
     }
 
     const authCard = document.getElementById('auth-card');
@@ -131,18 +148,18 @@ function parseJwtPayload(token) {
       authCard.innerHTML = `
         <div class="text-center">
           <div class="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-2 border-mistral-orange shadow-lg">
-            ${avatar ? '<img src="' + avatar + '" class="w-full h-full object-cover">' : '<div class="w-full h-full bg-slate-200 flex items-center justify-center text-3xl">👤</div>'}
+            ${avatar ? '<img src="' + avatar + '" class="w-full h-full object-cover">' : '<div class="w-full h-full bg-orange-50 flex items-center justify-center text-mistral-orange"><svg class="w-9 h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>'}
           </div>
           <h3 class="text-xl font-bold font-editorial text-mistral-ink">${name}</h3>
           <p class="text-sm text-mistral-slate mb-6">${profile.email || ''}</p>
-          <div class="p-3 mb-6 rounded-md bg-mistral-cream border border-mistral-beige-deep text-mistral-ink text-xs font-medium">
+          <div class="p-3 mb-6 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-medium">
             ✓ Oturumunuz açık durumda. Tüm mikro uygulamalara tam erişiminiz mevcuttur.
           </div>
           <div class="flex justify-center gap-3">
-            <a href="/app" class="px-5 py-2.5 rounded-md bg-mistral-orange hover:bg-mistral-orange-deep text-white font-medium text-sm transition shadow-sm">
-              Vitrine Git &rarr;
+            <a href="/" class="vibe-btn vibe-btn-primary">
+              <span>Vitrine Git</span> &rarr;
             </a>
-            <button type="button" onclick="logout()" class="px-4 py-2.5 rounded-md bg-white border border-mistral-hairline hover:bg-mistral-cream text-mistral-ink font-medium text-sm transition cursor-pointer">
+            <button type="button" onclick="logout()" class="vibe-btn vibe-btn-secondary">
               Çıkış Yap
             </button>
           </div>
@@ -155,8 +172,9 @@ function parseJwtPayload(token) {
     const currentNav = document.getElementById('auth-nav');
     if (currentNav) {
       currentNav.innerHTML = `
-        <a id="btn-login-sso" href="/app/auth" class="text-xs sm:text-sm px-4 py-2 rounded-md bg-mistral-orange hover:bg-mistral-orange-deep text-white font-medium transition shadow-sm">
-          Giriş Yap (SSO)
+        <a id="btn-login-sso" href="/auth" class="vibe-btn vibe-btn-sm vibe-btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          <span>Giriş Yap (SSO)</span>
         </a>
       `;
     }

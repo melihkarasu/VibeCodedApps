@@ -6,18 +6,14 @@ module.exports = function(pageTemplate) {
 
     const content = `
       <!-- Üst Başlık & Navigasyon -->
-      <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="vibe-page-header mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/" class="text-mistral-slate hover:text-mistral-orange transition text-sm flex items-center gap-1 font-medium">
-              &larr; Vitrine Dön
-            </a>
+            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-xs inline-flex items-center gap-1 font-semibold"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg><span>Vitrine Dön</span></a>
             <span class="text-mistral-hairline">|</span>
-            <span class="px-2.5 py-0.5 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold">Popüler Kültür & Müzik</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-orange-50 border border-orange-200 text-mistral-orange text-[11px] font-mono font-bold">Popüler Kültür & Müzik</span>
           </div>
-          <h1 class="text-3xl sm:text-4xl font-normal font-editorial tracking-tight mt-1.5 text-mistral-ink flex items-center gap-2">
-            <span>🎸</span> Akustik: Gitar Akor & Tab Stüdyosu
-          </h1>
+          <div class="flex items-center gap-3.5 mt-2"><span class="vibe-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span><h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">Akustik: Gitar Akor & Tab Stüdyosu</h1></div>
           <p class="text-mistral-slate text-sm mt-0.5 font-normal">
             Gitar akor şemaları, parmak fretboard kılavuzu, canlı transpoze (ton değiştirme) aracı ve çalım için otomatik sayfa kaydırma.
           </p>

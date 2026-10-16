@@ -8,18 +8,14 @@ module.exports = function(pageTemplate) {
 
     const content = `
       <!-- Üst Başlık & Navigasyon -->
-      <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="vibe-page-header mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/" class="text-mistral-slate hover:text-mistral-orange transition text-sm flex items-center gap-1 font-medium">
-              &larr; Vitrine Dön
-            </a>
+            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-xs inline-flex items-center gap-1 font-semibold"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg><span>Vitrine Dön</span></a>
             <span class="text-mistral-hairline">|</span>
-            <span class="px-2.5 py-0.5 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold">Sanat, Tarih & Edebiyat</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-orange-50 border border-orange-200 text-mistral-orange text-[11px] font-mono font-bold">Sanat, Tarih & Miras</span>
           </div>
-          <h1 class="text-3xl sm:text-4xl font-normal font-editorial tracking-tight mt-1.5 text-mistral-ink flex items-center gap-2">
-            <span>🏛️</span> UNESCO Dünya Mirası Atlası & Keşif Haritası
-          </h1>
+          <div class="flex items-center gap-3.5 mt-2"><span class="vibe-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></span><h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">UNESCO Dünya Mirası Atlası & Keşif Haritası</h1></div>
           <p class="text-mistral-slate text-sm mt-0.5 font-normal">
             İnsanlığın ortak hafızası: Göbeklitepe'den Machu Picchu'ya, Efes'ten Tac Mahal'e 1.100+ dünya mirası alanı, fotoğrafları ve coğrafi konumları.
           </p>
@@ -41,7 +37,7 @@ module.exports = function(pageTemplate) {
               placeholder="Miras alanı veya ülke ara (örn: Göbeklitepe, Efes, Petra, İtalya, Mısır)..." 
               oninput="filterSites()"
               class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder:text-mistral-stone focus:outline-none focus:border-mistral-orange transition">
-            <span class="absolute left-3.5 top-3 text-mistral-stone text-sm">🔍</span>
+            <span class="absolute left-3.5 top-3 text-mistral-stone text-sm"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
           </div>
           <div class="sm:col-span-4">
             <select id="unesco-category-select" onchange="filterSites()" class="w-full px-3 py-2.5 rounded-lg bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange transition">

@@ -6,18 +6,14 @@ module.exports = function(pageTemplate) {
     `;
 
     const content = `
-      <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="vibe-page-header mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/" class="text-mistral-slate hover:text-white transition text-sm flex items-center gap-1">
-              &larr; Vitrine Dön
-            </a>
+            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-xs inline-flex items-center gap-1 font-semibold"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg><span>Vitrine Dön</span></a>
             <span class="text-mistral-stone">|</span>
-            <span class="px-2.5 py-0.5 rounded-full bg-lime-500/20 text-lime-400 text-xs font-semibold">Mikro Uygulama #5</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-orange-50 border border-orange-200 text-mistral-orange text-[11px] font-mono font-bold">Coğrafya & Çevre</span>
           </div>
-          <h1 class="text-3xl font-extrabold tracking-tight mt-1 text-mistral-ink flex items-center gap-2">
-            <span>🌱</span> Web Karbon Ayak İzi & Eko-Skor
-          </h1>
+          <div class="flex items-center gap-3.5 mt-2"><span class="vibe-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span><h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">Web Karbon Ayak İzi & Eko-Skor</h1></div>
           <p class="text-mistral-slate text-sm mt-0.5">
             The Green Web Foundation & SWD modeli ile sayfa başına CO2 salımı, yeşil hosting analizi ve gömülebilir rozetler.
           </p>
@@ -38,7 +34,7 @@ module.exports = function(pageTemplate) {
           <div class="flex flex-col sm:flex-row gap-3">
             <div class="relative flex-1">
               <input type="url" id="input-site-url" value="https://github.com" placeholder="https://example.com" onkeyup="if(event.key==='Enter') runCarbonAnalysis()" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder-slate-500 focus:border-lime-400 focus:outline-none font-mono">
-              <span class="absolute left-3.5 top-3.5 text-mistral-stone text-base">🌐</span>
+              <span class="absolute left-3.5 top-3.5 text-mistral-stone text-base"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
             </div>
             <button onclick="runCarbonAnalysis()" id="btn-analyze" class="px-7 py-3 rounded-xl bg-white from-lime-500 to-emerald-600 hover:from-lime-400 hover:to-emerald-500 text-slate-950 font-black text-sm transition shadow-lg shadow-lime-500/20 shrink-0 flex items-center justify-center gap-2">
               <span>🍃</span> Ayak İzini Ölç

@@ -6,18 +6,14 @@ module.exports = function(pageTemplate) {
     `;
 
     const content = `
-      <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="vibe-page-header mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-sm flex items-center gap-1">
-              &larr; Vitrine Dön
-            </a>
+            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-xs inline-flex items-center gap-1 font-semibold"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg><span>Vitrine Dön</span></a>
             <span class="text-mistral-stone">|</span>
-            <span class="px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-400 text-xs font-semibold">Yeni Seri #4</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-orange-50 border border-orange-200 text-mistral-orange text-[11px] font-mono font-bold">Geliştirici Araçları</span>
           </div>
-          <h1 class="text-3xl font-extrabold tracking-tight mt-1 text-mistral-ink flex items-center gap-2">
-            <span>🛡️</span> Sızıntı Kontrolü & Şifre Güvenliği
-          </h1>
+          <div class="flex items-center gap-3.5 mt-2"><span class="vibe-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">Sızıntı Kontrolü & Şifre Güvenliği</h1></div>
           <p class="text-mistral-slate text-sm mt-0.5">
             HaveIBeenPwned k-Anonymity (SHA-1) protokolü ile şifrenizi asla iletmeden sızıntı denetimi ve entropi analizi.
           </p>

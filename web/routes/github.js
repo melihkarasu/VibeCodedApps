@@ -6,18 +6,14 @@ module.exports = function(pageTemplate) {
     `;
 
     const content = `
-      <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="vibe-page-header mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-sm flex items-center gap-1">
-              &larr; Vitrine Dön
-            </a>
+            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-xs inline-flex items-center gap-1 font-semibold"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg><span>Vitrine Dön</span></a>
             <span class="text-mistral-stone">|</span>
-            <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-400 text-xs font-semibold">Yeni Seri #6</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-orange-50 border border-orange-200 text-mistral-orange text-[11px] font-mono font-bold">Geliştirici Araçları</span>
           </div>
-          <h1 class="text-3xl font-extrabold tracking-tight mt-1 text-mistral-ink flex items-center gap-2">
-            <span><i class="fa-brands fa-github" style="color: rgb(0, 0, 0);"></i></span> GitHub Profil Analitiği & Rozet Üretici
-          </h1>
+          <div class="flex items-center gap-3.5 mt-2"><span class="vibe-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg></span><h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">GitHub Profil Analitiği & Rozet Üretici</h1></div>
           <p class="text-mistral-slate text-sm mt-0.5">
             GitHub geliştirici analitiği, dil dağılımı, toplam yıldızlar ve profillere gömülebilir dinamik SVG kartı üretimi.
           </p>

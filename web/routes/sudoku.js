@@ -10,15 +10,11 @@ module.exports = function(pageTemplate) {
       <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-mistral-hairline pb-4">
         <div>
           <div class="flex items-center gap-3 mb-1">
-            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-xs flex items-center gap-1 font-medium">
-              &larr; Vitrine Dön
-            </a>
+            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-xs inline-flex items-center gap-1 font-semibold"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg><span>Vitrine Dön</span></a>
             <span class="text-mistral-stone">|</span>
             <span class="px-2 py-0.5 rounded-full bg-violet-500/10 text-violet-700 text-[11px] font-bold">Zeka & Mantık</span>
           </div>
-          <h1 class="text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial flex items-center gap-2">
-            <span>🧩</span> Sudoku Arena
-          </h1>
+          <div class="flex items-center gap-3.5 mt-2"><span class="vibe-header-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg></span><h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">Sudoku Arena</h1></div>
           <p class="text-xs text-mistral-slate mt-0.5">
             Deterministik tohum motoru • Günün ortak mücadelesi & süreli liderlik tablosu
           </p>
