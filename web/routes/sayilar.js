@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/sayilar/app.js" defer></script>
+      <script src="/static/apps/sayilar/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -20,7 +20,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-medium" id="num-status">Analiz Motoru Hazır</span>
         </div>
       </div>
@@ -38,7 +37,7 @@ module.exports = function(pageTemplate) {
               placeholder="Pozitif bir tam sayı girin (örn: 7, 42, 73, 1729)..." 
               onkeydown="if(event.key==='Enter') analyzeNumber()"
               class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-white border border-mistral-hairline text-sm font-mono font-bold text-mistral-ink placeholder:text-mistral-stone focus:outline-none focus:border-mistral-orange transition">
-            <span class="absolute left-3.5 top-3 text-mistral-stone text-sm">🔢</span>
+            <span class="absolute left-3.5 top-3 text-mistral-stone text-sm"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
           </div>
           <button 
             type="button" 
@@ -50,7 +49,7 @@ module.exports = function(pageTemplate) {
             type="button" 
             onclick="randomFact()" 
             class="px-4 py-2.5 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer">
-            <span>🎲</span> Rastgele Sayı
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="2"/></svg></span> Rastgele Sayı
           </button>
         </div>
 

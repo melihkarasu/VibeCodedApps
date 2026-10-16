@@ -232,7 +232,7 @@ function updateUserMapMarker() {
 
   userMarker.bindPopup(`
     <div style="font-family: inherit; font-size: 13px;">
-      <div style="font-weight: 700; color: #1f1f1f; margin-bottom: 2px;">🔵 Referans Konumunuz</div>
+      <div style="font-weight: 700; color: #1f1f1f; margin-bottom: 2px;">Referans Konumunuz</div>
       <div style="color: #4a4a4a; font-size: 12px;">${escapeHtml(currentUserLocation.name)}</div>
       <div style="color: #8a8a8a; font-size: 11px; margin-top: 4px;">En yakın nöbetçi eczaneler bu merkeze göre hesaplanır.</div>
     </div>
@@ -362,7 +362,7 @@ function requestUserLocation(silent = false) {
       await applyDetectedLocation(lat, lng, detected, 'Mevcut Konumunuz', true);
 
       if (typeof showToast === 'function') {
-        showToast(`📍 Konumunuz saptandı: ${detected.cityName}`, 'success');
+        showToast(`Konumunuz saptandı: ${detected.cityName}`, 'success');
       }
     },
     function(err) {
@@ -414,7 +414,7 @@ async function loadCities() {
     if (data.success && Array.isArray(data.cities)) {
       allCities = data.cities;
       citySelect.innerHTML = allCities.map(c => 
-        `<option value="${c.slug}" ${c.slug === selectedCitySlug ? 'selected' : ''}>📍 ${c.name} (${c.plateCode})</option>`
+        `<option value="${c.slug}" ${c.slug === selectedCitySlug ? 'selected' : ''}>${c.name} (${c.plateCode})</option>`
       ).join('');
 
       await loadDistricts(selectedCitySlug);
@@ -547,7 +547,7 @@ async function fetchDutyPharmacies(autoFit = false) {
     const errorBanner = `
       <div class="col-span-full p-6 rounded-2xl bg-amber-50 border-2 border-amber-400 text-amber-950 space-y-3">
         <div class="flex items-center gap-2">
-          <span class="text-2xl">⚠️</span>
+          <span class="text-2xl"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
           <h3 class="font-bold text-base text-amber-900">Bu Bölge İçin Nöbetçi Listesi Alınamadı</h3>
         </div>
         <p class="text-xs leading-relaxed text-amber-900">
@@ -864,24 +864,24 @@ function renderMapMarkers(filteredPharmacies, top5) {
           ${isTop5 ? `<span style="background: #ecfdf5; color: #047857; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 9999px; border: 1px solid #a7f3d0;">#${rank} En Yakın</span>` : ''}
         </div>
         <div style="font-size: 12px; color: #fa520f; font-weight: 600; margin-bottom: 4px;">
-          📍 ${escapeHtml(item.district)} / ${escapeHtml(item.city)} &bull; ${distStr}
+          ${escapeHtml(item.district)} / ${escapeHtml(item.city)} &bull; ${distStr}
         </div>
         <div style="font-size: 12px; color: #4a4a4a; margin-bottom: 8px; line-height: 1.3;">
           ${escapeHtml(item.address)}
         </div>
         ${(item.notes && !item.notes.includes('08:00')) ? `
           <div style="font-size: 11px; background: #fffbeb; color: #92400e; padding: 4px 6px; border-radius: 6px; border: 1px solid #fde68a; margin-bottom: 8px;">
-            🕒 ${escapeHtml(item.notes)}
+            ${escapeHtml(item.notes)}
           </div>
         ` : ''}
         <div style="display: flex; gap: 6px; border-top: 1px solid #e5e5e5; padding-top: 8px;">
           ${item.phone ? `
             <a href="tel:${cleanPhone}" style="flex: 1; text-align: center; background: #ecfdf5; color: #065f46; font-size: 11px; font-weight: 600; padding: 5px; border-radius: 6px; text-decoration: none; border: 1px solid #a7f3d0;">
-              📞 Ara
+              Ara
             </a>
           ` : ''}
           <a href="${mapsUrl}" target="_blank" rel="noopener" style="flex: 1; text-align: center; background: #fa520f; color: white; font-size: 11px; font-weight: 600; padding: 5px; border-radius: 6px; text-decoration: none;">
-            🧭 Yol Tarifi
+            Yol Tarifi
           </a>
         </div>
       </div>
@@ -966,7 +966,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           requestUserLocation(true);
           return;
         } else if (status.state === 'prompt') {
-          showLocationPermissionBanner('📍 Size en yakın nöbetçi eczaneleri göstermek için konum izni gereklidir.');
+          showLocationPermissionBanner('Size en yakın nöbetçi eczaneleri göstermek için konum izni gereklidir.');
           requestUserLocation(true);
         } else {
           showLocationPermissionBanner('Konum izni kapalı. Yakınınızdaki nöbetçileri görmek için tarayıcı ayarlarından izin verebilir veya listeden il seçebilirsiniz.');

@@ -11,7 +11,7 @@ async function fetchNumberFact(num) {
             
             const pEl = document.getElementById('res-prime');
             if (data.isPrime) {
-              pEl.innerText = '✓ Asal Sayı';
+              pEl.innerText = 'Asal Sayı';
               pEl.className = 'text-base font-editorial mt-1 block text-emerald-600 font-bold';
             } else {
               pEl.innerText = 'Bileşik Sayı';
@@ -20,7 +20,7 @@ async function fetchNumberFact(num) {
 
             const fibEl = document.getElementById('res-fib');
             if (data.isFibonacci) {
-              fibEl.innerText = '✓ Fibonacci Üyesi';
+              fibEl.innerText = 'Fibonacci Üyesi';
               fibEl.className = 'text-base font-editorial mt-1 block text-amber-600 font-bold';
             } else {
               fibEl.innerText = 'Dizi Dışı';

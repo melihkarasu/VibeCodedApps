@@ -148,7 +148,7 @@ const ART_DB_APP_ID = 'sanat-galerisi';
                     <img src="${img}" alt="${item.title}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500">
                     <div class="absolute inset-0 bg-white from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-3">
                       <span class="text-white text-xs font-semibold flex items-center gap-1.5">
-                        <span>🔍</span> Derin İncele
+                        <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span> Derin İncele
                       </span>
                     </div>
                   </div>
@@ -163,7 +163,7 @@ const ART_DB_APP_ID = 'sanat-galerisi';
                     Detayları Gör &rarr;
                   </button>
                   <button onclick="quickSaveArt(${item.objectID}, '${item.title.replace(/'/g, "\\\\'")}', '${artist.replace(/'/g, "\\\\'")}', '${img}', '${date}')" class="text-xs text-mistral-slate hover:text-amber-400 transition p-1" title="Koleksiyonuma Kaydet">
-                    🔖
+                    
                   </button>
                 </div>
               </div>
@@ -287,7 +287,7 @@ const ART_DB_APP_ID = 'sanat-galerisi';
 
           el.innerText = src;
           if (srcEl) {
-            srcEl.innerText = '📖 Kaynak: ' + sourceLabel;
+            srcEl.innerText = 'Kaynak: ' + sourceLabel;
           }
           if (isStillOpen()) box.classList.remove('hidden');
         }
@@ -316,7 +316,7 @@ const ART_DB_APP_ID = 'sanat-galerisi';
               date: currentModalArt.objectDate || ''
             });
             savedArtCache = list;
-            showToast('✓ Başyapıt koleksiyonunuza eklendi!');
+            showToast('Başyapıt koleksiyonunuza eklendi!');
           }
 
           updateModalSaveButtonState();
@@ -333,7 +333,7 @@ const ART_DB_APP_ID = 'sanat-galerisi';
           list.unshift({ id, title, artist, img, date });
           savedArtCache = list;
           persistSavedArtToDb();
-          showToast(`✓ "${title}" koleksiyonunuza eklendi!`);
+          showToast(`"${title}" koleksiyonunuza eklendi!`);
           renderSavedArt();
         }
 
@@ -345,10 +345,10 @@ const ART_DB_APP_ID = 'sanat-galerisi';
           const text = document.getElementById('modal-art-save-text');
 
           if (isSaved) {
-            icon.innerText = '✓';
+            icon.innerText = '';
             text.innerText = 'Koleksiyonunuzda';
           } else {
-            icon.innerText = '🔖';
+            icon.innerText = '';
             text.innerText = 'Koleksiyona Ekle';
           }
         }
@@ -374,7 +374,7 @@ const ART_DB_APP_ID = 'sanat-galerisi';
                 <span class="text-[9px] text-mistral-stone font-mono">${item.date}</span>
               </div>
               <button onclick="removeSavedArt(${item.id})" class="text-xs text-mistral-stone hover:text-rose-400 p-1 transition" title="Sil">
-                ✕
+                
               </button>
             </div>
           `).join('');

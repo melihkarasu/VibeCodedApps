@@ -13,7 +13,7 @@ window.showToast = function(msg, duration = 3500) {
     document.body.appendChild(toast);
   }
 
-  toast.innerHTML = '<span>⚡</span> <span>' + msg + '</span>';
+  toast.innerHTML = '<span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> <span>' + msg + '</span>';
   toast.classList.remove('hidden');
   toast.style.display = 'flex';
 
@@ -28,7 +28,7 @@ window.showToast = function(msg, duration = 3500) {
 window.copyToClipboard = function(text, successMsg = 'Panoya kopyalandı!') {
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(() => {
-      window.showToast('✓ ' + successMsg);
+      window.showToast('' + successMsg);
     }).catch(() => {
       fallbackCopy(text, successMsg);
     });
@@ -46,7 +46,7 @@ function fallbackCopy(text, successMsg) {
   ta.select();
   try {
     document.execCommand('copy');
-    window.showToast('✓ ' + successMsg);
+    window.showToast('' + successMsg);
   } catch (err) {
     window.showToast('Kopyalama başarısız oldu');
   }
@@ -153,7 +153,7 @@ function parseJwtPayload(token) {
           <h3 class="text-xl font-bold font-editorial text-mistral-ink">${name}</h3>
           <p class="text-sm text-mistral-slate mb-6">${profile.email || ''}</p>
           <div class="p-3 mb-6 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-medium">
-            ✓ Oturumunuz açık durumda. Tüm mikro uygulamalara tam erişiminiz mevcuttur.
+            Oturumunuz açık durumda. Tüm mikro uygulamalara tam erişiminiz mevcuttur.
           </div>
           <div class="flex justify-center gap-3">
             <a href="/" class="vibe-btn vibe-btn-primary">

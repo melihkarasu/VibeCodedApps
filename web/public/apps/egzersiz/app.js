@@ -44,7 +44,7 @@ function renderMuscleChips(muscles) {
       onclick="selectMuscle('all')" 
       id="chip-all" 
       class="muscle-chip-btn active px-3.5 py-1.5 rounded-lg border border-mistral-hairline text-xs font-semibold cursor-pointer">
-      🌟 Tüm Vücut
+      Tüm Vücut
     </button>
   ` + muscles.map(m => `
     <button 
@@ -103,7 +103,7 @@ function selectMuscle(muscleId) {
     } else {
       infoEl.innerHTML = `
         <div class="flex items-center gap-2">
-          <span class="text-xl">🏋️</span>
+          <span class="text-xl"><svg class="w-5 h-5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
           <div>
             <strong class="text-sm text-mistral-ink font-bold block">Tüm Vücut Egzersiz Kütüphanesi</strong>
             <span class="text-xs text-mistral-slate">workout-cool ve Wger standartlarında derlenmiş 800+ hareket rehberi.</span>
@@ -198,7 +198,7 @@ function renderExerciseCards(exercises) {
   if (exercises.length === 0) {
     container.innerHTML = `
       <div class="col-span-full p-12 text-center rounded-2xl bg-white border border-dashed border-stone-300 text-mistral-slate">
-        <span class="text-3xl block mb-2">🔍</span>
+        <span class="text-3xl block mb-2"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
         <strong class="text-mistral-ink block mb-1">Seçilen Kriterlere Uygun Egzersiz Bulunamadı</strong>
         <p class="text-xs text-mistral-stone">Farklı bir ekipman filtresi deneyebilir veya kas seçimini "Tüm Vücut" yapabilirsiniz.</p>
       </div>
@@ -244,13 +244,13 @@ function renderExerciseCards(exercises) {
           <!-- Hedef Kaslar & Ekipman Etiketleri -->
           <div class="flex flex-wrap items-center gap-1.5 mb-4 text-[11px]">
             <span class="px-2.5 py-1 rounded-md bg-mistral-cream text-mistral-ink border border-mistral-beige-deep font-semibold">
-              🎯 ${escapeHtml(ex.primaryMuscle.toUpperCase())}
+              ${escapeHtml(ex.primaryMuscle.toUpperCase())}
             </span>
             <span class="px-2.5 py-1 rounded-md bg-stone-100 text-mistral-slate border border-stone-200">
-              ⚙️ ${escapeHtml(ex.equipment.toUpperCase())}
+              ${escapeHtml(ex.equipment.toUpperCase())}
             </span>
             <span class="px-2.5 py-1 rounded-md bg-stone-50 text-mistral-slate border border-stone-200">
-              🏷️ ${escapeHtml(ex.type)}
+              ${escapeHtml(ex.type)}
             </span>
           </div>
 
@@ -258,7 +258,7 @@ function renderExerciseCards(exercises) {
           ${ex.therapyTip ? `
             <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200/80 text-[11px] text-amber-950 mb-4 leading-relaxed">
               <strong class="font-semibold text-amber-800 flex items-center gap-1 mb-0.5">
-                <span>🧘</span> Postür & Fizik Tedavi Notu:
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span> Postür & Fizik Tedavi Notu:
               </strong>
               ${escapeHtml(ex.therapyTip)}
             </div>
@@ -404,7 +404,7 @@ function renderRoutine() {
   if (userRoutine.length === 0) {
     container.innerHTML = `
       <div class="p-8 text-center rounded-xl bg-stone-50 border border-dashed border-stone-200 text-xs text-mistral-stone">
-        Henüz programınıza egzersiz eklemediniz. Aşağıdaki egzersiz kartlarındaki <strong>"➕ Programa Ekle"</strong> butonuna tıklayarak hareketleri buraya toplayabilirsiniz.
+        Henüz programınıza egzersiz eklemediniz. Aşağıdaki egzersiz kartlarındaki <strong>"Programa Ekle"</strong> butonuna tıklayarak hareketleri buraya toplayabilirsiniz.
       </div>
     `;
     if (summaryBar) summaryBar.classList.add('hidden');
@@ -539,7 +539,7 @@ function exportRoutine(format) {
 
   if (format === 'markdown') {
     // 1. Markdown / Düz Metin Formatı (Panoya Kopyalama)
-    let md = `# 🏋️ Antrenman Programım - ${dateStr}\n\n`;
+    let md = `# Antrenman Programım - ${dateStr}\n\n`;
     md += `> Toplam: ${userRoutine.length} Egzersiz | Tahmini Süre: ~${Math.round(userRoutine.length * 7)} dk\n\n`;
     userRoutine.forEach((item, idx) => {
       md += `### ${idx + 1}. ${item.name} (${item.primaryMuscle.toUpperCase()})\n`;
@@ -621,7 +621,7 @@ function exportRoutine(format) {
       </head>
       <body>
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <h1>🏋️ Kişisel Antrenman Takip Formu</h1>
+          <h1>Kişisel Antrenman Takip Formu</h1>
           <button onclick="window.print()" style="padding: 6px 14px; font-size: 12px; font-weight: bold; cursor: pointer;">Yazdır / PDF</button>
         </div>
         <div class="meta">
@@ -686,7 +686,7 @@ function openExerciseModal(exerciseId) {
         type="button" 
         onclick="closeExerciseModal()" 
         class="w-8 h-8 rounded-lg bg-stone-100 hover:bg-stone-200 text-mistral-slate flex items-center justify-center text-sm cursor-pointer transition">
-        ✕
+        
       </button>
     </div>
 
@@ -709,7 +709,7 @@ function openExerciseModal(exerciseId) {
       <!-- Adım Adım Doğru Form Talimatları -->
       <div>
         <h4 class="font-bold text-sm text-mistral-ink mb-3 flex items-center gap-2">
-          <span>📋</span> Doğru Form & Hareketi Uygulama Adımları
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Doğru Form & Hareketi Uygulama Adımları
         </h4>
         <div class="space-y-2.5">
           ${ex.instructions.map((step, idx) => `
@@ -727,7 +727,7 @@ function openExerciseModal(exerciseId) {
       ${ex.therapyTip ? `
         <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 text-xs space-y-1.5 leading-relaxed">
           <strong class="font-bold text-amber-900 flex items-center gap-1.5 text-sm">
-            <span>🛡️</span> Sakatlık Önleme & Postür Terapisi
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Sakatlık Önleme & Postür Terapisi
           </strong>
           <p>${escapeHtml(ex.therapyTip)}</p>
         </div>

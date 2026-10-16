@@ -5,7 +5,7 @@ function safeCopyToClipboard(text, msg) {
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(() => {
-      if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+      if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
     }).catch(() => fallbackExecCopy(text, msg));
   } else {
     fallbackExecCopy(text, msg);
@@ -20,7 +20,7 @@ function fallbackExecCopy(text, msg) {
   ta.select();
   try {
     document.execCommand('copy');
-    if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+    if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
   } catch(e) {
     if (window.showToast) window.showToast('Kopyalama başarısız');
   }
@@ -205,13 +205,13 @@ let currentColors = [];
           const code = document.getElementById('code-output').innerText;
           navigator.clipboard.writeText(code);
           const btn = document.getElementById('btn-copy-code');
-          btn.innerText = '✓ Kopyalandı!';
-          setTimeout(() => btn.innerHTML = '<span>📋</span> Kopyala', 2000);
+          btn.innerText = 'Kopyalandı!';
+          setTimeout(() => btn.innerHTML = '<span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Kopyala', 2000);
         }
 
         function copyText(txt) {
           navigator.clipboard.writeText(txt);
-          alert(`"✓ ${txt}" panoya kopyalandı!`);
+          alert(`"${txt}" panoya kopyalandı!`);
         }
 
         document.addEventListener('DOMContentLoaded', () => {

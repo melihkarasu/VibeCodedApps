@@ -5,7 +5,7 @@ function safeCopyToClipboard(text, msg) {
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(() => {
-      if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+      if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
     }).catch(() => fallbackExecCopy(text, msg));
   } else {
     fallbackExecCopy(text, msg);
@@ -20,7 +20,7 @@ function fallbackExecCopy(text, msg) {
   ta.select();
   try {
     document.execCommand('copy');
-    if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+    if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
   } catch(e) {
     if (window.showToast) window.showToast('Kopyalama başarısız');
   }
@@ -184,7 +184,7 @@ let currentResults = [];
                     Sözleri Oku &rarr;
                   </button>
                   <button onclick="quickSaveSong(${idx})" class="text-xs text-mistral-slate hover:text-amber-400 transition p-1" title="Çalma Listeme Kaydet">
-                    🔖
+                    
                   </button>
                 </div>
               </div>
@@ -233,7 +233,7 @@ let currentResults = [];
           tName.innerText = trackName;
           aName.innerText = artistName;
 
-          showToast(`🎵 Çalıyor: ${trackName} - ${artistName}`);
+          showToast(`Çalıyor: ${trackName} - ${artistName}`);
         }
 
         function toggleGlobalAudio() {
@@ -370,7 +370,7 @@ let currentResults = [];
               plainLyrics: currentModalSong.plainLyrics,
               date: new Date().toLocaleDateString('tr-TR')
             });
-            showToast('✓ Çalma listenize eklendi!');
+            showToast('Çalma listenize eklendi!');
           }
 
           updateModalFavButtonState();
@@ -397,7 +397,7 @@ let currentResults = [];
             date: new Date().toLocaleDateString('tr-TR')
           });
 
-          showToast(`✓ "${song.trackName}" çalma listenize eklendi!`);
+          showToast(`"${song.trackName}" çalma listenize eklendi!`);
           renderSavedSongs();
           await persistPlaylistToDb();
         }
@@ -409,10 +409,10 @@ let currentResults = [];
           const text = document.getElementById('modal-fav-text');
 
           if (isSaved) {
-            icon.innerText = '✓';
+            icon.innerText = '';
             text.innerText = 'Listenizde Kayıtlı';
           } else {
-            icon.innerText = '🔖';
+            icon.innerText = '';
             text.innerText = 'Listeme Ekle';
           }
         }
@@ -444,7 +444,7 @@ let currentResults = [];
                 <p class="text-[11px] text-mistral-slate truncate">${escapeHtml(song.artistName)}</p>
               </div>
               <button onclick="removeSavedSong(${idx})" class="text-mistral-stone hover:text-rose-500 p-1 rounded-lg hover:bg-rose-50 transition" title="Listeden çıkar">
-                ✕
+                
               </button>
             </div>
           `).join('');

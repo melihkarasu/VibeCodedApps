@@ -5,7 +5,7 @@ function safeCopyToClipboard(text, msg) {
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(() => {
-      if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+      if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
     }).catch(() => fallbackExecCopy(text, msg));
   } else {
     fallbackExecCopy(text, msg);
@@ -20,7 +20,7 @@ function fallbackExecCopy(text, msg) {
   ta.select();
   try {
     document.execCommand('copy');
-    if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+    if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
   } catch(e) {
     if (window.showToast) window.showToast('Kopyalama başarısız');
   }
@@ -153,7 +153,7 @@ let checkDebounceTimer = null;
           btnText.innerText = '10+ Milyar Şifre Taranıyor...';
 
           card.className = 'p-5 rounded-2xl bg-amber-50 border-2 border-amber-300 flex items-start gap-4 transition shadow-sm';
-          icon.innerText = '🔍';
+          icon.innerText = '';
           title.innerText = 'k-Anonymity Sızıntı Taraması Yürütülüyor...';
           title.className = 'font-bold text-sm text-amber-950';
           desc.innerText = 'HaveIBeenPwned API V3 protokolü gereğince şifreniz hiçbir yere iletilmeden tarayıcınızda taranıyor.';
@@ -210,7 +210,7 @@ let checkDebounceTimer = null;
             renderBreachResult(matchCount);
           } catch(err) {
             card.className = 'p-5 rounded-2xl bg-rose-50 border-2 border-rose-300 flex items-start gap-4 transition shadow-sm';
-            icon.innerText = '⚠️';
+            icon.innerText = '';
             title.innerText = 'Tarama Sırasında Hata Oluştu';
             title.className = 'font-bold text-sm text-rose-950';
             desc.innerText = 'Sızıntı servisine erişilemedi: ' + err.message;
@@ -218,7 +218,7 @@ let checkDebounceTimer = null;
           } finally {
             btn.disabled = false;
             btn.classList.remove('opacity-80', 'cursor-not-allowed');
-            btnIcon.innerText = '🔍';
+            btnIcon.innerText = '';
             btnText.innerText = 'Sızıntıyı Kontrol Et';
           }
         }
@@ -305,17 +305,17 @@ let checkDebounceTimer = null;
 
           if (count > 0) {
             card.className = 'p-5 rounded-2xl bg-rose-50 border-2 border-rose-300 flex items-start gap-4 transition shadow-md';
-            icon.innerText = '⚠️';
+            icon.innerText = '';
             title.innerText = 'TEHLİKE: Şifreniz Sızdırılmış!';
             title.className = 'font-black text-sm text-rose-950 flex items-center gap-1.5';
             desc.innerText = 'Bu şifre geçmişteki büyük şirket veri sızıntılarında hackerların eline geçmiştir. Saldırganlar bu şifreyi sözlük saldırılarında (credential stuffing) otomatik denerler.';
             desc.className = 'text-xs text-rose-900 mt-1 leading-relaxed font-medium';
             stats.classList.remove('hidden');
             stats.className = 'mt-2.5 px-3 py-1.5 rounded-xl bg-rose-100 text-rose-900 border border-rose-300 font-mono font-bold text-xs inline-block';
-            stats.innerText = `🚨 Toplam İfşa Sayısı: ${count.toLocaleString('tr-TR')} kez`;
+            stats.innerText = `Toplam İfşa Sayısı: ${count.toLocaleString('tr-TR')} kez`;
           } else {
             card.className = 'p-5 rounded-2xl bg-emerald-50 border-2 border-emerald-300 flex items-start gap-4 transition shadow-md';
-            icon.innerText = '✅';
+            icon.innerText = '';
             title.innerText = 'Harika! Sızıntılarda Bulunamadı';
             title.className = 'font-black text-sm text-emerald-950';
             desc.innerText = 'Bu şifre bilinen hiçbir veri sızıntısında yer almıyor. Güvenle kullanabilirsiniz.';
@@ -335,7 +335,7 @@ let checkDebounceTimer = null;
 
           const card = document.getElementById('breach-result-card');
           card.className = 'p-5 rounded-2xl bg-mistral-cream-light border border-mistral-beige-deep flex items-start gap-4 transition shadow-sm';
-          document.getElementById('breach-icon').innerText = '🛡️';
+          document.getElementById('breach-icon').innerText = '';
           document.getElementById('breach-title').innerText = 'Sızıntı Taraması Bekleniyor';
           document.getElementById('breach-title').className = 'font-bold text-sm text-mistral-ink';
           const desc = document.getElementById('breach-desc');
@@ -389,7 +389,7 @@ let checkDebounceTimer = null;
           const pwd = document.getElementById('gen-password-display').innerText.trim();
           if (!pwd || pwd.includes('bekleniyor')) return;
           navigator.clipboard.writeText(pwd).then(() => {
-            showToast('✓ Üretilen güçlü parola panoya kopyalandı!');
+            showToast('Üretilen güçlü parola panoya kopyalandı!');
           });
         }
 

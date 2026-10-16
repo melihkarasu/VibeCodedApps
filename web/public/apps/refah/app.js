@@ -13,13 +13,13 @@ const COUNTRY_META = {
         };
 
         const INDICATORS = {
-          'NY.GDP.PCAP.KD': { name: 'Kişi Başına GSYİH', unit: 'Sabit 2015 USD ($)', icon: '💰', decimals: 0 },
+          'NY.GDP.PCAP.KD': { name: 'Kişi Başına GSYİH', unit: 'Sabit 2015 USD ($)', icon: '', decimals: 0 },
           'SP.DYN.LE00.IN': { name: 'Beklenen Yaşam Süresi', unit: 'Yıl', icon: '⏳', decimals: 1 },
-          'FP.CPI.TOTL.ZG': { name: 'TÜFE Enflasyon Oranı', unit: 'Yıllık %', icon: '📈', decimals: 1 },
-          'IT.NET.USER.ZS': { name: 'İnternet Kullanım Oranı', unit: '% Nüfus', icon: '🌐', decimals: 1 },
-          'EG.ELC.ACCS.ZS': { name: 'Elektrik Erişim Oranı', unit: '% Nüfus', icon: '⚡', decimals: 1 },
-          'EG.FEC.RNEW.ZS': { name: 'Yenilenebilir Enerji Payı', unit: '% Toplam', icon: '🌿', decimals: 1 },
-          'EN.ATM.CO2E.PC': { name: 'Kişi Başına Karbon Salımı', unit: 'Ton / Kişi', icon: '🏭', decimals: 2 }
+          'FP.CPI.TOTL.ZG': { name: 'TÜFE Enflasyon Oranı', unit: 'Yıllık %', icon: '', decimals: 1 },
+          'IT.NET.USER.ZS': { name: 'İnternet Kullanım Oranı', unit: '% Nüfus', icon: '', decimals: 1 },
+          'EG.ELC.ACCS.ZS': { name: 'Elektrik Erişim Oranı', unit: '% Nüfus', icon: '', decimals: 1 },
+          'EG.FEC.RNEW.ZS': { name: 'Yenilenebilir Enerji Payı', unit: '% Toplam', icon: '', decimals: 1 },
+          'EN.ATM.CO2E.PC': { name: 'Kişi Başına Karbon Salımı', unit: 'Ton / Kişi', icon: '', decimals: 2 }
         };
 
         let activeIndicator = 'NY.GDP.PCAP.KD';
@@ -50,13 +50,13 @@ const COUNTRY_META = {
         function renderSelectedTags() {
           const container = document.getElementById('selected-countries-tags');
           container.innerHTML = selectedCountries.map(code => {
-            const m = COUNTRY_META[code] || { name: code, flag: '🌐', color: '#94a3b8' };
+            const m = COUNTRY_META[code] || { name: code, flag: '', color: '#94a3b8' };
             const isTr = (code === 'TUR');
             return `
               <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold shadow-sm" style="background-color: ${m.color}15; border-color: ${m.color}60; color: ${m.color};">
                 <span>${m.flag}</span>
                 <span>${m.name}</span>
-                <button onclick="toggleCountry('${code}')" class="ml-1 opacity-70 hover:opacity-100 font-bold">✕</button>
+                <button onclick="toggleCountry('${code}')" class="ml-1 opacity-70 hover:opacity-100 font-bold"></button>
               </span>
             `;
           }).join('');
@@ -143,7 +143,7 @@ const COUNTRY_META = {
           const indMeta = INDICATORS[activeIndicator] || { decimals: 1, unit: '' };
 
           container.innerHTML = selectedCountries.map(code => {
-            const m = COUNTRY_META[code] || { name: code, flag: '🌐', color: '#3b82f6' };
+            const m = COUNTRY_META[code] || { name: code, flag: '', color: '#3b82f6' };
             const series = currentRawData[code] || [];
             const latest = series.length > 0 ? series[series.length - 1] : null;
             const oldest = series.length > 5 ? series[series.length - 6] : (series[0] || null);
@@ -311,7 +311,7 @@ const COUNTRY_META = {
           link.click();
           document.body.removeChild(link);
 
-          showToast('✓ Veri tablosu CSV olarak indirildi!');
+          showToast('Veri tablosu CSV olarak indirildi!');
         }
 
         function showToast(msg) {

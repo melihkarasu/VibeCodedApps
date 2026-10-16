@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/renk/app.js?v=20260926s" defer></script>
+      <script src="/static/apps/renk/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -20,7 +20,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-medium" id="color-mode-status">Harmoni Motoru Hazır</span>
         </div>
       </div>
@@ -68,7 +67,7 @@ module.exports = function(pageTemplate) {
               onclick="randomColor()" 
               title="Rastgele Renk Üret"
               class="flex-1 py-2.5 px-3 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep font-semibold text-xs transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
-              <span>🎲</span> Rastgele
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="2"/></svg></span> Rastgele
             </button>
             <button 
               type="button" 
@@ -82,18 +81,17 @@ module.exports = function(pageTemplate) {
         <!-- Hazır İlham Paletleri -->
         <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-mistral-hairline text-xs">
           <span class="text-mistral-stone font-medium mr-1">İlham Presetleri:</span>
-          <button onclick="setPreset('#FA520F', 'analogic')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🌅 Mistral Sunset</button>
-          <button onclick="setPreset('#0F766E', 'triad')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🌲 Orman Zümrütü</button>
-          <button onclick="setPreset('#6366F1', 'complement')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🌌 Gece Göğü</button>
-          <button onclick="setPreset('#EC4899', 'quad')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🍬 Neon Şeker</button>
-          <button onclick="setPreset('#D97706', 'monochrome')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🍂 Sonbahar Kehribar</button>
+          <button onclick="setPreset('#FA520F', 'analogic')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Mistral Sunset</button>
+          <button onclick="setPreset('#0F766E', 'triad')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Orman Zümrütü</button>
+          <button onclick="setPreset('#6366F1', 'complement')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Gece Göğü</button>
+          <button onclick="setPreset('#EC4899', 'quad')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Neon Şeker</button>
+          <button onclick="setPreset('#D97706', 'monochrome')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Sonbahar Kehribar</button>
         </div>
       </div>
 
       <!-- 5'Lİ RENK PALETİ GÖRSEL BLOKLARI -->
       <div id="palette-loading" class="hidden py-16 text-center">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold">
-          <span class="w-2.5 h-2.5 rounded-full bg-mistral-orange animate-ping"></span>
           <span>Renk spektrumu hesaplanıyor...</span>
         </div>
       </div>
@@ -109,7 +107,7 @@ module.exports = function(pageTemplate) {
           <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm space-y-4">
             <div class="flex items-center justify-between pb-3 border-b border-mistral-hairline">
               <h3 class="text-base font-bold font-editorial text-mistral-ink flex items-center gap-2">
-                <span>👁️</span> WCAG Okunabilirlik Kontrast Analizi
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span> WCAG Okunabilirlik Kontrast Analizi
               </h3>
               <span class="text-xs text-mistral-stone font-mono" id="lbl-contrast-hex">#FA520F</span>
             </div>
@@ -148,7 +146,7 @@ module.exports = function(pageTemplate) {
           <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm space-y-4">
             <div class="flex items-center justify-between pb-3 border-b border-mistral-hairline">
               <h3 class="text-base font-bold font-editorial text-mistral-ink flex items-center gap-2">
-                <span>💻</span> Kod Olarak Dışa Aktar
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span> Kod Olarak Dışa Aktar
               </h3>
               <div class="flex gap-1.5 text-xs">
                 <button onclick="setExportFormat('css')" id="btn-fmt-css" class="px-2.5 py-1 rounded-md bg-mistral-orange text-white font-semibold transition">CSS Vars</button>
@@ -163,7 +161,7 @@ module.exports = function(pageTemplate) {
                 onclick="copyCode()" 
                 id="btn-copy-code"
                 class="absolute top-2.5 right-2.5 px-3 py-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition backdrop-blur border border-white/20 flex items-center gap-1">
-                <span>📋</span> Kopyala
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Kopyala
               </button>
             </div>
           </div>

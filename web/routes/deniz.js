@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <script src="/static/apps/deniz/app.js" defer></script>
+      <script src="/static/apps/deniz/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -21,7 +21,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-teal-500 animate-pulse"></span>
           <span class="font-medium" id="marine-status-badge">Deniz Telemetrisi Açık</span>
         </div>
       </div>
@@ -31,15 +30,15 @@ module.exports = function(pageTemplate) {
         <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
           <div class="sm:col-span-8">
             <select id="select-spot" onchange="onSpotChange()" class="w-full px-4 py-2.5 rounded-lg bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange transition">
-              <option value="alacati" selected>🏄‍♂️ Alaçatı Sörf Koyu (İzmir / Ege)</option>
-              <option value="bodrum">⛵ Bodrum Yalıkavak (Muğla / Güney Ege)</option>
-              <option value="kas">🤿 Kaş / Kaputaş Kıyısı (Antalya / Akdeniz)</option>
-              <option value="bozcaada">🍇 Bozcaada Ayazma Koyu (Çanakkale / Kuzey Ege)</option>
-              <option value="sile">🌊 Şile & Karadeniz Kıyıları (İstanbul / Karadeniz)</option>
-              <option value="antalya">🏖️ Antalya Konyaaltı Körfezi (Akdeniz)</option>
-              <option value="datca">🌅 Datça Palamutbükü (Ege-Akdeniz Birleşimi)</option>
-              <option value="cesme">🏊‍♂️ Çeşme Ilıca Plajı (İzmir)</option>
-              <option value="fethiye">🛶 Fethiye Ölüdeniz Lagünü (Muğla)</option>
+              <option value="alacati" selected>‍ Alaçatı Sörf Koyu (İzmir / Ege)</option>
+              <option value="bodrum">Bodrum Yalıkavak (Muğla / Güney Ege)</option>
+              <option value="kas">Kaş / Kaputaş Kıyısı (Antalya / Akdeniz)</option>
+              <option value="bozcaada">Bozcaada Ayazma Koyu (Çanakkale / Kuzey Ege)</option>
+              <option value="sile">Şile & Karadeniz Kıyıları (İstanbul / Karadeniz)</option>
+              <option value="antalya">Antalya Konyaaltı Körfezi (Akdeniz)</option>
+              <option value="datca">Datça Palamutbükü (Ege-Akdeniz Birleşimi)</option>
+              <option value="cesme">‍ Çeşme Ilıca Plajı (İzmir)</option>
+              <option value="fethiye">Fethiye Ölüdeniz Lagünü (Muğla)</option>
             </select>
           </div>
           <div class="sm:col-span-4 flex gap-2">
@@ -47,7 +46,7 @@ module.exports = function(pageTemplate) {
               type="button" 
               onclick="refreshMarineData()" 
               class="w-full py-2.5 px-4 rounded-md bg-mistral-orange hover:bg-mistral-orange-deep text-white font-medium text-xs transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
-              <span>🔄</span> Dalga Durumunu Yenile
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span> Dalga Durumunu Yenile
             </button>
           </div>
         </div>
@@ -55,11 +54,11 @@ module.exports = function(pageTemplate) {
         <!-- Hızlı Kıyı Hapları -->
         <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-mistral-hairline text-xs">
           <span class="text-mistral-stone font-medium mr-1">Popüler Noktalar:</span>
-          <button onclick="setSpot('alacati')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🏄‍♂️ Alaçatı</button>
-          <button onclick="setSpot('bodrum')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">⛵ Bodrum</button>
-          <button onclick="setSpot('kas')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🤿 Kaş</button>
-          <button onclick="setSpot('sile')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🌊 Şile</button>
-          <button onclick="setSpot('bozcaada')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🍇 Bozcaada</button>
+          <button onclick="setSpot('alacati')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">‍Alaçatı</button>
+          <button onclick="setSpot('bodrum')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Bodrum</button>
+          <button onclick="setSpot('kas')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Kaş</button>
+          <button onclick="setSpot('sile')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Şile</button>
+          <button onclick="setSpot('bozcaada')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Bozcaada</button>
         </div>
       </div>
 
@@ -83,7 +82,7 @@ module.exports = function(pageTemplate) {
             <!-- Aktivite & Güvenlik Tavsiyesi -->
             <div class="p-4 rounded-xl bg-mistral-cream border border-mistral-beige-deep text-left text-xs text-mistral-slate space-y-2">
               <div class="font-bold text-mistral-ink flex items-center gap-1.5">
-                <span>⚓</span> Deniz & Sörf Uygunluğu
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg></span> Deniz & Sörf Uygunluğu
               </div>
               <p id="txt-marine-advice" class="leading-relaxed">
                 Deniz çarşaf gibi. Yüzme, kano, SUP ve aile aktiviteleri için son derece ideal.
@@ -137,7 +136,7 @@ module.exports = function(pageTemplate) {
           <!-- Denizcilik Rehber Kartı -->
           <div class="p-5 rounded-xl bg-mistral-cream-light border border-mistral-beige-deep text-xs text-mistral-slate space-y-2">
             <div class="font-bold text-mistral-ink flex items-center gap-1.5">
-              <span>🏄‍♀️</span> Sörfçüler ve Yelkenciler İçin İpucu
+              <span>‍</span> Sörfçüler ve Yelkenciler İçin İpucu
             </div>
             <p class="leading-relaxed">
               <strong>Dalga Periyodu (Period):</strong> Periyot süresi ne kadar uzunsa (örn: 8-12 saniye), dalgalar o kadar düzenli, güçlü ve sörf için kalitelidir. Kısa periyotlu dalgalar (2-4 saniye) genellikle yerel rüzgarın yarattığı düzensiz yüzey çalkantısını gösterir.

@@ -100,7 +100,7 @@ let bikeMap = null;
 
               const marker = L.marker([s.latitude, s.longitude], { icon: customIcon })
                 .addTo(bikeMap)
-                .bindPopup(`<strong>${s.name}</strong><br>🚲 Müsait: ${s.freeBikes}<br>🅿️ Boş Park: ${s.emptySlots || 0}`);
+                .bindPopup(`<strong>${s.name}</strong><br>Müsait: ${s.freeBikes}<br>🅿️ Boş Park: ${s.emptySlots || 0}`);
 
               marker.on('click', () => {
                 selectStation(s);
@@ -145,7 +145,7 @@ let bikeMap = null;
             <div onclick='selectStationAndCenter(${JSON.stringify(s)})' class="p-2.5 rounded-lg text-mistral-ink font-boldbg-mistral-cream-light hover:bg-mistral-cream border border-mistral-hairline cursor-pointer flex items-center justify-between transition">
               <span class="font-medium text-mistral-ink truncate max-w-[170px]">${s.name}</span>
               <div class="flex items-center gap-1 text-[11px] font-bold">
-                <span class="text-emerald-700">🚲 ${s.freeBikes}</span>
+                <span class="text-emerald-700">${s.freeBikes}</span>
                 <span class="text-mistral-stone">•</span>
                 <span class="text-mistral-slate">🅿️ ${s.emptySlots || 0}</span>
               </div>

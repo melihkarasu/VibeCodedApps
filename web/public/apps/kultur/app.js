@@ -5,7 +5,7 @@ function safeCopyToClipboard(text, msg) {
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(() => {
-      if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+      if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
     }).catch(() => fallbackExecCopy(text, msg));
   } else {
     fallbackExecCopy(text, msg);
@@ -20,7 +20,7 @@ function fallbackExecCopy(text, msg) {
   ta.select();
   try {
     document.execCommand('copy');
-    if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+    if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
   } catch(e) {
     if (window.showToast) window.showToast('Kopyalama başarısız');
   }
@@ -63,12 +63,12 @@ function fallbackExecCopy(text, msg) {
 
         // Başarımlar Tanımı
         const ACHIEVEMENTS_DEF = [
-          { id: 'first_win', name: '🎯 İlk Zafer', desc: 'İlk solo yarışmanı tamamla', xp: 50 },
-          { id: 'quick_reflex', name: '⚡ Şimşek Refleks', desc: 'Bir soruyu 3 saniyeden kısa sürede doğru bil', xp: 100 },
-          { id: 'duel_master', name: '🏆 Arena Şampiyonu', desc: 'İlk 1v1 çok oyunculu düellonu kazan', xp: 150 },
-          { id: 'perfect_streak', name: '🔥 Kusursuz Seri', desc: 'Tek oyunda 5 soruyu peş peşe doğru bil', xp: 100 },
-          { id: 'sage_master', name: '👑 Büyük Bilge', desc: 'Toplam 1.000 XP puanına ulaş', xp: 200 },
-          { id: 'explorer', name: '🌍 Kültür Elçisi', desc: 'En az 5 farklı oyun oyna', xp: 100 }
+          { id: 'first_win', name: 'İlk Zafer', desc: 'İlk solo yarışmanı tamamla', xp: 50 },
+          { id: 'quick_reflex', name: 'Şimşek Refleks', desc: 'Bir soruyu 3 saniyeden kısa sürede doğru bil', xp: 100 },
+          { id: 'duel_master', name: 'Arena Şampiyonu', desc: 'İlk 1v1 çok oyunculu düellonu kazan', xp: 150 },
+          { id: 'perfect_streak', name: 'Kusursuz Seri', desc: 'Tek oyunda 5 soruyu peş peşe doğru bil', xp: 100 },
+          { id: 'sage_master', name: 'Büyük Bilge', desc: 'Toplam 1.000 XP puanına ulaş', xp: 200 },
+          { id: 'explorer', name: 'Kültür Elçisi', desc: 'En az 5 farklı oyun oyna', xp: 100 }
         ];
 
         // Kullanıcı Durumu
@@ -180,7 +180,7 @@ function fallbackExecCopy(text, msg) {
           document.getElementById('game-cat-badge').innerText = q.cat.toUpperCase();
           document.getElementById('game-q-counter').innerText = `Soru ${currentQuestionIdx + 1}/${currentQuestions.length}`;
           document.getElementById('game-score-display').innerText = currentScore;
-          document.getElementById('game-streak-display').innerText = `🔥 ${currentStreak}`;
+          document.getElementById('game-streak-display').innerText = `${currentStreak}`;
           document.getElementById('game-question-text').innerText = q.q;
 
           // Seçenekleri oluştur
@@ -249,7 +249,7 @@ function fallbackExecCopy(text, msg) {
           }
 
           document.getElementById('game-score-display').innerText = currentScore;
-          document.getElementById('game-streak-display').innerText = `🔥 ${currentStreak}`;
+          document.getElementById('game-streak-display').innerText = `${currentStreak}`;
 
           setTimeout(() => {
             currentQuestionIdx++;
@@ -331,7 +331,7 @@ function fallbackExecCopy(text, msg) {
               currentRoomCode = data.room.code;
               document.getElementById('display-room-code').innerText = data.room.code;
               document.getElementById('created-room-info').classList.remove('hidden');
-              showToast('✓ Düello odası oluşturuldu! Kodu arkadaşınla paylaş.');
+              showToast('Düello odası oluşturuldu! Kodu arkadaşınla paylaş.');
               
               // Düello modunda başlat
               switchArenaTab('solo');
@@ -351,7 +351,7 @@ function fallbackExecCopy(text, msg) {
             const data = await res.json();
             if (data.success && data.room) {
               currentRoomCode = code;
-              showToast(`✓ ${code} odasına bağlanıldı! Karşılaşma başlıyor...`);
+              showToast(`${code} odasına bağlanıldı! Karşılaşma başlıyor...`);
               switchArenaTab('solo');
               startSoloGame(data.room.questions);
             } else {
@@ -407,15 +407,15 @@ function fallbackExecCopy(text, msg) {
               if (result === 'win') {
                 playerStats.duelWins++;
                 unlockAchievement('duel_master');
-                document.getElementById('duel-verdict-title').innerText = '🎉 KAZANDIN!';
-                document.getElementById('duel-verdict-icon').innerText = '🏆';
+                document.getElementById('duel-verdict-title').innerText = 'KAZANDIN!';
+                document.getElementById('duel-verdict-icon').innerText = '';
               } else if (result === 'loss') {
                 playerStats.duelLosses++;
                 document.getElementById('duel-verdict-title').innerText = 'KAYBETTİN';
-                document.getElementById('duel-verdict-icon').innerText = '💔';
+                document.getElementById('duel-verdict-icon').innerText = '';
               } else {
                 document.getElementById('duel-verdict-title').innerText = 'BERABERE!';
-                document.getElementById('duel-verdict-icon').innerText = '🤝';
+                document.getElementById('duel-verdict-icon').innerText = '';
               }
 
               // Maç geçmişine kaydet
@@ -436,7 +436,7 @@ function fallbackExecCopy(text, msg) {
           const code = document.getElementById('display-room-code').innerText;
           const url = window.location.origin + '/app/kultur-arena?room=' + code;
           navigator.clipboard.writeText(url).then(() => {
-            showToast('✓ Düello bağlantısı panoya kopyalandı!');
+            showToast('Düello bağlantısı panoya kopyalandı!');
           });
         }
 
@@ -473,7 +473,7 @@ function fallbackExecCopy(text, msg) {
             const def = ACHIEVEMENTS_DEF.find(a => a.id === id);
             if (def) {
               playerStats.xp += def.xp;
-              showToast(`🏅 Başarım Açıldı: ${def.name} (+${def.xp} XP)`);
+              showToast(`Başarım Açıldı: ${def.name} (+${def.xp} XP)`);
             }
           }
         }
@@ -499,7 +499,7 @@ function fallbackExecCopy(text, msg) {
             return `
               <div class="p-4 rounded-2xl bg-white border border-mistral-hairline flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                  <span class="text-2xl">${isWin ? '🏆' : (isDraw ? '🤝' : '⚔️')}</span>
+                  <span class="text-2xl">${isWin ? '' : (isDraw ? '' : '')}</span>
                   <div>
                     <h4 class="font-bold text-sm text-mistral-ink">vs ${m.opponent}</h4>
                     <span class="text-[11px] text-mistral-slate font-mono">Oda: ${m.roomCode} • ${m.date}</span>

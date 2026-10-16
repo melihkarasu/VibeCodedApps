@@ -3,7 +3,7 @@ module.exports = function(pageTemplate) {
     const extraHead = `
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/bisiklet/app.js?v=20260929a" defer></script>
+      <script src="/static/apps/bisiklet/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -22,7 +22,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-medium" id="bike-net-status">Şehir Verisi Açık</span>
         </div>
       </div>
@@ -92,9 +91,9 @@ module.exports = function(pageTemplate) {
             <div id="bike-map" class="w-full h-[520px] rounded-xl z-10"></div>
             <!-- Doluluk Lejantı -->
             <div class="absolute bottom-6 left-6 z-20 bg-white/95 backdrop-blur border border-mistral-hairline px-3.5 py-2 rounded-lg shadow-sm text-xs text-mistral-ink flex items-center gap-3">
-              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> 5+ Bisiklet</span>
-              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> 1-4 Bisiklet</span>
-              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Boş Durak</span>
+              <span class="flex items-center gap-1.5">5+ Bisiklet</span>
+              <span class="flex items-center gap-1.5">1-4 Bisiklet</span>
+              <span class="flex items-center gap-1.5">Boş Durak</span>
             </div>
           </div>
         </div>

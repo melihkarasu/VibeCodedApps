@@ -2,7 +2,7 @@
 function safeCopyToClipboard(text, msg) {
   if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
     navigator.clipboard.writeText(text).then(() => {
-      showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+      showToast('' + (msg || 'Panoya kopyalandı!'));
     }).catch(() => fallbackExecCopy(text, msg));
   } else {
     fallbackExecCopy(text, msg);
@@ -18,7 +18,7 @@ function fallbackExecCopy(text, msg) {
   ta.select();
   try {
     document.execCommand('copy');
-    showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+    showToast('' + (msg || 'Panoya kopyalandı!'));
   } catch(e) {
     showToast('Kopyalama başarısız');
   }
@@ -43,7 +43,7 @@ let currentPoemData = null;
 let currentAuthorPoems = []; // İndeks-tabanlı güvenli bağlama için
 
 // Yükleme göstergesi orijinal içerik
-const LOADING_HTML = '<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold"><span class="w-2.5 h-2.5 rounded-full bg-mistral-orange animate-ping"></span><span>Dizeler antolojiden derleniyor...</span></div>';
+const LOADING_HTML = '<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold"><span>Dizeler antolojiden derleniyor...</span></div>';
 
 // ===== PoetryDB doğrudan API (CORS-open, backend proxy yok) =====
 async function loadRandomPoem() {
@@ -159,7 +159,7 @@ function renderPoem(p) {
   card.classList.remove('hidden');
 
   document.getElementById('poem-title').innerText = p.title;
-  document.getElementById('poem-author').innerText = '✍️ ' + p.author;
+  document.getElementById('poem-author').innerText = '' + p.author;
   document.getElementById('poem-lines-count').innerText = (p.linecount || p.lines.length || 0) + ' Dize';
 
   const linesBox = document.getElementById('poem-lines');
@@ -239,7 +239,7 @@ async function savePoemToFavorites() {
       date: new Date().toLocaleDateString('tr-TR')
     });
     renderMyAnthology();
-    showToast('✓ "' + currentPoemData.title + '" antolojinize kaydedildi!');
+    showToast('"' + currentPoemData.title + '" antolojinize kaydedildi!');
     await persistAnthologyToDb();
   } else {
     showToast('Bu şiir zaten antolojinizde kayıtlı.');

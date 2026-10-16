@@ -2,8 +2,8 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <link rel="stylesheet" href="/static/apps/dso/app.css?v=2.0" />
-      <script src="/static/apps/dso/app.js?v=2.0" defer></script>
+      <link rel="stylesheet" href="/static/apps/dso/app.css?v=20261017a.0" />
+      <script src="/static/apps/dso/app.js?v=20261017a.0" defer></script>
     `;
 
     const content = `
@@ -22,7 +22,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-medium">WHO Global Health Observatory Bağlı</span>
         </div>
       </div>
@@ -87,22 +86,22 @@ module.exports = function(pageTemplate) {
       <!-- KATEGORİ & TEMA SEÇİCİ SEKMELER -->
       <div class="flex items-center gap-2 overflow-x-auto pb-2 mb-6 text-xs select-none">
         <button type="button" onclick="filterThemeCategory('all')" id="theme-btn-all" class="theme-tab-btn active px-3.5 py-2 rounded-xl bg-mistral-ink text-white font-semibold transition cursor-pointer shrink-0">
-          🌟 Tüm Göstergeler (10 Metrik)
+          Tüm Göstergeler (10 Metrik)
         </button>
         <button type="button" onclick="filterThemeCategory('life')" id="theme-btn-life" class="theme-tab-btn px-3.5 py-2 rounded-xl bg-white hover:bg-mistral-cream text-mistral-ink font-semibold border border-mistral-hairline transition cursor-pointer shrink-0">
-          🩺 Yaşam Süresi & Çocuk
+          Yaşam Süresi & Çocuk
         </button>
         <button type="button" onclick="filterThemeCategory('system')" id="theme-btn-system" class="theme-tab-btn px-3.5 py-2 rounded-xl bg-white hover:bg-mistral-cream text-mistral-ink font-semibold border border-mistral-hairline transition cursor-pointer shrink-0">
-          🏥 Sağlık Sistemi & Doktorlar
+          Sağlık Sistemi & Doktorlar
         </button>
         <button type="button" onclick="filterThemeCategory('lifestyle')" id="theme-btn-lifestyle" class="theme-tab-btn px-3.5 py-2 rounded-xl bg-white hover:bg-mistral-cream text-mistral-ink font-semibold border border-mistral-hairline transition cursor-pointer shrink-0">
-          🍔 Obezite & Alkol Tüketimi
+          Obezite & Alkol Tüketimi
         </button>
         <button type="button" onclick="filterThemeCategory('mental')" id="theme-btn-mental" class="theme-tab-btn px-3.5 py-2 rounded-xl bg-white hover:bg-mistral-cream text-mistral-ink font-semibold border border-mistral-hairline transition cursor-pointer shrink-0">
-          🧠 Ruh Sağlığı & İntihar
+          Ruh Sağlığı & İntihar
         </button>
         <button type="button" onclick="filterThemeCategory('environment')" id="theme-btn-environment" class="theme-tab-btn px-3.5 py-2 rounded-xl bg-white hover:bg-mistral-cream text-mistral-ink font-semibold border border-mistral-hairline transition cursor-pointer shrink-0">
-          💧 Temiz Su & Aşılama
+          Temiz Su & Aşılama
         </button>
       </div>
 
@@ -123,7 +122,7 @@ module.exports = function(pageTemplate) {
         <div class="dso-metric-card p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xs space-y-2" data-category="life">
           <div class="flex items-center justify-between text-xs text-mistral-stone font-bold uppercase tracking-wider">
             <span>Sağlıklı Ömür (HALE)</span>
-            <span class="text-base">🌱</span>
+            <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span>
           </div>
           <div id="metric-hale-value" class="text-2xl sm:text-3xl font-bold font-editorial text-mistral-ink">--</div>
           <p id="metric-hale-detail" class="text-xs text-mistral-slate line-clamp-2 leading-relaxed">Veri yükleniyor...</p>
@@ -133,7 +132,7 @@ module.exports = function(pageTemplate) {
         <div class="dso-metric-card p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xs space-y-2" data-category="life">
           <div class="flex items-center justify-between text-xs text-mistral-stone font-bold uppercase tracking-wider">
             <span>5 Yaş Altı Ölüm Oranı</span>
-            <span class="text-base">👶</span>
+            <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
           </div>
           <div id="metric-u5-value" class="text-2xl sm:text-3xl font-bold font-editorial text-rose-700">--</div>
           <p id="metric-u5-detail" class="text-xs text-mistral-slate line-clamp-2 leading-relaxed">Veri yükleniyor...</p>
@@ -143,7 +142,7 @@ module.exports = function(pageTemplate) {
         <div class="dso-metric-card p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xs space-y-2" data-category="system">
           <div class="flex items-center justify-between text-xs text-mistral-stone font-bold uppercase tracking-wider">
             <span>Doktor Yoğunluğu</span>
-            <span class="text-base">👨‍⚕️</span>
+            <span class="text-base">‍</span>
           </div>
           <div id="metric-doc-value" class="text-2xl sm:text-3xl font-bold font-editorial text-blue-700">--</div>
           <p id="metric-doc-detail" class="text-xs text-mistral-slate line-clamp-2 leading-relaxed">Veri yükleniyor...</p>
@@ -153,7 +152,7 @@ module.exports = function(pageTemplate) {
         <div class="dso-metric-card p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xs space-y-2" data-category="lifestyle">
           <div class="flex items-center justify-between text-xs text-mistral-stone font-bold uppercase tracking-wider">
             <span>Yetişkin Obezite Oranı</span>
-            <span class="text-base">🍔</span>
+            <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg></span>
           </div>
           <div id="metric-obe-value" class="text-2xl sm:text-3xl font-bold font-editorial text-amber-700">--</div>
           <p id="metric-obe-detail" class="text-xs text-mistral-slate line-clamp-2 leading-relaxed">Veri yükleniyor...</p>
@@ -163,7 +162,7 @@ module.exports = function(pageTemplate) {
         <div class="dso-metric-card p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xs space-y-2" data-category="lifestyle">
           <div class="flex items-center justify-between text-xs text-mistral-stone font-bold uppercase tracking-wider">
             <span>Kişi Başı Alkol Tüketimi</span>
-            <span class="text-base">🍷</span>
+            <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg></span>
           </div>
           <div id="metric-alc-value" class="text-2xl sm:text-3xl font-bold font-editorial text-purple-700">--</div>
           <p id="metric-alc-detail" class="text-xs text-mistral-slate line-clamp-2 leading-relaxed">Veri yükleniyor...</p>
@@ -173,7 +172,7 @@ module.exports = function(pageTemplate) {
         <div class="dso-metric-card p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xs space-y-2" data-category="mental">
           <div class="flex items-center justify-between text-xs text-mistral-stone font-bold uppercase tracking-wider">
             <span>İntihar Oranı</span>
-            <span class="text-base">🧠</span>
+            <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
           </div>
           <div id="metric-sui-value" class="text-2xl sm:text-3xl font-bold font-editorial text-rose-800">--</div>
           <p id="metric-sui-detail" class="text-xs text-mistral-slate line-clamp-2 leading-relaxed">Veri yükleniyor...</p>
@@ -183,7 +182,7 @@ module.exports = function(pageTemplate) {
         <div class="dso-metric-card p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xs space-y-2" data-category="environment">
           <div class="flex items-center justify-between text-xs text-mistral-stone font-bold uppercase tracking-wider">
             <span>Kızamık Aşı Kapsamı</span>
-            <span class="text-base">💉</span>
+            <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
           </div>
           <div id="metric-vac-value" class="text-2xl sm:text-3xl font-bold font-editorial text-emerald-700">--</div>
           <p id="metric-vac-detail" class="text-xs text-mistral-slate line-clamp-2 leading-relaxed">Veri yükleniyor...</p>
@@ -193,7 +192,7 @@ module.exports = function(pageTemplate) {
         <div class="dso-metric-card p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xs space-y-2" data-category="environment">
           <div class="flex items-center justify-between text-xs text-mistral-stone font-bold uppercase tracking-wider">
             <span>Temiz Suya Erişim</span>
-            <span class="text-base">💧</span>
+            <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg></span>
           </div>
           <div id="metric-water-value" class="text-2xl sm:text-3xl font-bold font-editorial text-cyan-700">--</div>
           <p id="metric-water-detail" class="text-xs text-mistral-slate line-clamp-2 leading-relaxed">Veri yükleniyor...</p>
@@ -203,7 +202,7 @@ module.exports = function(pageTemplate) {
         <div class="dso-metric-card p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xs space-y-2" data-category="environment">
           <div class="flex items-center justify-between text-xs text-mistral-stone font-bold uppercase tracking-wider">
             <span>Hava Kirliliği Ölümleri</span>
-            <span class="text-base">💨</span>
+            <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg></span>
           </div>
           <div id="metric-air-value" class="text-2xl sm:text-3xl font-bold font-editorial text-stone-700">--</div>
           <p id="metric-air-detail" class="text-xs text-mistral-slate line-clamp-2 leading-relaxed">Veri yükleniyor...</p>
@@ -217,7 +216,7 @@ module.exports = function(pageTemplate) {
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-mistral-hairline">
           <div>
             <h3 class="text-xl font-bold font-editorial text-mistral-ink tracking-tight flex items-center gap-2">
-              <span>📈</span> Tarihsel Gelişim Eğrisi (2000 &ndash; Günümüz)
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span> Tarihsel Gelişim Eğrisi (2000 &ndash; Günümüz)
             </h3>
             <p class="text-xs text-mistral-slate mt-0.5">
               DSÖ resmi kayıtlarıyla son 20+ yıldaki ulusal sağlık dönüşümü.
@@ -238,28 +237,28 @@ module.exports = function(pageTemplate) {
               onclick="switchChartMetric('obesity')" 
               id="btn-chart-obesity"
               class="metric-chart-btn px-2.5 py-1.5 rounded-md font-semibold bg-white text-mistral-ink hover:bg-stone-200 transition cursor-pointer">
-              🍔 Obezite (%)
+              Obezite (%)
             </button>
             <button 
               type="button" 
               onclick="switchChartMetric('doctors')" 
               id="btn-chart-doctors"
               class="metric-chart-btn px-2.5 py-1.5 rounded-md font-semibold bg-white text-mistral-ink hover:bg-stone-200 transition cursor-pointer">
-              👨‍⚕️ Doktorlar
+              ‍Doktorlar
             </button>
             <button 
               type="button" 
               onclick="switchChartMetric('suicide')" 
               id="btn-chart-suicide"
               class="metric-chart-btn px-2.5 py-1.5 rounded-md font-semibold bg-white text-mistral-ink hover:bg-stone-200 transition cursor-pointer">
-              🧠 İntihar (/100k)
+              İntihar (/100k)
             </button>
             <button 
               type="button" 
               onclick="switchChartMetric('vaccine')" 
               id="btn-chart-vaccine"
               class="metric-chart-btn px-2.5 py-1.5 rounded-md font-semibold bg-white text-mistral-ink hover:bg-stone-200 transition cursor-pointer">
-              💉 Aşılama (%)
+              Aşılama (%)
             </button>
           </div>
         </div>

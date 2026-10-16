@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/akor/app.js?v=20260926l" defer></script>
+      <script src="/static/apps/akor/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -20,7 +20,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
           <span class="font-medium" id="chord-studio-status">Akor Motoru Hazır</span>
         </div>
       </div>
@@ -41,9 +40,9 @@ module.exports = function(pageTemplate) {
             <div class="flex-1">
               <label class="block text-xs font-medium text-mistral-stone mb-1">Ton (Transpoze):</label>
               <div class="flex items-center gap-1.5 p-1 rounded-lg bg-mistral-cream border border-mistral-beige-deep">
-                <button onclick="transpose(-1)" class="w-8 h-8 rounded bg-white hover:bg-mistral-cream text-mistral-ink font-bold text-sm shadow-2xs transition">♭ -1</button>
+                <button onclick="transpose(-1)" class="w-8 h-8 rounded bg-white hover:bg-mistral-cream text-mistral-ink font-bold text-sm shadow-2xs transition">-1</button>
                 <span id="lbl-transpose-val" class="flex-1 text-center font-mono font-bold text-xs text-mistral-orange">Orijinal (0)</span>
-                <button onclick="transpose(1)" class="w-8 h-8 rounded bg-white hover:bg-mistral-cream text-mistral-ink font-bold text-sm shadow-2xs transition">♯ +1</button>
+                <button onclick="transpose(1)" class="w-8 h-8 rounded bg-white hover:bg-mistral-cream text-mistral-ink font-bold text-sm shadow-2xs transition">+1</button>
               </div>
             </div>
           </div>
@@ -56,7 +55,7 @@ module.exports = function(pageTemplate) {
               onclick="toggleAutoScroll()" 
               id="btn-autoscroll" 
               class="w-full py-2.5 px-3 rounded-lg text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
-              <span id="scroll-icon">📜</span> <span id="scroll-text">Kaydırmayı Başlat</span>
+              <span id="scroll-icon"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> <span id="scroll-text">Kaydırmayı Başlat</span>
             </button>
           </div>
         </div>
@@ -113,10 +112,10 @@ module.exports = function(pageTemplate) {
           <!-- Müzisyen İpuçları Kartı -->
           <div class="p-5 rounded-xl bg-mistral-cream-light border border-mistral-beige-deep text-xs text-mistral-slate space-y-2">
             <div class="font-bold text-mistral-ink flex items-center gap-1.5">
-              <span>💡</span> Transpoze İpucu
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg></span> Transpoze İpucu
             </div>
             <p class="leading-relaxed">
-              Vokalinizin ses aralığı şarkının orijinal tonuna uymuyorsa, üst kısımdaki <strong>♯ +1</strong> veya <strong>♭ -1</strong> butonlarıyla tüm şarkının akorlarını anında yarımşar ses kaydırabilirsiniz.
+              Vokalinizin ses aralığı şarkının orijinal tonuna uymuyorsa, üst kısımdaki <strong>+1</strong> veya <strong>-1</strong> butonlarıyla tüm şarkının akorlarını anında yarımşar ses kaydırabilirsiniz.
             </p>
           </div>
         </div>

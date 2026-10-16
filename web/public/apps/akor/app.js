@@ -133,7 +133,7 @@ const SCALE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
               window.scrollBy({ top: 1, behavior: 'auto' });
             }, 45);
           } else {
-            icon.innerText = '📜';
+            icon.innerText = '';
             text.innerText = 'Kaydırmayı Başlat';
             btn.className = 'w-full py-2.5 px-3 rounded-lg text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep text-xs font-semibold transition flex items-center justify-center gap-1.5 shadow-xs';
             if (scrollTimer) clearInterval(scrollTimer);

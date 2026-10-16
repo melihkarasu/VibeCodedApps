@@ -5,7 +5,7 @@ function safeCopyToClipboard(text, msg) {
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(() => {
-      if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+      if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
     }).catch(() => fallbackExecCopy(text, msg));
   } else {
     fallbackExecCopy(text, msg);
@@ -20,7 +20,7 @@ function fallbackExecCopy(text, msg) {
   ta.select();
   try {
     document.execCommand('copy');
-    if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+    if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
   } catch(e) {
     if (window.showToast) window.showToast('Kopyalama başarısız');
   }
@@ -90,8 +90,8 @@ const CURRENCIES = {
             btnTcmb.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500 text-slate-950 transition flex items-center gap-1.5 shadow';
             btnEcb.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold text-mistral-slate hover:text-mistral-ink transition flex items-center gap-1.5';
             tcmbTypeBox.classList.remove('hidden');
-            convSourceLabel.innerText = '🏛️ TCMB Resmi Kurları';
-            document.getElementById('matrix-title').innerHTML = '<span>🏛️</span> TCMB Gösterge Kurları';
+            convSourceLabel.innerText = 'TCMB Resmi Kurları';
+            document.getElementById('matrix-title').innerHTML = '<span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></span> TCMB Gösterge Kurları';
             document.getElementById('matrix-desc').innerText = 'TCMB resmi döviz ve efektif alış/satış kurları:';
             document.getElementById('th-col-1').innerText = 'Döviz Alış';
             document.getElementById('th-col-2').innerText = 'Döviz Satış';
@@ -102,8 +102,8 @@ const CURRENCIES = {
             btnEcb.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500 text-slate-950 transition flex items-center gap-1.5 shadow';
             btnTcmb.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold text-mistral-slate hover:text-mistral-ink transition flex items-center gap-1.5';
             tcmbTypeBox.classList.add('hidden');
-            convSourceLabel.innerText = '🌍 ECB Uluslararası Kurlar';
-            document.getElementById('matrix-title').innerHTML = '<span>🌐</span> Çoklu Kur Matrisi';
+            convSourceLabel.innerText = 'ECB Uluslararası Kurlar';
+            document.getElementById('matrix-title').innerHTML = '<span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span> Çoklu Kur Matrisi';
             document.getElementById('matrix-desc').innerText = 'Girilen tutarın dünya genelindeki karşılıkları:';
             document.getElementById('th-col-1').innerText = 'Birim Kur';
             document.getElementById('th-col-2').innerText = 'Toplam Değer';
@@ -335,7 +335,7 @@ const CURRENCIES = {
 
             tbody.innerHTML = codes.map(code => {
               const item = tRates[code];
-              const c = CURRENCIES[code] || { name: item.name, flag: '🌐', symbol: '' };
+              const c = CURRENCIES[code] || { name: item.name, flag: '', symbol: '' };
               const fBuy = item.forexBuying ? item.forexBuying.toFixed(4) : '-';
               const fSell = item.forexSelling ? item.forexSelling.toFixed(4) : '-';
               const bSell = item.banknoteSelling ? item.banknoteSelling.toFixed(4) : '-';
@@ -363,7 +363,7 @@ const CURRENCIES = {
               .map(code => {
                 const rate = ecbData.rates[code] || 0;
                 const total = amount * rate;
-                const c = CURRENCIES[code] || { name: code, flag: '🌐', symbol: '' };
+                const c = CURRENCIES[code] || { name: code, flag: '', symbol: '' };
                 return `
                   <tr class="hover:bg-mistral-cream cursor-pointer transition" onclick="selectTargetCurrency('${code}')">
                     <td class="py-2.5 flex items-center gap-2">
@@ -574,7 +574,7 @@ const CURRENCIES = {
             showToast(`${from}/${to} favorilerden çıkarıldı.`);
           } else {
             favs.unshift(key);
-            showToast(`✓ ${from}/${to} favorilere eklendi!`);
+            showToast(`${from}/${to} favorilere eklendi!`);
           }
 
           localStorage.setItem(FAV_STORAGE_KEY, JSON.stringify(favs));
@@ -592,10 +592,10 @@ const CURRENCIES = {
           const star = document.getElementById('star-icon');
           const btn = document.getElementById('btn-fav-star');
           if (isFav) {
-            star.innerText = '★';
+            star.innerText = '';
             btn.className = 'text-xs text-amber-400 font-medium transition flex items-center gap-1';
           } else {
-            star.innerText = '☆';
+            star.innerText = '';
             btn.className = 'text-xs text-mistral-slate hover:text-amber-400 transition flex items-center gap-1';
           }
         }
@@ -627,7 +627,7 @@ const CURRENCIES = {
                     Yükle
                   </button>
                   <button onclick="removeFavorite('${pair}')" class="text-xs text-mistral-stone hover:text-rose-400 transition">
-                    ✕
+                    
                   </button>
                 </div>
               </div>
@@ -663,7 +663,7 @@ const CURRENCIES = {
           const to = document.getElementById('select-to').value;
           const rateText = document.getElementById('res-unit-rate').innerText;
           navigator.clipboard.writeText(rateText).then(() => {
-            showToast('✓ Kur panoya kopyalandı!');
+            showToast('Kur panoya kopyalandı!');
           });
         }
 

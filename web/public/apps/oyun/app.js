@@ -15,13 +15,13 @@ const WISHLIST_KEY = '***';
             btnFree.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-violet-600 text-white transition flex items-center gap-1.5 shadow';
             btnDeals.className = 'px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-mistral-ink hover:bg-mistral-cream transition flex items-center gap-1.5';
             storesBox.classList.add('hidden');
-            listTitle.innerHTML = '<span>🎁</span> Şu An %100 Ücretsiz Olan Oyunlar (Kalıcı Hediyeler)';
+            listTitle.innerHTML = '<span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></span> Şu An %100 Ücretsiz Olan Oyunlar (Kalıcı Hediyeler)';
             fetchFreeGames();
           } else {
             btnDeals.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-violet-600 text-white transition flex items-center gap-1.5 shadow';
             btnFree.className = 'px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-mistral-ink hover:bg-mistral-cream transition flex items-center gap-1.5';
             storesBox.classList.remove('hidden');
-            listTitle.innerHTML = '<span>🔥</span> En Büyük İndirim Fırsatları (Steam & Epic Games)';
+            listTitle.innerHTML = '<span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span> En Büyük İndirim Fırsatları (Steam & Epic Games)';
             fetchDiscountDeals();
           }
         }
@@ -171,10 +171,10 @@ const WISHLIST_KEY = '***';
 
                 <div class="pt-3 border-t border-mistral-hairline flex items-center justify-between mt-3">
                   <a href="${url}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs transition flex items-center gap-1">
-                    <span>🎁</span> Oyunu Al &rarr;
+                    <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></span> Oyunu Al &rarr;
                   </a>
                   <button onclick="saveToWishlistRendered(${idx}, 'free', '${worth}')" class="p-1.5 text-mistral-slate hover:text-amber-400 transition" title="İstek Listeme Kaydet">
-                    🔖
+                    
                   </button>
                 </div>
               </div>
@@ -199,16 +199,16 @@ const WISHLIST_KEY = '***';
           countEl.innerText = `${list.length} indirimli fırsat listelendi`;
 
           const storeNames = {
-            '1': { name: 'Steam', icon: '♨️' },
-            '25': { name: 'Epic Games', icon: '⚡' },
-            '7': { name: 'GOG', icon: '👾' },
-            '11': { name: 'Humble', icon: '📦' }
+            '1': { name: 'Steam', icon: '' },
+            '25': { name: 'Epic Games', icon: '' },
+            '7': { name: 'GOG', icon: '' },
+            '11': { name: 'Humble', icon: '' }
           };
 
           window.__renderedList = list;
           grid.innerHTML = list.map((d, idx) => {
             const savings = Math.round(parseFloat(d.savings));
-            const store = storeNames[d.storeID] || { name: 'Mağaza', icon: '🎮' };
+            const store = storeNames[d.storeID] || { name: 'Mağaza', icon: '' };
             const dealUrl = `https://www.cheapshark.com/redirect?dealID=${encodeURIComponent(d.dealID)}`;
             const steamRating = d.steamRatingText ? `${d.steamRatingText} (%${d.steamRatingPercent})` : '';
 
@@ -230,7 +230,7 @@ const WISHLIST_KEY = '***';
                     <span class="text-xs text-mistral-stone line-through font-mono">$${d.normalPrice}</span>
                     <span class="text-base font-black text-emerald-400 font-mono">$${d.salePrice}</span>
                   </div>
-                  ${steamRating ? `<p class="text-[10px] text-mistral-slate truncate mt-1">👍 ${steamRating}</p>` : ''}
+                  ${steamRating ? `<p class="text-[10px] text-mistral-slate truncate mt-1">${steamRating}</p>` : ''}
                 </div>
 
                 <div class="pt-3 border-t border-mistral-hairline flex items-center justify-between mt-3">
@@ -238,7 +238,7 @@ const WISHLIST_KEY = '***';
                     <span>Fırsatı Gör</span> &rarr;
                   </a>
                   <button onclick="saveToWishlistRendered(${idx}, 'deals')" class="p-1.5 text-mistral-slate hover:text-amber-400 transition" title="İstek Listeme Kaydet">
-                    🔖
+                    
                   </button>
                 </div>
               </div>
@@ -298,7 +298,7 @@ const WISHLIST_KEY = '***';
 
           localStorage.setItem(WISHLIST_KEY, JSON.stringify(list));
           renderWishlist();
-          showToast(`✓ "${title}" istek listenize kaydedildi!`);
+          showToast(`"${title}" istek listenize kaydedildi!`);
         }
 
         function renderWishlist() {
@@ -324,7 +324,7 @@ const WISHLIST_KEY = '***';
                 </div>
               </div>
               <button onclick="removeFromWishlist('${item.id}')" class="text-mistral-stone hover:text-rose-400 p-1 text-xs transition" title="Sil">
-                ✕
+                
               </button>
             </div>
           `).join('');

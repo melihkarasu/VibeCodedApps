@@ -197,12 +197,12 @@ router.get('/github/card', async (req, res) => {
       <!-- Repos -->
       <rect x="105" y="0" width="95" height="52" rx="10" fill="${t.bg2}"/>
       <text x="117" y="20" fill="${t.text}" font-family="-apple-system,sans-serif" font-size="9" font-weight="700">REPOLAR</text>
-      <text x="117" y="40" fill="#f8fafc" font-family="-apple-system,sans-serif" font-size="15" font-weight="800">📦 ${repos}</text>
+      <text x="117" y="40" fill="#f8fafc" font-family="-apple-system,sans-serif" font-size="15" font-weight="800">${repos}</text>
 
       <!-- Followers -->
       <rect x="210" y="0" width="95" height="52" rx="10" fill="${t.bg2}"/>
       <text x="222" y="20" fill="${t.text}" font-family="-apple-system,sans-serif" font-size="9" font-weight="700">TAKİPÇİLER</text>
-      <text x="222" y="40" fill="${t.accent}" font-family="-apple-system,sans-serif" font-size="15" font-weight="800">👥 ${followers}</text>
+      <text x="222" y="40" fill="${t.accent}" font-family="-apple-system,sans-serif" font-size="15" font-weight="800">${followers}</text>
 
       <!-- Lider Dil -->
       <rect x="315" y="0" width="95" height="52" rx="10" fill="${t.bg2}"/>

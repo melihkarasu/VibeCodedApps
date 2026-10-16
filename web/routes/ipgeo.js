@@ -3,7 +3,7 @@ module.exports = function(pageTemplate) {
     const extraHead = `
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/ipgeo/app.js?v=20260927a" defer></script>
+      <script src="/static/apps/ipgeo/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -22,7 +22,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
           <span class="font-medium" id="ip-badge-status">Teşhis Hazır</span>
         </div>
       </div>
@@ -49,7 +48,7 @@ module.exports = function(pageTemplate) {
             type="button" 
             onclick="lookupSelfIp()" 
             class="px-4 py-2.5 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep text-xs font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer">
-            <span>📍</span> Kendi IP'mi Getir
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span> Kendi IP'mi Getir
           </button>
         </div>
 
@@ -97,7 +96,7 @@ module.exports = function(pageTemplate) {
           <!-- Web Security Scanner SSRF Koruma Rozeti -->
           <div class="p-4 rounded-xl bg-mistral-cream-light border border-mistral-beige-deep text-xs text-mistral-slate space-y-1.5">
             <div class="font-bold text-mistral-ink flex items-center gap-1.5">
-              <span>🛡️</span> SSRF Savunması Aktif
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> SSRF Savunması Aktif
             </div>
             <p class="leading-relaxed text-[11px]">
               Dahili ağlar, yerel IP adresleri (127.0.0.1, 10.x, 192.168.x, 172.16-31.x) ve bulut metaveri IP'si sunucu tarafında filtrelenir; sadece genel internet adresleri çözümlenir.

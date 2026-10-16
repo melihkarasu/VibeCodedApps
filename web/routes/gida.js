@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/gida/app.js?v=20260926i" defer></script>
+      <script src="/static/apps/gida/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -20,7 +20,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
           <span class="font-medium">Open Food Facts Veritabanı Açık</span>
         </div>
       </div>
@@ -30,7 +29,7 @@ module.exports = function(pageTemplate) {
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-mistral-hairline">
           <div>
             <h3 class="text-base font-bold font-editorial text-mistral-ink flex items-center gap-2">
-              <span>🛡️</span> Kişisel Alerji Profiliniz
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Kişisel Alerji Profiliniz
             </h3>
             <p class="text-xs text-mistral-slate mt-0.5">
               Hassas olduğunuz alerjenleri seçin; sorguladığınız ürünlerde eşleşme olursa sistem kırmızı alarm verecektir.
@@ -75,17 +74,16 @@ module.exports = function(pageTemplate) {
         <!-- Popüler Örnekler -->
         <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-mistral-hairline text-xs">
           <span class="text-mistral-stone font-medium mr-1">Örnek Ürünler:</span>
-          <button onclick="quickFood('3017620422003')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🌰 Nutella (Barkod)</button>
-          <button onclick="quickFood('Eti Karam')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🍫 Eti Karam</button>
-          <button onclick="quickFood('Sütaş Süt')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🥛 Sütaş Süt</button>
-          <button onclick="quickFood('Barilla Spaghetti')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🍝 Barilla Makarna</button>
+          <button onclick="quickFood('3017620422003')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Nutella (Barkod)</button>
+          <button onclick="quickFood('Eti Karam')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Eti Karam</button>
+          <button onclick="quickFood('Sütaş Süt')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Sütaş Süt</button>
+          <button onclick="quickFood('Barilla Spaghetti')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Barilla Makarna</button>
         </div>
       </div>
 
       <!-- SONUÇLAR VE ALERJEN UYARI ALANI -->
       <div id="food-loading" class="hidden py-16 text-center">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold">
-          <span class="w-2.5 h-2.5 rounded-full bg-mistral-orange animate-ping"></span>
           <span>Open Food Facts taranıyor...</span>
         </div>
       </div>

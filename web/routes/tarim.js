@@ -2,8 +2,8 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
         const extraHead = `
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <link rel="stylesheet" href="/static/apps/tarim/app.css">
-      <script src="/static/apps/tarim/app.js" defer></script>
+      <link rel="stylesheet" href="/static/apps/tarim/app.css?v=20261017a">
+      <script src="/static/apps/tarim/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -21,7 +21,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-slate">
-          <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
           <span>Open-Meteo Zirai Model (FAO-56)</span>
         </div>
       </div>
@@ -41,7 +40,7 @@ module.exports = function(pageTemplate) {
             <div class="relative">
               <input type="text" id="input-region-search" placeholder="Örn: Polatlı, Söke, Ceyhan, Kumluca, Bafra, Akhisar, İpsala..." oninput="handleSearchInput(event)" onfocus="handleSearchFocus()" onkeydown="handleSearchKeydown(event)" autocomplete="off" class="w-full pl-10 pr-8 py-3 rounded-xl bg-white border border-mistral-hairline text-sm font-semibold text-mistral-ink placeholder-slate-500 focus:border-teal-400 focus:outline-none">
               <span class="absolute left-3.5 top-3.5 text-mistral-stone text-base"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-              <button onclick="clearSearchInput()" id="btn-clear-search" class="hidden absolute right-3 top-3 text-mistral-stone hover:text-mistral-slate text-sm">✕</button>
+              <button onclick="clearSearchInput()" id="btn-clear-search" class="hidden absolute right-3 top-3 text-mistral-stone hover:text-mistral-slate text-sm"></button>
             </div>
 
             <!-- Otomatik Tamamlama Açılır Kutusu (Autocomplete Dropdown) -->
@@ -54,20 +53,20 @@ module.exports = function(pageTemplate) {
           <div class="sm:col-span-3">
             <label class="block text-xs font-semibold uppercase tracking-wider text-mistral-slate mb-1.5">Ekin / Ürün Türü</label>
             <select id="select-crop" onchange="updateCropRecommendations()" class="w-full px-3 py-3 rounded-xl bg-white border border-mistral-hairline text-sm font-semibold text-mistral-ink focus:border-teal-400 focus:outline-none">
-              <option value="wheat">🌾 Buğday / Arpa (Tahıllar)</option>
-              <option value="corn">🌽 Mısır</option>
-              <option value="cotton">☁️ Pamuk</option>
-              <option value="tomato">🍅 Domates / Biber (Sebze)</option>
-              <option value="sunflower">🌻 Ayçiçeği</option>
-              <option value="olive">🫒 Zeytin</option>
-              <option value="citrus">🍊 Narenciye</option>
+              <option value="wheat">Buğday / Arpa (Tahıllar)</option>
+              <option value="corn">Mısır</option>
+              <option value="cotton">Pamuk</option>
+              <option value="tomato">Domates / Biber (Sebze)</option>
+              <option value="sunflower">Ayçiçeği</option>
+              <option value="olive">Zeytin</option>
+              <option value="citrus">Narenciye</option>
             </select>
           </div>
 
           <!-- Konumumu Al Butonu -->
           <div class="sm:col-span-3">
             <button onclick="getGPSLocation()" id="btn-gps" class="w-full py-3 rounded-xl text-mistral-ink font-boldbg-mistral-cream-light hover:bg-mistral-cream-deeper text-mistral-ink font-bold font-bold text-xs transition flex items-center justify-center gap-1.5 shadow">
-              <span>📍</span> Tarlamın Konumunu Al
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span> Tarlamın Konumunu Al
             </button>
           </div>
         </div>
@@ -80,34 +79,34 @@ module.exports = function(pageTemplate) {
           </div>
           <div class="flex flex-wrap gap-1.5 text-xs">
             <button onclick="selectQuickRegion(37.87, 32.49, 'Konya Ovası', 'Tahıl & Bakliyat Havzası')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink hover:border-teal-400 transition flex items-center gap-1">
-              🌾 Konya Ovası
+              Konya Ovası
             </button>
             <button onclick="selectQuickRegion(39.58, 32.14, 'Polatlı (Ankara)', 'Tahıl Ambarı')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink hover:border-teal-400 transition flex items-center gap-1">
-              🌾 Polatlı
+              Polatlı
             </button>
             <button onclick="selectQuickRegion(36.99, 35.32, 'Adana / Çukurova', 'Narenciye, Pamuk & Mısır')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink hover:border-teal-400 transition flex items-center gap-1">
-              🍊 Çukurova
+              Çukurova
             </button>
             <button onclick="selectQuickRegion(36.88, 30.70, 'Antalya (Kumluca & Serik)', 'Örtüaltı Seracılık')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink hover:border-teal-400 transition flex items-center gap-1">
-              🍅 Antalya Seracılık
+              Antalya Seracılık
             </button>
             <button onclick="selectQuickRegion(37.75, 27.40, 'Söke Ovası (Aydın)', 'Pamuk & Zeytin Havzası')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink hover:border-teal-400 transition flex items-center gap-1">
-              ☁️ Söke Ovası
+              Söke Ovası
             </button>
             <button onclick="selectQuickRegion(38.61, 27.42, 'Manisa (Gediz Havzası)', 'Bağcılık & Çekirdeksiz Üzüm')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink hover:border-teal-400 transition flex items-center gap-1">
-              🍇 Gediz Havzası
+              Gediz Havzası
             </button>
             <button onclick="selectQuickRegion(37.16, 38.79, 'Harran Ovası (Şanlıurfa)', 'GAP Pamuk & Hububat')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink hover:border-teal-400 transition flex items-center gap-1">
-              🌾 Harran Ovası
+              Harran Ovası
             </button>
             <button onclick="selectQuickRegion(41.28, 36.33, 'Çarşamba & Bafra Ovaları (Samsun)', 'Sebze & Çeltik')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink hover:border-teal-400 transition flex items-center gap-1">
-              🌽 Çarşamba / Bafra
+              Çarşamba / Bafra
             </button>
             <button onclick="selectQuickRegion(40.97, 27.51, 'Trakya (Tekirdağ & Edirne)', 'Ayçiçeği & Buğday')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink hover:border-teal-400 transition flex items-center gap-1">
-              🌻 Trakya Havzası
+              Trakya Havzası
             </button>
             <button onclick="selectQuickRegion(38.35, 38.31, 'Malatya Ovası', 'Dünya Kayısı Başkenti')" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink hover:border-teal-400 transition flex items-center gap-1">
-              🍑 Malatya Ovası
+              Malatya Ovası
             </button>
           </div>
         </div>
@@ -120,7 +119,7 @@ module.exports = function(pageTemplate) {
             <span id="label-active-coords" class="font-mono text-teal-400 font-bold">37.87° N, 32.49° E</span>
           </div>
           <button onclick="saveCurrentField()" class="text-xs px-3.5 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 hover:bg-teal-500/30 font-medium transition flex items-center gap-1 border border-teal-500/40">
-            <span>💾</span> Bu Parseli Kaydet
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span> Bu Parseli Kaydet
           </button>
         </div>
       </div>
@@ -185,7 +184,7 @@ module.exports = function(pageTemplate) {
         <div class="lg:col-span-7 p-6 rounded-3xl bg-white border border-mistral-hairline shadow-xl space-y-4">
           <div class="flex items-center justify-between">
             <h3 class="text-sm font-bold text-mistral-ink flex items-center gap-2">
-              <span>🌱</span> Toprak Sıcaklığı & Nem Katman Profili
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span> Toprak Sıcaklığı & Nem Katman Profili
             </h3>
             <span class="text-xs text-mistral-slate font-mono">Derinlik Seviyeleri</span>
           </div>
@@ -268,7 +267,7 @@ module.exports = function(pageTemplate) {
         <!-- Sağ: Günlük Zirai Özet Tablosu (5 Kolon) -->
         <div class="lg:col-span-5 p-6 rounded-3xl bg-white border border-mistral-hairline shadow-xl space-y-4">
           <h3 class="text-sm font-bold text-mistral-ink flex items-center gap-2">
-            <span>📅</span> 7 Günlük Zirai Tahmin Özeti
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span> 7 Günlük Zirai Tahmin Özeti
           </h3>
           <p class="text-mistral-slate text-xs">
             Günlük maksimum/minimum sıcaklık, buharlaşma (ET0) ve beklenen yağış miktarları:
@@ -298,16 +297,16 @@ module.exports = function(pageTemplate) {
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-              <span>📊</span> Toprak Sıcaklığı ve Buharlaşma Trendi (7 Günlük)
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span> Toprak Sıcaklığı ve Buharlaşma Trendi (7 Günlük)
             </h3>
             <p class="text-mistral-slate text-xs mt-0.5">Tohum yatağı sıcaklığı ve FAO-56 referans evapotranspirasyon eğrisi</p>
           </div>
           <div class="flex items-center gap-4 text-xs font-semibold">
             <span class="flex items-center gap-1.5 text-teal-400">
-              <span class="w-3 h-3 rounded-full bg-teal-500"></span> Toprak Sıcaklığı (6cm)
+              Toprak Sıcaklığı (6cm)
             </span>
             <span class="flex items-center gap-1.5 text-blue-400">
-              <span class="w-3 h-3 rounded-full bg-blue-500"></span> Buharlaşma (ET0)
+              Buharlaşma (ET0)
             </span>
           </div>
         </div>
@@ -322,7 +321,7 @@ module.exports = function(pageTemplate) {
         <div class="flex items-center justify-between">
           <div>
             <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-              <span>🌾</span> Kayıtlı Tarlalarım & Parsellerim
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span> Kayıtlı Tarlalarım & Parsellerim
             </h3>
             <p class="text-mistral-slate text-xs">Sık takip ettiğiniz tarla koordinatlarını ve ekin türlerini kaydedin.</p>
           </div>

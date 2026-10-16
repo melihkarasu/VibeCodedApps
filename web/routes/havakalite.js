@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <script src="/static/apps/havakalite/app.js" defer></script>
+      <script src="/static/apps/havakalite/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -21,7 +21,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-medium" id="aqi-status-badge">Canlı İstasyonlar Açık</span>
         </div>
       </div>
@@ -78,7 +77,7 @@ module.exports = function(pageTemplate) {
             <!-- Sağlık Tavsiyesi -->
             <div class="p-4 rounded-xl bg-mistral-cream border border-mistral-beige-deep text-left text-xs text-mistral-slate space-y-2">
               <div class="font-bold text-mistral-ink flex items-center gap-1.5">
-                <span>🩺</span> Sağlık & Aktivite Tavsiyesi
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span> Sağlık & Aktivite Tavsiyesi
               </div>
               <p id="txt-health-advice" class="leading-relaxed">
                 Hava kalitesi ölçülüyor...
@@ -129,7 +128,7 @@ module.exports = function(pageTemplate) {
           <!-- Bilgilendirme Kartı -->
           <div class="p-5 rounded-xl bg-mistral-cream border border-mistral-beige-deep text-xs text-mistral-slate space-y-2">
             <h4 class="font-bold text-mistral-ink flex items-center gap-1.5">
-              <span>💡</span> PM2.5 Nedir ve Neden Önemlidir?
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg></span> PM2.5 Nedir ve Neden Önemlidir?
             </h4>
             <p class="leading-relaxed">
               PM2.5, çapı 2.5 mikrometreden küçük partikülleri ifade eder (insan saç telinin yaklaşık 30'da biri). Bu mikroskobik tanecikler akciğerlerin en derin noktalarına ve kan dolaşımına kadar ulaşabildiği için hava kalitesinin en kritik göstergesidir.

@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/karbon/app.css">
-      <script src="/static/apps/karbon/app.js" defer></script>
+      <link rel="stylesheet" href="/static/apps/karbon/app.css?v=20261017a">
+      <script src="/static/apps/karbon/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -20,7 +20,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-slate">
-          <span class="w-2 h-2 rounded-full bg-lime-400 animate-pulse"></span>
           <span>Green Web Foundation Standartları</span>
         </div>
       </div>
@@ -37,7 +36,7 @@ module.exports = function(pageTemplate) {
               <span class="absolute left-3.5 top-3.5 text-mistral-stone text-base"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
             </div>
             <button onclick="runCarbonAnalysis()" id="btn-analyze" class="px-7 py-3 rounded-xl bg-white from-lime-500 to-emerald-600 hover:from-lime-400 hover:to-emerald-500 text-slate-950 font-black text-sm transition shadow-lg shadow-lime-500/20 shrink-0 flex items-center justify-center gap-2">
-              <span>🍃</span> Ayak İzini Ölç
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span> Ayak İzini Ölç
             </button>
           </div>
         </div>
@@ -123,7 +122,7 @@ module.exports = function(pageTemplate) {
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-                <span>🌍</span> Yıllık Çevresel Etki Simülasyonu
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span> Yıllık Çevresel Etki Simülasyonu
               </h3>
               <p class="text-mistral-slate text-xs mt-0.5">
                 Bu web sitesi yılda doğaya ne kadar yük getiriyor? Aylık ziyaretçi trafiğini ayarlayarak keşfedin:
@@ -150,28 +149,28 @@ module.exports = function(pageTemplate) {
           <!-- Eşdeğerlik Kartları (Equivalents) -->
           <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 pt-2">
             <div class="p-4 rounded-2xl bg-white border border-mistral-hairline text-center flex flex-col justify-between">
-              <span class="text-3xl mb-2">☁️</span>
+              <span class="text-3xl mb-2"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg></span>
               <span class="text-[10px] text-mistral-slate uppercase font-semibold">Yıllık Karbon Emisyonu</span>
               <div id="sim-annual-co2" class="text-xl font-black text-lime-400 font-mono mt-1">28.8 kg</div>
               <span class="text-[10px] text-mistral-stone mt-1">Karbondioksit eşdeğeri</span>
             </div>
 
             <div class="p-4 rounded-2xl bg-white border border-mistral-hairline text-center flex flex-col justify-between">
-              <span class="text-3xl mb-2">🌲</span>
+              <span class="text-3xl mb-2"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span>
               <span class="text-[10px] text-mistral-slate uppercase font-semibold">Gereken Ağaç Sayısı</span>
               <div id="sim-trees" class="text-xl font-black text-emerald-400 font-mono mt-1">2 Ağaç</div>
               <span class="text-[10px] text-mistral-stone mt-1">Yıllık CO2 emilimi için</span>
             </div>
 
             <div class="p-4 rounded-2xl bg-white border border-mistral-hairline text-center flex flex-col justify-between">
-              <span class="text-3xl mb-2">🚗</span>
+              <span class="text-3xl mb-2"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span>
               <span class="text-[10px] text-mistral-slate uppercase font-semibold">Elektrikli Araç Sürüşü</span>
               <div id="sim-ev-km" class="text-xl font-black text-blue-400 font-mono mt-1">160 km</div>
               <span class="text-[10px] text-mistral-stone mt-1">Tüketilen elektrik karşılığı</span>
             </div>
 
             <div class="p-4 rounded-2xl bg-white border border-mistral-hairline text-center flex flex-col justify-between">
-              <span class="text-3xl mb-2">📱</span>
+              <span class="text-3xl mb-2"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
               <span class="text-[10px] text-mistral-slate uppercase font-semibold">Telefon Şarjı</span>
               <div id="sim-phones" class="text-xl font-black text-amber-400 font-mono mt-1">3.500 Kez</div>
               <span class="text-[10px] text-mistral-stone mt-1">Akıllı telefon tam şarjı</span>
@@ -184,14 +183,14 @@ module.exports = function(pageTemplate) {
           <div class="flex items-center justify-between">
             <div>
               <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-                <span>🏷️</span> Web Sitenize Gömülebilir Yeşil Web Rozeti
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span> Web Sitenize Gömülebilir Yeşil Web Rozeti
               </h3>
               <p class="text-mistral-slate text-xs mt-0.5">
                 Kendi web sitenizin footer veya hakkımızda alanına ekleyebileceğiniz dinamik eko-rozet:
               </p>
             </div>
             <button onclick="copyBadgeSnippet()" class="px-4 py-2 rounded-xl text-mistral-ink font-boldbg-mistral-cream-light hover:bg-mistral-cream-deeper text-mistral-ink font-bold font-semibold text-xs transition flex items-center gap-1.5 shadow">
-              <span>📋</span> Kodu Kopyala
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Kodu Kopyala
             </button>
           </div>
 
@@ -225,7 +224,7 @@ module.exports = function(pageTemplate) {
         <div class="flex items-center justify-between">
           <div>
             <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-              <span>📚</span> Son Taranan Web Siteleri
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Son Taranan Web Siteleri
             </h3>
             <p class="text-mistral-slate text-xs">Daha önce analiz ettiğiniz sitelerin eko-skor karnesi.</p>
           </div>

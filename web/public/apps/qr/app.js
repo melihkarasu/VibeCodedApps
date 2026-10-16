@@ -244,7 +244,7 @@ let currentTab = 'url';
             navigator.clipboard.write([
               new ClipboardItem({ 'image/png': blob })
             ]).then(function() {
-              showToast('✓ QR Kod panoya kopyalandı!');
+              showToast('QR Kod panoya kopyalandı!');
             }).catch(function() {
               showToast('Panoya kopyalama başarısız oldu.');
             });
@@ -386,7 +386,7 @@ let currentTab = 'url';
         savedQrsCache = qrs;
         renderSavedQrs();
         persistSavedQrsToDb();
-        showToast('✓ "' + title + '" tüm bilgileriyle koleksiyonunuza kaydedildi!');
+        showToast('"' + title + '" tüm bilgileriyle koleksiyonunuza kaydedildi!');
       }
 
       function renderSavedQrs() {
@@ -561,7 +561,7 @@ let currentTab = 'url';
         toggleGradientMode();
         updateQR();
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        showToast('✓ "' + qr.title + '" tüm alanlarıyla yüklendi!');
+        showToast('"' + qr.title + '" tüm alanlarıyla yüklendi!');
       }
 
       function deleteSavedQR(id) {

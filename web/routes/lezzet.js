@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/lezzet/app.css">
-      <script src="/static/apps/lezzet/app.js?v=20260926h" defer></script>
+      <link rel="stylesheet" href="/static/apps/lezzet/app.css?v=20261017a">
+      <script src="/static/apps/lezzet/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -23,23 +23,23 @@ module.exports = function(pageTemplate) {
           <!-- Mutfak & Bar Mod Değiştirici -->
           <div class="flex items-center gap-2 p-1 rounded-2xl bg-white border border-mistral-hairline shadow-md">
             <button onclick="switchMode('kitchen')" id="btn-mode-kitchen" class="px-4 py-2 rounded-xl text-xs font-bold bg-rose-500 text-white transition flex items-center gap-2 shadow">
-              <span>🍲</span> Gurme Mutfak
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg></span> Gurme Mutfak
             </button>
             <button onclick="switchMode('bar')" id="btn-mode-bar" class="px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-2">
-              <span>🍸</span> Miksoloji Barı
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg></span> Miksoloji Barı
             </button>
           </div>
 
           <!-- Mutfak Kaynak Filtresi (Forkify & TheMealDB) -->
           <div id="kitchen-source-selector" class="flex items-center gap-1 p-1 rounded-2xl bg-white border border-mistral-hairline shadow-md">
             <button onclick="setRecipeSource('all')" id="btn-src-all" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-500 text-white transition" title="Her iki kaynaktan birleşik getir">
-              🌐 Tümü
+              Tümü
             </button>
             <button onclick="setRecipeSource('forkify')" id="btn-src-forkify" class="px-3 py-1.5 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition" title="Forkify 1M+ Global Gurme Arşivi">
-              📚 Forkify
+              Forkify
             </button>
             <button onclick="setRecipeSource('themealdb')" id="btn-src-themealdb" class="px-3 py-1.5 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition" title="TheMealDB Dünya Mutfakları">
-              🌟 MealDB
+              MealDB
             </button>
           </div>
         </div>
@@ -50,7 +50,7 @@ module.exports = function(pageTemplate) {
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h2 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-              <span id="pantry-title">🧺 Dolapta Ne Var? (Evdeki Malzemelerle Pişir)</span>
+              <span id="pantry-title">Dolapta Ne Var? (Evdeki Malzemelerle Pişir)</span>
             </h2>
             <p class="text-mistral-slate text-xs mt-0.5" id="pantry-desc">
               Elinizdeki malzemeleri metin kutusuna yazarak ekleyin veya hazır etiketlere tıklayın:
@@ -59,7 +59,7 @@ module.exports = function(pageTemplate) {
 
           <!-- Sürpriz Tarif Butonu (Şans Çarkı) -->
           <button onclick="fetchRandomRecipe()" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-white font-bold text-xs transition shadow-md flex items-center justify-center gap-2 shrink-0">
-            <span>🎲</span> <span id="btn-random-label">Ne Yesem? (Rastgele Sürpriz)</span>
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="2"/></svg></span> <span id="btn-random-label">Ne Yesem? (Rastgele Sürpriz)</span>
           </button>
         </div>
 
@@ -67,7 +67,7 @@ module.exports = function(pageTemplate) {
         <div class="flex flex-col sm:flex-row gap-2.5">
           <div class="relative flex-1">
             <input type="text" id="input-ingredient" placeholder="Malzeme yazın (Örn: patates, tavuk, sarımsak, soğan, cheese, mint)..." onkeyup="if(event.key==='Enter') addCustomIngredient()" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder-slate-500 focus:border-rose-400 focus:outline-none">
-            <span class="absolute left-3.5 top-3 text-mistral-stone text-sm">🥕</span>
+            <span class="absolute left-3.5 top-3 text-mistral-stone text-sm"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg></span>
           </div>
           <button onclick="addCustomIngredient()" class="px-5 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-bold text-xs transition shadow-md flex items-center justify-center gap-1.5 shrink-0">
             <span>+</span> <span>Malzemeyi Ekle & Ara</span>
@@ -77,7 +77,7 @@ module.exports = function(pageTemplate) {
         <!-- Seçilen Malzemelerin Rozetleri (Active Tags) -->
         <div id="selected-ingredients-wrapper" class="hidden flex flex-wrap items-center gap-2 p-3 rounded-xl bg-white border border-rose-500/30">
           <span class="text-xs font-semibold text-rose-300 flex items-center gap-1 shrink-0">
-            <span>🛒 Seçili Malzemeler:</span>
+            <span>Seçili Malzemeler:</span>
           </span>
           <div id="selected-ingredients-container" class="flex flex-wrap gap-1.5 items-center">
             <!-- JS ile dinamik rozetler -->
@@ -90,7 +90,7 @@ module.exports = function(pageTemplate) {
         <!-- Hızlı Malzeme Etiketleri -->
         <div>
           <div class="text-[11px] text-mistral-slate mb-1.5 font-medium flex items-center gap-1">
-            <span>⚡ Hızlı Seçim:</span>
+            <span>Hızlı Seçim:</span>
             <span class="text-mistral-stone text-[10px]">(Tıklayarak listeye ekleyin)</span>
           </div>
           <div class="flex flex-wrap gap-2" id="pantry-tags-container">
@@ -131,7 +131,7 @@ module.exports = function(pageTemplate) {
       </div>
 
       <div id="empty-state" class="hidden py-16 text-center text-mistral-slate text-sm">
-        <div class="text-4xl mb-2">🍽️</div>
+        <div class="text-4xl mb-2"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg></div>
         <span>Aradığınız kriterlere uygun tarif bulunamadı. Başka bir malzeme veya arama terimi deneyebilirsiniz.</span>
       </div>
 
@@ -140,7 +140,7 @@ module.exports = function(pageTemplate) {
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <h2 class="text-2xl font-bold text-mistral-ink flex items-center gap-2">
-              <span>📖</span> Tarif Defterim & Favoriler
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Tarif Defterim & Favoriler
             </h2>
             <p class="text-mistral-slate text-xs mt-1">
               Beğenip kaydettiğiniz yemek ve kokteyl tarifleri hesabınızla saklanır.
@@ -155,7 +155,7 @@ module.exports = function(pageTemplate) {
           <!-- JS ile dinamik favoriler -->
         </div>
         <div id="saved-recipes-empty" class="p-8 text-center rounded-2xl bg-white border border-mistral-hairline text-mistral-stone text-xs">
-          Henüz tarif defterinize bir lezzet eklemediniz. Tarif kartlarındaki 🔖 simgesine tıklayarak kaydedebilirsiniz.
+          Henüz tarif defterinize bir lezzet eklemediniz. Tarif kartlarındaki simgesine tıklayarak kaydedebilirsiniz.
         </div>
       </div>
 
@@ -165,7 +165,7 @@ module.exports = function(pageTemplate) {
           
           <!-- Kapat Butonu -->
           <button onclick="closeModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white hover:bg-white text-mistral-slate hover:text-white flex items-center justify-center transition border border-mistral-hairline text-sm">
-            ✕
+            
           </button>
 
           <!-- Modal Başlık Resmi -->
@@ -183,7 +183,7 @@ module.exports = function(pageTemplate) {
             <!-- Aksiyon Butonları (Kaydet & Video) -->
             <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-mistral-hairline">
               <button onclick="toggleSaveCurrentModalRecipe()" id="btn-modal-save" class="px-4 py-2 rounded-xl bg-white hover:bg-mistral-cream text-xs font-semibold text-mistral-ink transition flex items-center gap-1.5 border border-mistral-hairline">
-                <span id="modal-save-icon">🔖</span> <span id="modal-save-text">Tarif Defterime Kaydet</span>
+                <span id="modal-save-icon"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></span> <span id="modal-save-text">Tarif Defterime Kaydet</span>
               </button>
 
               <div id="modal-video-box"></div>
@@ -192,7 +192,7 @@ module.exports = function(pageTemplate) {
             <!-- Malzemeler Listesi -->
             <div>
               <h3 class="text-sm font-bold uppercase tracking-wider text-rose-400 mb-3 flex items-center gap-1.5">
-                <span>🧂</span> Gerekli Malzemeler & Ölçüler
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg></span> Gerekli Malzemeler & Ölçüler
               </h3>
               <div id="modal-ingredients" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs"></div>
             </div>
@@ -200,7 +200,7 @@ module.exports = function(pageTemplate) {
             <!-- Hazırlanış Talimatı -->
             <div>
               <h3 class="text-sm font-bold uppercase tracking-wider text-teal-400 mb-3 flex items-center gap-1.5">
-                <span>👩‍🍳</span> Adım Adım Hazırlanışı
+                <span>‍</span> Adım Adım Hazırlanışı
               </h3>
               <div id="modal-instructions" class="text-xs sm:text-sm text-mistral-slate leading-relaxed whitespace-pre-line bg-white p-4 rounded-2xl border border-mistral-hairline"></div>
             </div>

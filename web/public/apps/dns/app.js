@@ -5,7 +5,7 @@ function safeCopyToClipboard(text, msg) {
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(() => {
-      if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+      if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
     }).catch(() => fallbackExecCopy(text, msg));
   } else {
     fallbackExecCopy(text, msg);
@@ -20,7 +20,7 @@ function fallbackExecCopy(text, msg) {
   ta.select();
   try {
     document.execCommand('copy');
-    if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+    if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
   } catch(e) {
     if (window.showToast) window.showToast('Kopyalama başarısız');
   }
@@ -175,7 +175,7 @@ const STORAGE_KEY = '***';
           if (hasSpf && hasDmarc) {
             emBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-300';
             emBadge.innerText = 'Tam Korumalı';
-            emText.innerText = 'SPF & DMARC Aktif ✓';
+            emText.innerText = 'SPF & DMARC Aktif ';
             emSub.innerText = 'Sahte e-posta gönderimi engelli';
           } else if (hasSpf || hasDmarc) {
             emBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-yellow-500/20 text-yellow-300';
@@ -242,14 +242,13 @@ const STORAGE_KEY = '***';
             <div class="p-3.5 rounded-2xl bg-white border border-mistral-hairline flex items-center justify-between">
               <div>
                 <div class="flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                   <h4 class="font-bold text-xs text-mistral-ink">${res.name}</h4>
                 </div>
                 <div class="text-[10px] text-mistral-stone font-mono mt-0.5">${res.ip} • ${res.location}</div>
               </div>
               <div class="text-right">
                 <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 font-mono font-bold">
-                  ✓ Yayılmış
+                  Yayılmış
                 </span>
                 <span class="block text-[10px] text-mistral-slate font-mono truncate max-w-[110px] mt-0.5">${firstIp}</span>
               </div>
@@ -267,7 +266,7 @@ const STORAGE_KEY = '***';
 
         function copyRecordData(val) {
           navigator.clipboard.writeText(val).then(() => {
-            showToast('✓ Kayıt değeri panoya kopyalandı!');
+            showToast('Kayıt değeri panoya kopyalandı!');
           });
         }
 

@@ -321,7 +321,7 @@ router.get('/nobetci-eczane', async (req, res) => {
       const pDistrict = p.district?.name || (district ? (district.charAt(0).toUpperCase() + district.slice(1)) : 'Merkez');
       const pCity = p.city?.name || (city.charAt(0).toUpperCase() + city.slice(1));
 
-      // 🕒 08:00 - Ertesi gün 08:00 bilgisi apiden gelmiyorsa kesinlikle üretilmez, null bırakılır
+      // 08:00 - Ertesi gün 08:00 bilgisi apiden gelmiyorsa kesinlikle üretilmez, null bırakılır
       let cleanNotes = null;
       if (p.notes && typeof p.notes === 'string' && !p.notes.includes('08:00')) {
         cleanNotes = p.notes.trim();

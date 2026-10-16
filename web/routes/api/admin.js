@@ -211,7 +211,7 @@ router.post('/categories', async (req, res) => {
       body: JSON.stringify({
         id: String(id).trim().toLowerCase(),
         title: String(title).trim(),
-        icon: icon || '📁',
+        icon: icon || '',
         color: color || 'emerald',
         sort_order: Number(sort_order) || 0
       })
@@ -302,7 +302,7 @@ router.post('/apps', async (req, res) => {
         category_id: category_id || null,
         name: String(name).trim(),
         desc: String(desc || '').trim(),
-        icon: icon || '⚡',
+        icon: icon || '',
         url: String(url).trim(),
         action: action || 'Uygulamayı Aç',
         status: status || 'active',

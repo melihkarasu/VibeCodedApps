@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/ilac/app.css?v=4.0" />
-      <script src="/static/apps/ilac/app.js?v=4.0" defer></script>
+      <link rel="stylesheet" href="/static/apps/ilac/app.css?v=20261017a.0" />
+      <script src="/static/apps/ilac/app.js?v=20261017a.0" defer></script>
     `;
 
     const content = `
@@ -21,7 +21,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-medium" id="drug-source-tag">Farmakope & FDA Bağlı</span>
         </div>
       </div>
@@ -96,9 +95,7 @@ module.exports = function(pageTemplate) {
         <!-- Üst İlaç Başlık Kartı -->
         <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div class="flex items-start gap-4">
-            <div class="w-12 h-12 rounded-xl bg-mistral-cream border border-mistral-beige-deep text-mistral-orange flex items-center justify-center text-2xl shrink-0 shadow-2xs">
-              💊
-            </div>
+            <div class="w-12 h-12 rounded-xl bg-mistral-cream border border-mistral-beige-deep text-mistral-orange flex items-center justify-center text-2xl shrink-0 shadow-2xs"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
             <div>
               <div class="flex flex-wrap items-center gap-2">
                 <h2 id="drug-title" class="text-2xl sm:text-3xl font-bold font-editorial text-mistral-ink tracking-tight">Calpol</h2>
@@ -123,7 +120,7 @@ module.exports = function(pageTemplate) {
         <!-- 1. KART: Genel Bakış & Endikasyonlar -->
         <div class="p-6 sm:p-8 rounded-2xl bg-white border border-mistral-hairline shadow-sm space-y-4">
           <div class="flex items-center gap-2.5 pb-3 border-b border-mistral-hairline">
-            <span class="text-xl">📋</span>
+            <span class="text-xl"><svg class="w-5 h-5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
             <h3 class="text-lg sm:text-xl font-bold font-editorial text-mistral-ink tracking-tight">Genel Bakış & Endikasyonlar</h3>
           </div>
           <div id="tab-content-purpose">Yükleniyor...</div>
@@ -132,7 +129,7 @@ module.exports = function(pageTemplate) {
         <!-- 2. KART: Güvenlik Uyarıları & Kontrendikasyonlar -->
         <div class="p-6 sm:p-8 rounded-2xl bg-white border border-mistral-hairline shadow-sm space-y-4">
           <div class="flex items-center gap-2.5 pb-3 border-b border-mistral-hairline">
-            <span class="text-xl text-rose-600">⚠️</span>
+            <span class="text-xl text-rose-600"><svg class="w-5 h-5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
             <h3 class="text-lg sm:text-xl font-bold font-editorial text-mistral-ink tracking-tight">Güvenlik Uyarıları & Kontrendikasyonlar</h3>
           </div>
           <div id="tab-content-warnings">Yükleniyor...</div>
@@ -141,7 +138,7 @@ module.exports = function(pageTemplate) {
         <!-- 3. KART: Bildirilen Yan Etkiler & Risk Analitiği -->
         <div class="p-6 sm:p-8 rounded-2xl bg-white border border-mistral-hairline shadow-sm space-y-4">
           <div class="flex items-center gap-2.5 pb-3 border-b border-mistral-hairline">
-            <span class="text-xl text-mistral-orange">📊</span>
+            <span class="text-xl text-mistral-orange"><svg class="w-5 h-5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
             <h3 class="text-lg sm:text-xl font-bold font-editorial text-mistral-ink tracking-tight">Bildirilen Yan Etkiler & Risk Dağılımı</h3>
           </div>
           <div id="tab-content-adverse">Yükleniyor...</div>

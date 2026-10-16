@@ -186,7 +186,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
           container.innerHTML = activeIngredients.map((item, idx) => `
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-medium">
               <span>${item.raw}</span>
-              <button onclick="removeActiveIngredient(${idx})" class="hover:text-mistral-ink text-rose-400 font-bold ml-0.5 text-xs" title="Kaldır">✕</button>
+              <button onclick="removeActiveIngredient(${idx})" class="hover:text-mistral-ink text-rose-400 font-bold ml-0.5 text-xs" title="Kaldır"></button>
             </span>
           `).join('');
         }
@@ -226,18 +226,18 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
             { label: '🇮🇹 İtalyan', type: 'area', val: 'Italian' },
             { label: '🇲🇽 Meksika', type: 'area', val: 'Mexican' },
             { label: '🇯🇵 Japon', type: 'area', val: 'Japanese' },
-            { label: '🍰 Tatlılar', type: 'category', val: 'Dessert' },
-            { label: '🐟 Deniz Ürünleri', type: 'category', val: 'Seafood' },
-            { label: '🥗 Vejetaryen', type: 'category', val: 'Vegetarian' },
-            { label: '🍝 Makarna', type: 'category', val: 'Pasta' }
+            { label: 'Tatlılar', type: 'category', val: 'Dessert' },
+            { label: 'Deniz Ürünleri', type: 'category', val: 'Seafood' },
+            { label: 'Vejetaryen', type: 'category', val: 'Vegetarian' },
+            { label: 'Makarna', type: 'category', val: 'Pasta' }
           ],
           bar: [
-            { label: '🍸 Popüler Kokteyller', type: 'search', val: 'margarita' },
-            { label: '🍹 Klasik Mojito', type: 'search', val: 'mojito' },
-            { label: '🥤 Alkolsüz (Mocktail)', type: 'alcoholic', val: 'Non_Alcoholic' },
-            { label: '🍾 Alkollü Karışımlar', type: 'alcoholic', val: 'Alcoholic' },
-            { label: '☕ Espresso & Kahveli', type: 'ingredient', val: 'coffee' },
-            { label: '🍊 Meyveli & Tropikal', type: 'ingredient', val: 'orange' }
+            { label: 'Popüler Kokteyller', type: 'search', val: 'margarita' },
+            { label: 'Klasik Mojito', type: 'search', val: 'mojito' },
+            { label: 'Alkolsüz (Mocktail)', type: 'alcoholic', val: 'Non_Alcoholic' },
+            { label: 'Alkollü Karışımlar', type: 'alcoholic', val: 'Alcoholic' },
+            { label: 'Espresso & Kahveli', type: 'ingredient', val: 'coffee' },
+            { label: 'Meyveli & Tropikal', type: 'ingredient', val: 'orange' }
           ]
         };
 
@@ -280,7 +280,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
             if (srcSelector) srcSelector.classList.remove('hidden');
             btnK.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-rose-500 text-white transition flex items-center gap-2 shadow';
             btnB.className = 'px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-mistral-ink transition flex items-center gap-2';
-            pTitle.innerText = '🧺 Dolapta Ne Var? (Evdeki Malzemelerle Pişir)';
+            pTitle.innerText = 'Dolapta Ne Var? (Evdeki Malzemelerle Pişir)';
             pDesc.innerText = 'Elinizdeki malzemeleri metin kutusuna yazarak ekleyin veya hazır etiketlere tıklayın:';
             rLabel.innerText = 'Ne Yesem? (Rastgele Sürpriz)';
             sInput.placeholder = 'Yemek veya tarif adı arayın (Örn: Pasta, Kebab, Soup)...';
@@ -289,7 +289,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
             if (srcSelector) srcSelector.classList.add('hidden');
             btnB.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-rose-500 text-white transition flex items-center gap-2 shadow';
             btnK.className = 'px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-mistral-ink transition flex items-center gap-2';
-            pTitle.innerText = '🍸 Barda Ne Var? (Evdeki İçeceklerle Karıştır)';
+            pTitle.innerText = 'Barda Ne Var? (Evdeki İçeceklerle Karıştır)';
             pDesc.innerText = 'Elinizdeki içecek veya garnitür malzemesini yazın veya seçin:';
             rLabel.innerText = 'Ne İçsem? (Rastgele Kokteyl)';
             sInput.placeholder = 'Kokteyl veya içecek adı arayın (Örn: Mojito, Martini, Sour)...';
@@ -510,7 +510,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
 
         // 4. Rastgele Sürpriz Tarif (Şans Çarkı)
         async function fetchRandomRecipe() {
-          showToast('🎲 Sürpriz tarif hazırlanıyor...');
+          showToast('Sürpriz tarif hazırlanıyor...');
           try {
             if (currentMode === 'kitchen') {
               const res = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
@@ -578,7 +578,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
                     Tarifi İncele &rarr;
                   </button>
                   <button onclick="quickSaveRecipeByRenderedIdx(${idx})"" class="text-xs text-mistral-slate hover:text-amber-400 transition p-1" title="Deftere Kaydet">
-                    🔖
+                    
                   </button>
                 </div>
               </div>
@@ -616,15 +616,15 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
               document.getElementById('modal-img').src = recipe.image_url;
               document.getElementById('modal-title').innerText = recipe.title;
 
-              badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/80 text-white text-[10px] font-bold">📚 Forkify (1M+ Global)</span>`;
-              if (recipe.publisher) badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-indigo-500/80 text-white text-[10px] font-bold">🏢 ${recipe.publisher}</span>`;
+              badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/80 text-white text-[10px] font-bold">Forkify (1M+ Global)</span>`;
+              if (recipe.publisher) badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-indigo-500/80 text-white text-[10px] font-bold">${recipe.publisher}</span>`;
               if (recipe.cooking_time) badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-teal-500/80 text-white text-[10px] font-bold">⏱️ ${recipe.cooking_time} dk</span>`;
-              if (recipe.servings) badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-rose-500/80 text-white text-[10px] font-bold">👥 ${recipe.servings} Kişilik</span>`;
+              if (recipe.servings) badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-rose-500/80 text-white text-[10px] font-bold">${recipe.servings} Kişilik</span>`;
 
               if (recipe.source_url) {
                 videoBox.innerHTML = `
                   <a href="${recipe.source_url}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white text-xs font-semibold flex items-center gap-1.5 transition shadow">
-                    <span>📖</span> Orijinal Tarifi Aç (${recipe.publisher}) &rarr;
+                    <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Orijinal Tarifi Aç (${recipe.publisher}) &rarr;
                   </a>
                 `;
               }
@@ -665,7 +665,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
               document.getElementById('modal-img').src = item.strMealThumb || item.strDrinkThumb;
               document.getElementById('modal-title').innerText = item.strMeal || item.strDrink;
 
-              if (type === 'meal') badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-rose-500/80 text-white text-[10px] font-bold">🌟 TheMealDB</span>`;
+              if (type === 'meal') badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-rose-500/80 text-white text-[10px] font-bold">TheMealDB</span>`;
               if (item.strCategory) badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-rose-500/80 text-white text-[10px] font-bold">${item.strCategory}</span>`;
               if (item.strArea) badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-teal-500/80 text-white text-[10px] font-bold">${item.strArea} Mutfağı</span>`;
               if (item.strAlcoholic) badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/80 text-white text-[10px] font-bold">${item.strAlcoholic}</span>`;
@@ -735,7 +735,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
               thumb: currentModalRecipe.thumb,
               date: new Date().toLocaleDateString('tr-TR')
             });
-            showToast('✓ Tarif defterinize kaydedildi!');
+            showToast('Tarif defterinize kaydedildi!');
           }
 
           saveRecipesToStorage(list);
@@ -752,11 +752,11 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
           const btn = document.getElementById('btn-modal-save');
 
           if (exists) {
-            icon.innerText = '✅';
+            icon.innerText = '';
             txt.innerText = 'Deftere Kaydedildi';
             btn.className = 'px-4 py-2 rounded-xl bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 text-xs font-semibold transition flex items-center gap-1.5';
           } else {
-            icon.innerText = '🔖';
+            icon.innerText = '';
             txt.innerText = 'Tarif Defterime Kaydet';
             btn.className = 'px-4 py-2 rounded-xl bg-white hover:bg-mistral-cream text-xs font-semibold text-mistral-ink transition flex items-center gap-1.5 border border-mistral-hairline';
           }
@@ -785,7 +785,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
           list.push({ id, title, thumb, type, source: resolvedSource, date: new Date().toLocaleDateString('tr-TR') });
           saveRecipesToStorage(list);
           renderSavedRecipes();
-          showToast('✅ Tarif defterinize eklendi!');
+          showToast('Tarif defterinize eklendi!');
         }
 
         function removeSavedRecipe(id) {
@@ -827,7 +827,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
                 </div>
                 <h4 class="font-bold text-xs text-mistral-ink line-clamp-1 mb-1">${item.title}</h4>
                 <div class="flex items-center gap-1.5 text-[10px] text-mistral-slate">
-                  <span>${item.type === 'meal' ? (item.source === 'forkify' ? '📚 Forkify' : '🍲 MealDB') : '🍸 İçecek'}</span>
+                  <span>${item.type === 'meal' ? (item.source === 'forkify' ? 'Forkify' : 'MealDB') : 'İçecek'}</span>
                   <span>&bull;</span>
                   <span>${item.date || ''}</span>
                 </div>
@@ -837,7 +837,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
                   Görüntüle
                 </button>
                 <button onclick="removeSavedRecipe('${item.id}')" class="text-[11px] text-mistral-slate hover:text-red-400 transition" title="Sil">
-                  🗑️
+                  
                 </button>
               </div>
             </div>

@@ -100,7 +100,7 @@ module.exports = function(pageTemplate) {
         }
       </style>
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/eczane/app.js?v=13.0" defer></script>
+      <script src="/static/apps/eczane/app.js?v=20261017a.0" defer></script>
     `;
 
     const content = `
@@ -119,7 +119,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-medium" id="eczane-status-label">81 İl Canlı Eczane API</span>
         </div>
       </div>
@@ -130,7 +129,7 @@ module.exports = function(pageTemplate) {
           <span class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 text-base shadow-xs">
             <i class="fa-solid fa-location-dot"></i>
           </span>
-          <span id="location-banner-text">📍 Bulunduğunuz şehirdeki en yakın nöbetçi eczaneleri görmek için konumunuzu tespit edelim:</span>
+          <span id="location-banner-text">Bulunduğunuz şehirdeki en yakın nöbetçi eczaneleri görmek için konumunuzu tespit edelim:</span>
         </div>
         <button 
           type="button" 
@@ -167,9 +166,9 @@ module.exports = function(pageTemplate) {
                 id="select-city" 
                 onchange="onCityChange()" 
                 class="w-full h-11 px-3.5 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange focus:ring-2 focus:ring-mistral-orange/20 transition cursor-pointer">
-                <option value="ankara" selected>📍 Ankara (Başkent)</option>
-                <option value="istanbul">📍 İstanbul</option>
-                <option value="izmir">📍 İzmir</option>
+                <option value="ankara" selected>Ankara (Başkent)</option>
+                <option value="istanbul">İstanbul</option>
+                <option value="izmir">İzmir</option>
               </select>
             </div>
           </div>
@@ -223,7 +222,6 @@ module.exports = function(pageTemplate) {
           <!-- Harita Lejantı -->
           <div class="absolute bottom-6 left-6 z-20 bg-white/95 backdrop-blur border border-mistral-hairline px-3.5 py-2.5 rounded-lg shadow-sm text-xs text-mistral-ink flex flex-wrap items-center gap-4">
             <span class="flex items-center gap-1.5">
-              <span class="w-3 h-3 rounded-full bg-blue-600 border border-white shadow-xs"></span>
               <span>Referans Konum</span>
             </span>
             <span class="flex items-center gap-1.5">

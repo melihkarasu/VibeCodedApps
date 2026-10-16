@@ -2,8 +2,8 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/2.4.2/3Dmol-min.js"></script>
-      <link rel="stylesheet" href="/static/apps/molekul/app.css">
-      <script src="/static/apps/molekul/app.js" defer></script>
+      <link rel="stylesheet" href="/static/apps/molekul/app.css?v=20261017a">
+      <script src="/static/apps/molekul/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -21,7 +21,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-slate">
-          <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
           <span>PubChem 3D Conformer & WebGL</span>
         </div>
       </div>
@@ -50,7 +49,7 @@ module.exports = function(pageTemplate) {
             </div>
 
             <button onclick="toggleSpin()" id="btn-spin" class="px-3 py-1.5 rounded-xl bg-white hover:bg-mistral-cream border border-mistral-hairline text-xs font-bold text-teal-300 transition flex items-center gap-1.5 shadow">
-              <span>🔄</span> <span id="label-spin">Döndür: Açık</span>
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span> <span id="label-spin">Döndür: Açık</span>
             </button>
             <button onclick="resetCamera()" class="px-3 py-1.5 rounded-xl bg-white hover:bg-mistral-cream border border-mistral-hairline text-xs font-bold text-mistral-slate transition" title="Kamerayı Sıfırla">
               Merkeze Al
@@ -70,12 +69,12 @@ module.exports = function(pageTemplate) {
 
           <!-- Sol Alt Kontrol İpucu -->
           <div class="absolute bottom-4 left-4 pointer-events-none bg-mistral-canvas backdrop-blur-md px-3 py-1.5 rounded-xl text-[11px] text-mistral-slate border border-mistral-hairline">
-            🖱️ Sol Tık: Döndür • Tekerlek: Yakınlaş • Sağ Tık: Kaydır
+            Sol Tık: Döndür • Tekerlek: Yakınlaş • Sağ Tık: Kaydır
           </div>
 
           <!-- Sağ Üst Favorileme Butonu -->
           <button onclick="toggleSaveMolecule()" id="btn-save-mol" class="absolute top-4 right-4 z-10 px-3 py-1.5 rounded-xl bg-white hover:bg-white border border-mistral-hairline text-xs font-bold text-mistral-ink transition flex items-center gap-1.5 backdrop-blur-md shadow">
-            <span id="star-icon">🔖</span> <span id="label-save-mol">Laboratuvarıma Kaydet</span>
+            <span id="star-icon"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></span> <span id="label-save-mol">Laboratuvarıma Kaydet</span>
           </button>
         </div>
 
@@ -121,14 +120,14 @@ module.exports = function(pageTemplate) {
         <!-- Hızlı Popüler Moleküller -->
         <div class="flex flex-wrap items-center gap-1.5 text-xs pt-1">
           <span class="text-mistral-stone text-[11px] mr-1">Seçkin Moleküller:</span>
-          <button onclick="loadPresetMolecule('caffeine', 'Kafein', 'C8H10N4O2')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">☕ Kafein</button>
-          <button onclick="loadPresetMolecule('aspirin', 'Aspirin', 'C9H8O4')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">💊 Aspirin</button>
-          <button onclick="loadPresetMolecule('acetaminophen', 'Parasetamol', 'C8H9NO2')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">💊 Parasetamol</button>
-          <button onclick="loadPresetMolecule('dopamine', 'Dopamin', 'C8H11NO2')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">🧠 Dopamin</button>
-          <button onclick="loadPresetMolecule('serotonin', 'Serotonin', 'C10H12N2O')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">☀️ Serotonin</button>
-          <button onclick="loadPresetMolecule('epinephrine', 'Adrenalin', 'C9H13NO3')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">⚡ Adrenalin</button>
-          <button onclick="loadPresetMolecule('penicillin', 'Penisilin', 'C16H18N2O4S')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">🧪 Penisilin</button>
-          <button onclick="loadPresetMolecule('water', 'Su', 'H2O')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">💧 Su</button>
+          <button onclick="loadPresetMolecule('caffeine', 'Kafein', 'C8H10N4O2')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Kafein</button>
+          <button onclick="loadPresetMolecule('aspirin', 'Aspirin', 'C9H8O4')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Aspirin</button>
+          <button onclick="loadPresetMolecule('acetaminophen', 'Parasetamol', 'C8H9NO2')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Parasetamol</button>
+          <button onclick="loadPresetMolecule('dopamine', 'Dopamin', 'C8H11NO2')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Dopamin</button>
+          <button onclick="loadPresetMolecule('serotonin', 'Serotonin', 'C10H12N2O')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Serotonin</button>
+          <button onclick="loadPresetMolecule('epinephrine', 'Adrenalin', 'C9H13NO3')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Adrenalin</button>
+          <button onclick="loadPresetMolecule('penicillin', 'Penisilin', 'C16H18N2O4S')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Penisilin</button>
+          <button onclick="loadPresetMolecule('water', 'Su', 'H2O')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Su</button>
         </div>
       </div>
 
@@ -137,7 +136,7 @@ module.exports = function(pageTemplate) {
         <div class="flex items-center justify-between">
           <div>
             <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-              <span>🔬</span> Kişisel Molekül Laboratuvarım
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg></span> Kişisel Molekül Laboratuvarım
             </h3>
             <p class="text-mistral-slate text-xs">Kaydettiğiniz kimyasal bileşikler ve 3D modelleri.</p>
           </div>
@@ -148,7 +147,7 @@ module.exports = function(pageTemplate) {
           <!-- JS ile doldurulur -->
         </div>
         <div id="mol-shelf-empty" class="p-8 text-center rounded-2xl bg-white border border-mistral-hairline text-mistral-stone text-xs">
-          Henüz laboratuvarınıza bir molekül kaydetmediniz. Yukarıdaki 🔖 simgesine tıklayarak favorilerinizi buraya ekleyebilirsiniz.
+          Henüz laboratuvarınıza bir molekül kaydetmediniz. Yukarıdaki simgesine tıklayarak favorilerinizi buraya ekleyebilirsiniz.
         </div>
       </div>
 

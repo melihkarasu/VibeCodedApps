@@ -18,7 +18,7 @@
     medium: { name: 'Orta',    level: 2, symbol: '●●○○', symbolColor: 'text-indigo-400', clues: 32, baseScore: 1000, parTime: 600,  mult: 3 },
     hard:   { name: 'Zor',     level: 3, symbol: '●●●○', symbolColor: 'text-orange-500', clues: 28, baseScore: 2000, parTime: 900,  mult: 4 },
     expert: { name: 'Uzman',   level: 4, symbol: '●●●●', symbolColor: 'text-red-600',    clues: 24, baseScore: 3500, parTime: 1200, mult: 5 },
-    daily:  { name: 'Günün',   level: 0, symbol: '📅',   symbolColor: 'text-amber-700',  clues: 30, baseScore: 2500, parTime: 600,  mult: 4 }
+    daily:  { name: 'Günün',   level: 0, symbol: '',   symbolColor: 'text-amber-700',  clues: 30, baseScore: 2500, parTime: 600,  mult: 4 }
   };
 
   // --- 2. GÜVENLİK PROTOKOLLERİ (XSS SANİTİZASYONU & GÜVENLİ KOPYALAMA) ---
@@ -322,7 +322,7 @@
       saveActiveGame();
     }
     showLobbyView();
-    showToast('💾 Oyun kaydedildi, ana menüye dönüldü.');
+    showToast('Oyun kaydedildi, ana menüye dönüldü.');
   }
 
   function pauseAndOpenNewGame() {
@@ -331,7 +331,7 @@
       saveActiveGame();
     }
     showLobbyView();
-    showToast('💾 Yarım kalan oyun kaydedildi.');
+    showToast('Yarım kalan oyun kaydedildi.');
   }
 
   // --- 9. OYUN BAŞLATMA (MOTOR ÇAĞRISI) ---
@@ -351,7 +351,7 @@
     gameState.history = [];
     gameState.hasPlayerMoved = false;
 
-    showToast(`🧩 Bulmaca #${id} yükleniyor...`);
+    showToast(`Bulmaca #${id} yükleniyor...`);
 
     const cfg = DIFFICULTY_CONFIG[diff];
     const generated = generateSudoku(id, cfg.clues);
@@ -472,7 +472,7 @@
 
       showGameView();
       startTimer();
-      showToast('✓ Oyun kaldığı yerden yüklendi!');
+      showToast('Oyun kaldığı yerden yüklendi!');
     } catch(e) {
       showToast('Kayıtlı oyun yüklenemedi.');
     }
@@ -484,7 +484,7 @@
     } catch(e) {}
     const card = document.getElementById('lobby-resume-card');
     if (card) card.classList.add('hidden');
-    showToast('✓ Önceki oyun kaydı silindi.');
+    showToast('Önceki oyun kaydı silindi.');
   }
 
   // --- 11. KRONOMETRE & DURAKLATMA (BLUR KATMANI) ---
@@ -693,9 +693,9 @@
     if (num !== gameState.solution[idx]) {
       gameState.mistakes++;
       updateBadges();
-      showToast(`❌ Hatalı rakam! (${gameState.mistakes}/3)`);
+      showToast(`Hatalı rakam! (${gameState.mistakes}/3)`);
       if (gameState.mistakes >= 3) {
-        showToast('⚠️ 3 hata yaptınız! Skor düşüşü uygulanıyor.');
+        showToast('3 hata yaptınız! Skor düşüşü uygulanıyor.');
       }
     }
 
@@ -844,7 +844,7 @@
     updateLiveScore();
     updateNumpadBadges();
     saveActiveGame();
-    showToast(`💡 İpucu kullanıldı (-150 puan). Kalan: ${gameState.hintsRemaining}`);
+    showToast(`İpucu kullanıldı (-150 puan). Kalan: ${gameState.hintsRemaining}`);
     checkVictory();
   }
 
@@ -920,7 +920,7 @@
     const cfg = DIFFICULTY_CONFIG[gameState.difficulty] || DIFFICULTY_CONFIG.medium;
     if (pBadge) pBadge.innerText = `ID: #${gameState.puzzleId}`;
     if (dBadge) dBadge.innerHTML = `<span class="${cfg.symbolColor} font-mono">${cfg.symbol}</span> ${cfg.name}`;
-    if (mCounter) mCounter.innerText = `❌ ${gameState.mistakes}/3`;
+    if (mCounter) mCounter.innerText = `${gameState.mistakes}/3`;
 
     // İpucu sayacı ve pasifleşme
     if (hLabel) {
@@ -1129,7 +1129,7 @@
 
     container.innerHTML = rows.map((item, idx) => {
       const rank = item.rank || (idx + 1);
-      const rankBadge = rank === 1 ? '🥇 1' : rank === 2 ? '🥈 2' : rank === 3 ? '🥉 3' : `#${rank}`;
+      const rankBadge = rank === 1 ? '#1' : rank === 2 ? '#2' : rank === 3 ? '#3' : `#${rank}`;
       const isSelf = Boolean(item.isSelf);
       const selfClass = isSelf ? 'bg-amber-50/70 font-bold border-l-2 border-amber-500' : 'hover:bg-mistral-cream/50';
 
@@ -1278,7 +1278,7 @@
     url.searchParams.set('id', gameState.puzzleId);
     url.searchParams.set('diff', gameState.difficulty);
     const linkStr = url.toString();
-    safeCopyToClipboard(linkStr, `✓ #${gameState.puzzleId} linki panoya kopyalandı!`);
+    safeCopyToClipboard(linkStr, `#${gameState.puzzleId} linki panoya kopyalandı!`);
   }
 
   // --- 20. KLAVYE VE ETKİLEŞİM DİNLEYİCİLERİ ---

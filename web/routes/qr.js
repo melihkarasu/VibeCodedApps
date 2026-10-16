@@ -2,8 +2,8 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
   const extraHead = `
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js"></script>
-      <link rel="stylesheet" href="/static/apps/qr/app.css">
-      <script src="/static/apps/qr/app.js?v=20260929a" defer></script>
+      <link rel="stylesheet" href="/static/apps/qr/app.css?v=20261017a">
+      <script src="/static/apps/qr/app.js?v=20261017a" defer></script>
     `;
 
   const content = `
@@ -20,7 +20,6 @@ module.exports = function(pageTemplate) {
         </p>
       </div>
       <div id="qr-user-badge" class="hidden items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-slate">
-        <span class="w-2 h-2 rounded-full bg-teal-400"></span>
         <span id="qr-user-name">Kullanıcı Koleksiyonu Aktif</span>
       </div>
     </div>
@@ -34,22 +33,22 @@ module.exports = function(pageTemplate) {
           <label class="block text-xs font-semibold uppercase tracking-wider text-mistral-slate mb-3">1. İçerik Türü</label>
           <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-5">
             <button onclick="setTab('url')" id="tab-url" class="tab-btn py-2 px-3 rounded-xl text-xs font-medium border border-teal-500 bg-teal-500/20 text-teal-700 transition flex flex-col items-center gap-1">
-              <span class="text-base">🔗</span> URL
+              <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span> URL
             </button>
             <button onclick="setTab('wifi')" id="tab-wifi" class="tab-btn py-2 px-3 rounded-xl text-xs font-medium border border-mistral-hairline bg-white hover:bg-mistral-cream text-mistral-slate transition flex flex-col items-center gap-1">
-              <span class="text-base">📶</span> Wi-Fi
+              <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span> Wi-Fi
             </button>
             <button onclick="setTab('vcard')" id="tab-vcard" class="tab-btn py-2 px-3 rounded-xl text-xs font-medium border border-mistral-hairline bg-white hover:bg-mistral-cream text-mistral-slate transition flex flex-col items-center gap-1">
-              <span class="text-base">👤</span> vCard
+              <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> vCard
             </button>
             <button onclick="setTab('text')" id="tab-text" class="tab-btn py-2 px-3 rounded-xl text-xs font-medium border border-mistral-hairline bg-white hover:bg-mistral-cream text-mistral-slate transition flex flex-col items-center gap-1">
-              <span class="text-base">📝</span> Metin
+              <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span> Metin
             </button>
             <button onclick="setTab('email')" id="tab-email" class="tab-btn py-2 px-3 rounded-xl text-xs font-medium border border-mistral-hairline bg-white hover:bg-mistral-cream text-mistral-slate transition flex flex-col items-center gap-1">
-              <span class="text-base">✉️</span> E-posta
+              <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> E-posta
             </button>
             <button onclick="setTab('crypto')" id="tab-crypto" class="tab-btn py-2 px-3 rounded-xl text-xs font-medium border border-mistral-hairline bg-white hover:bg-mistral-cream text-mistral-slate transition flex flex-col items-center gap-1">
-              <span class="text-base">💳</span> Kripto
+              <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span> Kripto
             </button>
           </div>
 
@@ -309,19 +308,19 @@ module.exports = function(pageTemplate) {
             <span class="block text-xs text-mistral-slate mb-2">Popüler Hazır Simgeler:</span>
             <div class="flex flex-wrap gap-2">
               <button onclick="setPresetLogo('github')" class="px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-hairline text-xs flex items-center gap-1.5">
-                <span>🐙</span> GitHub
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg></span> GitHub
               </button>
               <button onclick="setPresetLogo('wifi')" class="px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-hairline text-xs flex items-center gap-1.5">
-                <span>📶</span> Wi-Fi
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span> Wi-Fi
               </button>
               <button onclick="setPresetLogo('link')" class="px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-hairline text-xs flex items-center gap-1.5">
-                <span>🔗</span> Link
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span> Link
               </button>
               <button onclick="setPresetLogo('star')" class="px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-hairline text-xs flex items-center gap-1.5">
                 <span>⭐</span> Yıldız
               </button>
               <button onclick="setPresetLogo('bolt')" class="px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-hairline text-xs flex items-center gap-1.5">
-                <span>⚡</span> Şimşek
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> Şimşek
               </button>
             </div>
           </div>
@@ -380,19 +379,19 @@ module.exports = function(pageTemplate) {
           <!-- Aksiyon Butonları -->
           <div class="w-full grid grid-cols-2 gap-3 mt-4">
             <button onclick="downloadQR('png')" class="py-3 px-4 rounded-xl bg-teal-500 hover:bg-teal-400 text-white font-medium text-sm transition shadow-md shadow-teal-500/20 flex items-center justify-center gap-2">
-              <span>📥</span> PNG İndir
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span> PNG İndir
             </button>
             <button onclick="downloadQR('svg')" class="py-3 px-4 rounded-xl bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep font-medium text-sm transition flex items-center justify-center gap-2">
-              <span>📐</span> SVG İndir
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span> SVG İndir
             </button>
           </div>
 
           <div class="w-full grid grid-cols-2 gap-3 mt-2">
             <button onclick="copyToClipboard()" id="btn-copy" class="py-2.5 px-3 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-hairline text-mistral-slate text-xs transition flex items-center justify-center gap-1.5">
-              <span>📋</span> Panoya Kopyala
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Panoya Kopyala
             </button>
             <button onclick="saveCurrentQR()" id="btn-save-qr" class="py-2.5 px-3 rounded-xl bg-white border border-teal-500/40 hover:border-teal-400 text-teal-700 text-xs transition flex items-center justify-center gap-1.5">
-              <span>💾</span> Koleksiyonuma Kaydet
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></span> Koleksiyonuma Kaydet
             </button>
           </div>
 
@@ -407,7 +406,7 @@ module.exports = function(pageTemplate) {
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h2 class="text-2xl font-bold text-mistral-ink flex items-center gap-2">
-            <span>📚</span> Kayıtlı QR Koleksiyonum
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Kayıtlı QR Koleksiyonum
           </h2>
           <p class="text-mistral-slate text-xs mt-1">
             Tekil kimlik doğrulama (SSO) ile bu tarayıcı ve hesabınıza kaydedilen özel tasarım QR kodlarınız.

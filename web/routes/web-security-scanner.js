@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/web-security-scanner/app.css?v=20261015a">
-      <script src="/static/apps/web-security-scanner/app.js?v=20261015a" defer></script>
+      <link rel="stylesheet" href="/static/apps/web-security-scanner/app.css?v=20261017a">
+      <script src="/static/apps/web-security-scanner/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -210,7 +210,7 @@ module.exports = function(pageTemplate) {
             <textarea 
               id="manual-headers-input" 
               rows="8" 
-              placeholder="HTTP/2 200&#10;date: Wed, 09 Oct 2026 12:00:00 GMT&#10;content-type: text/html&#10;content-security-policy: default-src 'self';&#10;strict-transport-security: max-age=31536000; includeSubDomains; preload&#10;x-frame-options: SAMEORIGIN&#10;x-content-type-options: nosniff"
+              placeholder="HTTP/2 200&#10;date: Wed, 09 Oct 2026 12:00:00 GMT&#10;content-type: text/html&#10;content-security-policy: default-src'self';&#10;strict-transport-security: max-age=31536000; includeSubDomains; preload&#10;x-frame-options: SAMEORIGIN&#10;x-content-type-options: nosniff"
               class="w-full p-4 bg-stone-50 border border-stone-200 rounded-xl text-xs font-mono text-mistral-ink placeholder-stone-400 transition-all"
             ></textarea>
           </div>

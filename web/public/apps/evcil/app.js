@@ -48,14 +48,14 @@ let allBreeds = [];
                 <div class="relative overflow-hidden aspect-video bg-mistral-cream">
                   <img src="${b.image}" alt="${b.name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&auto=format&fit=crop&q=80'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                   <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded text-[10px] font-bold bg-white/90 backdrop-blur text-mistral-ink border border-mistral-hairline shadow-2xs">
-                    ${b.petType === 'cat' ? '🐱 Kedi' : '🐶 Köpek'}
+                    ${b.petType === 'cat' ? 'Kedi' : 'Köpek'}
                   </span>
                 </div>
                 <div class="p-4">
                   <h3 class="text-base font-bold font-editorial text-mistral-ink group-hover:text-mistral-orange transition truncate mb-0.5">
                     ${b.name}
                   </h3>
-                  <span class="text-[11px] text-mistral-stone block mb-2">📍 ${b.origin}</span>
+                  <span class="text-[11px] text-mistral-stone block mb-2">${b.origin}</span>
                   <p class="text-xs text-mistral-slate line-clamp-2 leading-relaxed">
                     ${b.temperament || b.description || 'Sevimli ve dost canlısı.'}
                   </p>
@@ -79,13 +79,13 @@ let allBreeds = [];
           const mImg = document.getElementById('m-pet-img');
           mImg.onerror = function() { this.src = 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&auto=format&fit=crop&q=80'; };
           mImg.src = b.image;
-          document.getElementById('m-pet-type').innerText = b.petType === 'cat' ? '🐱 KEDİ IRKI' : '🐶 KÖPEK IRKI';
-          document.getElementById('m-pet-origin').innerText = '📍 ' + b.origin;
+          document.getElementById('m-pet-type').innerText = b.petType === 'cat' ? 'KEDİ IRKI' : 'KÖPEK IRKI';
+          document.getElementById('m-pet-origin').innerText = '' + b.origin;
           document.getElementById('m-pet-name').innerText = b.name;
           document.getElementById('m-pet-desc').innerText = b.description || b.temperament || 'Özel ırk açıklaması bulunmuyor.';
           document.getElementById('m-pet-life').innerText = b.lifeSpan;
           document.getElementById('m-pet-friendly').innerText = `⭐ ${b.childFriendly}/5`;
-          document.getElementById('m-pet-energy').innerText = `⚡ ${b.energyLevel}/5`;
+          document.getElementById('m-pet-energy').innerText = `${b.energyLevel}/5`;
 
           const tBox = document.getElementById('m-pet-temperament');
           const tags = (b.temperament || '').split(',').map(x => x.trim()).filter(Boolean);

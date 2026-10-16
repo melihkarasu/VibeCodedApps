@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/sanat/app.css">
-      <script src="/static/apps/sanat/app.js?v=20260930d" defer></script>
+      <link rel="stylesheet" href="/static/apps/sanat/app.css?v=20261017a">
+      <script src="/static/apps/sanat/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -20,7 +20,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-slate">
-          <span class="w-2 h-2 rounded-full bg-purple-400"></span>
           <span>The Met Digital Archive • Public Domain</span>
         </div>
       </div>
@@ -38,7 +37,7 @@ module.exports = function(pageTemplate) {
           <div class="lg:col-span-5 p-6 sm:p-8 space-y-4">
             <div class="flex items-center gap-2">
               <span class="px-2.5 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-300 text-[10px] font-bold uppercase tracking-wider">
-                👑 Günün Başyapıtı
+                Günün Başyapıtı
               </span>
               <span id="hero-date" class="text-xs text-mistral-slate font-mono">1889</span>
             </div>
@@ -58,10 +57,10 @@ module.exports = function(pageTemplate) {
 
             <div class="pt-2 flex flex-wrap items-center gap-3">
               <button onclick="openDeepZoomModal(436535)" class="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition shadow-lg shadow-purple-500/20 flex items-center gap-2">
-                <span>🔍</span> Fırça Detaylarını İncele
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span> Fırça Detaylarını İncele
               </button>
               <button onclick="quickSaveArt(436535, 'Wheat Field with Cypresses', 'Vincent van Gogh', 'https://images.metmuseum.org/CRDImages/ep/web-large/DP-42549-001.jpg', '1889')" class="px-4 py-2.5 rounded-xl bg-white hover:bg-mistral-cream border border-mistral-hairline text-xs font-semibold text-mistral-ink transition">
-                🔖 Koleksiyonuma Ekle
+                Koleksiyonuma Ekle
               </button>
             </div>
           </div>
@@ -74,28 +73,28 @@ module.exports = function(pageTemplate) {
           <label class="block text-xs font-semibold uppercase tracking-wider text-mistral-slate mb-2">Usta Sanatçılar ve Akımlar</label>
           <div class="flex flex-wrap gap-2" id="artist-filter-buttons">
             <button onclick="fetchArtworks('Van Gogh', 'artist')" class="filter-btn active px-3 py-1.5 rounded-xl text-xs font-semibold bg-purple-600 text-white transition flex items-center gap-1.5 shadow">
-              <span>🌻</span> Van Gogh
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span> Van Gogh
             </button>
             <button onclick="fetchArtworks('Claude Monet', 'artist')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition flex items-center gap-1.5">
-              <span>🪷</span> Claude Monet
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span> Claude Monet
             </button>
             <button onclick="fetchArtworks('Rembrandt', 'artist')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition flex items-center gap-1.5">
-              <span>🎨</span> Rembrandt
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span> Rembrandt
             </button>
             <button onclick="fetchArtworks('Hokusai', 'artist')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition flex items-center gap-1.5">
-              <span>🌊</span> Hokusai
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg></span> Hokusai
             </button>
             <button onclick="fetchArtworks('Edgar Degas', 'artist')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition flex items-center gap-1.5">
-              <span>🩰</span> Edgar Degas
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span> Edgar Degas
             </button>
             <button onclick="fetchArtworks('Cezanne', 'artist')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition flex items-center gap-1.5">
-              <span>🍎</span> Cézanne
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg></span> Cézanne
             </button>
             <button onclick="fetchArtworks('Vermeer', 'artist')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition flex items-center gap-1.5">
-              <span>🏛️</span> Vermeer
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></span> Vermeer
             </button>
             <button onclick="fetchArtworks('Renaissance', 'keyword')" class="filter-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-white border border-mistral-hairline text-mistral-slate hover:text-white transition flex items-center gap-1.5">
-              <span>📜</span> Rönesans
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Rönesans
             </button>
           </div>
         </div>
@@ -115,7 +114,7 @@ module.exports = function(pageTemplate) {
       <!-- 3. ESERLER LİSTESİ BAŞLIĞI -->
       <div class="mb-4 flex items-center justify-between">
         <h2 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-          <span>🏛️</span> <span id="gallery-topic-title">Van Gogh Koleksiyonu</span>
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></span> <span id="gallery-topic-title">Van Gogh Koleksiyonu</span>
         </h2>
         <span id="results-count" class="text-xs text-mistral-slate font-mono">Eserler listeleniyor...</span>
       </div>
@@ -131,7 +130,7 @@ module.exports = function(pageTemplate) {
       </div>
 
       <div id="empty-state" class="hidden py-16 text-center text-mistral-slate text-sm">
-        <div class="text-4xl mb-2">🖼️</div>
+        <div class="text-4xl mb-2"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
         <span>Bu arama kriterine uygun görsel bulunamadı. Lütfen başka bir sanatçı veya akım seçin.</span>
       </div>
 
@@ -140,7 +139,7 @@ module.exports = function(pageTemplate) {
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <h2 class="text-2xl font-bold text-mistral-ink flex items-center gap-2">
-              <span>🏛️</span> Kişisel Sanat Koleksiyonum
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></span> Kişisel Sanat Koleksiyonum
             </h2>
             <p class="text-mistral-slate text-xs mt-1">
               Beğendiğiniz tabloları sanal sergi salonunuza kaydedin, fırça detaylarını istediğiniz zaman inceleyin.
@@ -155,7 +154,7 @@ module.exports = function(pageTemplate) {
           <!-- JS ile kayıtlı eserler -->
         </div>
         <div id="saved-art-empty" class="p-8 text-center rounded-2xl bg-white border border-mistral-hairline text-mistral-stone text-xs">
-          Henüz koleksiyonunuza bir eser eklemediniz. Eser kartlarındaki 🔖 simgesine tıklayarak serginizi oluşturabilirsiniz.
+          Henüz koleksiyonunuza bir eser eklemediniz. Eser kartlarındaki simgesine tıklayarak serginizi oluşturabilirsiniz.
         </div>
       </div>
 
@@ -186,11 +185,11 @@ module.exports = function(pageTemplate) {
               </div>
 
               <button onclick="toggleModalSaved()" id="btn-modal-art-save" class="px-3 py-1.5 rounded-xl bg-white hover:bg-mistral-cream border border-mistral-hairline text-xs font-semibold text-mistral-ink transition flex items-center gap-1.5">
-                <span id="modal-art-save-icon">🔖</span> <span id="modal-art-save-text">Koleksiyona Ekle</span>
+                <span id="modal-art-save-icon"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></span> <span id="modal-art-save-text">Koleksiyona Ekle</span>
               </button>
 
               <button onclick="closeZoomModal()" class="w-9 h-9 rounded-full bg-white hover:bg-mistral-cream-light text-mistral-slate hover:text-mistral-ink font-bold flex items-center justify-center transition border border-mistral-hairline text-sm">
-                ✕
+                
               </button>
             </div>
           </div>
@@ -199,7 +198,7 @@ module.exports = function(pageTemplate) {
           <div class="relative flex-1 zoom-container bg-black flex items-center justify-center" id="pan-container" onmousedown="startPan(event)" onmousemove="doPan(event)" onmouseup="endPan()" onmouseleave="endPan()" onwheel="handleWheel(event)">
             <img id="modal-zoom-img" src="" class="zoom-img max-w-full max-h-full object-contain pointer-events-none select-none">
             <div class="absolute bottom-4 left-4 pointer-events-none bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl text-[11px] text-mistral-slate">
-              💡 İpucu: Fare tekerleğiyle yakınlaşabilir, tıklayıp sürükleyerek fırça darbelerini inceleyebilirsiniz.
+              İpucu: Fare tekerleğiyle yakınlaşabilir, tıklayıp sürükleyerek fırça darbelerini inceleyebilirsiniz.
             </div>
           </div>
 
@@ -219,7 +218,7 @@ module.exports = function(pageTemplate) {
               <span id="modal-art-dims" class="font-mono"></span>
             </div>
             <a id="modal-art-met-link" href="#" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:underline flex items-center gap-1">
-              <span>🔗</span> The Met Kataloğunda Gör &rarr;
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span> The Met Kataloğunda Gör &rarr;
             </a>
           </div>
 

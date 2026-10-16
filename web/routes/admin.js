@@ -32,14 +32,13 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div id="admin-user-badge" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs shadow-xs">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-semibold text-mistral-ink" id="admin-user-email">Doğrulanıyor...</span>
         </div>
       </div>
 
       <!-- Yetki Yok Uyarısı (Yetkisiz Kullanıcılar İçin) -->
       <div id="admin-unauthorized-banner" class="hidden p-8 rounded-2xl bg-rose-50 border-2 border-rose-300 text-center max-w-xl mx-auto my-12 shadow-sm">
-        <div class="text-4xl mb-3">⛔</div>
+        <div class="text-4xl mb-3"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
         <h3 class="text-xl font-bold font-editorial text-rose-900 mb-2">Erişim Yetkisi Yetersiz</h3>
         <p class="text-sm text-rose-800 leading-relaxed mb-6">
           Bu alana yalnızca sistem yöneticisi erişebilir. Lütfen yönetici hesabınızla giriş yapınız.
@@ -60,16 +59,16 @@ module.exports = function(pageTemplate) {
         <!-- Sekme Butonları -->
         <div class="flex flex-wrap items-center gap-2 p-1.5 bg-mistral-cream rounded-xl border border-mistral-beige-deep max-w-fit">
           <button type="button" onclick="switchAdminTab('overview')" id="tab-btn-overview" class="admin-tab-btn active px-4 py-2 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center gap-1.5">
-            <span>📊</span> <span>Genel Bakış</span>
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span> <span>Genel Bakış</span>
           </button>
           <button type="button" onclick="switchAdminTab('users')" id="tab-btn-users" class="admin-tab-btn px-4 py-2 rounded-lg text-xs font-semibold text-mistral-ink hover:text-mistral-orange transition cursor-pointer flex items-center gap-1.5">
-            <span>👥</span> <span>Kullanıcılar</span>
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> <span>Kullanıcılar</span>
           </button>
           <button type="button" onclick="switchAdminTab('categories')" id="tab-btn-categories" class="admin-tab-btn px-4 py-2 rounded-lg text-xs font-semibold text-mistral-ink hover:text-mistral-orange transition cursor-pointer flex items-center gap-1.5">
-            <span>📁</span> <span>Kategoriler</span>
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span> <span>Kategoriler</span>
           </button>
           <button type="button" onclick="switchAdminTab('apps')" id="tab-btn-apps" class="admin-tab-btn px-4 py-2 rounded-lg text-xs font-semibold text-mistral-ink hover:text-mistral-orange transition cursor-pointer flex items-center gap-1.5">
-            <span>🚀</span> <span>Uygulamalar</span>
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> <span>Uygulamalar</span>
           </button>
         </div>
 
@@ -103,13 +102,13 @@ module.exports = function(pageTemplate) {
             <h3 class="text-lg font-bold font-editorial text-mistral-ink mb-3">Hızlı İşlemler</h3>
             <div class="flex flex-wrap gap-3">
               <button type="button" onclick="openNewAppModal()" class="px-4 py-2.5 rounded-xl bg-mistral-orange hover:bg-mistral-orange-deep text-white text-xs font-semibold transition flex items-center gap-2 cursor-pointer shadow-xs">
-                <span>➕</span> <span>Yeni Uygulama Ekle</span>
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span> <span>Yeni Uygulama Ekle</span>
               </button>
               <button type="button" onclick="openNewCategoryModal()" class="px-4 py-2.5 rounded-xl bg-white hover:bg-mistral-cream text-mistral-ink border border-mistral-hairline text-xs font-semibold transition flex items-center gap-2 cursor-pointer shadow-2xs">
-                <span>📁</span> <span>Yeni Kategori Ekle</span>
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span> <span>Yeni Kategori Ekle</span>
               </button>
               <a href="/" target="_blank" class="px-4 py-2.5 rounded-xl bg-white hover:bg-mistral-cream text-mistral-ink border border-mistral-hairline text-xs font-semibold transition flex items-center gap-2 shadow-2xs">
-                <span>🌐</span> <span>Canlı Vitrini Görüntüle</span>
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span> <span>Canlı Vitrini Görüntüle</span>
               </a>
             </div>
           </div>
@@ -121,7 +120,7 @@ module.exports = function(pageTemplate) {
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-xl font-bold font-editorial text-mistral-ink">Kayıtlı Kullanıcı Listesi</h3>
               <button onclick="loadAdminUsers()" class="text-xs text-mistral-orange hover:underline font-semibold flex items-center gap-1 cursor-pointer">
-                <span>🔄</span> Yenile
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span> Yenile
               </button>
             </div>
             <div class="overflow-x-auto">
@@ -153,7 +152,7 @@ module.exports = function(pageTemplate) {
           <div class="flex items-center justify-between">
             <h3 class="text-xl font-bold font-editorial text-mistral-ink">Uygulama Kategorileri <span class="text-xs font-sans font-normal text-mistral-slate">(⠿ tutamaçtan sürükleyerek sıralayın)</span></h3>
             <button onclick="openNewCategoryModal()" class="px-3.5 py-2 rounded-xl bg-mistral-orange hover:bg-mistral-orange-deep text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer shadow-xs">
-              <span>➕</span> <span>Kategori Ekle</span>
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span> <span>Kategori Ekle</span>
             </button>
           </div>
 
@@ -174,7 +173,7 @@ module.exports = function(pageTemplate) {
                 <option value="">Tüm Kategoriler</option>
               </select>
               <button onclick="openNewAppModal()" class="px-3.5 py-2 rounded-xl bg-mistral-orange hover:bg-mistral-orange-deep text-white text-xs font-semibold transition flex items-center gap-1.5 cursor-pointer shadow-xs shrink-0">
-                <span>➕</span> <span>Uygulama Ekle</span>
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span> <span>Uygulama Ekle</span>
               </button>
             </div>
           </div>
@@ -419,7 +418,7 @@ module.exports = function(pageTemplate) {
             });
             const data = await res.json();
             if (res.ok && data.success) {
-              if (window.showToast) window.showToast('✓ Kategori sıralaması kaydedildi');
+              if (window.showToast) window.showToast('Kategori sıralaması kaydedildi');
               loadAdminCategories();
             } else {
               alert('Sıralama kaydedilemedi: ' + (data.error || 'Bilinmeyen hata'));
@@ -485,7 +484,7 @@ module.exports = function(pageTemplate) {
 
                 return '<tr class="hover:bg-mistral-cream/40 transition"' + (isBanned ? ' style="background:#fff7f7;opacity:0.75;"' : '') + '>' +
                   '<td class="py-3 px-4 flex items-center gap-2.5 font-semibold text-mistral-ink">' +
-                    (avatar ? '<img src="' + avatar + '" class="w-6 h-6 rounded-full border border-mistral-orange object-cover">' : '<span class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs">👤</span>') +
+                    (avatar ? '<img src="' + avatar + '" class="w-6 h-6 rounded-full border border-mistral-orange object-cover">' : '<span class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>') +
                     '<span>' + name + (isSelf ? ' <span class="px-1.5 py-0.5 rounded bg-amber-100 border border-amber-300 text-amber-800 text-[10px] font-sans">SİZ</span>' : '') + '</span>' +
                   '</td>' +
                   '<td class="py-3 px-4 font-mono text-mistral-slate">' + (u.email || '--') + '</td>' +
@@ -496,12 +495,12 @@ module.exports = function(pageTemplate) {
                   '<td class="py-3 px-4 text-mistral-slate">' + lastLogin + '</td>' +
                   '<td class="py-3 px-4">' +
                     (userRole === 'admin'
-                      ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold border border-amber-300">⚙️ Yönetici</span>'
+                      ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold border border-amber-300">Yönetici</span>'
                       : '<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold border border-slate-200">Kullanıcı</span>') +
                   '</td>' +
                   '<td class="py-3 px-4">' +
                     (isBanned
-                      ? '<span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[10px] font-bold border border-rose-300">⛔ Askıda</span>'
+                      ? '<span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[10px] font-bold border border-rose-300">Askıda</span>'
                       : '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold border border-emerald-200">Aktif</span>') +
                   '</td>' +
                   '<td class="py-3 px-4 text-right">' +
@@ -540,7 +539,7 @@ module.exports = function(pageTemplate) {
             });
             const data = await res.json();
             if (res.ok && data.success) {
-              if (window.showToast) window.showToast('✓ ' + data.message);
+              if (window.showToast) window.showToast('' + data.message);
               loadAdminUsers();
             } else {
               alert(data.error || 'İşlem başarısız');
@@ -561,7 +560,7 @@ module.exports = function(pageTemplate) {
             });
             const data = await res.json();
             if (res.ok && data.success) {
-              if (window.showToast) window.showToast('✓ ' + data.message);
+              if (window.showToast) window.showToast('' + data.message);
               loadAdminUsers();
             } else {
               alert(data.error || 'İşlem başarısız');
@@ -606,10 +605,10 @@ module.exports = function(pageTemplate) {
                   '</div>' +
                   '<div class="flex items-center gap-1.5">' +
                     '<button type="button" onclick="openEditCategoryModal(\\'' + c.id + '\\')" class="p-1.5 rounded-lg hover:bg-mistral-cream text-mistral-slate hover:text-mistral-orange transition cursor-pointer" title="Düzenle">' +
-                      '✏️' +
+                      '' +
                     '</button>' +
                     '<button type="button" onclick="deleteCategory(\\'' + c.id + '\\')" class="p-1.5 rounded-lg hover:bg-rose-50 text-mistral-slate hover:text-rose-600 transition cursor-pointer" title="Sil">' +
-                      '🗑️' +
+                      '' +
                     '</button>' +
                   '</div>' +
                 '</div>';
@@ -690,7 +689,7 @@ module.exports = function(pageTemplate) {
           return '<div class="admin-app-cat-card p-5 rounded-2xl bg-white border-2 border-dashed border-mistral-hairline shadow-xs transition" data-cat-id="">' +
             '<div class="flex items-center justify-between mb-3 pb-2 border-b border-mistral-hairline-soft">' +
               '<div class="flex items-center gap-2.5">' +
-                '<span class="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 flex items-center justify-center text-lg shrink-0">❓</span>' +
+                '<span class="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 flex items-center justify-center text-lg shrink-0"><svg class="w-5 h-5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>' +
                 '<div>' +
                   '<h4 class="font-bold text-sm text-mistral-ink font-editorial">Kategorisiz Uygulamalar</h4>' +
                   '<div class="text-[10px] text-mistral-slate font-mono">' + orphans.length + ' uygulama • bir kategorinin üzerine bırakın</div>' +
@@ -716,8 +715,8 @@ module.exports = function(pageTemplate) {
               (isActive
                 ? '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold mr-1">Aktif</span>'
                 : '<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold mr-1">Gizli</span>') +
-              '<button type="button" onclick="adminAppAction(this)" data-app-action="edit" data-app-id="' + app.id + '" class="p-1.5 rounded-lg hover:bg-mistral-cream text-mistral-slate hover:text-mistral-orange transition cursor-pointer" title="Düzenle">✏️</button>' +
-              '<button type="button" onclick="adminAppAction(this)" data-app-action="delete" data-app-id="' + app.id + '" class="p-1.5 rounded-lg hover:bg-rose-50 text-mistral-slate hover:text-rose-600 transition cursor-pointer" title="Sil">🗑️</button>' +
+              '<button type="button" onclick="adminAppAction(this)" data-app-action="edit" data-app-id="' + app.id + '" class="p-1.5 rounded-lg hover:bg-mistral-cream text-mistral-slate hover:text-mistral-orange transition cursor-pointer" title="Düzenle"></button>' +
+              '<button type="button" onclick="adminAppAction(this)" data-app-action="delete" data-app-id="' + app.id + '" class="p-1.5 rounded-lg hover:bg-rose-50 text-mistral-slate hover:text-rose-600 transition cursor-pointer" title="Sil"></button>' +
             '</div>' +
           '</div>';
         }
@@ -801,7 +800,7 @@ module.exports = function(pageTemplate) {
             });
             const data = await res.json();
             if (res.ok && data.success) {
-              if (window.showToast) window.showToast('✓ ' + data.message);
+              if (window.showToast) window.showToast('' + data.message);
               loadAdminApps();
             } else {
               alert('Sıralama kaydedilemedi: ' + (data.error || 'Bilinmeyen hata'));
@@ -825,7 +824,7 @@ module.exports = function(pageTemplate) {
           document.getElementById('cat-field-id').disabled = false;
           document.getElementById('cat-field-id').value = '';
           document.getElementById('cat-field-title').value = '';
-          document.getElementById('cat-field-icon').value = '📁';
+          document.getElementById('cat-field-icon').value = '';
           document.getElementById('cat-field-sort').value = allAdminCategories.length;
           document.getElementById('category-modal').classList.remove('hidden');
           document.getElementById('category-modal').classList.add('flex');
@@ -868,7 +867,7 @@ module.exports = function(pageTemplate) {
 
             if (res.ok) {
               closeCategoryModal();
-              if (window.showToast) window.showToast('✓ Kategori başarıyla kaydedildi!');
+              if (window.showToast) window.showToast('Kategori başarıyla kaydedildi!');
               loadAdminCategories();
             } else {
               const err = await res.json().catch(() => ({}));
@@ -903,7 +902,7 @@ module.exports = function(pageTemplate) {
           document.getElementById('app-field-id').value = '';
           document.getElementById('app-field-name').value = '';
           document.getElementById('app-field-desc').value = '';
-          document.getElementById('app-field-icon').value = '⚡';
+          document.getElementById('app-field-icon').value = '';
           document.getElementById('app-field-url').value = '';
           document.getElementById('app-field-action').value = 'Uygulamayı Aç';
           document.getElementById('app-field-status').value = 'active';
@@ -959,7 +958,7 @@ module.exports = function(pageTemplate) {
 
             if (res.ok) {
               closeAppModal();
-              if (window.showToast) window.showToast('✓ Uygulama başarıyla kaydedildi!');
+              if (window.showToast) window.showToast('Uygulama başarıyla kaydedildi!');
               loadAdminApps();
             } else {
               const err = await res.json().catch(() => ({}));

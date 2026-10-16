@@ -199,7 +199,7 @@ const STORAGE_KEY = '***';
               cid: currentMolInfo.cid || '',
               date: new Date().toLocaleDateString('tr-TR')
             });
-            showToast(`✓ "${currentMolInfo.trName || currentMolInfo.name}" laboratuvarınıza kaydedildi!`);
+            showToast(`"${currentMolInfo.trName || currentMolInfo.name}" laboratuvarınıza kaydedildi!`);
           }
 
           localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
@@ -216,10 +216,10 @@ const STORAGE_KEY = '***';
 
           if (star && label) {
             if (exists) {
-              star.innerText = '✓';
+              star.innerText = '';
               label.innerText = 'Laboratuvarınızda Kayıtlı';
             } else {
-              star.innerText = '🔖';
+              star.innerText = '';
               label.innerText = 'Laboratuvarıma Kaydet';
             }
           }
@@ -249,7 +249,7 @@ const STORAGE_KEY = '***';
                 </div>
                 <div class="pt-2 border-t border-mistral-hairline-soft flex items-center justify-between mt-2.5 text-xs">
                   <span class="text-mistral-orange font-bold text-[10px]">3D Aç &rarr;</span>
-                  <button onclick="event.stopPropagation(); removeMolecule('${mName}')" class="text-mistral-slate hover:text-rose-500 text-xs">✕</button>
+                  <button onclick="event.stopPropagation(); removeMolecule('${mName}')" class="text-mistral-slate hover:text-rose-500 text-xs"></button>
                 </div>
               </div>
             `;

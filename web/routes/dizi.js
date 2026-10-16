@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/dizi/app.css">
-      <script src="/static/apps/dizi/app.js?v=20260926f" defer></script>
+      <link rel="stylesheet" href="/static/apps/dizi/app.css?v=20261017a">
+      <script src="/static/apps/dizi/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -47,10 +47,10 @@ module.exports = function(pageTemplate) {
           <div class="flex flex-col sm:flex-row gap-3">
             <div class="relative flex-1">
               <input type="text" id="input-imdb-url" placeholder="https://www.imdb.com/title/tt0903747/ veya tt0903747" onkeyup="if(event.key==='Enter') addByImdbUrl()" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-mistral-canvas border border-mistral-hairline text-sm text-mistral-ink placeholder-slate-500 focus:border-amber-400 focus:outline-none font-mono">
-              <span class="absolute left-3.5 top-3 text-amber-500 text-xs font-bold">★</span>
+              <span class="absolute left-3.5 top-3 text-amber-500 text-xs font-bold"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
             </div>
             <button onclick="addByImdbUrl()" id="btn-imdb-add" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition shadow-lg shadow-amber-500/20 flex items-center justify-center gap-1.5 shrink-0">
-              <span>📥</span> IMDb'den Çek & Ekle
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span> IMDb'den Çek & Ekle
             </button>
           </div>
           <!-- Hazır Örnek Linkler -->
@@ -88,21 +88,21 @@ module.exports = function(pageTemplate) {
       <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div class="flex p-1 rounded-xl bg-white border border-mistral-hairline">
           <button onclick="filterWatchlist('watching')" id="btn-tab-watching" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-blue-500 text-white transition flex items-center gap-1.5 shadow">
-            <span>👁️</span> İzleniyor (<span id="count-watching">0</span>)
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span> İzleniyor (<span id="count-watching">0</span>)
           </button>
           <button onclick="filterWatchlist('plan')" id="btn-tab-plan" class="px-4 py-1.5 rounded-lg text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-1.5">
             <span>⏳</span> İzlenecek (<span id="count-plan">0</span>)
           </button>
           <button onclick="filterWatchlist('completed')" id="btn-tab-completed" class="px-4 py-1.5 rounded-lg text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-1.5">
-            <span>✅</span> Tamamlandı (<span id="count-completed">0</span>)
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Tamamlandı (<span id="count-completed">0</span>)
           </button>
           <button onclick="filterWatchlist('all')" id="btn-tab-all" class="px-4 py-1.5 rounded-lg text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-1.5">
-            <span>📂</span> Tümü (<span id="count-all">0</span>)
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span> Tümü (<span id="count-all">0</span>)
           </button>
         </div>
 
         <div id="search-results-banner" class="hidden text-xs text-blue-400 font-semibold flex items-center gap-2">
-          <span>🔍 Arama Sonuçları Gösteriliyor</span>
+          <span>Arama Sonuçları Gösteriliyor</span>
           <button onclick="clearSearchResults()" class="text-mistral-slate hover:text-white underline">İzleme Listeme Dön</button>
         </div>
       </div>
@@ -118,7 +118,7 @@ module.exports = function(pageTemplate) {
       </div>
 
       <div id="empty-state" class="p-12 text-center rounded-3xl bg-white border border-mistral-hairline text-mistral-stone text-sm">
-        <div class="text-4xl mb-3">🎬</div>
+        <div class="text-4xl mb-3"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
         <h3 class="font-bold text-base text-mistral-slate mb-1">İzleme Listeniz Boş</h3>
         <p class="text-xs text-mistral-slate max-w-md mx-auto">
           Yukarıdan bir IMDb bağlantısı yapıştırarak veya dizi adı aratarak listenize yapım ekleyebilirsiniz.
@@ -129,7 +129,7 @@ module.exports = function(pageTemplate) {
       <div class="mt-14 pt-8 border-t border-mistral-hairline space-y-6">
         <div>
           <h2 class="text-xl font-bold text-mistral-ink flex items-center gap-2">
-            <span>📊</span> İzleme İstatistiklerim
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span> İzleme İstatistiklerim
           </h2>
           <p class="text-mistral-slate text-xs mt-0.5">
             İzlediğiniz dizi ve filmlere dayalı süre ve içerik tüketim analizi.
@@ -162,7 +162,7 @@ module.exports = function(pageTemplate) {
           
           <!-- Kapat Butonu -->
           <button onclick="closeTrackerModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white hover:bg-white text-mistral-slate hover:text-white flex items-center justify-center transition border border-mistral-hairline text-sm">
-            ✕
+            
           </button>
 
           <!-- Modal Başlık Bölümü -->
@@ -185,9 +185,9 @@ module.exports = function(pageTemplate) {
                 <div class="flex items-center gap-2">
                   <span class="text-xs text-mistral-slate">Durum:</span>
                   <select id="modal-status-select" onchange="updateModalStatus()" class="px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink font-semibold">
-                    <option value="watching">👁️ İzleniyor</option>
+                    <option value="watching">İzleniyor</option>
                     <option value="plan">⏳ İzlenecek</option>
-                    <option value="completed">✅ Tamamlandı</option>
+                    <option value="completed">Tamamlandı</option>
                   </select>
                 </div>
 
@@ -230,7 +230,7 @@ module.exports = function(pageTemplate) {
                 <!-- JS ile sezon butonları -->
               </div>
               <button onclick="markCurrentSeasonWatched()" class="text-xs px-3 py-1.5 rounded-xl bg-white hover:bg-mistral-cream text-mistral-slate transition">
-                ✓ Tüm Sezonu İzlendi İşaretle
+                Tüm Sezonu İzlendi İşaretle
               </button>
             </div>
 
