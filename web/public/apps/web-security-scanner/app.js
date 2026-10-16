@@ -690,7 +690,7 @@ function exportMarkdownReport() {
     }
   }
 
-  md += `\n*Rapor, [Web Security Scanner](https://melihkarasu.github.io/web-security-scanner/) tarafından pasif denetimle üretilmiştir.*`;
+  md += `\n*Rapor, [Web Security Scanner](https://github.com/melihkarasu/web-security-scanner) tarafından pasif denetimle üretilmiştir.*`;
 
   downloadFile(`${STATE.currentDomain}-guvenlik-raporu.md`, md, 'text/markdown');
   showToast('Markdown raporu indirildi!', 'success');
