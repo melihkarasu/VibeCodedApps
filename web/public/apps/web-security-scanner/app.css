@@ -16,90 +16,163 @@ h1, h2, h3, .font-editorial {
   width: 100%;
 }
 
-/* MISTRAL AI GLOBAL SYSTEM OVERRIDES (Tüm alt sayfalar ve bileşenler için tam uyum) */
-
-/* 1. Tüm Koyu Gradyanları ve Arka Plan Resimlerini Sıfırla */
-[class*="from-slate-"], [class*="to-slate-"], [class*="via-slate-"],
-[class*="from-gray-"], [class*="to-gray-"], [class*="via-gray-"],
-[class*="from-zinc-"], [class*="to-zinc-"], [class*="via-zinc-"],
-.bg-gradient-to-b, .bg-gradient-to-r, .bg-gradient-to-t, .bg-gradient-to-l,
-.bg-gradient-to-tr, .bg-gradient-to-tl, .bg-gradient-to-br, .bg-gradient-to-bl {
-  background-image: none !important;
+/* =============================================================
+   Web Security Scanner — Modern Component & Mobile-First Styles
+============================================================= */
+.wss-hero-card {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(250, 82, 15, 0.07) 0%, rgba(245, 158, 11, 0.04) 40%, transparent 70%),
+    #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
 }
 
-/* 2. Ana Zemin ve Koyu Arka Planları Beyaz/Krem Mistral Yüzeylerine Dönüştür */
+.wss-brand-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fa520f 0%, #ea580c 60%, #d97706 100%);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px -2px rgba(250, 82, 15, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.wss-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+  padding: 0.625rem 1.125rem;
+  border-radius: 10px !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.wss-btn svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.wss-btn-primary {
+  background: linear-gradient(135deg, #fa520f 0%, #ea580c 60%, #d97706 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(204, 58, 5, 0.3) !important;
+  box-shadow: 0 6px 18px -3px rgba(250, 82, 15, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+
+.wss-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #e04406 0%, #c2410c 65%, #b45309 100%) !important;
+  transform: translateY(-1px);
+}
+
+.wss-btn-secondary {
+  background-color: #ffffff !important;
+  color: #1f1f1f !important;
+  border: 1px solid #d6d3d1 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+}
+
+.wss-btn-secondary:hover {
+  background-color: #fafaf9 !important;
+  border-color: #a8a29e !important;
+}
+
+.wss-btn-dark {
+  background-color: #1f1f1f !important;
+  color: #ffffff !important;
+  border: 1px solid #2c2c2c !important;
+}
+
+.wss-btn-dark:hover {
+  background-color: #2c2c2c !important;
+}
+
+.wss-omni-dock {
+  background-color: #fafaf9;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px !important;
+  padding: 0.625rem;
+  transition: all 0.2s ease;
+}
+
+.wss-omni-dock:focus-within {
+  background-color: #ffffff;
+  border-color: rgba(250, 82, 15, 0.5);
+  box-shadow: 0 8px 24px -6px rgba(250, 82, 15, 0.12);
+}
+
+.wss-tabs-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem;
+  background-color: #f5f5f4;
+  border: 1px solid #e7e5e4;
+  border-radius: 12px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.wss-tabs-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.wss-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  padding: 0.5rem 0.9375rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #57534e !important;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.16s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.wss-tab-btn svg {
+  width: 0.9375rem;
+  height: 0.9375rem;
+  flex-shrink: 0;
+}
+
+.wss-tab-btn.active {
+  background-color: #ffffff !important;
+  color: #fa520f !important;
+  border-color: rgba(250, 82, 15, 0.25) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  font-weight: 700;
+}
+
+/* MISTRAL AI GLOBAL SYSTEM OVERRIDES */
 body, main {
   background-color: #fffdf9 !important;
   color: #1f1f1f !important;
 }
 
-.bg-slate-900, .bg-slate-950, .bg-[#020617], .bg-[#0f172a], .bg-[#0a0f1d] {
-  background-color: #fffdf9 !important;
-  color: #1f1f1f !important;
-}
-
-.bg-slate-800, .bg-slate-800\/90, .bg-slate-800\/80, .bg-slate-800\/70, 
-.bg-slate-800\/60, .bg-slate-800\/50, .bg-slate-800\/40, .bg-slate-800\/30,
-.bg-slate-900\/90, .bg-slate-900\/80, .bg-slate-900\/50, .bg-slate-900\/40,
-.bg-gray-800, .bg-gray-900, .bg-zinc-800, .bg-zinc-900 {
-  background-color: #ffffff !important;
-  color: #1f1f1f !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-}
-
-/* 3. İkincil Vurgu Kartları ve Mini Paneller (Mistral Cream #fff8e0) */
-.bg-slate-700, .bg-slate-700\/80, .bg-slate-700\/60, .bg-slate-700\/50, .bg-slate-700\/40, .bg-slate-700\/30,
-.bg-slate-800\/20, .bg-slate-900\/20 {
-  background-color: #fff8e0 !important;
-  color: #1f1f1f !important;
-  border-color: #e6d5a8 !important;
-}
-
-/* 4. Kenarlıklar: Mistral 1px Hairline (#e5e5e5) */
-.border-slate-800, .border-slate-700, .border-slate-700\/80, .border-slate-700\/50,
-.border-slate-600, .border-slate-600\/80, .border-slate-600\/50,
-.border-gray-800, .border-gray-700, .border-zinc-800 {
-  border-color: #e5e5e5 !important;
-}
-
-/* 5. Tipografi ve Kontrast Standartları (DESIGN.md) */
-body, h1, h2, h3, h4, h5, h6, p, label {
-  color: #1f1f1f !important;
-}
-
-.text-slate-300, .text-slate-400 {
-  color: #4a4a4a !important;
-}
-
-.text-slate-500, .text-slate-600 {
-  color: #8a8a8a !important;
-}
-
-/* Koyu zeminli renkli butonlarda ve rozetlerde beyaz yazı zorunluluğu */
-button.bg-red-600, button.bg-purple-600, button.bg-orange-600, button.bg-teal-600,
-button.bg-emerald-600, button.bg-indigo-600, button.bg-blue-600,
-.bg-mistral-orange, .bg-red-600, .bg-purple-600, .bg-emerald-600, .bg-teal-600,
-.bg-indigo-600, .bg-blue-600, [class*="bg-red-6"], [class*="bg-purple-6"],
-.bg-mistral-ink, .badge-dark, .btn-primary {
+.bg-mistral-orange, .bg-emerald-600, .bg-rose-500, .bg-blue-600, .bg-amber-500, .bg-orange-500, .bg-mistral-ink, .badge-dark, .btn-primary {
   color: #ffffff !important;
 }
 
-/* Krem zeminli açık butonlarda ve kartlarda derin mürekkep rengi (#1f1f1f) */
-button.bg-mistral-cream, button.bg-mistral-cream-deeper, button.bg-mistral-cream-light,
 .bg-mistral-cream, .bg-mistral-cream-light, .bg-mistral-cream-deeper {
   color: #1f1f1f !important;
 }
 
-/* 6. Butonlar ve Şekiller: Mistral Geometry (rounded-md 8px & rounded-lg 12px) */
-.rounded-3xl, .rounded-2xl {
-  border-radius: 12px !important;
-}
-
-.rounded-xl {
-  border-radius: 8px !important;
-}
-
-/* 7. Form Inputları & Seçiciler */
 input:not([type="checkbox"]):not([type="radio"]), select, textarea {
   background-color: #ffffff !important;
   color: #1f1f1f !important;
@@ -109,25 +182,9 @@ input:not([type="checkbox"]):not([type="radio"]), select, textarea {
 input:focus, select:focus, textarea:focus {
   border-color: #fa520f !important;
   outline: none !important;
-  box-shadow: 0 0 0 1px #fa520f !important;
+  box-shadow: 0 0 0 3px rgba(250, 82, 15, 0.14) !important;
 }
 
-/* 8. Birincil Eylem Butonları: Mistral Orange (#fa520f) */
-.bg-indigo-600, .bg-indigo-500, .bg-teal-600, .bg-teal-500, .bg-emerald-600, .bg-emerald-500 {
-  background-color: #fa520f !important;
-  color: #ffffff !important;
-}
-
-.hover\:bg-indigo-500:hover, .hover\:bg-teal-500:hover, .hover\:bg-emerald-500:hover,
-.hover\:bg-indigo-600:hover, .hover\:bg-teal-600:hover, .hover\:bg-emerald-600:hover {
-  background-color: #cc3a05 !important;
-}
-
-.text-teal-400, .text-indigo-400, .text-emerald-400 {
-  color: #fa520f !important;
-}
-
-/* 9. Kod ve Konsol Blokları: Mistral dark surface-code (#1c1c1e) */
 pre, code:not(.inline-code) {
   background-color: #1c1c1e !important;
   color: #ffffff !important;
@@ -135,6 +192,8 @@ pre, code:not(.inline-code) {
   font-family: 'JetBrains Mono', monospace !important;
 }
 
-/* ===== Yellow contrast repair (dark-theme leftovers, kultur-arena) ===== */
-.text-yellow-300 { color: #a16207 !important; }
-.text-yellow-400 { color: #854d0e !important; }
+@media (max-width: 639px) {
+  .wss-mobile-full {
+    width: 100%;
+  }
+}

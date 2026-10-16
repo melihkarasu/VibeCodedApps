@@ -531,16 +531,16 @@ function renderHeaderResults(headerEval) {
     }`;
 
     const statusBadge = item.pass
-      ? '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-100 text-emerald-800">✅ Güvenli (' + item.score + '/' + item.maxScore + ')</span>'
-      : '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-100 text-rose-800">❌ Eksik / Zayıf (0/' + item.maxScore + ')</span>';
+      ? '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">✓ Güvenli (' + item.score + '/' + item.maxScore + ')</span>'
+      : '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-100 text-rose-800 border border-rose-200">✕ Eksik / Zayıf (0/' + item.maxScore + ')</span>';
 
     const fixSnippet = !item.pass ? `
       <div class="mt-3 pt-3 border-t border-rose-100">
-        <div class="flex items-center justify-between mb-1">
+        <div class="flex items-center justify-between mb-1.5">
           <span class="text-[11px] font-semibold text-mistral-slate uppercase tracking-wider">Önerilen Nginx Çözümü:</span>
-          <button onclick="copyToClipboard('${escapeAttr(item.fix.nginx)}')" class="text-[11px] text-mistral-orange hover:underline font-medium">📋 Kopyala</button>
+          <button type="button" onclick="copyToClipboard('${escapeAttr(item.fix.nginx)}')" class="wss-btn wss-btn-secondary !py-1 !px-2.5 !text-[11px]">Kopyala</button>
         </div>
-        <pre class="bg-stone-900 text-stone-100 p-2.5 rounded-lg text-xs font-mono overflow-x-auto select-all"><code>${escapeHtml(item.fix.nginx)}</code></pre>
+        <pre class="bg-stone-900 text-stone-100 p-2.5 rounded-xl text-xs font-mono overflow-x-auto select-all"><code>${escapeHtml(item.fix.nginx)}</code></pre>
       </div>
     ` : '';
 
@@ -608,24 +608,24 @@ function renderDnsResults(dns) {
     const isWarn = item.status === 'warn';
 
     const badge = isPass
-      ? '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-100 text-emerald-800">✅ Doğrulandı</span>'
+      ? '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">✓ Doğrulandı</span>'
       : isWarn
-      ? '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-100 text-amber-800">⚠️ İyileştirilmeli</span>'
-      : '<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-100 text-rose-800">❌ Eksik</span>';
+      ? '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-800 border border-amber-200">! İyileştirilmeli</span>'
+      : '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-100 text-rose-800 border border-rose-200">✕ Eksik</span>';
 
     card.className = `p-4 rounded-xl border ${isPass ? 'bg-white border-stone-200' : 'bg-stone-50 border-stone-200'}`;
     card.innerHTML = `
-      <div class="flex items-center justify-between gap-2 mb-1">
+      <div class="flex items-center justify-between gap-2 mb-1.5">
         <h4 class="font-bold text-sm text-mistral-ink">${escapeHtml(item.title)}</h4>
         ${badge}
       </div>
-      <div class="text-xs font-mono p-2 rounded bg-white border border-stone-200/80 break-all mb-1 text-stone-700">
+      <div class="text-xs font-mono p-2 rounded-lg bg-white border border-stone-200/80 break-all mb-1.5 text-stone-700">
         ${escapeHtml(item.value)}
       </div>
       <p class="text-xs text-mistral-slate">${escapeHtml(item.note)}</p>
       ${item.fix ? `
         <div class="mt-2 text-right">
-          <button onclick="copyToClipboard('${escapeAttr(item.fix)}')" class="text-[11px] text-mistral-orange hover:underline font-medium">📋 Örnek TXT Kopyala</button>
+          <button type="button" onclick="copyToClipboard('${escapeAttr(item.fix)}')" class="wss-btn wss-btn-secondary !py-1 !px-2.5 !text-[11px]">Örnek TXT Kopyala</button>
         </div>
       ` : ''}
     `;
@@ -797,11 +797,7 @@ function switchTab(tabId) {
     const btn = document.getElementById(`tab-btn-${t}`);
     if (el) el.classList.toggle('hidden', t !== tabId);
     if (btn) {
-      if (t === tabId) {
-        btn.className = 'px-4 py-2 rounded-lg text-xs font-bold bg-white text-mistral-ink shadow-xs border border-stone-200 transition-all';
-      } else {
-        btn.className = 'px-4 py-2 rounded-lg text-xs font-semibold text-mistral-slate hover:text-mistral-ink transition-all';
-      }
+      btn.classList.toggle('active', t === tabId);
     }
   }
 }
