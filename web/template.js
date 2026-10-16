@@ -55,11 +55,11 @@ const pageTemplate = (title, content, extraHead = '') => `
   <!-- Precompiled Tailwind CSS (Zero Runtime / No CDN Delay) -->
   <link rel="stylesheet" href="/static/css/tailwind.min.css">
   <!-- Global Mistral AI Theme (Cache Destekli Statik CSS) -->
-  <link rel="stylesheet" href="/static/css/mistral-theme.css?v=20261015b">
+  <link rel="stylesheet" href="/static/css/mistral-theme.css?v=20261016a">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-  <!-- Favicon: Koyu Zemin Üzerinde Beyaz MK -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23fa520f'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' fill='%23ffffff' font-family='-apple-system,BlinkMacSystemFont,Inter,sans-serif' font-weight='800' font-size='13' letter-spacing='-0.5'%3EMK%3C/text%3E%3C/svg%3E">
+  <!-- Favicon: Premium Siyah Zemin Üzerinde Geometrik MK Monogramı -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%231E2028'/%3E%3Cstop offset='100%25' stop-color='%23090A0F'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='40' height='40' rx='10' fill='url(%23bg)' stroke='%232E323E' stroke-width='1.5'/%3E%3Cpath d='M7.5 27.5V12.5H10.6L14.5 20.2L18.4 12.5H21.5V27.5H18.6V17.6L15.4 23.8H13.6L10.4 17.6V27.5H7.5Z' fill='%23FFFFFF'/%3E%3Cpath d='M24.2 27.5V12.5H27.2V19.2L32.8 12.5H36.5L30.5 19.4L36.8 27.5H33.1L28.4 21.3L27.2 22.7V27.5H24.2Z' fill='%23FFFFFF'/%3E%3Ccircle cx='35.2' cy='9.2' r='2' fill='%23FA520F'/%3E%3C/svg%3E">
   <!-- Web Awesome <wa-icon> Custom Element Desteği -->
   <script>
     if (typeof customElements !== 'undefined' && !customElements.get('wa-icon')) {
@@ -110,16 +110,23 @@ const pageTemplate = (title, content, extraHead = '') => `
   <header class="border-b border-stone-200/90 bg-white/90 backdrop-blur-md sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-3 min-w-0">
-        <a href="/" class="flex items-center gap-3 text-mistral-ink hover:text-mistral-orange transition group min-w-0">
-          <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-mistral-orange to-amber-600 text-white flex items-center justify-center shadow-sm shrink-0 select-none" style="background: linear-gradient(135deg, #FA520F 0%, #EA580C 60%, #D97706 100%); box-shadow: 0 4px 12px -2px rgba(250, 82, 15, 0.35);">
-            <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-              <polyline points="2 17 12 22 22 17"/>
-              <polyline points="2 12 12 17 22 12"/>
+        <a href="/" class="flex items-center gap-3.5 text-mistral-ink hover:text-mistral-orange transition group min-w-0">
+          <span class="mk-brand-emblem select-none" aria-label="MK Monogram Logo">
+            <svg class="w-7 h-7" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- M Harfi: Mimari Geometrik Kesim -->
+              <path d="M6.5 28V12H10L14.2 20.4L18.4 12H21.9V28H18.8V17.5L15.2 24.3H13.2L9.6 17.5V28H6.5Z" fill="#FFFFFF"/>
+              <!-- K Harfi: Keskin Diyagonal Vurgu -->
+              <path d="M24.2 28V12H27.4V19.1L33.2 12H37.1L30.8 19.4L37.4 28H33.4L28.6 21.5L27.4 22.9V28H24.2Z" fill="#FFFFFF"/>
+              <!-- İmza Turuncu Nokta & Alt Çizgi Vurgusu -->
+              <circle cx="35.5" cy="8.5" r="2.1" fill="#FA520F"/>
+              <rect x="6.5" y="30.5" width="12" height="1.6" rx="0.8" fill="#FA520F"/>
             </svg>
           </span>
           <div class="min-w-0">
-            <span class="font-extrabold text-sm sm:text-base tracking-tight block truncate">VIBE CODED APPS</span>
+            <div class="flex items-center gap-2">
+              <span class="font-extrabold text-sm sm:text-base tracking-tight text-mistral-ink block truncate">VIBE CODED APPS</span>
+              <span class="hidden md:inline-flex items-center px-1.5 py-0.5 rounded bg-stone-900 text-white font-mono text-[9px] font-bold tracking-widest uppercase">MK STUDIO</span>
+            </div>
             <span class="text-[10px] text-stone-500 font-mono hidden sm:block">Açık Kaynak Mikro Uygulama Vitrini</span>
           </div>
         </a>
@@ -183,8 +190,13 @@ const pageTemplate = (title, content, extraHead = '') => `
     <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
       <div class="flex items-center gap-2.5">
         <a href="/" class="flex items-center gap-2.5 text-mistral-ink hover:text-mistral-orange transition">
-          <span class="w-7 h-7 rounded-lg text-white flex items-center justify-center shadow-xs select-none" style="background: linear-gradient(135deg, #FA520F 0%, #D97706 100%);">
-            <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          <span class="mk-brand-emblem mk-brand-emblem-sm select-none" aria-label="MK Monogram Logo">
+            <svg class="w-5 h-5" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6.5 28V12H10L14.2 20.4L18.4 12H21.9V28H18.8V17.5L15.2 24.3H13.2L9.6 17.5V28H6.5Z" fill="#FFFFFF"/>
+              <path d="M24.2 28V12H27.4V19.1L33.2 12H37.1L30.8 19.4L37.4 28H33.4L28.6 21.5L27.4 22.9V28H24.2Z" fill="#FFFFFF"/>
+              <circle cx="35.5" cy="8.5" r="2.1" fill="#FA520F"/>
+              <rect x="6.5" y="30.5" width="12" height="1.6" rx="0.8" fill="#FA520F"/>
+            </svg>
           </span>
           <span class="font-bold text-mistral-ink tracking-tight">VIBE CODED APPS</span>
         </a>
