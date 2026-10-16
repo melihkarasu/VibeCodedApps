@@ -5,7 +5,7 @@ function safeCopyToClipboard(text, msg) {
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(() => {
-      if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+      if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
     }).catch(() => fallbackExecCopy(text, msg));
   } else {
     fallbackExecCopy(text, msg);
@@ -20,7 +20,7 @@ function fallbackExecCopy(text, msg) {
   ta.select();
   try {
     document.execCommand('copy');
-    if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+    if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
   } catch(e) {
     if (window.showToast) window.showToast('Kopyalama başarısız');
   }
@@ -91,10 +91,10 @@ const STORAGE_KEY = '***';
           const hostBadge = document.getElementById('res-green-host-badge');
           if (data.isGreen) {
             hostBadge.className = 'px-3 py-1.5 rounded-xl border border-emerald-500/40 bg-emerald-500/20 text-emerald-300 flex items-center gap-2 text-xs font-bold shrink-0';
-            hostBadge.innerHTML = `<span>🌿</span> <span>Yeşil Hosting (${data.hostingProvider || 'Yenilenebilir'})</span>`;
+            hostBadge.innerHTML = `<span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span> <span>Yeşil Hosting (${data.hostingProvider || 'Yenilenebilir'})</span>`;
           } else {
             hostBadge.className = 'px-3 py-1.5 rounded-xl border border-mistral-hairline bg-white text-mistral-slate flex items-center gap-2 text-xs font-bold shrink-0';
-            hostBadge.innerHTML = `<span>⚡</span> <span>Standart Şebeke Elektriği</span>`;
+            hostBadge.innerHTML = `<span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> <span>Standart Şebeke Elektriği</span>`;
           }
 
           // Teknik Metrikler
@@ -157,7 +157,7 @@ const STORAGE_KEY = '***';
         function copyBadgeSnippet() {
           const htmlSnippet = document.getElementById('badge-snippet-html').value;
           navigator.clipboard.writeText(htmlSnippet).then(() => {
-            showToast('✓ HTML rozet kodu panoya kopyalandı!');
+            showToast('HTML rozet kodu panoya kopyalandı!');
           });
         }
 

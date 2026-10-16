@@ -160,7 +160,7 @@ function renderDrugDetails(drug, source) {
       translationBannerEl.innerHTML = `
         <div class="p-3.5 rounded-xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-amber-900">
           <div class="flex items-center gap-2">
-            <span class="text-base">🌐</span>
+            <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
             <span>Bu prospektüs <strong>U.S. FDA</strong> resmi veritabanından orijinal İngilizce metin olarak getirilmiştir.</span>
           </div>
           <div class="flex items-center gap-2">
@@ -183,13 +183,13 @@ function renderDrugDetails(drug, source) {
     <div class="space-y-4 text-mistral-slate text-sm leading-relaxed" ${langAttr}>
       <div class="p-4 rounded-xl bg-mistral-cream border border-mistral-beige-deep">
         <strong class="text-mistral-ink block mb-1 font-bold text-sm flex items-center gap-1.5">
-          <span>💡</span> Kullanım Amacı (Terapötik Etki)
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg></span> Kullanım Amacı (Terapötik Etki)
         </strong>
         <p>${escapeHtml(drug.purpose)}</p>
       </div>
       <div>
         <strong class="text-mistral-ink block mb-1.5 font-bold text-sm flex items-center gap-1.5">
-          <span>📋</span> Endikasyonlar (Hangi Hastalık ve Durumlarda Kullanılır?)
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Endikasyonlar (Hangi Hastalık ve Durumlarda Kullanılır?)
         </strong>
         <p class="bg-stone-50/70 p-4 rounded-xl border border-mistral-hairline">${escapeHtml(drug.indications)}</p>
       </div>
@@ -247,7 +247,7 @@ function renderDrugDetails(drug, source) {
         ${reactionsHtml || '<p class="text-xs text-mistral-stone">Bildirilen belirgin yan etki kaydı bulunamadı.</p>'}
       </div>
       <div class="p-3 rounded-lg bg-mistral-cream/60 border border-mistral-beige-deep text-[11px] text-mistral-slate leading-normal">
-        <strong>📌 Bilgilendirme:</strong> Bu yan etkiler resmi sağlık bildirim raporlarından derlenmiştir. İlacı kullanan herkeste görüleceği anlamına gelmez. Beklenmeyen bir belirti gördüğünüzde derhal hekiminize danışınız.
+        <strong>Bilgilendirme:</strong> Bu yan etkiler resmi sağlık bildirim raporlarından derlenmiştir. İlacı kullanan herkeste görüleceği anlamına gelmez. Beklenmeyen bir belirti gördüğünüzde derhal hekiminize danışınız.
       </div>
     </div>
   `;
@@ -262,7 +262,7 @@ function renderDrugDetails(drug, source) {
         <p>${escapeHtml(drug.dosage)}</p>
       </div>
       <div class="p-4 rounded-xl bg-white border border-mistral-hairline text-xs space-y-2">
-        <strong class="text-mistral-ink block font-bold">📦 Saklama Koşulları:</strong>
+        <strong class="text-mistral-ink block font-bold">Saklama Koşulları:</strong>
         <p>25°C altındaki kuru oda sıcaklığında, nemden ve doğrudan güneş ışığından koruyarak ambalajında saklayınız.</p>
         <p class="text-rose-600 font-semibold flex items-center gap-1">
           <i class="fa-solid fa-triangle-exclamation"></i> Reçeteli ilaçlarınızı hekiminizin belirttiği doz ve süreden farklı kullanmayınız.

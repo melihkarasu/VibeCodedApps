@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <script src="/static/apps/doviz/app.js?v=20260926m" defer></script>
+      <script src="/static/apps/doviz/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -23,14 +23,13 @@ module.exports = function(pageTemplate) {
         <div class="flex flex-col sm:flex-row items-end sm:items-center gap-3">
           <div class="flex p-1 rounded-xl bg-white border border-mistral-hairline">
             <button onclick="setDataSource('tcmb')" id="btn-src-tcmb" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500 text-slate-950 transition flex items-center gap-1.5 shadow">
-              <span>🏛️</span> TCMB Kurları
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></span> TCMB Kurları
             </button>
             <button onclick="setDataSource('ecb')" id="btn-src-ecb" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-mistral-slate hover:text-mistral-ink transition flex items-center gap-1.5">
-              <span>🌍</span> ECB Kurları
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span> ECB Kurları
             </button>
           </div>
           <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-slate">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <span id="source-date-badge">Kurlar Yükleniyor...</span>
           </div>
         </div>
@@ -50,7 +49,7 @@ module.exports = function(pageTemplate) {
           <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xl">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
               <span class="text-xs font-semibold uppercase tracking-wider text-mistral-slate flex items-center gap-2">
-                <span id="conv-source-label">🏛️ TCMB Resmi Kurları</span>
+                <span id="conv-source-label">TCMB Resmi Kurları</span>
               </span>
 
               <!-- TCMB Kur Türü Seçici (Alış / Satış / Efektif) -->
@@ -62,7 +61,7 @@ module.exports = function(pageTemplate) {
               </div>
 
               <button onclick="toggleFavorite()" id="btn-fav-star" class="text-xs text-mistral-slate hover:text-amber-400 transition flex items-center gap-1">
-                <span id="star-icon">☆</span> Favorilere Ekle
+                <span id="star-icon"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span> Favorilere Ekle
               </button>
             </div>
 
@@ -111,7 +110,7 @@ module.exports = function(pageTemplate) {
                 <div id="res-unit-rate">1 USD = 0.00 TRY</div>
                 <div id="res-inverse-rate">1 TRY = 0.00 USD</div>
                 <button onclick="copyRateToClipboard()" class="text-mistral-slate hover:text-emerald-400 transition flex items-center gap-1">
-                  <span>📋</span> Kuru Kopyala
+                  <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Kuru Kopyala
                 </button>
               </div>
             </div>
@@ -166,7 +165,7 @@ module.exports = function(pageTemplate) {
           <!-- TARİHSEL GETİRİ SİMÜLATÖRÜ -->
           <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xl space-y-4">
             <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-              <span>📈</span> Geçmiş Getiri Simülatörü
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span> Geçmiş Getiri Simülatörü
             </h3>
             <p class="text-mistral-slate text-xs">
               "Geçmişte bu dövize yatırım yapsaydınız bugün Türk Lirası karşılığı ne olurdu?"
@@ -223,7 +222,7 @@ module.exports = function(pageTemplate) {
           <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xl">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-sm font-bold text-mistral-ink flex items-center gap-1.5" id="matrix-title">
-                <span>🏛️</span> TCMB Gösterge Kurları
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></span> TCMB Gösterge Kurları
               </h3>
               <span class="text-[10px] text-mistral-slate font-mono" id="matrix-base-label">TCMB Bülteni</span>
             </div>

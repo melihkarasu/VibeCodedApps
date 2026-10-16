@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/httpstatus/app.js?v=20260926t" defer></script>
+      <script src="/static/apps/httpstatus/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -20,7 +20,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
           <span class="font-medium" id="http-status-badge">Teşhis Motoru Aktif</span>
         </div>
       </div>
@@ -30,7 +29,7 @@ module.exports = function(pageTemplate) {
         <div class="flex items-center justify-between pb-3 border-b border-mistral-hairline">
           <div>
             <h3 class="text-base font-bold font-editorial text-mistral-ink flex items-center gap-2">
-              <span>🔍</span> Cihaz & Donanım Taraması (Live Fingerprint)
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span> Cihaz & Donanım Taraması (Live Fingerprint)
             </h3>
             <p class="text-xs text-mistral-slate mt-0.5">
               Tarayıcınızın donanım, grafik kartı (GPU), çözünürlük ve ağ yeteneklerinin canlı teşhisi.
@@ -85,10 +84,10 @@ module.exports = function(pageTemplate) {
           <div class="sm:col-span-4">
             <select id="status-cat-select" onchange="filterStatusCodes()" class="w-full px-3 py-2.5 rounded-lg bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange transition">
               <option value="all" selected>Tüm HTTP Kodları (1xx - 5xx)</option>
-              <option value="2xx">🟢 2xx Başarılı (Success)</option>
-              <option value="3xx">🔵 3xx Yönlendirme (Redirect)</option>
-              <option value="4xx">🟠 4xx İstemci Hatası (Client Error)</option>
-              <option value="5xx">🔴 5xx Sunucu Hatası (Server Error)</option>
+              <option value="2xx">2xx Başarılı (Success)</option>
+              <option value="3xx">3xx Yönlendirme (Redirect)</option>
+              <option value="4xx">4xx İstemci Hatası (Client Error)</option>
+              <option value="5xx">5xx Sunucu Hatası (Server Error)</option>
             </select>
           </div>
         </div>
@@ -102,7 +101,7 @@ module.exports = function(pageTemplate) {
       <!-- KOD DETAY MODALI -->
       <div id="status-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
         <div class="relative w-full max-w-xl bg-white border border-mistral-hairline rounded-2xl shadow-2xl p-6 sm:p-8 space-y-5">
-          <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-slate hover:text-mistral-ink flex items-center justify-center text-sm font-bold transition">✕</button>
+          <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-slate hover:text-mistral-ink flex items-center justify-center text-sm font-bold transition"></button>
 
           <div class="flex items-center gap-4">
             <span class="px-4 py-2 rounded-xl bg-mistral-cream border border-mistral-beige-deep text-2xl font-bold font-mono text-mistral-orange" id="m-code">404</span>

@@ -478,11 +478,11 @@ async function detectScannerMode() {
       if (data.mode === 'local_server') {
         STATE.mode = 'local_api';
         if (modeBadgeEl) {
-          modeBadgeEl.innerHTML = '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-[11px] font-mono shadow-xs">🟢 Lokal Mod (Tam Başlık Taraması Aktif)</span>';
+          modeBadgeEl.innerHTML = '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-[11px] font-mono shadow-xs">Lokal Mod (Tam Başlık Taraması Aktif)</span>';
         }
         if (modeNoticeEl) {
           modeNoticeEl.className = 'p-3 rounded-xl bg-emerald-50/70 border border-emerald-200 text-xs text-emerald-900 mb-4 flex items-start gap-2.5';
-          modeNoticeEl.innerHTML = '<span class="text-base">🚀</span><div><strong>Lokal Sunucu Aktif (127.0.0.1):</strong> HTTP güvenlik başlıkları CORS engeline takılmadan yerel makineniz üzerinden canlı olarak çekilmektedir.</div>';
+          modeNoticeEl.innerHTML = '<span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span><div><strong>Lokal Sunucu Aktif (127.0.0.1):</strong> HTTP güvenlik başlıkları CORS engeline takılmadan yerel makineniz üzerinden canlı olarak çekilmektedir.</div>';
         }
         return;
       }
@@ -492,7 +492,7 @@ async function detectScannerMode() {
   // GitHub Pages veya Statik Barındırma Modu
   STATE.mode = 'github_pages';
   if (modeBadgeEl) {
-    modeBadgeEl.innerHTML = '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 font-bold text-[11px] font-mono shadow-xs">🟡 GitHub Pages Modu (Pasif DoH)</span>';
+    modeBadgeEl.innerHTML = '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 font-bold text-[11px] font-mono shadow-xs">GitHub Pages Modu (Pasif DoH)</span>';
   }
   if (modeNoticeEl) {
     modeNoticeEl.className = 'p-3 rounded-xl bg-amber-50/70 border border-amber-200 text-xs text-amber-900 mb-4 flex items-start gap-2.5';
@@ -531,8 +531,8 @@ function renderHeaderResults(headerEval) {
     }`;
 
     const statusBadge = item.pass
-      ? '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">✓ Güvenli (' + item.score + '/' + item.maxScore + ')</span>'
-      : '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-100 text-rose-800 border border-rose-200">✕ Eksik / Zayıf (0/' + item.maxScore + ')</span>';
+      ? '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Güvenli (' + item.score + '/' + item.maxScore + ')</span>'
+      : '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-100 text-rose-800 border border-rose-200">Eksik / Zayıf (0/' + item.maxScore + ')</span>';
 
     const fixSnippet = !item.pass ? `
       <div class="mt-3 pt-3 border-t border-rose-100">
@@ -608,10 +608,10 @@ function renderDnsResults(dns) {
     const isWarn = item.status === 'warn';
 
     const badge = isPass
-      ? '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">✓ Doğrulandı</span>'
+      ? '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Doğrulandı</span>'
       : isWarn
       ? '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-800 border border-amber-200">! İyileştirilmeli</span>'
-      : '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-100 text-rose-800 border border-rose-200">✕ Eksik</span>';
+      : '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-100 text-rose-800 border border-rose-200">Eksik</span>';
 
     card.className = `p-4 rounded-xl border ${isPass ? 'bg-white border-stone-200' : 'bg-stone-50 border-stone-200'}`;
     card.innerHTML = `
@@ -667,23 +667,23 @@ function exportMarkdownReport() {
   md += `**Taranan Hedef:** \`${STATE.currentDomain}\`  \n`;
   md += `**Tarih:** ${dateStr}  \n`;
   md += `**Güvenlik Puanı:** **${STATE.score} / 100** (Not: **${STATE.grade}**)  \n\n`;
-  md += `---\n\n## 🛡️ 1. HTTP Güvenlik Başlıkları Analizi\n\n`;
+  md += `---\n\n## 1. HTTP Güvenlik Başlıkları Analizi\n\n`;
   md += `| Başlık | Durum | Skor | Değer / Not |\n|---|---|---|---|\n`;
 
   for (const [k, v] of Object.entries(STATE.results.headers.headers || {})) {
-    const st = v.pass ? '✅ Güvenli' : '❌ Eksik/Zayıf';
+    const st = v.pass ? 'Güvenli' : 'Eksik/Zayıf';
     const val = v.value ? `\`${v.value.slice(0, 40)}...\`` : '_Yok_';
     md += `| ${v.name} | ${st} | ${v.score}/${v.maxScore} | ${val} (${v.note}) |\n`;
   }
 
-  md += `\n---\n\n## 🌐 2. DNS & E-posta Savunma Kayıtları\n\n`;
+  md += `\n---\n\n## 2. DNS & E-posta Savunma Kayıtları\n\n`;
   const dns = STATE.results.dns;
   md += `- **DMARC:** ${dns.dmarc.record ? `\`${dns.dmarc.record}\`` : '_Yok_'} (${dns.dmarc.note})\n`;
   md += `- **SPF:** ${dns.spf.record ? `\`${dns.spf.record}\`` : '_Yok_'} (${dns.spf.note})\n`;
-  md += `- **DNSSEC:** ${dns.dnssec ? '✅ Aktif' : '⚠️ Yapılandırılmamış'}\n`;
-  md += `- **CAA:** ${dns.caa.records.length ? `✅ Aktif (${dns.caa.records.join(', ')})` : '⚠️ Kayıt Yok'}\n`;
+  md += `- **DNSSEC:** ${dns.dnssec ? 'Aktif' : 'Yapılandırılmamış'}\n`;
+  md += `- **CAA:** ${dns.caa.records.length ? `Aktif (${dns.caa.records.join(', ')})` : 'Kayıt Yok'}\n`;
 
-  md += `\n---\n\n## 🚀 3. Tavsiye Edilen Sertleştirme Çözümleri\n\n`;
+  md += `\n---\n\n## 3. Tavsiye Edilen Sertleştirme Çözümleri\n\n`;
   for (const [k, v] of Object.entries(STATE.results.headers.headers || {})) {
     if (!v.pass && v.fix) {
       md += `### ${v.name} Onarımı\n\`\`\`nginx\n${v.fix.nginx}\n\`\`\`\n\n`;

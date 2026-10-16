@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/dns/app.css">
-      <script src="/static/apps/dns/app.js?v=20260926p" defer></script>
+      <link rel="stylesheet" href="/static/apps/dns/app.css?v=20261017a">
+      <script src="/static/apps/dns/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -20,7 +20,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-slate">
-          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
           <span>DoH (DNS-over-HTTPS) Güvenli Protokol</span>
         </div>
       </div>
@@ -39,7 +38,7 @@ module.exports = function(pageTemplate) {
               <span class="absolute left-3.5 top-3.5 text-mistral-stone text-base"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
             </div>
             <button onclick="executeDnsLookup()" id="btn-lookup" class="px-7 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-black text-sm transition shadow-lg shadow-cyan-500/20 shrink-0 flex items-center justify-center gap-2">
-              <span>⚡</span> Kayıtları Çözümle
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> Kayıtları Çözümle
             </button>
           </div>
         </div>
@@ -114,7 +113,7 @@ module.exports = function(pageTemplate) {
           <div class="flex items-center justify-between">
             <div>
               <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-                <span>📋</span> Çözümlenen DNS Kayıtları
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Çözümlenen DNS Kayıtları
               </h3>
               <p class="text-mistral-slate text-xs mt-0.5" id="records-table-sub">Domain ve kayıt tipi dökümü</p>
             </div>
@@ -146,7 +145,7 @@ module.exports = function(pageTemplate) {
           <div class="flex items-center justify-between">
             <div>
               <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-                <span>🌍</span> Küresel DNS Çözümleme Ağı
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span> Küresel DNS Çözümleme Ağı
               </h3>
               <p class="text-mistral-slate text-xs mt-0.5">Dünya genelindeki popüler resolver düğümlerinde A kaydı yayılım durumu:</p>
             </div>
@@ -165,7 +164,7 @@ module.exports = function(pageTemplate) {
         <div class="flex items-center justify-between">
           <div>
             <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-              <span>📚</span> Son Sorgulanan Alan Adları
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Son Sorgulanan Alan Adları
             </h3>
             <p class="text-mistral-slate text-xs">Tek tıkla eski analizlerinize geri dönün.</p>
           </div>

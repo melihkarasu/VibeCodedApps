@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/sizinti/app.css">
-      <script src="/static/apps/sizinti/app.js?v=20260926q" defer></script>
+      <link rel="stylesheet" href="/static/apps/sizinti/app.css?v=20261017a">
+      <script src="/static/apps/sizinti/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -20,14 +20,13 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-slate">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
           <span>%100 Sıfır Bilgi (Zero-Knowledge) Garantisi</span>
         </div>
       </div>
 
       <!-- GÜVENLİK BİLGİLENDİRME BANNERI (DESIGN.md card-cream) -->
       <div class="p-4.5 rounded-2xl bg-mistral-cream border border-mistral-beige-deep flex items-start gap-3.5 mb-8 text-xs text-mistral-ink shadow-sm">
-        <span class="text-xl shrink-0">🔒</span>
+        <span class="text-xl shrink-0"><svg class="w-5 h-5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
         <div class="leading-relaxed">
           <strong class="text-mistral-ink font-bold">Gizlilik & Güvenlik Güvencesi:</strong> Şifreniz asla sunucumuza veya internete <u>gönderilmez</u>. Tarayıcınızda SHA-1 ile hash'lenir, yalnızca hash'in ilk 5 karakteri (k-Anonymity) HIBP veritabanına iletilerek geri dönen binlerce aday arasından yerel eşleşme yapılır.
         </div>
@@ -40,7 +39,7 @@ module.exports = function(pageTemplate) {
           
           <div class="p-6 rounded-3xl bg-white border border-mistral-hairline shadow-md space-y-5">
             <h2 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-              <span>🔍</span> Şifre Sızıntı & Güvenlik Taraması
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span> Şifre Sızıntı & Güvenlik Taraması
             </h2>
 
             <div>
@@ -65,7 +64,7 @@ module.exports = function(pageTemplate) {
                   onclick="runBreachCheck()" 
                   id="btn-breach-check" 
                   class="px-5 py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs sm:text-sm transition shadow-lg shadow-red-600/20 shrink-0 flex items-center justify-center gap-2 cursor-pointer">
-                  <span id="btn-check-icon">🔍</span>
+                  <span id="btn-check-icon"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
                   <span id="btn-check-text">Sızıntıyı Kontrol Et</span>
                 </button>
               </div>
@@ -92,7 +91,7 @@ module.exports = function(pageTemplate) {
 
             <!-- Canlı Sızıntı Sonuç Kartı (DESIGN.md card-cream-soft & Açık Statü Zeminleri) -->
             <div id="breach-result-card" class="p-5 rounded-2xl bg-mistral-cream-light border border-mistral-beige-deep flex items-start gap-4 transition shadow-sm">
-              <div id="breach-icon" class="text-3xl shrink-0">🛡️</div>
+              <div id="breach-icon" class="text-3xl shrink-0"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
               <div class="flex-1 min-w-0">
                 <h3 id="breach-title" class="font-bold text-sm text-mistral-ink">Sızıntı Taraması Bekleniyor</h3>
                 <p id="breach-desc" class="text-xs text-mistral-slate mt-1 leading-relaxed">
@@ -103,13 +102,13 @@ module.exports = function(pageTemplate) {
                 <!-- İnceleme Adımları Telemetrisi (Şeffaf Zero-Knowledge Göstergesi) -->
                 <div id="breach-telemetry" class="hidden mt-4 pt-3 border-t border-mistral-beige-deep/60 space-y-2 text-xs font-mono text-mistral-ink bg-white/70 p-3 rounded-xl border border-mistral-hairline">
                   <div id="step-hash" class="flex items-center gap-2">
-                    <span class="text-emerald-600 font-bold">✓</span> <span>1. Tarayıcı SHA-1: <strong class="text-mistral-ink font-bold" id="hash-preview">-</strong></span>
+                    <span class="text-emerald-600 font-bold"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> <span>1. Tarayıcı SHA-1: <strong class="text-mistral-ink font-bold" id="hash-preview">-</strong></span>
                   </div>
                   <div id="step-api" class="flex items-center gap-2">
-                    <span class="text-emerald-600 font-bold">✓</span> <span>2. HIBP Range API İletisi (İlk 5 Karakter): <strong class="text-amber-700 font-bold" id="prefix-preview">-</strong></span>
+                    <span class="text-emerald-600 font-bold"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> <span>2. HIBP Range API İletisi (İlk 5 Karakter): <strong class="text-amber-700 font-bold" id="prefix-preview">-</strong></span>
                   </div>
                   <div id="step-match" class="flex items-center gap-2">
-                    <span id="match-status-icon" class="text-emerald-600 font-bold">✓</span> <span id="match-status-text" class="text-mistral-slate font-medium">3. Kalan 35 karakter yerel olarak eşleştirildi.</span>
+                    <span id="match-status-icon" class="text-emerald-600 font-bold"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> <span id="match-status-text" class="text-mistral-slate font-medium">3. Kalan 35 karakter yerel olarak eşleştirildi.</span>
                   </div>
                 </div>
               </div>
@@ -144,7 +143,7 @@ module.exports = function(pageTemplate) {
           
           <div class="p-6 rounded-3xl bg-white border border-mistral-hairline shadow-xl space-y-5">
             <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-              <span>🎲</span> Güçlü Parola Üretici
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="2"/></svg></span> Güçlü Parola Üretici
             </h3>
             <p class="text-mistral-slate text-xs">
               Tarayıcınızın kriptografik rastgelelik motoru (crypto.getRandomValues) ile kırılması imkansız şifre oluşturun:
@@ -156,7 +155,7 @@ module.exports = function(pageTemplate) {
                 Parola bekleniyor...
               </span>
               <button onclick="copyGeneratedPassword()" class="px-3 py-1.5 rounded-xl bg-white hover:bg-mistral-cream-light border border-mistral-hairline text-xs font-bold text-mistral-ink font-bold transition shrink-0 flex items-center gap-1">
-                <span>📋</span> Kopyala
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Kopyala
               </button>
             </div>
 
@@ -190,7 +189,7 @@ module.exports = function(pageTemplate) {
               </div>
 
               <button onclick="generateSecurePassword()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black text-xs transition shadow flex items-center justify-center gap-1.5">
-                <span>🔄</span> Yeni Parola Üret
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span> Yeni Parola Üret
               </button>
             </div>
 
@@ -205,7 +204,7 @@ module.exports = function(pageTemplate) {
         <div class="flex items-center justify-between">
           <div>
             <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-              <span>📚</span> Tarihe Geçen Büyük Veri Sızıntıları Arşivi
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Tarihe Geçen Büyük Veri Sızıntıları Arşivi
             </h3>
             <p class="text-mistral-slate text-xs mt-0.5">Milyonlarca hesabın ifşa olduğu en büyük sızıntılar ve dersler:</p>
           </div>

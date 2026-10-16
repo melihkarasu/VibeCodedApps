@@ -12,17 +12,17 @@ const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
 // Anatomik Kas Grupları Kataloğu (Ön ve Arka Vücut Haritası)
 const MUSCLE_GROUPS = [
-  { id: "chest", name: "Göğüs (Pektoral)", nameEn: "Chest", view: "front", icon: "🛡️", desc: "Üst gövde itiş kasları, duruş düzeltme ve solunum kapasitesi." },
-  { id: "shoulders", name: "Omuzlar (Deltoid)", nameEn: "Shoulders", view: "both", icon: "💪", desc: "Kol hareket kabiliyeti, omuz başları ve rotator manşet sağlığı." },
-  { id: "biceps", name: "Pazı (Biceps)", nameEn: "Biceps", view: "front", icon: "🦾", desc: "Ön kol çekiş kasları, dirsek fleksörleri ve kavrama gücü." },
-  { id: "triceps", name: "Arka Kol (Triceps)", nameEn: "Triceps", view: "back", icon: "⚡", desc: "Kolun 2/3'ünü oluşturan ekstansör kaslar ve itiş gücü." },
-  { id: "back", name: "Sırt & Kanat (Lats/Traps)", nameEn: "Back", view: "back", icon: "🦅", desc: "Omurga stabilitesi, dik duruş ve bel ağrılarının önlenmesi." },
-  { id: "abs", name: "Karın & Merkez (Core)", nameEn: "Abs", view: "front", icon: "🧱", desc: "Karın duvarı, pelvik denge ve omurga koruma kalkanı." },
-  { id: "quadriceps", name: "Ön Bacak (Quadriceps)", nameEn: "Quadriceps", view: "front", icon: "🦵", desc: "Diz eklemi stabilitesi, merdiven çıkma ve çömelme gücü." },
-  { id: "hamstrings", name: "Arka Bacak (Hamstrings)", nameEn: "Hamstrings", view: "back", icon: "🏃", desc: "Diz fleksiyonu, kalça itişi ve koşu biyomekaniği." },
-  { id: "glutes", name: "Kalça (Gluteus)", nameEn: "Glutes", view: "back", icon: "🍑", desc: "Vücudun en büyük kas grubu; pelvis hizalama ve bel koruyucu." },
-  { id: "calves", name: "Kalf & Baldır (Calves)", nameEn: "Calves", view: "back", icon: "👣", desc: "Ayak bileği stabilitesi, yürüme ve sıçrama amortisörü." },
-  { id: "lower_back", name: "Bel (Lumbar / Erector)", nameEn: "Lower Back", view: "back", icon: "🧘", desc: "Lomber omurga koruması, fıtık önleme ve duruş dengesi." }
+  { id: "chest", name: "Göğüs (Pektoral)", nameEn: "Chest", view: "front", icon: "", desc: "Üst gövde itiş kasları, duruş düzeltme ve solunum kapasitesi." },
+  { id: "shoulders", name: "Omuzlar (Deltoid)", nameEn: "Shoulders", view: "both", icon: "", desc: "Kol hareket kabiliyeti, omuz başları ve rotator manşet sağlığı." },
+  { id: "biceps", name: "Pazı (Biceps)", nameEn: "Biceps", view: "front", icon: "", desc: "Ön kol çekiş kasları, dirsek fleksörleri ve kavrama gücü." },
+  { id: "triceps", name: "Arka Kol (Triceps)", nameEn: "Triceps", view: "back", icon: "", desc: "Kolun 2/3'ünü oluşturan ekstansör kaslar ve itiş gücü." },
+  { id: "back", name: "Sırt & Kanat (Lats/Traps)", nameEn: "Back", view: "back", icon: "", desc: "Omurga stabilitesi, dik duruş ve bel ağrılarının önlenmesi." },
+  { id: "abs", name: "Karın & Merkez (Core)", nameEn: "Abs", view: "front", icon: "", desc: "Karın duvarı, pelvik denge ve omurga koruma kalkanı." },
+  { id: "quadriceps", name: "Ön Bacak (Quadriceps)", nameEn: "Quadriceps", view: "front", icon: "", desc: "Diz eklemi stabilitesi, merdiven çıkma ve çömelme gücü." },
+  { id: "hamstrings", name: "Arka Bacak (Hamstrings)", nameEn: "Hamstrings", view: "back", icon: "", desc: "Diz fleksiyonu, kalça itişi ve koşu biyomekaniği." },
+  { id: "glutes", name: "Kalça (Gluteus)", nameEn: "Glutes", view: "back", icon: "", desc: "Vücudun en büyük kas grubu; pelvis hizalama ve bel koruyucu." },
+  { id: "calves", name: "Kalf & Baldır (Calves)", nameEn: "Calves", view: "back", icon: "", desc: "Ayak bileği stabilitesi, yürüme ve sıçrama amortisörü." },
+  { id: "lower_back", name: "Bel (Lumbar / Erector)", nameEn: "Lower Back", view: "back", icon: "", desc: "Lomber omurga koruması, fıtık önleme ve duruş dengesi." }
 ];
 
 // workout-cool ve Wger İlhamlı Zengin Egzersiz Veritabanı

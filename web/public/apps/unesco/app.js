@@ -64,7 +64,7 @@ let unescoMap = null;
                   </span>
                 </div>
                 <div class="p-5">
-                  <span class="text-[11px] font-semibold text-mistral-orange uppercase tracking-wider block mb-1">📍 ${s.country}</span>
+                  <span class="text-[11px] font-semibold text-mistral-orange uppercase tracking-wider block mb-1">${s.country}</span>
                   <h3 class="text-xl font-bold font-editorial text-mistral-ink group-hover:text-mistral-orange transition mb-2">
                     ${s.name}
                   </h3>
@@ -92,7 +92,7 @@ let unescoMap = null;
             const group = [];
             list.forEach(s => {
               const customIcon = L.divIcon({
-                html: '<div style="font-size: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); transform: translate(-12px, -12px);">🏛️</div>',
+                html: '<div style="font-size: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); transform: translate(-12px, -12px);"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></div>',
                 className: 'unesco-marker',
                 iconSize: [24, 24]
               });

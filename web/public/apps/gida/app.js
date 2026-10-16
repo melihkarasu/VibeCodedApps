@@ -31,7 +31,7 @@ const DEFAULT_ALLERGENS = [
                 type="button" 
                 onclick="toggleAllergen('${a.id}')"
                 class="px-3 py-1.5 rounded-lg border font-medium transition cursor-pointer flex items-center gap-1.5 ${active ? 'bg-rose-50 border-rose-300 text-rose-700 shadow-2xs font-bold' : 'bg-white border-mistral-hairline text-mistral-slate hover:bg-mistral-cream'}">
-                <span>${active ? '⚠️' : '○'}</span> ${a.label}
+                <span>${active ? '' : '○'}</span> ${a.label}
               </button>
             `;
           }).join('');
@@ -105,7 +105,7 @@ const DEFAULT_ALLERGENS = [
                   <!-- ALERJEN ALARMI (Eğer eşleşme varsa) -->
                   ${isDanger ? `
                     <div class="p-4 rounded-xl bg-rose-50 border border-rose-300 text-rose-800 flex items-start gap-3">
-                      <span class="text-2xl shrink-0">🚨</span>
+                      <span class="text-2xl shrink-0"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
                       <div>
                         <strong class="text-sm font-bold block">DİKKAT: Alerji Profilinizle Eşleşen Madde Tespit Edildi!</strong>
                         <p class="text-xs text-rose-700 mt-0.5">
@@ -115,7 +115,7 @@ const DEFAULT_ALLERGENS = [
                     </div>
                   ` : `
                     <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
-                      <span>✓</span>
+                      <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
                       <span>Kişisel alerji profilinizle doğrudan eşleşen kritik bir içerik bulunamadı.</span>
                     </div>
                   `}

@@ -42,7 +42,7 @@ let geoMap = null;
               if (geoMarker) geoMarker.remove();
 
               const customIcon = L.divIcon({
-                html: '<div style="font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); transform: translate(-14px, -14px);">📍</div>',
+                html: '<div style="font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); transform: translate(-14px, -14px);"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>',
                 className: 'custom-geo-icon',
                 iconSize: [28, 28]
               });
@@ -53,7 +53,7 @@ let geoMap = null;
                 .openPopup();
             }
           } catch(err) {
-            errBox.innerText = '⚠️ ' + err.message;
+            errBox.innerText = '' + err.message;
             errBox.classList.remove('hidden');
           }
         }

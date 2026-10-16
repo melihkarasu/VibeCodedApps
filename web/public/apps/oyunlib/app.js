@@ -40,7 +40,7 @@ async function loadGames() {
                       ${g.short_description || 'Açıklama mevcut değil.'}
                     </p>
                     <div class="flex items-center justify-between text-[11px] text-mistral-stone pt-2 border-t border-mistral-hairline">
-                      <span>💻 ${g.platform}</span>
+                      <span>${g.platform}</span>
                       <span>${g.developer || ''}</span>
                     </div>
                   </div>

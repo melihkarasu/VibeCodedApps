@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/siir/app.js?v=20260928b" defer></script>
+      <script src="/static/apps/siir/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -18,7 +18,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
           <span class="font-medium" id="poetry-status">3.000+ Şiir Yayında</span>
         </div>
       </div>
@@ -34,7 +33,7 @@ module.exports = function(pageTemplate) {
               placeholder="Şair adı arayın (örn: Shakespeare, Poe, Dickinson, Byron, Shelley, Keats)..." 
               onkeydown="if(event.key==='Enter') searchAuthorPoems()"
               class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder:text-mistral-stone focus:outline-none focus:border-mistral-orange transition">
-            <span class="absolute left-3.5 top-3 text-mistral-stone text-sm">✍️</span>
+            <span class="absolute left-3.5 top-3 text-mistral-stone text-sm"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
           </div>
           <div class="sm:col-span-4 flex gap-2">
             <button 
@@ -48,7 +47,7 @@ module.exports = function(pageTemplate) {
               onclick="loadRandomPoem()" 
               title="Rastgele Bir Şiir Fısılda"
               class="px-3.5 py-2.5 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep font-semibold text-xs transition shadow-xs flex items-center justify-center gap-1 cursor-pointer shrink-0">
-              <span>🎲</span> Rastgele
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="2"/></svg></span> Rastgele
             </button>
           </div>
         </div>
@@ -56,18 +55,17 @@ module.exports = function(pageTemplate) {
         <!-- Hızlı Şair Seçimleri -->
         <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-mistral-hairline text-xs">
           <span class="text-mistral-stone font-medium mr-1">Öne Çıkan Şairler:</span>
-          <button onclick="quickAuthor('William Shakespeare')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🎭 W. Shakespeare</button>
-          <button onclick="quickAuthor('Edgar Allan Poe')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🦅 Edgar Allan Poe</button>
-          <button onclick="quickAuthor('Emily Dickinson')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🌸 Emily Dickinson</button>
-          <button onclick="quickAuthor('Lord Byron')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🌊 Lord Byron</button>
-          <button onclick="quickAuthor('John Keats')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🍂 John Keats</button>
+          <button onclick="quickAuthor('William Shakespeare')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">W. Shakespeare</button>
+          <button onclick="quickAuthor('Edgar Allan Poe')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Edgar Allan Poe</button>
+          <button onclick="quickAuthor('Emily Dickinson')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Emily Dickinson</button>
+          <button onclick="quickAuthor('Lord Byron')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Lord Byron</button>
+          <button onclick="quickAuthor('John Keats')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">John Keats</button>
         </div>
       </div>
 
       <!-- ANA OKUMA SAYFASI (EDİTORYAL KİTAP FORMU) -->
       <div id="poem-loading" class="py-16 text-center">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold">
-          <span class="w-2.5 h-2.5 rounded-full bg-mistral-orange animate-ping"></span>
           <span>Dizeler antolojiden derleniyor...</span>
         </div>
       </div>
@@ -99,7 +97,7 @@ module.exports = function(pageTemplate) {
           <div class="pt-6 border-t border-mistral-hairline flex flex-wrap items-center justify-between gap-3 text-xs">
             <div class="flex items-center gap-2">
               <button onclick="copyPoemText()" class="px-3 py-1.5 rounded-lg text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep font-semibold transition flex items-center gap-1.5 cursor-pointer">
-                <span>📋</span> Şiiri Kopyala
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Şiiri Kopyala
               </button>
               <button onclick="savePoemToFavorites()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-mistral-cream text-mistral-ink border border-mistral-hairline font-semibold transition flex items-center gap-1.5 cursor-pointer">
                 <span>⭐</span> Antolojime Ekle

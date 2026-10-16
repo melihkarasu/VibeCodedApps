@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/tatil/app.css?v=20261001a">
-      <script src="/static/apps/tatil/app.js?v=20261001a" defer></script>
+      <link rel="stylesheet" href="/static/apps/tatil/app.css?v=20261017a">
+      <script src="/static/apps/tatil/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -22,7 +22,7 @@ module.exports = function(pageTemplate) {
         <!-- Dışa Aktarma Butonu -->
         <div class="flex items-center gap-2">
           <button onclick="exportICS()" class="px-4 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition shadow-lg shadow-amber-500/20 flex items-center gap-2">
-            <span>📥</span> Takvime Aktar (.ics)
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span> Takvime Aktar (.ics)
           </button>
         </div>
       </div>
@@ -79,7 +79,7 @@ module.exports = function(pageTemplate) {
       <div class="p-6 rounded-3xl bg-amber-50 border border-amber-200 shadow-xl mb-8 space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2.5">
-            <span class="text-2xl">🏖️</span>
+            <span class="text-2xl"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/></svg></span>
             <div>
               <h2 class="text-sm font-bold text-mistral-ink">Akıllı Köprü İzin ve Uzun Hafta Sonu Fırsatları</h2>
               <p class="text-mistral-slate text-xs">Az izin günü kullanarak maksimum tatil yapabileceğiniz fırsat dönemleri:</p>
@@ -99,13 +99,13 @@ module.exports = function(pageTemplate) {
       <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div class="flex p-1 rounded-xl bg-white border border-mistral-hairline">
           <button onclick="setViewMode('timeline')" id="btn-view-timeline" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-slate-950 transition flex items-center gap-1.5 shadow">
-            <span>📋</span> Birleşik Kronolojik Liste
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Birleşik Kronolojik Liste
           </button>
           <button onclick="setViewMode('matrix')" id="btn-view-matrix" class="px-4 py-1.5 rounded-lg text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-1.5">
-            <span>📊</span> Ülke Sütunları
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span> Ülke Sütunları
           </button>
           <button onclick="setViewMode('calendar')" id="btn-view-calendar" class="px-4 py-1.5 rounded-lg text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-1.5">
-            <span>🗓️</span> Ay Gruplu Görünüm
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span> Ay Gruplu Görünüm
           </button>
         </div>
 

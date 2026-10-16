@@ -5,7 +5,7 @@ function safeCopyToClipboard(text, msg) {
   }
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(() => {
-      if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+      if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
     }).catch(() => fallbackExecCopy(text, msg));
   } else {
     fallbackExecCopy(text, msg);
@@ -20,7 +20,7 @@ function fallbackExecCopy(text, msg) {
   ta.select();
   try {
     document.execCommand('copy');
-    if (window.showToast) window.showToast('✓ ' + (msg || 'Panoya kopyalandı!'));
+    if (window.showToast) window.showToast('' + (msg || 'Panoya kopyalandı!'));
   } catch(e) {
     if (window.showToast) window.showToast('Kopyalama başarısız');
   }
@@ -105,17 +105,17 @@ let currentCardTheme = 'dark';
           document.getElementById('badge-join-date').innerText = `${years > 0 ? years + ' yıldır üye' : 'Yeni üye'}`;
           
           let rank = 'Junior Explorer';
-          if (u.public_repos > 50 || data.totalStars > 100) rank = 'Master Architect 🏆';
-          else if (u.public_repos > 20 || data.totalStars > 20) rank = 'Senior Hacker ⚡';
-          else if (years >= 2) rank = 'Active Developer 🚀';
+          if (u.public_repos > 50 || data.totalStars > 100) rank = 'Master Architect ';
+          else if (u.public_repos > 20 || data.totalStars > 20) rank = 'Senior Hacker ';
+          else if (years >= 2) rank = 'Active Developer ';
           document.getElementById('badge-dev-rank').innerText = rank;
 
           // Meta Bilgileri
-          document.getElementById('meta-company').innerText = u.company ? '🏢 ' + u.company : '';
-          document.getElementById('meta-location').innerText = u.location ? '📍 ' + u.location : '';
+          document.getElementById('meta-company').innerText = u.company ? '' + u.company : '';
+          document.getElementById('meta-location').innerText = u.location ? '' + u.location : '';
           const blogEl = document.getElementById('meta-blog');
           if (u.blog) {
-            blogEl.innerText = '🔗 ' + u.blog.replace(/^https?:\/\//, '');
+            blogEl.innerText = '' + u.blog.replace(/^https?:\/\//, '');
             blogEl.href = u.blog.startsWith('http') ? u.blog : 'https://' + u.blog;
             blogEl.classList.remove('hidden');
           } else {
@@ -130,7 +130,7 @@ let currentCardTheme = 'dark';
           const elFollowing = document.getElementById('stat-following');
 
           if (elStars) elStars.innerText = '⭐ ' + (data.totalStarsEarned || data.totalStars || 0).toLocaleString('tr-TR');
-          if (elStarred) elStarred.innerText = '🌟 ' + (data.starredCount || 0).toLocaleString('tr-TR');
+          if (elStarred) elStarred.innerText = '' + (data.starredCount || 0).toLocaleString('tr-TR');
           if (elRepos) elRepos.innerText = (u.public_repos || 0).toLocaleString('tr-TR');
           if (elFollowers) elFollowers.innerText = (u.followers !== undefined ? u.followers : 0).toLocaleString('tr-TR');
           if (elFollowing) elFollowing.innerText = (u.following !== undefined ? u.following : 0).toLocaleString('tr-TR');
@@ -210,7 +210,7 @@ let currentCardTheme = 'dark';
                 </span>
                 <div class="flex items-center gap-3 font-semibold text-mistral-ink">
                   <span class="text-amber-500 font-bold">⭐ ${Number(r.stargazers_count || 0).toLocaleString('en-US')}</span>
-                  <span>🍴 ${Number(r.forks_count || 0).toLocaleString('en-US')}</span>
+                  <span>${Number(r.forks_count || 0).toLocaleString('en-US')}</span>
                 </div>
               </div>
             </div>
@@ -304,7 +304,7 @@ let currentCardTheme = 'dark';
                 </span>
                 <div class="flex items-center gap-3">
                   <span>⭐ ${r.stargazers_count}</span>
-                  <span>🍴 ${r.forks_count}</span>
+                  <span>${r.forks_count}</span>
                 </div>
               </div>
             </div>

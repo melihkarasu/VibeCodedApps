@@ -165,7 +165,7 @@ const STORAGE_KEY = '***';
               <div class="p-3 text-center text-xs text-mistral-slate">
                 <span class="block text-mistral-slate font-semibold mb-1">Yerel havza listesinde bulunamadı</span>
                 <button onclick="executeLiveGeocoding('${query.replace(/'/g, "\\\\'")}')" class="px-3 py-1.5 rounded-lg bg-teal-500/20 text-teal-300 hover:bg-teal-500/30 font-bold transition">
-                  🌐 "${query}" için Türkiye & Dünya Haritasında Ara &rarr;
+                  "${query}" için Türkiye & Dünya Haritasında Ara &rarr;
                 </button>
               </div>
             `;
@@ -199,7 +199,7 @@ const STORAGE_KEY = '***';
               <div class="pt-2 border-t border-mistral-hairline px-2 py-1 flex items-center justify-between text-[11px]">
                 <span class="text-mistral-stone">Listede yok mu?</span>
                 <button onclick="executeLiveGeocoding('${query.replace(/'/g, "\\\\'")}')" class="text-teal-400 hover:underline font-bold">
-                  🌐 Canlı Haritada Ara &rarr;
+                  Canlı Haritada Ara &rarr;
                 </button>
               </div>
             `;
@@ -221,20 +221,20 @@ const STORAGE_KEY = '***';
           document.getElementById('input-region-search').value = `${name} (${city})`;
           document.getElementById('search-dropdown').classList.add('hidden');
           fetchAgroForecast(lat, lon, `${name} (${city})`);
-          showToast(`✓ ${name} seçildi!`);
+          showToast(`${name} seçildi!`);
         }
 
         function selectQuickRegion(lat, lon, name, type) {
           document.getElementById('input-region-search').value = name;
           document.getElementById('search-dropdown').classList.add('hidden');
           fetchAgroForecast(lat, lon, name);
-          showToast(`✓ ${name} havzası yüklendi!`);
+          showToast(`${name} havzası yüklendi!`);
         }
 
         // Canlı Coğrafi Konum Arama (Nominatim OpenStreetMap)
         async function executeLiveGeocoding(searchTerm) {
           document.getElementById('search-dropdown').classList.add('hidden');
-          showToast(`🌐 "${searchTerm}" için harita koordinatları taranıyor...`);
+          showToast(`"${searchTerm}" için harita koordinatları taranıyor...`);
 
           try {
             const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchTerm)}&format=json&countrycodes=tr&limit=1`;
@@ -249,7 +249,7 @@ const STORAGE_KEY = '***';
 
               document.getElementById('input-region-search').value = cleanName;
               fetchAgroForecast(lat, lon, cleanName);
-              showToast(`✓ "${cleanName}" bulundu ve zirai veriler çekildi!`);
+              showToast(`"${cleanName}" bulundu ve zirai veriler çekildi!`);
             } else {
               // Dünya genelinde ara
               const globalUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchTerm)}&format=json&limit=1`;
@@ -262,7 +262,7 @@ const STORAGE_KEY = '***';
                 const gName = gPlace.display_name.split(',')[0];
                 document.getElementById('input-region-search').value = gName;
                 fetchAgroForecast(gLat, gLon, gName);
-                showToast(`✓ "${gName}" bulundu ve zirai veriler çekildi!`);
+                showToast(`"${gName}" bulundu ve zirai veriler çekildi!`);
               } else {
                 showToast('Girdiğiniz konuma ait koordinat bulunamadı.');
               }
@@ -305,7 +305,7 @@ const STORAGE_KEY = '***';
               const lon = pos.coords.longitude;
               document.getElementById('input-region-search').value = 'Mevcut Parselim (GPS)';
               fetchAgroForecast(lat, lon, 'Mevcut Parselim (GPS)');
-              showToast('✓ Konum başarıyla alındı!');
+              showToast('Konum başarıyla alındı!');
             },
             () => {
               showToast('Konum erişimi reddedildi.');
@@ -349,7 +349,7 @@ const STORAGE_KEY = '***';
           valSurface.innerText = minNightTemp.toFixed(1) + '°C Gece';
           if (minNightTemp <= 0) {
             frostBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300';
-            frostBadge.innerText = '⚠️ KRİTİK DON';
+            frostBadge.innerText = 'KRİTİK DON';
             descFrost.innerText = 'Gece sıcaklığı sıfırın altına düşüyor! Örtüaltı veya don pervanesi önlemi alınmalı.';
           } else if (minNightTemp <= 3) {
             frostBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-yellow-500/20 text-yellow-300';
@@ -566,7 +566,7 @@ const STORAGE_KEY = '***';
 
           localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
           renderSavedFields();
-          showToast(`✓ "${fieldName}" başarıyla kaydedildi!`);
+          showToast(`"${fieldName}" başarıyla kaydedildi!`);
         }
 
         function renderSavedFields() {
@@ -603,7 +603,7 @@ const STORAGE_KEY = '***';
           document.getElementById('select-crop').value = cropKey;
           document.getElementById('input-region-search').value = regionTitle;
           fetchAgroForecast(lat, lon, regionTitle);
-          showToast(`✓ "${regionTitle}" parseli yüklendi!`);
+          showToast(`"${regionTitle}" parseli yüklendi!`);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 

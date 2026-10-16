@@ -48,7 +48,7 @@ async function searchStudies(customQuery) {
       if (container) {
         container.innerHTML = `
           <div class="col-span-full p-12 text-center rounded-2xl bg-white border border-dashed border-stone-300 text-mistral-slate">
-            <span class="text-3xl block mb-2">🔍</span>
+            <span class="text-3xl block mb-2"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
             <strong class="text-mistral-ink block mb-1">"${escapeHtml(q)}" İçin Eşleşen Klinik Çalışma Bulunamadı</strong>
             <p class="text-xs text-mistral-stone">Filtreleri gevşetebilir veya farklı bir hastalık/tedavi terimi aratabilirsiniz.</p>
           </div>
@@ -148,7 +148,7 @@ function renderStudyCards(studies) {
             <button 
               type="button" 
               onclick="toggleFollowStudy('${escapeHtml(st.nctId)}')" 
-              title="${isFollowed ? 'Takibi Bırak' : 'Bu Klinik Çalışmayı Takip Et / Favla'}"
+              title="${isFollowed ?'Takibi Bırak' : 'Bu Klinik Çalışmayı Takip Et / Favla'}"
               class="w-7 h-7 rounded-lg ${isFollowed ? 'bg-amber-100 text-amber-600 border border-amber-300' : 'bg-stone-50 text-stone-400 hover:text-amber-500 hover:bg-amber-50 border border-stone-200'} flex items-center justify-center transition cursor-pointer shrink-0">
               <i class="fa-${isFollowed ? 'solid' : 'regular'} fa-star text-xs"></i>
             </button>
@@ -178,7 +178,7 @@ function renderStudyCards(studies) {
               <strong class="text-mistral-ink">Sponsor:</strong> ${escapeHtml(st.leadSponsor)}
             </div>
             <div class="truncate">
-              <strong class="text-mistral-ink">Merkezler:</strong> 📍 ${escapeHtml(locationCities)}
+              <strong class="text-mistral-ink">Merkezler:</strong> ${escapeHtml(locationCities)}
             </div>
           </div>
         </div>
@@ -286,7 +286,7 @@ function renderFollowedStudies() {
   if (followedStudies.length === 0) {
     container.innerHTML = `
       <div class="p-8 text-center rounded-xl bg-amber-50/40 border border-dashed border-amber-200 text-xs text-mistral-stone">
-        Henüz takip ettiğiniz bir klinik çalışma yok. Aşağıdaki katalogda yer alan araştırmaların üzerindeki <strong>"☆ Takip Et"</strong> butonuna tıklayarak çalışmaları buraya sabitleyebilir, canlı faz ve kabul durumlarını izleyebilirsiniz.
+        Henüz takip ettiğiniz bir klinik çalışma yok. Aşağıdaki katalogda yer alan araştırmaların üzerindeki <strong>"Takip Et"</strong> butonuna tıklayarak çalışmaları buraya sabitleyebilir, canlı faz ve kabul durumlarını izleyebilirsiniz.
       </div>
     `;
     return;
@@ -317,7 +317,7 @@ function renderFollowedStudies() {
               <div class="text-[11px] text-mistral-stone flex items-center gap-3">
                 <span><strong>Sponsor:</strong> ${escapeHtml(item.leadSponsor || 'NIH Kayıtlı')}</span>
                 <span>&bull;</span>
-                <span>🕒 Son Kontrol: <strong class="text-mistral-slate">${escapeHtml(item.lastChecked || 'Bugün')}</strong></span>
+                <span>Son Kontrol: <strong class="text-mistral-slate">${escapeHtml(item.lastChecked || 'Bugün')}</strong></span>
               </div>
             </div>
 
@@ -414,7 +414,7 @@ function exportFollowedStudies() {
   }
 
   const dateStr = new Date().toLocaleDateString('tr-TR');
-  let md = `# 🔬 Takip Ettiğim Klinik Araştırmalar - ${dateStr}\n\n`;
+  let md = `# Takip Ettiğim Klinik Araştırmalar - ${dateStr}\n\n`;
   md += `> Toplam: ${followedStudies.length} Klinik Çalışma | Kaynak: NIH ClinicalTrials.gov\n\n`;
 
   followedStudies.forEach((item, idx) => {
@@ -485,7 +485,7 @@ function openStudyModal(nctId) {
         <button 
           type="button" 
           onclick="toggleFollowStudy('${escapeHtml(st.nctId)}'); openStudyModal('${escapeHtml(st.nctId)}');" 
-          title="${isFollowed ? 'Takibi Bırak' : 'Takip Et / Favla'}"
+          title="${isFollowed ?'Takibi Bırak' : 'Takip Et / Favla'}"
           class="px-3 py-1.5 rounded-lg ${isFollowed ? 'bg-amber-100 text-amber-700 border border-amber-300' : 'bg-stone-100 hover:bg-amber-50 text-mistral-ink border border-stone-200'} text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
           <i class="fa-${isFollowed ? 'solid' : 'regular'} fa-star text-amber-500"></i>
           <span>${isFollowed ? 'Takip Ediliyor' : 'Takip Et'}</span>
@@ -494,7 +494,7 @@ function openStudyModal(nctId) {
           type="button" 
           onclick="closeStudyModal()" 
           class="w-8 h-8 rounded-lg bg-stone-100 hover:bg-stone-200 text-mistral-slate flex items-center justify-center text-sm cursor-pointer transition">
-          ✕
+          
         </button>
       </div>
     </div>
@@ -505,7 +505,7 @@ function openStudyModal(nctId) {
       <!-- Ayrıntılı Özet -->
       <div class="p-4 rounded-xl bg-mistral-cream/60 border border-mistral-beige-deep space-y-1.5">
         <strong class="text-sm font-bold text-mistral-ink block flex items-center gap-1.5">
-          <span>🔬</span> Araştırma Hipotezi & Bilimsel Özet
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg></span> Araştırma Hipotezi & Bilimsel Özet
         </strong>
         <p>${escapeHtml(st.briefSummary)}</p>
       </div>
@@ -513,7 +513,7 @@ function openStudyModal(nctId) {
       <!-- Uygunluk / Katılım Kriterleri -->
       <div>
         <strong class="text-sm font-bold text-mistral-ink block mb-2 flex items-center gap-1.5">
-          <span>📋</span> Hasta Katılım & Uygunluk Kriterleri (Eligibility)
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Hasta Katılım & Uygunluk Kriterleri (Eligibility)
         </strong>
         <div class="p-4 rounded-xl bg-stone-50 border border-mistral-hairline whitespace-pre-line font-mono text-[11px] leading-normal text-mistral-slate">
           ${escapeHtml(st.eligibility || 'Kriter detayları için resmi protokol sayfasına başvurunuz.')}
@@ -523,12 +523,12 @@ function openStudyModal(nctId) {
       <!-- Araştırma Merkezleri / Hastaneler -->
       <div>
         <strong class="text-sm font-bold text-mistral-ink block mb-2 flex items-center gap-1.5">
-          <span>🏥</span> Araştırma Merkezleri & Hastaneler
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></span> Araştırma Merkezleri & Hastaneler
         </strong>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
           ${(st.locations && st.locations.length > 0) ? st.locations.map(loc => `
             <div class="p-3 rounded-lg bg-white border border-mistral-hairline flex items-center gap-2">
-              <span class="text-base text-mistral-orange">📍</span>
+              <span class="text-base text-mistral-orange"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
               <div class="truncate">
                 <strong class="text-mistral-ink block truncate">${escapeHtml(loc.city)}, ${escapeHtml(loc.country)}</strong>
                 <span class="text-[10px] text-mistral-stone truncate block">${escapeHtml(loc.facility)}</span>
@@ -614,7 +614,7 @@ function toggleTurkeyOnly() {
     } else {
       btn.classList.remove('bg-rose-600', 'text-white', 'border-rose-600');
       btn.classList.add('bg-white', 'text-mistral-ink', 'border-mistral-hairline');
-      btn.innerHTML = '<span>🌍 Küresel / Tüm Ülkeler</span>';
+      btn.innerHTML = '<span>Küresel / Tüm Ülkeler</span>';
     }
   }
   searchStudies();

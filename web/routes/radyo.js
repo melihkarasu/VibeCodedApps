@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/radyo/app.js?v=20260926j" defer></script>
+      <script src="/static/apps/radyo/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -20,7 +20,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-medium" id="radio-station-count">Frekanslar Taranıyor...</span>
         </div>
       </div>
@@ -42,11 +41,7 @@ module.exports = function(pageTemplate) {
         <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
           <!-- Ses Dalgası Equalizer Çubukları -->
           <div id="equalizer-bars" class="hidden items-center gap-1 h-6 px-2">
-            <span class="w-1 bg-mistral-orange rounded-full animate-pulse h-3"></span>
-            <span class="w-1 bg-mistral-orange rounded-full animate-pulse h-6"></span>
-            <span class="w-1 bg-mistral-orange rounded-full animate-pulse h-4"></span>
-            <span class="w-1 bg-mistral-orange rounded-full animate-pulse h-5"></span>
-          </div>
+            </div>
 
           <!-- Oynat / Durdur Butonu -->
           <button 
@@ -59,7 +54,7 @@ module.exports = function(pageTemplate) {
 
           <!-- Ses Seviyesi Kaydırıcısı -->
           <div class="flex items-center gap-2">
-            <span class="text-xs text-mistral-stone">🔊</span>
+            <span class="text-xs text-mistral-stone"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span>
             <input 
               type="range" 
               id="volume-slider" 
@@ -93,7 +88,7 @@ module.exports = function(pageTemplate) {
           <div class="sm:col-span-3">
             <select id="radio-country" onchange="loadStations()" class="w-full px-3 py-2.5 rounded-lg bg-white border border-mistral-hairline text-sm text-mistral-ink focus:outline-none focus:border-mistral-orange transition">
               <option value="TR" selected>🇹🇷 Türkiye</option>
-              <option value="ALL">🌍 Tüm Dünya</option>
+              <option value="ALL">Tüm Dünya</option>
               <option value="GB">🇬🇧 Birleşik Krallık</option>
               <option value="US">🇺🇸 Amerika Birleşik Devletleri</option>
               <option value="DE">🇩🇪 Almanya</option>
@@ -127,7 +122,6 @@ module.exports = function(pageTemplate) {
       <!-- RADYO İSTASYONLARI IZGARASI -->
       <div id="radio-loading" class="py-16 text-center">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold">
-          <span class="w-2.5 h-2.5 rounded-full bg-mistral-orange animate-ping"></span>
           <span>Canlı radyo frekansları taranıyor...</span>
         </div>
       </div>

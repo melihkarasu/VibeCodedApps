@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/atlas/app.js" defer></script>
+      <script src="/static/apps/atlas/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -66,7 +66,6 @@ module.exports = function(pageTemplate) {
       <!-- ÜLKE KARTLARI IZGARASI -->
       <div id="countries-loading" class="py-16 text-center">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold">
-          <span class="w-2.5 h-2.5 rounded-full bg-mistral-orange animate-ping"></span>
           <span>Dünya veritabanı yükleniyor...</span>
         </div>
       </div>
@@ -78,7 +77,7 @@ module.exports = function(pageTemplate) {
       <!-- ÜLKE DETAY MODALI -->
       <div id="country-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
         <div class="relative w-full max-w-xl bg-white border border-mistral-hairline rounded-2xl shadow-xl overflow-hidden p-6 space-y-5 animate-in fade-in duration-200">
-          <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-slate hover:text-mistral-ink flex items-center justify-center text-sm font-bold transition">✕</button>
+          <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-slate hover:text-mistral-ink flex items-center justify-center text-sm font-bold transition"></button>
           
           <div class="flex items-center gap-4">
             <img id="m-flag" src="" alt="Bayrak" class="w-16 h-11 object-cover rounded-md border border-mistral-hairline shadow-2xs shrink-0">
@@ -124,7 +123,7 @@ module.exports = function(pageTemplate) {
 
           <div class="pt-2 flex justify-end">
             <a id="m-maps" href="#" target="_blank" rel="noopener" class="px-4 py-2 rounded-md bg-mistral-orange hover:bg-mistral-orange-deep text-white font-medium text-xs transition shadow-xs flex items-center gap-1.5">
-              <span>🗺️</span> Google Haritalarda Gör &rarr;
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span> Google Haritalarda Gör &rarr;
             </a>
           </div>
         </div>

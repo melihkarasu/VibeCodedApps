@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/doga/app.css">
-      <script src="/static/apps/doga/app.js" defer></script>
+      <link rel="stylesheet" href="/static/apps/doga/app.css?v=20261017a">
+      <script src="/static/apps/doga/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -21,7 +21,6 @@ module.exports = function(pageTemplate) {
 
         <!-- Üst Rozet -->
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-slate">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span>iNaturalist Biyoakustik Arşivi</span>
         </div>
       </div>
@@ -58,7 +57,7 @@ module.exports = function(pageTemplate) {
         <div class="relative w-full h-24 rounded-2xl bg-mistral-canvas border border-mistral-hairline overflow-hidden flex items-center justify-center">
           <canvas id="visualizer-canvas" class="w-full h-full visualizer-canvas"></canvas>
           <div id="visualizer-idle-text" class="absolute pointer-events-none text-xs text-mistral-stone flex items-center gap-2">
-            <span>🎵</span> <span>Bir kuş sesi seçip oynatın</span>
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span> <span>Bir kuş sesi seçip oynatın</span>
           </div>
         </div>
 
@@ -85,20 +84,20 @@ module.exports = function(pageTemplate) {
         <!-- Hızlı Popüler Türler -->
         <div class="flex flex-wrap items-center gap-1.5 text-xs pt-1">
           <span class="text-mistral-stone text-[11px] mr-1">Popüler Kuşlar:</span>
-          <button onclick="quickSearchBird('Bülbül', 'Luscinia megarhynchos')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">🐦 Bülbül</button>
-          <button onclick="quickSearchBird('Peçeli Baykuş', 'Tyto alba')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">🦉 Peçeli Baykuş</button>
-          <button onclick="quickSearchBird('Saka Kuşu', 'Carduelis carduelis')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">🐤 Saka Kuşu</button>
-          <button onclick="quickSearchBird('Kızılgerdan', 'Erithacus rubecula')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">🍂 Kızılgerdan</button>
-          <button onclick="quickSearchBird('Gökdoğan', 'Falco peregrinus')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">🦅 Gökdoğan</button>
-          <button onclick="quickSearchBird('Orman Alaca Ağaçkakanı', 'Dendrocopos major')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">🌲 Ağaçkakan</button>
-          <button onclick="quickSearchBird('Flamingo', 'Phoenicopterus roseus')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">🦩 Flamingo</button>
+          <button onclick="quickSearchBird('Bülbül', 'Luscinia megarhynchos')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Bülbül</button>
+          <button onclick="quickSearchBird('Peçeli Baykuş', 'Tyto alba')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Peçeli Baykuş</button>
+          <button onclick="quickSearchBird('Saka Kuşu', 'Carduelis carduelis')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Saka Kuşu</button>
+          <button onclick="quickSearchBird('Kızılgerdan', 'Erithacus rubecula')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Kızılgerdan</button>
+          <button onclick="quickSearchBird('Gökdoğan', 'Falco peregrinus')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Gökdoğan</button>
+          <button onclick="quickSearchBird('Orman Alaca Ağaçkakanı', 'Dendrocopos major')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Ağaçkakan</button>
+          <button onclick="quickSearchBird('Flamingo', 'Phoenicopterus roseus')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-slate transition">Flamingo</button>
         </div>
       </div>
 
       <!-- 3. KUŞ SESLERİ LİSTESİ -->
       <div class="mb-4 flex items-center justify-between">
         <h2 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-          <span>🌿</span> <span id="results-headline">Kuş Sesi Kayıtları</span>
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span> <span id="results-headline">Kuş Sesi Kayıtları</span>
         </h2>
         <span id="results-count" class="text-xs text-mistral-slate font-mono">Sesler taranıyor...</span>
       </div>
@@ -123,7 +122,7 @@ module.exports = function(pageTemplate) {
             <p class="text-mistral-slate text-xs">Aşağıdaki sesi dinleyin ve 4 seçenek arasından hangi kuşa ait olduğunu tahmin edin:</p>
           </div>
           <button onclick="startBirdQuiz()" class="px-4 py-2 rounded-xl bg-white hover:bg-mistral-cream border border-mistral-hairline text-xs font-bold text-mistral-ink transition">
-            🎲 Yeni Soru Getir
+            Yeni Soru Getir
           </button>
         </div>
 
@@ -147,7 +146,7 @@ module.exports = function(pageTemplate) {
         <div class="flex items-center justify-between">
           <div>
             <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-              <span>📖</span> Doğa Defterim & Kayıtlı Kuş Sesleri
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Doğa Defterim & Kayıtlı Kuş Sesleri
             </h3>
             <p class="text-mistral-slate text-xs">Beğendiğiniz kuş seslerini kaydedin, dilediğiniz an dinleyin.</p>
           </div>
@@ -158,7 +157,7 @@ module.exports = function(pageTemplate) {
           <!-- JS ile -->
         </div>
         <div id="nature-shelf-empty" class="p-8 text-center rounded-2xl bg-white border border-mistral-hairline text-mistral-stone text-xs">
-          Henüz defterinize bir kuş sesi kaydetmediniz. Kartlardaki 🔖 simgesine tıklayarak koleksiyonunuzu oluşturabilirsiniz.
+          Henüz defterinize bir kuş sesi kaydetmediniz. Kartlardaki simgesine tıklayarak koleksiyonunuzu oluşturabilirsiniz.
         </div>
       </div>
 

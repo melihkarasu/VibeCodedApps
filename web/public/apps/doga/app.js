@@ -123,7 +123,7 @@ const SHELF_KEY = '***';
 
                 <h3 class="font-bold text-sm text-mistral-ink group-hover:text-emerald-400 transition truncate">${b.commonName}</h3>
                 <p class="text-xs text-emerald-400/90 font-mono italic truncate mt-0.5">${b.sciName}</p>
-                <p class="text-[11px] text-mistral-slate truncate mt-1">📍 ${b.place}</p>
+                <p class="text-[11px] text-mistral-slate truncate mt-1">${b.place}</p>
               </div>
 
               <div class="pt-3 border-t border-mistral-hairline flex items-center justify-between mt-3 text-xs">
@@ -131,7 +131,7 @@ const SHELF_KEY = '***';
                   Sesi Çal &rarr;
                 </button>
                 <button onclick="saveToNatureShelf('${b.commonName.replace(/'/g, "\\\\'")}', '${b.sciName.replace(/'/g, "\\\\'")}', '${b.place.replace(/'/g, "\\\\'")}', '${b.photo}', '${b.soundUrl}')" class="p-1.5 text-mistral-slate hover:text-amber-400 transition" title="Doğa Defterime Kaydet">
-                  🔖
+                  
                 </button>
               </div>
             </div>
@@ -149,7 +149,7 @@ const SHELF_KEY = '***';
             console.warn('Ses kaynağı yüklenemedi:', audio.src);
             document.getElementById('player-badge-type').innerText = 'Hata';
             document.getElementById('btn-master-play').innerText = '▶';
-            showToast('⚠️ Ses dosyası yüklenemedi veya format desteklenmiyor.');
+            showToast('Ses dosyası yüklenemedi veya format desteklenmiyor.');
           };
 
           audio.src = url;
@@ -173,7 +173,7 @@ const SHELF_KEY = '***';
           }
 
           startVisualizer();
-          showToast(`🎵 Çalıyor: ${name}`);
+          showToast(`Çalıyor: ${name}`);
         }
 
         function toggleAudioPlay() {
@@ -327,7 +327,7 @@ const SHELF_KEY = '***';
             });
           }
           startVisualizer();
-          showToast('🎵 Quiz sesi çalıyor...');
+          showToast('Quiz sesi çalıyor...');
         }
 
         function handleQuizAnswer(selectedId) {
@@ -338,9 +338,9 @@ const SHELF_KEY = '***';
 
           if (isCorrect) {
             btn.className = 'p-3 rounded-2xl bg-emerald-600 border border-emerald-400 text-xs font-bold text-white transition text-center';
-            fb.innerText = `🎉 TEBRİKLER! Doğru bildiniz: ${quizTargetBird.commonName}`;
+            fb.innerText = `TEBRİKLER! Doğru bildiniz: ${quizTargetBird.commonName}`;
             fb.className = 'text-xs font-bold text-emerald-400';
-            showToast('✓ Harika bir doğa kulağı!');
+            showToast('Harika bir doğa kulağı!');
           } else {
             btn.className = 'p-3 rounded-2xl bg-rose-600 border border-rose-400 text-xs font-bold text-white transition text-center';
             fb.innerText = `Yanlış! Doğru cevap: ${quizTargetBird.commonName}`;
@@ -376,7 +376,7 @@ const SHELF_KEY = '***';
 
           localStorage.setItem(SHELF_KEY, JSON.stringify(shelf));
           renderNatureShelf();
-          showToast(`✓ "${commonName}" doğa defterinize eklendi!`);
+          showToast(`"${commonName}" doğa defterinize eklendi!`);
         }
 
         function renderNatureShelf() {
@@ -400,7 +400,7 @@ const SHELF_KEY = '***';
                 <span class="text-[9px] text-mistral-stone">${b.date}</span>
               </div>
               <button onclick="removeFromNatureShelf('${b.id}')" class="text-xs text-mistral-stone hover:text-rose-400 p-1 transition" title="Sil">
-                ✕
+                
               </button>
             </div>
           `).join('');

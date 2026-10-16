@@ -3,7 +3,7 @@ module.exports = function(pageTemplate) {
     const extraHead = `
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/unesco/app.js?v=20260927a" defer></script>
+      <script src="/static/apps/unesco/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -42,8 +42,8 @@ module.exports = function(pageTemplate) {
           <div class="sm:col-span-4">
             <select id="unesco-category-select" onchange="filterSites()" class="w-full px-3 py-2.5 rounded-lg bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange transition">
               <option value="all" selected>Tüm Kategoriler</option>
-              <option value="Kültürel">🏛️ Kültürel Miras</option>
-              <option value="Karma">🌋 Doğal & Karma Miras</option>
+              <option value="Kültürel">Kültürel Miras</option>
+              <option value="Karma">Doğal & Karma Miras</option>
             </select>
           </div>
         </div>
@@ -65,7 +65,7 @@ module.exports = function(pageTemplate) {
         <div class="p-3 rounded-2xl bg-white border border-mistral-hairline shadow-sm relative overflow-hidden">
           <div id="unesco-map" class="w-full h-[440px] rounded-xl z-10"></div>
           <div class="absolute bottom-6 left-6 z-20 bg-white/95 backdrop-blur border border-mistral-hairline px-3.5 py-2 rounded-lg shadow-sm text-xs text-mistral-ink flex items-center gap-3">
-            <span class="flex items-center gap-1.5 font-bold text-mistral-orange">🏛️ UNESCO Dünya Mirası Noktaları</span>
+            <span class="flex items-center gap-1.5 font-bold text-mistral-orange">UNESCO Dünya Mirası Noktaları</span>
           </div>
         </div>
 

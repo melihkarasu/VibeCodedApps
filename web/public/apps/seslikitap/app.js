@@ -113,11 +113,11 @@ let currentBooks = [];
             <div class="p-4 rounded-xl bg-white border ${isPlaying ? 'border-mistral-orange/40' : 'border-mistral-hairline hover:border-mistral-orange/40'} hover:shadow-md transition duration-200 flex flex-col justify-between gap-3">
               <div>
                 <div class="flex items-center justify-between gap-2 mb-1">
-                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep">🔖 Bölüm ${trackNo}</span>
+                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep">Bölüm ${trackNo}</span>
                   <span class="text-[10px] text-mistral-stone">${escapeHtml(pos)}</span>
                 </div>
                 <h3 class="text-sm font-bold text-mistral-ink leading-snug mb-0.5">${escapeHtml(p.bookTitle || p.bookId)}</h3>
-                <span class="text-xs text-mistral-slate block truncate">✍️ ${escapeHtml(p.authors || 'Bilinmiyor')}</span>
+                <span class="text-xs text-mistral-slate block truncate">${escapeHtml(p.authors || 'Bilinmiyor')}</span>
                 ${when ? `<span class="text-[10px] text-mistral-stone block mt-1">Son dinlenme: ${when}</span>` : ''}
               </div>
               <div class="pt-2 border-t border-mistral-hairline flex items-center justify-between gap-2">
@@ -244,7 +244,7 @@ let currentBooks = [];
             <div class="p-6 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-orange/40 hover:shadow-md transition duration-200 flex flex-col justify-between group">
               <div>
                 <div class="flex items-center justify-between mb-3">
-                  <span class="text-2xl">🎧</span>
+                  <span class="text-2xl"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
                   <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep">
                     ⬇️ ${(b.downloads || 0).toLocaleString('tr-TR')} dinlenme
                   </span>
@@ -252,7 +252,7 @@ let currentBooks = [];
                 <h3 class="text-lg font-bold font-editorial text-mistral-ink group-hover:text-mistral-orange transition truncate mb-1">
                   ${b.title}
                 </h3>
-                <span class="text-xs font-semibold text-mistral-slate block mb-2">✍️ ${b.authors}</span>
+                <span class="text-xs font-semibold text-mistral-slate block mb-2">${b.authors}</span>
                 <p class="text-xs text-mistral-slate line-clamp-3 leading-relaxed mb-4">
                   ${b.description}
                 </p>
@@ -464,7 +464,7 @@ let currentBooks = [];
 
         function updateMuteIcon() {
           const btn = document.getElementById('btn-mute');
-          if (btn) btn.innerText = (player.muted || player.volume === 0) ? '🔇' : '🔊';
+          if (btn) btn.innerHTML = (player.muted || player.volume === 0) ? '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>' : '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
         }
 
         function renderTrackList() {

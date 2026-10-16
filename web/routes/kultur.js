@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/kultur/app.css">
-      <script src="/static/apps/kultur/app.js?v=20261001a" defer></script>
+      <link rel="stylesheet" href="/static/apps/kultur/app.css?v=20261017a">
+      <script src="/static/apps/kultur/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -23,7 +23,7 @@ module.exports = function(pageTemplate) {
         <div id="player-profile-badge" class="flex items-center gap-3 p-2.5 px-4 rounded-2xl bg-white border border-mistral-hairline shadow-lg">
           <div class="relative w-10 h-10 rounded-full overflow-hidden bg-mistral-cream border border-yellow-500/50 flex items-center justify-center shrink-0">
             <img id="player-avatar" src="" class="hidden w-full h-full object-cover">
-            <span id="player-avatar-fallback" class="text-lg">👤</span>
+            <span id="player-avatar-fallback" class="text-lg"><svg class="w-5 h-5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
           </div>
           <div>
             <div class="flex items-center gap-2">
@@ -43,19 +43,19 @@ module.exports = function(pageTemplate) {
       <!-- ANA SEKMELER (TABS) -->
       <div class="flex flex-wrap gap-2 mb-8 border-b border-mistral-hairline pb-3">
         <button onclick="switchArenaTab('solo')" id="tab-btn-solo" class="tab-arena-btn px-4 py-2 rounded-xl text-xs font-bold bg-yellow-500 text-slate-950 transition flex items-center gap-2 shadow">
-          <span>🎯</span> Tek Başına Oyna
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span> Tek Başına Oyna
         </button>
         <button onclick="switchArenaTab('duel')" id="tab-btn-duel" class="tab-arena-btn px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-2">
-          <span>⚔️</span> 1v1 Düello Arenası
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="2"/></svg></span> 1v1 Düello Arenası
         </button>
         <button onclick="switchArenaTab('history')" id="tab-btn-history" class="tab-arena-btn px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-2">
-          <span>📜</span> Karşılaşma Geçmişi
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Karşılaşma Geçmişi
         </button>
         <button onclick="switchArenaTab('stats')" id="tab-btn-stats" class="tab-arena-btn px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-2">
-          <span>📊</span> İstatistik & Başarımlar
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span> İstatistik & Başarımlar
         </button>
         <button onclick="switchArenaTab('leaderboard')" id="tab-btn-leaderboard" class="tab-arena-btn px-4 py-2 rounded-xl text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-2">
-          <span>🏆</span> Liderlik Tablosu
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span> Liderlik Tablosu
         </button>
       </div>
 
@@ -66,7 +66,7 @@ module.exports = function(pageTemplate) {
         
         <!-- Oyun Başlatma Ekranı (Lobi) -->
         <div id="solo-lobby" class="p-8 rounded-3xl bg-white border border-mistral-hairline shadow-2xl max-w-2xl mx-auto space-y-6 text-center">
-          <div class="text-5xl mb-2">🏛️</div>
+          <div class="text-5xl mb-2"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></div>
           <div>
             <h2 class="text-2xl font-black text-mistral-ink">Kültür Arenası: Solo Yarışma</h2>
             <p class="text-mistral-slate text-sm mt-1">Kategori ve zorluğu seç, her soru için 15 saniyede en hızlı doğru cevabı vererek rekor skora ulaş!</p>
@@ -76,27 +76,27 @@ module.exports = function(pageTemplate) {
             <div>
               <label class="block text-xs font-semibold uppercase tracking-wider text-mistral-slate mb-1.5">Kategori Seçimi</label>
               <select id="solo-category" class="w-full px-4 py-3 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink focus:border-yellow-400 focus:outline-none">
-                <option value="all">🎲 Karışık (Tüm Kategoriler)</option>
-                <option value="cografya">🌍 Dünya Coğrafyası & Ülkeler</option>
-                <option value="tarih">🏛️ Dünya Tarihi & Medeniyetler</option>
-                <option value="bilim">🔬 Bilim, Teknoloji & Doğa</option>
-                <option value="sanat">🎨 Sanat, Sinema & Kültür</option>
+                <option value="all">Karışık (Tüm Kategoriler)</option>
+                <option value="cografya">Dünya Coğrafyası & Ülkeler</option>
+                <option value="tarih">Dünya Tarihi & Medeniyetler</option>
+                <option value="bilim">Bilim, Teknoloji & Doğa</option>
+                <option value="sanat">Sanat, Sinema & Kültür</option>
               </select>
             </div>
 
             <div>
               <label class="block text-xs font-semibold uppercase tracking-wider text-mistral-slate mb-1.5">Zorluk Derecesi</label>
               <select id="solo-difficulty" class="w-full px-4 py-3 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink focus:border-yellow-400 focus:outline-none">
-                <option value="easy">🟢 Kolay (Isınma Turları)</option>
-                <option value="medium" selected>🟡 Orta (Dengeli Mücadele)</option>
-                <option value="hard">🔴 Zor (Usta Bilgeler)</option>
+                <option value="easy">Kolay (Isınma Turları)</option>
+                <option value="medium" selected>Orta (Dengeli Mücadele)</option>
+                <option value="hard">Zor (Usta Bilgeler)</option>
               </select>
             </div>
           </div>
 
           <div class="pt-2">
             <button onclick="startSoloGame()" class="w-full sm:w-auto px-10 py-4 rounded-2xl bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-base shadow-xl shadow-yellow-500/20 transition transform hover:scale-105">
-              🚀 Yarışmayı Başlat (10 Soru)
+              Yarışmayı Başlat (10 Soru)
             </button>
           </div>
         </div>
@@ -116,7 +116,7 @@ module.exports = function(pageTemplate) {
               </div>
               <div class="text-right">
                 <span class="text-[10px] text-mistral-slate block uppercase">Seri</span>
-                <span id="game-streak-display" class="font-extrabold text-sm text-rose-400 font-mono">🔥 0</span>
+                <span id="game-streak-display" class="font-extrabold text-sm text-rose-400 font-mono">0</span>
               </div>
             </div>
           </div>
@@ -141,7 +141,7 @@ module.exports = function(pageTemplate) {
 
         <!-- Sonuç ve Skor Ekranı -->
         <div id="solo-results" class="hidden p-8 rounded-3xl bg-white border border-mistral-hairline max-w-xl mx-auto text-center space-y-6 shadow-2xl">
-          <div id="results-icon" class="text-6xl">🏆</div>
+          <div id="results-icon" class="text-6xl"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
           <div>
             <h2 id="results-title" class="text-3xl font-black text-mistral-ink">Tebrikler!</h2>
             <p id="results-desc" class="text-mistral-slate text-sm mt-1">Yarışmayı başarıyla tamamladın.</p>
@@ -184,7 +184,7 @@ module.exports = function(pageTemplate) {
           <!-- Sol: Oda Oluştur -->
           <div class="p-6 rounded-3xl bg-white border border-mistral-hairline shadow-xl space-y-4">
             <div class="flex items-center gap-3 mb-2">
-              <span class="text-3xl">⚔️</span>
+              <span class="text-3xl"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="2"/></svg></span>
               <div>
                 <h3 class="text-lg font-bold text-mistral-ink">Yeni Düello Odası Kur</h3>
                 <p class="text-xs text-mistral-slate">Oda kodunu arkadaşınla paylaş, aynı sorularla yarışın.</p>
@@ -195,11 +195,11 @@ module.exports = function(pageTemplate) {
               <div>
                 <label class="block text-xs font-semibold text-mistral-slate mb-1">Düello Kategorisi</label>
                 <select id="duel-cat-select" class="w-full px-3 py-2.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink">
-                  <option value="all">🎲 Karışık Kültür Arenası</option>
-                  <option value="cografya">🌍 Dünya Coğrafyası</option>
-                  <option value="tarih">🏛️ Dünya Tarihi</option>
-                  <option value="bilim">🔬 Bilim & Teknoloji</option>
-                  <option value="sanat">🎨 Sanat & Sinema</option>
+                  <option value="all">Karışık Kültür Arenası</option>
+                  <option value="cografya">Dünya Coğrafyası</option>
+                  <option value="tarih">Dünya Tarihi</option>
+                  <option value="bilim">Bilim & Teknoloji</option>
+                  <option value="sanat">Sanat & Sinema</option>
                 </select>
               </div>
 
@@ -223,7 +223,7 @@ module.exports = function(pageTemplate) {
               <div id="display-room-code" class="text-2xl font-black text-yellow-400 font-mono tracking-wider">ARENA-0000</div>
               <p class="text-[11px] text-mistral-slate">Arkadaşınız bu kodu girerek aynı sorularla yarışabilir.</p>
               <button onclick="copyRoomLink()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-mistral-cream text-xs text-mistral-ink transition">
-                🔗 Oda Bağlantısını Kopyala
+                Oda Bağlantısını Kopyala
               </button>
             </div>
           </div>
@@ -232,7 +232,7 @@ module.exports = function(pageTemplate) {
           <div class="p-6 rounded-3xl bg-white border border-mistral-hairline shadow-xl space-y-4 flex flex-col justify-between">
             <div>
               <div class="flex items-center gap-3 mb-2">
-                <span class="text-3xl">🚪</span>
+                <span class="text-3xl"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></span>
                 <div>
                   <h3 class="text-lg font-bold text-mistral-ink">Mevcut Bir Odaya Katıl</h3>
                   <p class="text-xs text-mistral-slate">Arkadaşının gönderdiği 6 haneli oda kodunu gir.</p>
@@ -256,7 +256,7 @@ module.exports = function(pageTemplate) {
 
         <!-- Düello Sonuç Karşılaştırma Ekranı -->
         <div id="duel-comparison-card" class="hidden p-8 rounded-3xl bg-white border border-mistral-hairline max-w-2xl mx-auto shadow-2xl space-y-6 text-center">
-          <div class="text-5xl" id="duel-verdict-icon">⚔️</div>
+          <div class="text-5xl" id="duel-verdict-icon"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="2"/></svg></div>
           <div>
             <h2 id="duel-verdict-title" class="text-2xl font-black text-mistral-ink">Düello Tamamlandı!</h2>
             <p id="duel-verdict-desc" class="text-mistral-slate text-xs mt-1">İki oyuncunun skor ve süre karşılaştırması:</p>
@@ -267,7 +267,7 @@ module.exports = function(pageTemplate) {
             <div id="duel-p1-box" class="p-4 rounded-2xl bg-white border border-mistral-hairline">
               <div class="w-12 h-12 rounded-full mx-auto mb-2 overflow-hidden bg-white flex items-center justify-center">
                 <img id="duel-p1-avatar" src="" class="hidden w-full h-full object-cover">
-                <span id="duel-p1-fallback">👤</span>
+                <span id="duel-p1-fallback"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
               </div>
               <h4 id="duel-p1-name" class="font-bold text-sm text-mistral-ink truncate">Oyuncu 1</h4>
               <div id="duel-p1-score" class="text-xl font-black text-yellow-400 font-mono mt-1">0 Puan</div>
@@ -277,7 +277,7 @@ module.exports = function(pageTemplate) {
             <div id="duel-p2-box" class="p-4 rounded-2xl bg-white border border-mistral-hairline">
               <div class="w-12 h-12 rounded-full mx-auto mb-2 overflow-hidden bg-white flex items-center justify-center">
                 <img id="duel-p2-avatar" src="" class="hidden w-full h-full object-cover">
-                <span id="duel-p2-fallback">👤</span>
+                <span id="duel-p2-fallback"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
               </div>
               <h4 id="duel-p2-name" class="font-bold text-sm text-mistral-ink truncate">Rakip Bekleniyor...</h4>
               <div id="duel-p2-score" class="text-xl font-black text-mistral-stone font-mono mt-1">-</div>
@@ -297,7 +297,7 @@ module.exports = function(pageTemplate) {
         <div class="flex items-center justify-between">
           <div>
             <h3 class="text-lg font-bold text-mistral-ink flex items-center gap-2">
-              <span>📜</span> Düello & Karşılaşma Karnesi
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Düello & Karşılaşma Karnesi
             </h3>
             <p class="text-xs text-mistral-slate">Arkadaşlarınızla ve rakiplerinizle yaptığınız 1v1 düelloların sonuçları.</p>
           </div>
@@ -320,7 +320,7 @@ module.exports = function(pageTemplate) {
         <!-- İstatistik Özet Kartları -->
         <div>
           <h3 class="text-base font-bold text-mistral-ink mb-3 flex items-center gap-2">
-            <span>📊</span> Performans Göstergeleri
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span> Performans Göstergeleri
           </h3>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div class="p-4 rounded-2xl bg-white border border-mistral-hairline text-center">
@@ -345,7 +345,7 @@ module.exports = function(pageTemplate) {
         <!-- Başarımlar & Rozetler (Achievements) -->
         <div>
           <h3 class="text-base font-bold text-mistral-ink mb-3 flex items-center gap-2">
-            <span>🏅</span> Başarımlar & Rozetler
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span> Başarımlar & Rozetler
           </h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="achievements-container">
             <!-- JS ile doldurulur -->
@@ -360,7 +360,7 @@ module.exports = function(pageTemplate) {
       <div id="tab-content-leaderboard" class="arena-tab-content hidden space-y-6">
         <div>
           <h3 class="text-lg font-bold text-mistral-ink flex items-center gap-2">
-            <span>🏆</span> Kültür Arenası Liderlik Sıralaması
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span> Kültür Arenası Liderlik Sıralaması
           </h3>
           <p class="text-xs text-mistral-slate">En yüksek XP ve puana sahip en iyi yarışmacılar.</p>
         </div>

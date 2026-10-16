@@ -57,7 +57,7 @@ let allCountries = [];
               </div>
 
               <div class="mt-4 pt-3 border-t border-mistral-hairline flex items-center justify-between text-[11px] text-mistral-stone font-medium">
-                <span>👥 ${Number(c.population).toLocaleString('tr-TR')}</span>
+                <span>${Number(c.population).toLocaleString('tr-TR')}</span>
                 <span class="text-mistral-orange font-semibold group-hover:translate-x-0.5 transition-transform">İncele &rarr;</span>
               </div>
             </div>

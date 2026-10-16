@@ -134,7 +134,7 @@ router.get('/dso/country', async (req, res) => {
     return res.status(400).json({ success: false, error: 'Geçersiz 3 haneli ISO ülke kodu (örn. TUR, DEU, USA).' });
   }
 
-  const countryInfo = DSO_COUNTRIES.find(c => c.code === code) || { code, name: code, flag: "🌐" };
+  const countryInfo = DSO_COUNTRIES.find(c => c.code === code) || { code, name: code, flag: "" };
 
   try {
     const data = await getCachedJson(`dso_country_${code}`, async () => {

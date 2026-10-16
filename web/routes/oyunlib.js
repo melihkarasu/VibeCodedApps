@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/oyunlib/app.js?v=20260926d" defer></script>
+      <script src="/static/apps/oyunlib/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -61,7 +61,6 @@ module.exports = function(pageTemplate) {
       <!-- OYUN KARTLARI IZGARASI -->
       <div id="games-loading" class="py-16 text-center">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold">
-          <span class="w-2.5 h-2.5 rounded-full bg-mistral-orange animate-ping"></span>
           <span>Oyun kütüphanesi taranıyor...</span>
         </div>
       </div>

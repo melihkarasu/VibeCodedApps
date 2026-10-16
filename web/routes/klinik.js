@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/klinik/app.css?v=2.0" />
-      <script src="/static/apps/klinik/app.js?v=2.0" defer></script>
+      <link rel="stylesheet" href="/static/apps/klinik/app.css?v=20261017a.0" />
+      <script src="/static/apps/klinik/app.js?v=20261017a.0" defer></script>
     `;
 
     const content = `
@@ -21,7 +21,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-medium">NIH ClinicalTrials v2 Bağlı</span>
         </div>
       </div>
@@ -51,7 +50,7 @@ module.exports = function(pageTemplate) {
             onclick="toggleTurkeyOnly()" 
             id="btn-toggle-turkey"
             class="px-4 py-3 rounded-lg bg-white border border-mistral-hairline hover:bg-mistral-cream text-mistral-ink text-xs sm:text-sm font-semibold transition cursor-pointer flex items-center justify-center gap-2 shrink-0">
-            <span>🌍 Küresel / Tüm Ülkeler</span>
+            <span>Küresel / Tüm Ülkeler</span>
           </button>
 
           <!-- Ara Butonu -->
@@ -69,12 +68,12 @@ module.exports = function(pageTemplate) {
           <span class="font-medium text-mistral-stone mr-1 flex items-center gap-1">
             <i class="fa-solid fa-bolt text-mistral-orange text-[10px]"></i> Popüler Alanlar:
           </span>
-          <button type="button" onclick="selectPresetCondition('kanser')" id="cond-kanser" class="preset-cond-btn active px-2.5 py-1 rounded-md bg-stone-900 text-white font-medium cursor-pointer">🎗️ Kanser / Onkoloji</button>
-          <button type="button" onclick="selectPresetCondition('diyabet')" id="cond-diyabet" class="preset-cond-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium cursor-pointer">🩸 Diyabet</button>
-          <button type="button" onclick="selectPresetCondition('alzheimer')" id="cond-alzheimer" class="preset-cond-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium cursor-pointer">🧠 Alzheimer & Nöroloji</button>
-          <button type="button" onclick="selectPresetCondition('kalp')" id="cond-kalp" class="preset-cond-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium cursor-pointer">❤️ Kardiyovasküler</button>
-          <button type="button" onclick="selectPresetCondition('mrna')" id="cond-mrna" class="preset-cond-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium cursor-pointer">🧬 mRNA & Gen Terapisi</button>
-          <button type="button" onclick="selectPresetCondition('astım')" id="cond-astım" class="preset-cond-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium cursor-pointer">🫁 Astım & Solunum</button>
+          <button type="button" onclick="selectPresetCondition('kanser')" id="cond-kanser" class="preset-cond-btn active px-2.5 py-1 rounded-md bg-stone-900 text-white font-medium cursor-pointer">Kanser / Onkoloji</button>
+          <button type="button" onclick="selectPresetCondition('diyabet')" id="cond-diyabet" class="preset-cond-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium cursor-pointer">Diyabet</button>
+          <button type="button" onclick="selectPresetCondition('alzheimer')" id="cond-alzheimer" class="preset-cond-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium cursor-pointer">Alzheimer & Nöroloji</button>
+          <button type="button" onclick="selectPresetCondition('kalp')" id="cond-kalp" class="preset-cond-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium cursor-pointer">Kardiyovasküler</button>
+          <button type="button" onclick="selectPresetCondition('mrna')" id="cond-mrna" class="preset-cond-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium cursor-pointer">mRNA & Gen Terapisi</button>
+          <button type="button" onclick="selectPresetCondition('astım')" id="cond-astım" class="preset-cond-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium cursor-pointer">Astım & Solunum</button>
         </div>
 
         <!-- Faz Aşama Filtreleri -->
@@ -139,7 +138,7 @@ module.exports = function(pageTemplate) {
         <!-- Takip Listesi Kutusu -->
         <div id="followed-items-container">
           <div class="p-8 text-center rounded-xl bg-amber-50/40 border border-dashed border-amber-200 text-xs text-mistral-stone">
-            Henüz takip ettiğiniz bir klinik çalışma yok. Aşağıdaki katalogda yer alan araştırmaların üzerindeki <strong>"☆ Takip Et"</strong> butonuna tıklayarak çalışmaları buraya sabitleyebilir, canlı faz ve kabul durumlarını izleyebilirsiniz.
+            Henüz takip ettiğiniz bir klinik çalışma yok. Aşağıdaki katalogda yer alan araştırmaların üzerindeki <strong>"Takip Et"</strong> butonuna tıklayarak çalışmaları buraya sabitleyebilir, canlı faz ve kabul durumlarını izleyebilirsiniz.
           </div>
         </div>
       </div>

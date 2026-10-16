@@ -60,7 +60,7 @@ let allPrizes = [];
             const laureatesHtml = (p.laureates || []).map(l => `
               <div class="p-3 rounded-lg bg-mistral-cream/50 border border-mistral-beige-deep/80 space-y-1">
                 <h4 class="font-bold text-sm font-editorial text-mistral-ink flex items-center gap-1.5">
-                  <span>🎖️</span> ${l.name}
+                  <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span> ${l.name}
                 </h4>
                 <p class="text-xs text-mistral-slate leading-relaxed italic">
                   "${l.motivation}"
@@ -88,7 +88,7 @@ let allPrizes = [];
                 </div>
 
                 <div class="pt-3 border-t border-mistral-hairline flex items-center justify-between text-[11px] text-mistral-stone font-mono">
-                  <span>💰 Ödül: ${Number(p.prizeAmount || 0).toLocaleString('en-US')} SEK</span>
+                  <span>Ödül: ${Number(p.prizeAmount || 0).toLocaleString('en-US')} SEK</span>
                   <span class="text-mistral-orange font-bold font-sans">Nobel Vakfı Resmi</span>
                 </div>
               </div>

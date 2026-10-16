@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <script src="/static/apps/kripto/app.js?v=20260926o" defer></script>
+      <script src="/static/apps/kripto/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -21,7 +21,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-medium" id="kripto-update-time">Canlı Piyasa Açık</span>
         </div>
       </div>
@@ -29,7 +28,7 @@ module.exports = function(pageTemplate) {
       <!-- TREND OLAN TOKENLAR ŞERİDİ -->
       <div class="p-4 rounded-xl bg-mistral-cream border border-mistral-beige-deep mb-8 flex flex-col sm:flex-row items-start sm:items-center gap-3 text-xs">
         <span class="font-bold text-mistral-ink flex items-center gap-1.5 shrink-0">
-          <span>🔥</span> Popüler Trendler:
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span> Popüler Trendler:
         </span>
         <div id="trending-container" class="flex flex-wrap items-center gap-2">
           <span class="text-mistral-stone">Trendler taranıyor...</span>
@@ -76,7 +75,7 @@ module.exports = function(pageTemplate) {
         <div class="lg:col-span-4 space-y-6">
           <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm space-y-4">
             <h3 class="text-base font-bold font-editorial text-mistral-ink flex items-center gap-2">
-              <span>🧮</span> Hızlı Varlık Dönüştürücü
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span> Hızlı Varlık Dönüştürücü
             </h3>
             
             <div>
@@ -101,7 +100,7 @@ module.exports = function(pageTemplate) {
           <!-- Bilgi Kartı -->
           <div class="p-5 rounded-xl bg-mistral-cream-light border border-mistral-beige-deep text-xs text-mistral-slate space-y-2">
             <div class="font-bold text-mistral-ink flex items-center gap-1.5">
-              <span>🛡️</span> Güvenli ve Açık Veri
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Güvenli ve Açık Veri
             </div>
             <p class="leading-relaxed">
               Veriler CoinGecko genel API uç noktalarından çekilir ve 60 saniyelik aralıklarla önbelleğe alınır. Sayfada yer alan fiyatlar ve hesaplamalar bilgilendirme amaçlıdır; yatırım tavsiyesi niteliği taşımaz.

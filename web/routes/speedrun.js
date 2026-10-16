@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/speedrun/app.js?v=20260926e" defer></script>
+      <script src="/static/apps/speedrun/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -20,7 +20,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
           <span class="font-medium" id="speedrun-status">Canlı Rekorlar Açık</span>
         </div>
       </div>
@@ -28,7 +27,6 @@ module.exports = function(pageTemplate) {
       <!-- REKOR KARTLARI IZGARASI -->
       <div id="speedrun-loading" class="py-16 text-center">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold">
-          <span class="w-2.5 h-2.5 rounded-full bg-mistral-orange animate-ping"></span>
           <span>Speedrun.com dünya rekorları taranıyor...</span>
         </div>
       </div>
@@ -40,7 +38,7 @@ module.exports = function(pageTemplate) {
       <!-- BİLGİ VE REKOR KONSEPTİ KARTI -->
       <div class="p-6 rounded-2xl bg-mistral-cream border border-mistral-beige-deep text-xs text-mistral-slate space-y-3 mb-16">
         <h3 class="text-sm font-bold font-editorial text-mistral-ink flex items-center gap-2">
-          <span>🏆</span> Speedrun Kategorileri Ne Anlama Gelir?
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span> Speedrun Kategorileri Ne Anlama Gelir?
         </h3>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
           <div class="p-3 rounded-xl bg-white border border-mistral-hairline">

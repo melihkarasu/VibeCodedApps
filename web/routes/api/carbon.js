@@ -126,7 +126,7 @@ router.get('/carbon/badge', (req, res) => {
     <rect width="220" height="28" rx="6" fill="#0f172a"/>
     <rect width="130" height="28" rx="6" fill="#1e293b"/>
     <rect x="130" width="90" height="28" rx="6" fill="${bgCol}"/>
-    <text x="12" y="18" fill="#e2e8f0" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif" font-size="11" font-weight="600">🌱 ${host.slice(0, 14)}</text>
+    <text x="12" y="18" fill="#e2e8f0" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif" font-size="11" font-weight="600">${host.slice(0, 14)}</text>
     <text x="142" y="18" fill="#ffffff" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif" font-size="11" font-weight="700">${co2Text} • ${gradeText}</text>
   </svg>`;
 

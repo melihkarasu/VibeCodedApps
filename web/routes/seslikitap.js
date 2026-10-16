@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/seslikitap/app.js?v=20260929a" defer></script>
+      <script src="/static/apps/seslikitap/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -20,7 +20,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-medium" id="audio-books-count">Ses Arşivi Açık</span>
         </div>
       </div>
@@ -28,9 +27,7 @@ module.exports = function(pageTemplate) {
       <!-- ÇALAN SESLİ KİTAP KARTI (STICKY AUDIO DOCK) -->
       <div id="audiobook-dock" class="p-6 rounded-2xl bg-white border border-mistral-orange/40 shadow-md mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 transition">
         <div class="flex items-center gap-4 w-full sm:w-auto">
-          <div class="w-14 h-14 rounded-xl bg-mistral-cream border border-mistral-beige-deep flex items-center justify-center text-2xl shrink-0">
-            📖
-          </div>
+          <div class="w-14 h-14 rounded-xl bg-mistral-cream border border-mistral-beige-deep flex items-center justify-center text-2xl shrink-0"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
           <div class="min-w-0">
             <span class="text-[10px] font-bold text-mistral-orange uppercase tracking-wider block" id="dock-status">SESLİ KİTAP SEÇİN</span>
             <h3 class="text-lg font-bold font-editorial text-mistral-ink truncate" id="dock-title">Dinlemek İstediğiniz Eseri Seçin</h3>
@@ -87,10 +84,10 @@ module.exports = function(pageTemplate) {
             </select>
           </div>
           <div class="flex items-center gap-2 flex-1 max-w-[240px]">
-            <button onclick="toggleMute()" id="btn-mute" class="text-mistral-ink hover:text-mistral-orange transition text-base cursor-pointer" title="Sessize Al">🔊</button>
+            <button onclick="toggleMute()" id="btn-mute" class="text-mistral-ink hover:text-mistral-orange transition text-base cursor-pointer" title="Sessize Al"></button>
             <input type="range" id="volume-bar" min="0" max="1" step="0.05" value="1" class="flex-1 accent-orange-600 cursor-pointer" oninput="setVolume(this.value)">
           </div>
-          <span class="text-[10px] text-mistral-stone hidden sm:inline" id="progress-sync-note">💡 Kaldığınız yer otomatik kaydedilir</span>
+          <span class="text-[10px] text-mistral-stone hidden sm:inline" id="progress-sync-note">Kaldığınız yer otomatik kaydedilir</span>
         </div>
 
         <!-- Bölüm Listesi -->
@@ -105,7 +102,7 @@ module.exports = function(pageTemplate) {
         <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm space-y-4">
           <div class="flex items-center justify-between">
             <h2 class="text-xl font-bold font-editorial text-mistral-ink flex items-center gap-2">
-              <span>📚</span> Kitaplığım
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Kitaplığım
               <span id="my-library-count" class="px-2 py-0.5 rounded bg-mistral-cream border border-mistral-beige-deep text-mistral-ink font-mono text-xs font-bold">0</span>
             </h2>
           </div>
@@ -139,18 +136,17 @@ module.exports = function(pageTemplate) {
         <!-- Hızlı Eserler -->
         <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-mistral-hairline text-xs">
           <span class="text-mistral-stone font-medium mr-1">Örnek Başyapıtlar:</span>
-          <button onclick="quickSearch('Sherlock Holmes')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🕵️‍♂️ Sherlock Holmes</button>
-          <button onclick="quickSearch('Dracula')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🧛 Dracula</button>
-          <button onclick="quickSearch('Monte Cristo')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">⚔️ Monte Cristo</button>
-          <button onclick="quickSearch('Frankenstein')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">⚡ Frankenstein</button>
-          <button onclick="quickSearch('Alice in Wonderland')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🐇 Alice in Wonderland</button>
+          <button onclick="quickSearch('Sherlock Holmes')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">‍Sherlock Holmes</button>
+          <button onclick="quickSearch('Dracula')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Dracula</button>
+          <button onclick="quickSearch('Monte Cristo')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Monte Cristo</button>
+          <button onclick="quickSearch('Frankenstein')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Frankenstein</button>
+          <button onclick="quickSearch('Alice in Wonderland')" class="px-2.5 py-1 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Alice in Wonderland</button>
         </div>
       </div>
 
       <!-- KİTAP KARTLARI IZGARASI -->
       <div id="books-loading" class="py-16 text-center">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold">
-          <span class="w-2.5 h-2.5 rounded-full bg-mistral-orange animate-ping"></span>
           <span>LibriVox sesli kitap arşivi taranıyor...</span>
         </div>
       </div>

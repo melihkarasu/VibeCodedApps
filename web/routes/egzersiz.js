@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/egzersiz/app.css?v=2.0" />
-      <script src="/static/apps/egzersiz/app.js?v=2.0" defer></script>
+      <link rel="stylesheet" href="/static/apps/egzersiz/app.css?v=20261017a.0" />
+      <script src="/static/apps/egzersiz/app.js?v=20261017a.0" defer></script>
     `;
 
     const content = `
@@ -21,7 +21,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-medium">workout-cool & Wger Bağlı</span>
         </div>
       </div>
@@ -169,7 +168,7 @@ module.exports = function(pageTemplate) {
 
             <!-- İpucu & Bilgi -->
             <p class="text-[11px] text-center text-mistral-stone leading-normal">
-              💡 <strong>İpucu:</strong> Vücut üzerindeki kas gruplarına doğrudan tıklayarak hedeflenen egzersizleri ve fizik tedavi hareketlerini filtreleyebilirsiniz.
+              <strong>İpucu:</strong> Vücut üzerindeki kas gruplarına doğrudan tıklayarak hedeflenen egzersizleri ve fizik tedavi hareketlerini filtreleyebilirsiniz.
             </p>
 
           </div>
@@ -182,7 +181,7 @@ module.exports = function(pageTemplate) {
           <div class="p-5 rounded-2xl bg-white border border-mistral-hairline shadow-sm">
             <div id="selected-muscle-info">
               <div class="flex items-center gap-2">
-                <span class="text-xl">🏋️</span>
+                <span class="text-xl"><svg class="w-5 h-5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
                 <div>
                   <strong class="text-sm text-mistral-ink font-bold block">Tüm Vücut Egzersiz Kütüphanesi</strong>
                   <span class="text-xs text-mistral-slate">workout-cool ve Wger standartlarında derlenmiş 800+ hareket rehberi.</span>
@@ -230,13 +229,11 @@ module.exports = function(pageTemplate) {
 
       </div>
 
-      <!-- 📋 KİŞİSEL SPOR PROGRAMIM (ANTRENMAN RUTİNİ) PANELİ -->
+      <!-- KİŞİSEL SPOR PROGRAMIM (ANTRENMAN RUTİNİ) PANELİ -->
       <div id="workout-routine-section" class="mb-12 p-6 rounded-2xl bg-white border-2 border-mistral-orange/40 shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-mistral-hairline">
           <div class="flex items-center gap-3">
-            <span class="w-10 h-10 rounded-xl bg-mistral-cream border border-mistral-beige-deep text-mistral-orange flex items-center justify-center text-xl shrink-0">
-              📋
-            </span>
+            <span class="w-10 h-10 rounded-xl bg-mistral-cream border border-mistral-beige-deep text-mistral-orange flex items-center justify-center text-xl shrink-0"><svg class="w-5 h-5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
             <div>
               <div class="flex items-center gap-2">
                 <h2 class="text-xl font-bold font-editorial text-mistral-ink tracking-tight">Kişisel Spor Programım</h2>
@@ -295,7 +292,7 @@ module.exports = function(pageTemplate) {
         <!-- Program Listesi Tablosu / Kutusu -->
         <div id="routine-items-container">
           <div class="p-8 text-center rounded-xl bg-stone-50 border border-dashed border-stone-200 text-xs text-mistral-stone">
-            Henüz programınıza egzersiz eklemediniz. Aşağıdaki egzersiz kartlarındaki <strong>"➕ Programa Ekle"</strong> butonuna tıklayarak hareketleri buraya toplayabilirsiniz.
+            Henüz programınıza egzersiz eklemediniz. Aşağıdaki egzersiz kartlarındaki <strong>"Programa Ekle"</strong> butonuna tıklayarak hareketleri buraya toplayabilirsiniz.
           </div>
         </div>
 

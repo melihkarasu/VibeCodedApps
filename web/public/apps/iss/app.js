@@ -21,7 +21,7 @@ let map = null;
 
           // Özel ISS İkonu
           const issIcon = L.divIcon({
-            html: '<div style="font-size: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); transform: translate(-13px, -13px);">🛰️</div>',
+            html: '<div style="font-size: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); transform: translate(-13px, -13px);"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>',
             className: 'custom-iss-icon',
             iconSize: [26, 26]
           });

@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/github/app.css">
-      <script src="/static/apps/github/app.js?v=20260926u" defer></script>
+      <link rel="stylesheet" href="/static/apps/github/app.css?v=20261017a">
+      <script src="/static/apps/github/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -20,7 +20,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-slate">
-          <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
           <span>GitHub REST API v3</span>
         </div>
       </div>
@@ -37,7 +36,7 @@ module.exports = function(pageTemplate) {
               <span class="absolute left-3.5 top-3 text-mistral-stone text-base">@</span>
             </div>
             <button onclick="runGithubAnalysis()" id="btn-analyze" class="px-7 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-sm transition shadow-lg shadow-purple-500/20 shrink-0 flex items-center justify-center gap-2">
-              <span>🚀</span> Profili Analiz Et
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> Profili Analiz Et
             </button>
           </div>
         </div>
@@ -80,9 +79,9 @@ module.exports = function(pageTemplate) {
 
               <!-- Ek Bilgiler (Şirket, Lokasyon, Blog) -->
               <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 mt-3 pt-3 border-t border-mistral-hairline text-xs text-mistral-slate">
-                <span id="meta-company" class="flex items-center gap-1.5 truncate">🏢 -</span>
-                <span id="meta-location" class="flex items-center gap-1.5 truncate">📍 -</span>
-                <a id="meta-blog" href="#" target="_blank" rel="noopener" class="text-purple-400 hover:underline flex items-center gap-1.5 truncate">🔗 -</a>
+                <span id="meta-company" class="flex items-center gap-1.5 truncate">-</span>
+                <span id="meta-location" class="flex items-center gap-1.5 truncate">-</span>
+                <a id="meta-blog" href="#" target="_blank" rel="noopener" class="text-purple-400 hover:underline flex items-center gap-1.5 truncate">-</a>
               </div>
             </div>
 
@@ -96,7 +95,7 @@ module.exports = function(pageTemplate) {
             </div>
             <div class="p-4 rounded-2xl bg-white border border-mistral-hairline text-center">
               <span class="text-[10px] text-mistral-slate uppercase font-semibold">Yıldızlanan (Starred)</span>
-              <div id="stat-starred" class="text-xl sm:text-2xl font-black text-purple-600 font-mono mt-1">🌟 0</div>
+              <div id="stat-starred" class="text-xl sm:text-2xl font-black text-purple-600 font-mono mt-1">0</div>
             </div>
             <div class="p-4 rounded-2xl bg-white border border-mistral-hairline text-center">
               <span class="text-[10px] text-mistral-slate uppercase font-semibold">Açık Repo</span>
@@ -119,10 +118,10 @@ module.exports = function(pageTemplate) {
             <div>
               <div class="flex items-center gap-2 mb-1">
                 <button onclick="switchLangTab('starred')" id="tab-lang-starred" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-purple-600 text-white transition shadow-sm flex items-center gap-1.5 cursor-pointer">
-                  <span>🌟</span> Takip Edilen Projeler (İlgi Alanları)
+                  <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span> Takip Edilen Projeler (İlgi Alanları)
                 </button>
                 <button onclick="switchLangTab('owned')" id="tab-lang-owned" class="px-3.5 py-1.5 rounded-xl text-xs font-medium text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition flex items-center gap-1.5 cursor-pointer">
-                  <span>💻</span> Bizzat Yazılan Projeler
+                  <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span> Bizzat Yazılan Projeler
                 </button>
               </div>
               <p class="text-mistral-slate text-xs mt-0.5" id="lang-tab-desc">Yıldızladığınız açık kaynak projelerin teknoloji ve dil dağılımı:</p>
@@ -146,7 +145,7 @@ module.exports = function(pageTemplate) {
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h3 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-                <span>🏷️</span> GitHub Profilinize Gömülebilir SVG İstatistik Kartı
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></span> GitHub Profilinize Gömülebilir SVG İstatistik Kartı
               </h3>
               <p class="text-mistral-slate text-xs mt-0.5">
                 Kendi GitHub README.md dosyanıza veya kişisel portföyünüze ekleyebileceğiniz dinamik kart:
@@ -196,10 +195,10 @@ module.exports = function(pageTemplate) {
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-mistral-hairline">
             <div class="flex items-center gap-2">
               <button onclick="switchRepoTab('starred')" id="tab-btn-starred" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-purple-600 text-white transition shadow-sm flex items-center gap-1.5 cursor-pointer">
-                <span>🌟</span> Yıldızlanan Repolar (<span id="tab-count-starred">0</span>)
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span> Yıldızlanan Repolar (<span id="tab-count-starred">0</span>)
               </button>
               <button onclick="switchRepoTab('owned')" id="tab-btn-owned" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition flex items-center gap-1.5 cursor-pointer">
-                <span>📦</span> Kendi Repoları (<span id="tab-count-owned">0</span>)
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></span> Kendi Repoları (<span id="tab-count-owned">0</span>)
               </button>
             </div>
             <span class="text-xs text-mistral-stone font-mono" id="repo-view-hint">Yıldızlanan projeler listeleniyor</span>

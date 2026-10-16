@@ -2,8 +2,8 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     // Dijital Kütüphane Özel Varlıkları (Cache Destekli Modüler CSS & JS)
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/kutuphane/app.css">
-      <script src="/static/apps/kutuphane/app.js" defer></script>
+      <link rel="stylesheet" href="/static/apps/kutuphane/app.css?v=20261017a">
+      <script src="/static/apps/kutuphane/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -21,7 +21,6 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-slate">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span>Project Gutenberg Açık Arşivi</span>
         </div>
       </div>
@@ -30,7 +29,7 @@ module.exports = function(pageTemplate) {
       <div class="p-6 rounded-3xl bg-white border border-mistral-hairline shadow-md mb-8 space-y-4">
         <div class="flex items-center justify-between">
           <h2 class="text-sm font-bold text-mistral-ink uppercase tracking-wider flex items-center gap-2">
-            <span>🔍</span> İsimle veya Yazarla Kitap Ara
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span> İsimle veya Yazarla Kitap Ara
           </h2>
           <span class="text-xs text-mistral-stone font-mono">Project Gutenberg & Açık Arşiv</span>
         </div>
@@ -75,9 +74,9 @@ module.exports = function(pageTemplate) {
         <div id="search-results-section" class="hidden pt-4 border-t border-mistral-hairline space-y-3">
           <div class="flex items-center justify-between">
             <h3 class="text-xs font-bold text-mistral-ink uppercase tracking-wider flex items-center gap-1.5" id="search-results-header">
-              <span>📚</span> Arama Sonuçları
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Arama Sonuçları
             </h3>
-            <button onclick="closeSearchResults()" class="text-xs text-mistral-slate hover:text-mistral-ink cursor-pointer">Sonuçları Kapat ✕</button>
+            <button onclick="closeSearchResults()" class="text-xs text-mistral-slate hover:text-mistral-ink cursor-pointer">Sonuçları Kapat </button>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4" id="search-results-grid">
             <!-- app.js ile doldurulur -->
@@ -90,7 +89,7 @@ module.exports = function(pageTemplate) {
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 class="text-sm font-bold text-mistral-ink uppercase tracking-wider flex items-center gap-2">
-              <span>🏛️</span> Seçkin Dünya Edebiyatı Klasikleri
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></span> Seçkin Dünya Edebiyatı Klasikleri
             </h2>
             <p class="text-mistral-slate text-xs mt-0.5">
               Aşağıdaki başyapıtlardan birine tıklayarak anında tam metin e-kitap okuyucuyu başlatın:
@@ -125,7 +124,7 @@ module.exports = function(pageTemplate) {
       <div class="p-6 rounded-3xl bg-white border border-mistral-hairline shadow-xl mb-8 space-y-4">
         <div class="flex items-center justify-between">
           <h3 class="text-sm font-bold text-mistral-ink flex items-center gap-2">
-            <span>📚</span> Kişisel Kitaplığım & Kaldığım Yerler
+            <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Kişisel Kitaplığım & Kaldığım Yerler
           </h3>
           <button onclick="clearShelf()" class="text-xs text-rose-400 hover:underline cursor-pointer">Kitaplığı Temizle</button>
         </div>
@@ -158,9 +157,9 @@ module.exports = function(pageTemplate) {
             
             <!-- Tema Seçici (Koyu / Sepya / Açık) -->
             <div class="flex p-0.5 rounded-xl bg-white border border-mistral-hairline text-xs">
-              <button onclick="setReaderTheme('dark')" id="theme-btn-dark" class="px-2.5 py-1 rounded-lg text-mistral-slate font-bold transition cursor-pointer" title="Koyu Mod">🌙</button>
-              <button onclick="setReaderTheme('sepya')" id="theme-btn-sepya" class="px-2.5 py-1 rounded-lg text-mistral-slate font-bold transition cursor-pointer" title="Sepya Kitap Kağıdı">📜</button>
-              <button onclick="setReaderTheme('light')" id="theme-btn-light" class="px-2.5 py-1 rounded-lg text-mistral-slate font-bold transition cursor-pointer" title="Açık Mod">☀️</button>
+              <button onclick="setReaderTheme('dark')" id="theme-btn-dark" class="px-2.5 py-1 rounded-lg text-mistral-slate font-bold transition cursor-pointer" title="Koyu Mod"></button>
+              <button onclick="setReaderTheme('sepya')" id="theme-btn-sepya" class="px-2.5 py-1 rounded-lg text-mistral-slate font-bold transition cursor-pointer" title="Sepya Kitap Kağıdı"></button>
+              <button onclick="setReaderTheme('light')" id="theme-btn-light" class="px-2.5 py-1 rounded-lg text-mistral-slate font-bold transition cursor-pointer" title="Açık Mod"></button>
             </div>
 
             <!-- Font Ailesi (Serif / Sans) -->
@@ -177,12 +176,12 @@ module.exports = function(pageTemplate) {
 
             <!-- Sesli Dinle Butonu (TTS Özelliği) -->
             <button onclick="toggleTtsBar()" id="btn-toggle-tts" class="px-3 py-1.5 rounded-xl bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink font-bold text-xs transition shadow flex items-center gap-1.5 border border-mistral-beige-deep cursor-pointer">
-              <span>🎧</span> <span>Sesli Dinle</span>
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span> <span>Sesli Dinle</span>
             </button>
 
             <!-- Yer İmi Kaydet -->
             <button onclick="saveBookmark()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition shadow flex items-center gap-1 cursor-pointer">
-              <span>🔖</span> <span class="hidden sm:inline">Kaldığım Yeri Kaydet</span>
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></span> <span class="hidden sm:inline">Kaldığım Yeri Kaydet</span>
             </button>
           </div>
         </header>

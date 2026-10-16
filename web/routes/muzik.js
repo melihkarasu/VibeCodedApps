@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/muzik/app.css">
-      <script src="/static/apps/muzik/app.js?v=20260928b" defer></script>
+      <link rel="stylesheet" href="/static/apps/muzik/app.css?v=20261017a">
+      <script src="/static/apps/muzik/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -37,7 +37,7 @@ module.exports = function(pageTemplate) {
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <h2 class="text-2xl font-bold text-mistral-ink flex items-center gap-2">
-              <span>💿</span> Favori Çalma Listem & Şarkılarım
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span> Favori Çalma Listem & Şarkılarım
             </h2>
             <p class="text-mistral-slate text-xs mt-1">
               Beğendiğiniz şarkıları tek tıkla koleksiyonunuza ekleyip dilediğiniz zaman dinleyebilir ve sözlerini açabilirsiniz.
@@ -52,7 +52,7 @@ module.exports = function(pageTemplate) {
           <!-- JS ile favoriler -->
         </div>
         <div id="saved-songs-empty" class="p-8 text-center rounded-2xl bg-white border border-mistral-hairline text-mistral-stone text-xs">
-          Henüz çalma listenize bir parça eklemediniz. Şarkı kartlarındaki 🔖 simgesine tıklayarak favorilerinize ekleyebilirsiniz.
+          Henüz çalma listenize bir parça eklemediniz. Şarkı kartlarındaki simgesine tıklayarak favorilerinize ekleyebilirsiniz.
         </div>
       </div>
 
@@ -66,7 +66,7 @@ module.exports = function(pageTemplate) {
           </p>
           <div class="relative flex flex-col sm:flex-row gap-3">
             <div class="relative flex-1">
-              <input type="text" id="input-lyrics-search" value="is this the real life" placeholder="Örn: 'mama just killed a man', 'benden öte benden ziyade', 'fly me to the moon'..." onkeyup="if(event.key==='Enter') searchMusic()" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-mistral-hairline focus:border-pink-400 focus:outline-none text-mistral-ink text-sm placeholder-slate-500">
+              <input type="text" id="input-lyrics-search" value="is this the real life" placeholder="Örn:'mama just killed a man', 'benden öte benden ziyade', 'fly me to the moon'..." onkeyup="if(event.key==='Enter') searchMusic()" class="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-mistral-hairline focus:border-pink-400 focus:outline-none text-mistral-ink text-sm placeholder-slate-500">
               <span class="absolute left-3.5 top-3.5 text-mistral-stone text-base"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
             </div>
             <button onclick="searchMusic()" class="px-6 py-3 rounded-xl bg-pink-500 hover:bg-pink-400 text-white font-bold text-sm transition shadow-lg shadow-pink-500/20 shrink-0 flex items-center justify-center gap-2">
@@ -79,19 +79,19 @@ module.exports = function(pageTemplate) {
         <div class="pt-2 flex flex-wrap items-center gap-2 text-xs">
           <span class="text-mistral-stone">Örnek Keşifler:</span>
           <button onclick="quickSearch('is this the real life')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream text-mistral-slate transition border border-mistral-hairline">
-            👑 Queen - Bohemian Rhapsody
+            Queen - Bohemian Rhapsody
           </button>
           <button onclick="quickSearch('dönence dönence')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream text-mistral-slate transition border border-mistral-hairline">
-            🎸 Barış Manço - Dönence
+            Barış Manço - Dönence
           </button>
           <button onclick="quickSearch('fly me to the moon')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream text-mistral-slate transition border border-mistral-hairline">
-            🌙 Frank Sinatra - Fly Me to the Moon
+            Frank Sinatra - Fly Me to the Moon
           </button>
           <button onclick="quickSearch('fesupanallah')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream text-mistral-slate transition border border-mistral-hairline">
-            ⚡ Erkin Koray - Fesupanallah
+            Erkin Koray - Fesupanallah
           </button>
           <button onclick="quickSearch('i used to rule the world')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-mistral-cream text-mistral-slate transition border border-mistral-hairline">
-            🏛️ Coldplay - Viva La Vida
+            Coldplay - Viva La Vida
           </button>
         </div>
       </div>
@@ -99,7 +99,7 @@ module.exports = function(pageTemplate) {
       <!-- ARAMA SONUÇLARI BAŞLIĞI -->
       <div class="mb-4 flex items-center justify-between">
         <h2 class="text-base font-bold text-mistral-ink flex items-center gap-2">
-          <span>🎧</span> Eşleşen Şarkılar
+          <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span> Eşleşen Şarkılar
         </h2>
         <span id="results-count" class="text-xs text-mistral-slate font-mono">Aranıyor...</span>
       </div>
@@ -115,7 +115,7 @@ module.exports = function(pageTemplate) {
       </div>
 
       <div id="empty-state" class="hidden py-16 text-center text-mistral-slate text-sm">
-        <div class="text-4xl mb-2">🎶</div>
+        <div class="text-4xl mb-2"><svg class="w-6 h-6 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
         <span>Bu sözlerle eşleşen bir şarkı bulunamadı. Lütfen kelimeleri kontrol edip tekrar deneyin.</span>
       </div>
 
@@ -125,7 +125,7 @@ module.exports = function(pageTemplate) {
           
           <!-- Kapat Butonu -->
           <button onclick="closeModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white hover:bg-white text-mistral-slate hover:text-white flex items-center justify-center transition border border-mistral-hairline text-sm">
-            ✕
+            
           </button>
 
           <!-- Modal Başlık (Parça Bilgisi & Ses Çalar) -->
@@ -152,15 +152,15 @@ module.exports = function(pageTemplate) {
           <div class="p-6 overflow-y-auto space-y-4 flex-1 lyrics-container bg-mistral-canvas">
             <div class="flex items-center justify-between pb-3 border-b border-mistral-hairline text-xs">
               <span class="text-mistral-slate uppercase font-semibold tracking-wider flex items-center gap-1.5">
-                <span>📜</span> Şarkı Sözleri (Lyrics)
+                <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Şarkı Sözleri (Lyrics)
               </span>
               <div class="flex items-center gap-2">
                 <button onclick="copyLyrics()" class="text-mistral-slate hover:text-pink-400 transition flex items-center gap-1">
-                  <span>📋</span> Sözleri Kopyala
+                  <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Sözleri Kopyala
                 </button>
                 <span class="text-slate-700">•</span>
                 <button onclick="toggleModalFavorite()" id="btn-modal-fav" class="text-mistral-slate hover:text-amber-400 transition flex items-center gap-1">
-                  <span id="modal-fav-icon">🔖</span> <span id="modal-fav-text">Listeme Ekle</span>
+                  <span id="modal-fav-icon"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></span> <span id="modal-fav-text">Listeme Ekle</span>
                 </button>
               </div>
             </div>

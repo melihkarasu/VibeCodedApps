@@ -65,7 +65,7 @@ const STORAGE_KEY = 'vibe_w…hlist';
             return;
           }
 
-            setButtonLoading('btn-imdb-add', false, "📥 IMDb'den Çek & Ekle");
+            setButtonLoading('btn-imdb-add', false, "IMDb'den Çek & Ekle");
 
           try {
             const res = await fetch(`/api/dizi/imdb?id=${imdbId}`);
@@ -93,13 +93,13 @@ const STORAGE_KEY = 'vibe_w…hlist';
             watchlist.unshift(newShow);
             saveWatchlist();
             document.getElementById('input-imdb-url').value = '';
-            showToast(`✓ "${newShow.title}" başarıyla listenize eklendi!`);
+            showToast(`"${newShow.title}" başarıyla listenize eklendi!`);
             filterWatchlist('watching');
             openTrackerModal(newShow.id);
           } catch(err) {
             showToast('IMDb yapımı eklenirken hata oluştu. ID kontrol ediniz.');
           } finally {
-            setButtonLoading('btn-imdb-add', false, "📥 IMDb'den Çek & Ekle");
+            setButtonLoading('btn-imdb-add', false, "IMDb'den Çek & Ekle");
           }
         }
 
@@ -112,7 +112,7 @@ const STORAGE_KEY = 'vibe_w…hlist';
           const btn = document.getElementById(btnId);
           if (btn) {
             btn.disabled = loading;
-            btn.innerHTML = loading ? `<span class="w-4 h-4 rounded-full border-2 border-slate-900 border-t-transparent animate-spin mr-1"></span> ${text}` : text;
+            btn.innerHTML = loading ? `${text}` : text;
           }
         }
 
@@ -211,7 +211,7 @@ const STORAGE_KEY = 'vibe_w…hlist';
                   <div class="relative w-full aspect-[2/3] rounded-2xl overflow-hidden mb-3 bg-white shadow-md">
                     <img src="${show.poster}" alt="${show.title}" class="poster-zoom w-full h-full object-cover transition-transform duration-500">
                     <div class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-lg bg-black/75 backdrop-blur-md text-amber-400 font-black text-xs font-mono flex items-center gap-1">
-                      <span>★</span> ${show.imdbRating || '8.0'}
+                      <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span> ${show.imdbRating || '8.0'}
                     </div>
                     <div class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-lg bg-blue-600/80 text-white text-[10px] font-bold uppercase tracking-wider">
                       ${show.type === 'movie' ? 'Film' : 'Dizi'}
@@ -286,7 +286,7 @@ const STORAGE_KEY = 'vibe_w…hlist';
           };
           watchlist.unshift(item);
           saveWatchlist();
-          showToast(`✓ "${title}" izleme listenize eklendi!`);
+          showToast(`"${title}" izleme listenize eklendi!`);
           clearSearchResults();
         }
 
@@ -300,7 +300,7 @@ const STORAGE_KEY = 'vibe_w…hlist';
           document.getElementById('modal-poster-img').src = show.poster;
           document.getElementById('modal-title').innerText = show.title;
           document.getElementById('modal-genres').innerText = show.genres ? show.genres.join(', ') : '';
-          document.getElementById('modal-imdb-badge').innerText = '★ ' + (show.imdbRating || '8.0');
+          document.getElementById('modal-imdb-badge').innerText = '' + (show.imdbRating || '8.0');
           document.getElementById('modal-year-badge').innerText = show.year || '';
           document.getElementById('modal-type-badge').innerText = show.type === 'movie' ? 'Film' : 'Dizi';
           document.getElementById('modal-status-select').value = show.status;
@@ -422,7 +422,7 @@ const STORAGE_KEY = 'vibe_w…hlist';
           saveWatchlist();
           renderModalSeasonsAndEpisodes();
           updateModalProgress();
-          showToast(`✓ Sezon ${activeModalSeason} tüm bölümleri izlendi olarak işaretlendi!`);
+          showToast(`Sezon ${activeModalSeason} tüm bölümleri izlendi olarak işaretlendi!`);
         }
 
         function updateModalProgress() {

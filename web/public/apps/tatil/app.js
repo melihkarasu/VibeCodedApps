@@ -161,7 +161,7 @@ const COUNTRY_FLAGS = {
             const select = document.getElementById('select-all-countries');
             select.innerHTML = '<option value="">+ Başka bir ülke ekle...</option>';
             data.sort((a,b) => a.name.localeCompare(b.name)).forEach(c => {
-              const info = COUNTRY_FLAGS[c.countryCode] || { flag: '🌐' };
+              const info = COUNTRY_FLAGS[c.countryCode] || { flag: '' };
               const opt = new Option(`${info.flag} ${c.name} (${c.countryCode})`, c.countryCode);
               select.add(opt);
             });
@@ -186,20 +186,20 @@ const COUNTRY_FLAGS = {
         function renderSelectedCountryTags() {
           const container = document.getElementById('selected-countries-container');
           container.innerHTML = selectedCountries.map(code => {
-            const info = COUNTRY_FLAGS[code] || { flag: '🌐', name: code };
+            const info = COUNTRY_FLAGS[code] || { flag: '', name: code };
             const isTr = (code === 'TR');
             return `
               <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border ${isTr ? 'border-amber-500/50 bg-amber-500/10 text-amber-300' : 'border-mistral-hairline text-mistral-ink'} text-xs font-bold shadow-sm">
                 <span>${info.flag}</span>
                 <span>${info.name}</span>
-                <button onclick="toggleCountry('${code}')" class="ml-1 text-mistral-stone hover:text-rose-400 font-bold transition">✕</button>
+                <button onclick="toggleCountry('${code}')" class="ml-1 text-mistral-stone hover:text-rose-400 font-bold transition"></button>
               </span>
             `;
           }).join('');
 
           // Köprü tatil rozeti (ilk seçili ülke)
           const primary = selectedCountries[0] || 'TR';
-          const primaryInfo = COUNTRY_FLAGS[primary] || { flag: '🌐', name: primary };
+          const primaryInfo = COUNTRY_FLAGS[primary] || { flag: '', name: primary };
           document.getElementById('bridge-country-badge').innerText = `${primaryInfo.flag} ${primaryInfo.name}`;
         }
 
@@ -308,7 +308,7 @@ const COUNTRY_FLAGS = {
                     <span class="px-2 py-0.5 rounded text-[10px] font-bold ${w.needBridgeDay ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'}">
                       ${w.dayCount} Gün Kesintisiz Tatil
                     </span>
-                    <span class="text-[10px] text-mistral-slate font-mono">${w.needBridgeDay ? '⚡ 1 Gün İzin' : '✓ 0 Gün İzin'}</span>
+                    <span class="text-[10px] text-mistral-slate font-mono">${w.needBridgeDay ? '1 Gün İzin' : '0 Gün İzin'}</span>
                   </div>
                   <h4 class="font-black text-sm text-mistral-ink">${formatD(start)} - ${formatD(end)}</h4>
                   <p class="text-[11px] text-mistral-slate mt-1">
@@ -388,7 +388,7 @@ const COUNTRY_FLAGS = {
                     <!-- Tatiller Listesi -->
                     <div class="flex-1 space-y-2">
                       ${items.map(item => {
-                        const cInfo = COUNTRY_FLAGS[item.countryCode] || { flag: '🌐', name: item.countryCode };
+                        const cInfo = COUNTRY_FLAGS[item.countryCode] || { flag: '', name: item.countryCode };
                         return `
                           <div class="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-xl bg-white border border-mistral-hairline">
                             <div class="flex items-center gap-2">
@@ -416,7 +416,7 @@ const COUNTRY_FLAGS = {
           container.innerHTML = `
             <div class="grid grid-cols-1 md:grid-cols-${Math.min(4, selectedCountries.length)} gap-4 items-start">
               ${selectedCountries.map(code => {
-                const cInfo = COUNTRY_FLAGS[code] || { flag: '🌐', name: code };
+                const cInfo = COUNTRY_FLAGS[code] || { flag: '', name: code };
                 const list = holidaysCache[`${currentYear}_${code}`] || [];
 
                 return `
@@ -480,7 +480,7 @@ const COUNTRY_FLAGS = {
                       ` : `
                         <div class="space-y-2">
                           ${mList.map(h => {
-                            const cInfo = COUNTRY_FLAGS[h.countryCode] || { flag: '🌐' };
+                            const cInfo = COUNTRY_FLAGS[h.countryCode] || { flag: '' };
                             const d = new Date(h.date).getDate();
                             return `
                               <div class="p-2 rounded-xl bg-white border border-mistral-hairline flex items-center justify-between text-xs">
@@ -547,7 +547,7 @@ const COUNTRY_FLAGS = {
           link.click();
           document.body.removeChild(link);
 
-          showToast(`✓ ${allHolidays.length} resmi tatil .ics dosyası olarak indirildi!`);
+          showToast(`${allHolidays.length} resmi tatil .ics dosyası olarak indirildi!`);
         }
 
         function showToast(msg) {

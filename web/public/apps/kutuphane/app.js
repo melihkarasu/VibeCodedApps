@@ -190,7 +190,7 @@ function filterBooks(cat) {
 
 // 2. Tam Metin Okuyucuyu Başlat (Reader Modal)
 async function openBookReader(bookId, optTitle = null, optAuthor = null, optCover = null, optTrTitle = null) {
-  if (window.showToast) window.showToast('📖 Kitap metni Project Gutenberg arşivinden yükleniyor...');
+  if (window.showToast) window.showToast('Kitap metni Project Gutenberg arşivinden yükleniyor...');
 
   let bookInfo = CLASSIC_BOOKS.find(b => b.id === bookId);
   if (!bookInfo) {
@@ -339,7 +339,7 @@ function saveBookmark() {
 
   localStorage.setItem(SHELF_STORAGE_KEY, JSON.stringify(shelf));
   renderShelf();
-  if (window.showToast) window.showToast(`✓ Yer imi kaydedildi (%${pct})`);
+  if (window.showToast) window.showToast(`Yer imi kaydedildi (%${pct})`);
 }
 
 function restoreBookmark(bookId) {
@@ -350,7 +350,7 @@ function restoreBookmark(bookId) {
       const vp = document.getElementById('reader-viewport');
       if (vp) {
         vp.scrollTop = item.scrollPos;
-        if (window.showToast) window.showToast(`✓ Kaldığınız yerden devam ediliyor (%${item.progressPct})`);
+        if (window.showToast) window.showToast(`Kaldığınız yerden devam ediliyor (%${item.progressPct})`);
       }
     }, 300);
   }
@@ -408,7 +408,7 @@ function renderShelf() {
         </div>
       </div>
       <button onclick="removeFromShelf(${item.id})" class="text-xs text-mistral-stone hover:text-rose-400 p-1 transition cursor-pointer" title="Kaldır">
-        ✕
+        
       </button>
     </div>
   `).join('');
@@ -442,7 +442,7 @@ function toggleTtsBar() {
   if (!bar) return;
   if (bar.classList.contains('hidden')) {
     bar.classList.remove('hidden');
-    if (window.showToast) window.showToast("🎧 Sesli kitap çubuğu açıldı. Oynat butonuna basın veya bir paragrafa tıklayın.");
+    if (window.showToast) window.showToast("Sesli kitap çubuğu açıldı. Oynat butonuna basın veya bir paragrafa tıklayın.");
   } else {
     bar.classList.add('hidden');
     stopSpeech();
@@ -549,7 +549,7 @@ function startSpeechAt(idx) {
         startSpeechAt(idx + 1);
       } else {
         stopSpeech();
-        if (window.showToast) window.showToast('✓ Sesli okuma tamamlandı.');
+        if (window.showToast) window.showToast('Sesli okuma tamamlandı.');
       }
     }
   };
@@ -629,7 +629,7 @@ async function searchBooks(customQuery = null) {
 
   sec.classList.remove('hidden');
   grid.innerHTML = '<div class="col-span-full py-12 text-center text-mistral-slate"><div class="w-8 h-8 rounded-full border-2 border-emerald-500 border-t-transparent animate-spin mx-auto mb-3"></div>Project Gutenberg ve açık kütüphane arşivi taranıyor...</div>';
-  header.innerHTML = '<span>📚</span> "' + query + '" İçin Arama Sonuçları';
+  header.innerHTML = '<span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> "' + query + '" İçin Arama Sonuçları';
 
   try {
     const res = await fetch(`/api/kutuphane/search?q=${encodeURIComponent(query)}`);
@@ -659,7 +659,7 @@ function renderSearchResults(books, query) {
   currentSearchResults = books || [];
   const grid = document.getElementById('search-results-grid');
   const header = document.getElementById('search-results-header');
-  header.innerHTML = '<span>📚</span> "' + query + '" İçin Bulunan Eserler (' + books.length + ' Sonuç)';
+  header.innerHTML = '<span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> "' + query + '" İçin Bulunan Eserler (' + books.length + ' Sonuç)';
 
   grid.innerHTML = books.map(function(b, idx) {
     const displayTitle = b.trTitle ? (b.trTitle + ' (' + b.title + ')') : b.title;
@@ -668,7 +668,7 @@ function renderSearchResults(books, query) {
 
     let btnHtml = '';
     if (hasId) {
-      btnHtml = '<button onclick="handleSearchResultClick(' + idx + ')" class="w-full py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] transition shadow flex items-center justify-center gap-1 cursor-pointer"><span>📖</span> Hemen Oku</button>';
+      btnHtml = '<button onclick="handleSearchResultClick(' + idx + ')" class="w-full py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] transition shadow flex items-center justify-center gap-1 cursor-pointer"><span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Hemen Oku</button>';
     } else {
       btnHtml = '<button onclick="notifyArchive()" class="w-full py-1.5 rounded-lg bg-mistral-cream-light text-mistral-ink border border-mistral-beige-deep font-semibold text-[11px] transition cursor-pointer">Katalog Kaydı</button>';
     }

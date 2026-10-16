@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/nobel/app.js?v=20261001a" defer></script>
+      <script src="/static/apps/nobel/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -40,12 +40,12 @@ module.exports = function(pageTemplate) {
           <div class="sm:col-span-4">
             <select id="nobel-category-select" onchange="filterNobelPrizes()" class="w-full px-3 py-2.5 rounded-lg bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange transition">
               <option value="all" selected>Tüm Kategoriler (1901 - Günümüz)</option>
-              <option value="Chemistry">🧪 Kimya (Chemistry)</option>
-              <option value="Physics">⚛️ Fizik (Physics)</option>
-              <option value="Physiology or Medicine">🧬 Fizyoloji / Tıp (Medicine)</option>
-              <option value="Literature">✍️ Edebiyat (Literature)</option>
-              <option value="Peace">🕊️ Barış (Peace)</option>
-              <option value="Economic Sciences">📊 Ekonomi (Economic Sciences)</option>
+              <option value="Chemistry">Kimya (Chemistry)</option>
+              <option value="Physics">Fizik (Physics)</option>
+              <option value="Physiology or Medicine">Fizyoloji / Tıp (Medicine)</option>
+              <option value="Literature">Edebiyat (Literature)</option>
+              <option value="Peace">Barış (Peace)</option>
+              <option value="Economic Sciences">Ekonomi (Economic Sciences)</option>
             </select>
           </div>
         </div>
@@ -55,8 +55,8 @@ module.exports = function(pageTemplate) {
           <span class="text-mistral-stone font-medium mr-1">Tarihi İsimler:</span>
           <button onclick="quickNobel('Aziz Sancar')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🇹🇷 Aziz Sancar (Kimya 2015)</button>
           <button onclick="quickNobel('Orhan Pamuk')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">🇹🇷 Orhan Pamuk (Edebiyat 2006)</button>
-          <button onclick="quickNobel('Curie')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">⚛️ Marie Curie (Fizik & Kimya)</button>
-          <button onclick="quickNobel('Einstein')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">💡 Albert Einstein</button>
+          <button onclick="quickNobel('Curie')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Marie Curie (Fizik & Kimya)</button>
+          <button onclick="quickNobel('Einstein')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Albert Einstein</button>
           <button onclick="quickNobel('')" class="px-2.5 py-1 rounded-md bg-white hover:bg-mistral-cream text-mistral-stone border border-mistral-hairline transition">Tümünü Göster</button>
         </div>
       </div>
@@ -64,7 +64,6 @@ module.exports = function(pageTemplate) {
       <!-- ÖDÜL KARTLARI IZGARASI -->
       <div id="nobel-loading" class="py-16 text-center">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-mistral-cream text-mistral-ink border border-mistral-beige-deep text-xs font-semibold">
-          <span class="w-2.5 h-2.5 rounded-full bg-mistral-orange animate-ping"></span>
           <span>Nobel Vakfı resmi arşivi taranıyor...</span>
         </div>
       </div>

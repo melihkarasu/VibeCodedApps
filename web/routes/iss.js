@@ -3,7 +3,7 @@ module.exports = function(pageTemplate) {
     const extraHead = `
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/iss/app.js?v=20260927b" defer></script>
+      <script src="/static/apps/iss/app.js?v=20261017a" defer></script>
     `;
 
     const content = `
@@ -23,7 +23,6 @@ module.exports = function(pageTemplate) {
 
         <!-- Canlı Sinyal Göstergesi -->
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
           <span class="font-medium" id="iss-status-text">Canlı Telemetri Bağlı</span>
           <span class="text-mistral-stone text-[11px]" id="iss-last-update">• 3s aralıkla</span>
         </div>
@@ -64,7 +63,6 @@ module.exports = function(pageTemplate) {
             <div id="iss-map" class="w-full h-[480px] rounded-xl z-10"></div>
             <!-- Harita Üzeri Canlı Rozet -->
             <div class="absolute bottom-6 left-6 z-20 bg-white/95 backdrop-blur border border-mistral-hairline px-3.5 py-2 rounded-lg shadow-sm text-xs text-mistral-ink flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-mistral-orange animate-pulse"></span>
               <span>Görüş Durumu: <strong id="lbl-visibility" class="capitalize">Gündüz</strong></span>
             </div>
           </div>
@@ -74,7 +72,7 @@ module.exports = function(pageTemplate) {
         <div class="lg:col-span-4 space-y-6">
           <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm space-y-4">
             <h3 class="text-lg font-bold font-editorial text-mistral-ink flex items-center gap-2">
-              <span>🚀</span> İstasyon Hakkında Bilgiler
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> İstasyon Hakkında Bilgiler
             </h3>
             <p class="text-xs text-mistral-slate leading-relaxed">
               Uluslararası Uzay İstasyonu saniyede yaklaşık 7.66 km hızla hareket eder ve Dünya çevresindeki bir tam turunu sadece <strong>90-93 dakikada</strong> tamamlar. Astronotlar günde 16 gün doğumu ve gün batımına tanık olur.
@@ -97,7 +95,7 @@ module.exports = function(pageTemplate) {
 
             <div class="pt-2">
               <button onclick="centerOnIss()" class="w-full py-3 px-4 rounded-lg bg-mistral-orange hover:bg-mistral-orange-deep text-white font-bold text-sm transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
-                <span class="text-base">🎯</span> ISS'in Anlık Konumunu Haritada Ortala
+                <span class="text-base"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span> ISS'in Anlık Konumunu Haritada Ortala
               </button>
             </div>
           </div>
@@ -105,7 +103,7 @@ module.exports = function(pageTemplate) {
           <!-- Yörünge İpuçları Kartı -->
           <div class="p-5 rounded-xl bg-mistral-cream-light border border-mistral-beige-deep text-xs text-mistral-slate space-y-2">
             <div class="font-bold text-mistral-ink flex items-center gap-1.5">
-              <span>👀</span> Çıplak Gözle Görünür mü?
+              <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span> Çıplak Gözle Görünür mü?
             </div>
             <p class="leading-relaxed">
               Evet! ISS, Güneş ışığını yansıtan devasa güneş panelleri sayesinde gökyüzünde Venüs'ten sonraki en parlak insan yapımı nesnedir. Üzerinizden geçerken hızla ilerleyen parlak bir yıldız gibi görünür.
