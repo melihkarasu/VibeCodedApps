@@ -468,9 +468,9 @@ module.exports = function(pageTemplate) {
             id: "web-security-scanner",
             name: "Web Security Scanner",
             icon: getAppSvg("web-security-scanner", "gelistirici-araclari"),
-            desc: "Pasif HTTP güvenlik başlıkları (CSP, HSTS, X-Frame) ve DoH DNS (DMARC, SPF, DNSSEC) denetimi. Sıfır WAF & abuse riski.",
-            url: "/web-security-scanner",
-            action: "Taramayı Başlat"
+            desc: "Pasif HTTP güvenlik başlıkları (CSP, HSTS, X-Frame), DoH DNS, SAST ve aktif zafiyet denetimi.",
+            url: "https://github.com/melihkarasu/web-security-scanner",
+            action: "GitHub Reposunu Aç"
           },
           {
             id: "ip-konum",
@@ -558,8 +558,8 @@ module.exports = function(pageTemplate) {
                   name: a.name,
                   icon: getAppSvg(a.id, dc.id),
                   desc: a.desc || (appExtra[a.id] ? appExtra[a.id].desc : ''),
-                  url: a.url,
-                  action: a.action || (appExtra[a.id] ? appExtra[a.id].action : 'Uygulamayı Aç')
+                  url: a.id === 'web-security-scanner' ? 'https://github.com/melihkarasu/web-security-scanner' : a.url,
+                  action: a.id === 'web-security-scanner' ? 'GitHub Reposunu Aç' : (a.action || (appExtra[a.id] ? appExtra[a.id].action : 'Uygulamayı Aç'))
                 }));
               merged.push({
                 id: dc.id,
@@ -670,7 +670,7 @@ module.exports = function(pageTemplate) {
                     </p>
                   </div>
 
-                  <a href="${app.url}" class="vibe-card-cta">
+                  <a href="${app.url}" ${app.url.startsWith('http') ? 'target="_blank" rel="noopener"' : ''} class="vibe-card-cta">
                     <span>${app.action}</span>
                     ${arrowRightSvg}
                   </a>
@@ -1145,7 +1145,7 @@ module.exports = function(pageTemplate) {
                   '</div>' +
                   '<p class="text-mistral-slate text-xs sm:text-sm leading-relaxed">' + app.desc + '</p>' +
                 '</div>' +
-                '<a href="' + app.url + '" class="vibe-card-cta">' +
+                '<a href="' + app.url + '"' + (app.url.indexOf('http') === 0 ? ' target="_blank" rel="noopener"' : '') + ' class="vibe-card-cta">' +
                   '<span>' + app.action + '</span>' +
                   ARROW_RIGHT_SVG +
                 '</a>' +
