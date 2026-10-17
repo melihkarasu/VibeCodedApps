@@ -18,8 +18,8 @@ module.exports = function(pageTemplate) {
 
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/sudoku/app.css?v=20261017b">
-      <script src="/static/apps/sudoku/app.js?v=20261017b" defer></script>
+      <link rel="stylesheet" href="/static/apps/sudoku/app.css?v=20261017c">
+      <script src="/static/apps/sudoku/app.js?v=20261017c" defer></script>
     `;
 
     const content = `
