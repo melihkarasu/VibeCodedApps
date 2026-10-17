@@ -88,13 +88,12 @@ module.exports = function(pageTemplate) {
 
       </div>
 
-      <!-- ⭐ TAKİP ETTİĞİM KLİNİK ARAŞTIRMALAR (CANLI DURUM TAKİP PANELİ) -->
+      <!-- TAKİP ETTİĞİM KLİNİK ARAŞTIRMALAR (CANLI DURUM TAKİP PANELİ) -->
       <div id="followed-studies-section" class="mb-12 p-6 rounded-2xl bg-white border-2 border-amber-300 shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-mistral-hairline">
           <div class="flex items-center gap-3">
             <span class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 border border-amber-300 flex items-center justify-center text-xl shrink-0">
-              ⭐
-            </span>
+              </span>
             <div>
               <div class="flex items-center gap-2">
                 <h2 class="text-xl font-bold font-editorial text-mistral-ink tracking-tight">Takip Ettiğim Klinik Araştırmalar</h2>

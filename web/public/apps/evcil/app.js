@@ -65,7 +65,7 @@ let allBreeds = [];
               <div class="p-4 pt-0">
                 <div class="pt-2 border-t border-mistral-hairline flex items-center justify-between text-[11px] font-semibold text-mistral-orange">
                   <span>Detayları İncele &rarr;</span>
-                  <span class="text-mistral-stone font-normal text-[10px]">⏳ ${b.lifeSpan}</span>
+                  <span class="text-mistral-stone font-normal text-[10px]">${b.lifeSpan}</span>
                 </div>
               </div>
             </div>
@@ -84,7 +84,7 @@ let allBreeds = [];
           document.getElementById('m-pet-name').innerText = b.name;
           document.getElementById('m-pet-desc').innerText = b.description || b.temperament || 'Özel ırk açıklaması bulunmuyor.';
           document.getElementById('m-pet-life').innerText = b.lifeSpan;
-          document.getElementById('m-pet-friendly').innerText = `⭐ ${b.childFriendly}/5`;
+          document.getElementById('m-pet-friendly').innerText = `${b.childFriendly}/5`;
           document.getElementById('m-pet-energy').innerText = `${b.energyLevel}/5`;
 
           const tBox = document.getElementById('m-pet-temperament');

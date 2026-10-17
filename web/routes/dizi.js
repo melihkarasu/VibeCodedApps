@@ -91,7 +91,7 @@ module.exports = function(pageTemplate) {
             <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span> İzleniyor (<span id="count-watching">0</span>)
           </button>
           <button onclick="filterWatchlist('plan')" id="btn-tab-plan" class="px-4 py-1.5 rounded-lg text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-1.5">
-            <span>⏳</span> İzlenecek (<span id="count-plan">0</span>)
+            <span></span> İzlenecek (<span id="count-plan">0</span>)
           </button>
           <button onclick="filterWatchlist('completed')" id="btn-tab-completed" class="px-4 py-1.5 rounded-lg text-xs font-bold text-mistral-slate hover:text-white transition flex items-center gap-1.5">
             <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Tamamlandı (<span id="count-completed">0</span>)
@@ -151,7 +151,7 @@ module.exports = function(pageTemplate) {
           </div>
           <div class="p-5 rounded-2xl bg-white border border-mistral-hairline text-center">
             <span class="text-[10px] text-mistral-slate uppercase font-semibold">Ortalama Puan</span>
-            <div id="stat-avg-rating" class="text-2xl font-black text-amber-400 font-mono mt-1">⭐ 0.0</div>
+            <div id="stat-avg-rating" class="text-2xl font-black text-amber-400 font-mono mt-1">0.0</div>
           </div>
         </div>
       </div>
@@ -186,7 +186,7 @@ module.exports = function(pageTemplate) {
                   <span class="text-xs text-mistral-slate">Durum:</span>
                   <select id="modal-status-select" onchange="updateModalStatus()" class="px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink font-semibold">
                     <option value="watching">İzleniyor</option>
-                    <option value="plan">⏳ İzlenecek</option>
+                    <option value="plan">İzlenecek</option>
                     <option value="completed">Tamamlandı</option>
                   </select>
                 </div>
@@ -195,12 +195,12 @@ module.exports = function(pageTemplate) {
                   <span class="text-xs text-mistral-slate">Puanım:</span>
                   <select id="modal-user-rating" onchange="updateModalUserRating()" class="px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-amber-400 font-bold">
                     <option value="0">Puansız</option>
-                    <option value="10">⭐ 10 (Başyapıt)</option>
-                    <option value="9">⭐ 9 (Harika)</option>
-                    <option value="8">⭐ 8 (Çok İyi)</option>
-                    <option value="7">⭐ 7 (İyi)</option>
-                    <option value="6">⭐ 6 (Fena Değil)</option>
-                    <option value="5">⭐ 5 (Orta)</option>
+                    <option value="10">10 (Başyapıt)</option>
+                    <option value="9">9 (Harika)</option>
+                    <option value="8">8 (Çok İyi)</option>
+                    <option value="7">7 (İyi)</option>
+                    <option value="6">6 (Fena Değil)</option>
+                    <option value="5">5 (Orta)</option>
                   </select>
                 </div>
 

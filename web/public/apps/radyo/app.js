@@ -64,7 +64,7 @@ let currentStations = [];
                   <button 
                     onclick="playStation('${s.id}')" 
                     class="flex-1 py-1.5 px-3 rounded-md text-xs font-semibold transition flex items-center justify-center gap-1.5 ${isPlayingThis ? 'bg-mistral-orange text-white' : 'text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep'}">
-                    <span>${isPlayingThis ? '⏸ Durdur' : '▶ Canlı Dinle'}</span>
+                    <span>${isPlayingThis ? 'Durdur' : '▶ Canlı Dinle'}</span>
                   </button>
                 </div>
               </div>
@@ -123,7 +123,7 @@ let currentStations = [];
           if (isPlaying) {
             status.innerText = 'CANLI YAYINDA';
             status.className = 'text-[10px] font-bold text-emerald-600 uppercase tracking-wider block';
-            playIcon.innerText = '⏸';
+            playIcon.innerText = '';
             eqBars.classList.remove('hidden');
             eqBars.classList.add('flex');
           } else {

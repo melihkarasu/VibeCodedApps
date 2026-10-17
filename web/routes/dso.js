@@ -112,7 +112,7 @@ module.exports = function(pageTemplate) {
         <div class="dso-metric-card p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xs space-y-2" data-category="life">
           <div class="flex items-center justify-between text-xs text-mistral-stone font-bold uppercase tracking-wider">
             <span>Beklenen Yaşam Süresi</span>
-            <span class="text-base">⏳</span>
+            <span class="text-base"></span>
           </div>
           <div id="metric-le-value" class="text-2xl sm:text-3xl font-bold font-editorial text-mistral-ink">--</div>
           <p id="metric-le-detail" class="text-xs text-mistral-slate line-clamp-2 leading-relaxed">Veri yükleniyor...</p>
@@ -230,7 +230,7 @@ module.exports = function(pageTemplate) {
               onclick="switchChartMetric('lifeExpectancy')" 
               id="btn-chart-lifeExpectancy"
               class="metric-chart-btn active px-2.5 py-1.5 rounded-md font-semibold bg-mistral-ink text-white transition cursor-pointer">
-              ⏳ Yaşam Süresi
+              Yaşam Süresi
             </button>
             <button 
               type="button" 

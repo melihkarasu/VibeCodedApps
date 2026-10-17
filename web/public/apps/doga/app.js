@@ -159,7 +159,7 @@ const SHELF_KEY = '***';
           document.getElementById('player-bird-place').innerText = place;
           document.getElementById('player-bird-img').src = photo;
           document.getElementById('player-badge-type').innerText = 'Çalıyor';
-          document.getElementById('btn-master-play').innerText = '⏸';
+          document.getElementById('btn-master-play').innerText = '';
           document.getElementById('visualizer-idle-text').classList.add('hidden');
 
           const playPromise = audio.play();
@@ -189,7 +189,7 @@ const SHELF_KEY = '***';
                 showToast('Ses başlatılamadı.');
               });
             }
-            btn.innerText = '⏸';
+            btn.innerText = '';
             document.getElementById('player-badge-type').innerText = 'Çalıyor';
             document.getElementById('visualizer-idle-text').classList.add('hidden');
             startVisualizer();
@@ -316,7 +316,7 @@ const SHELF_KEY = '***';
           document.getElementById('player-bird-place').innerText = quizTargetBird.place;
           document.getElementById('player-bird-img').src = 'https://images.unsplash.com/photo-1555169062-013468b47731?w=500&auto=format&fit=crop&q=80';
           document.getElementById('player-badge-type').innerText = 'Quiz Sesi';
-          document.getElementById('btn-master-play').innerText = '⏸';
+          document.getElementById('btn-master-play').innerText = '';
           document.getElementById('visualizer-idle-text').classList.add('hidden');
 
           const playPromise = audio.play();

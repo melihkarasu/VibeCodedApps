@@ -317,7 +317,7 @@ module.exports = function(pageTemplate) {
                 <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span> Link
               </button>
               <button onclick="setPresetLogo('star')" class="px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-hairline text-xs flex items-center gap-1.5">
-                <span>⭐</span> Yıldız
+                <span></span> Yıldız
               </button>
               <button onclick="setPresetLogo('bolt')" class="px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline hover:border-mistral-hairline text-xs flex items-center gap-1.5">
                 <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> Şimşek

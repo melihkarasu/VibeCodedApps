@@ -129,7 +129,7 @@ let currentCardTheme = 'dark';
           const elFollowers = document.getElementById('stat-followers');
           const elFollowing = document.getElementById('stat-following');
 
-          if (elStars) elStars.innerText = '⭐ ' + (data.totalStarsEarned || data.totalStars || 0).toLocaleString('tr-TR');
+          if (elStars) elStars.innerText = '' + (data.totalStarsEarned || data.totalStars || 0).toLocaleString('tr-TR');
           if (elStarred) elStarred.innerText = '' + (data.starredCount || 0).toLocaleString('tr-TR');
           if (elRepos) elRepos.innerText = (u.public_repos || 0).toLocaleString('tr-TR');
           if (elFollowers) elFollowers.innerText = (u.followers !== undefined ? u.followers : 0).toLocaleString('tr-TR');
@@ -209,7 +209,7 @@ let currentCardTheme = 'dark';
                   ${r.language || 'Düz Metin'}
                 </span>
                 <div class="flex items-center gap-3 font-semibold text-mistral-ink">
-                  <span class="text-amber-500 font-bold">⭐ ${Number(r.stargazers_count || 0).toLocaleString('en-US')}</span>
+                  <span class="text-amber-500 font-bold">${Number(r.stargazers_count || 0).toLocaleString('en-US')}</span>
                   <span>${Number(r.forks_count || 0).toLocaleString('en-US')}</span>
                 </div>
               </div>
@@ -303,7 +303,7 @@ let currentCardTheme = 'dark';
                   ${r.language || 'Düz Metin'}
                 </span>
                 <div class="flex items-center gap-3">
-                  <span>⭐ ${r.stargazers_count}</span>
+                  <span>${r.stargazers_count}</span>
                   <span>${r.forks_count}</span>
                 </div>
               </div>

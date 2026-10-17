@@ -147,7 +147,7 @@ module.exports = function(pageTemplate) {
         <!-- 4. KART: Standart Dozaj & Saklama Koşulları -->
         <div class="p-6 sm:p-8 rounded-2xl bg-white border border-mistral-hairline shadow-sm space-y-4">
           <div class="flex items-center gap-2.5 pb-3 border-b border-mistral-hairline">
-            <span class="text-xl">⏱️</span>
+            <span class="text-xl"></span>
             <h3 class="text-lg sm:text-xl font-bold font-editorial text-mistral-ink tracking-tight">Standart Kullanım, Dozaj & Saklama</h3>
           </div>
           <div id="tab-content-dosage">Yükleniyor...</div>

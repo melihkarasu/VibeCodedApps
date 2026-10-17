@@ -257,7 +257,7 @@ function renderDrugDetails(drug, source) {
     <div class="space-y-4 text-mistral-slate text-sm leading-relaxed" ${langAttr}>
       <div class="p-4 rounded-xl bg-mistral-cream border border-mistral-beige-deep">
         <strong class="text-mistral-ink block mb-1 font-bold text-sm flex items-center gap-1.5">
-          <span>⏱️</span> Standart Kullanım & Dozaj Rehberi
+          <span></span> Standart Kullanım & Dozaj Rehberi
         </strong>
         <p>${escapeHtml(drug.dosage)}</p>
       </div>

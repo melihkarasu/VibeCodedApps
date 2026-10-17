@@ -254,7 +254,7 @@ function toggleFollowStudy(nctId) {
     saveFollowedToStorage();
     renderStudyCards(allStudies);
     if (typeof showToast === 'function') {
-      showToast(`⭐ ${nctId} takip listenize eklendi!`, 'success');
+      showToast(`${nctId} takip listenize eklendi!`, 'success');
     }
   }
 }

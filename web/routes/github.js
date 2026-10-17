@@ -91,7 +91,7 @@ module.exports = function(pageTemplate) {
           <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mt-6 pt-6 border-t border-mistral-hairline">
             <div class="p-4 rounded-2xl bg-white border border-mistral-hairline text-center">
               <span class="text-[10px] text-mistral-slate uppercase font-semibold">Kazanılan Yıldız</span>
-              <div id="stat-stars" class="text-xl sm:text-2xl font-black text-amber-500 font-mono mt-1">⭐ 0</div>
+              <div id="stat-stars" class="text-xl sm:text-2xl font-black text-amber-500 font-mono mt-1">0</div>
             </div>
             <div class="p-4 rounded-2xl bg-white border border-mistral-hairline text-center">
               <span class="text-[10px] text-mistral-slate uppercase font-semibold">Yıldızlanan (Starred)</span>

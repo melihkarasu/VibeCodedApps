@@ -100,7 +100,7 @@ module.exports = function(pageTemplate) {
                 <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> Şiiri Kopyala
               </button>
               <button onclick="savePoemToFavorites()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-mistral-cream text-mistral-ink border border-mistral-hairline font-semibold transition flex items-center gap-1.5 cursor-pointer">
-                <span>⭐</span> Antolojime Ekle
+                <span></span> Antolojime Ekle
               </button>
             </div>
             <span class="text-mistral-stone font-mono text-[11px]">PoetryDB Açık Arşivi</span>
@@ -120,7 +120,7 @@ module.exports = function(pageTemplate) {
       <div id="my-anthology-container" class="mb-16 space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <h3 class="text-xl font-bold font-editorial text-mistral-ink flex items-center gap-2">
-            <span>⭐</span> Şiir Antolojim
+            <span></span> Şiir Antolojim
             <span id="my-anthology-count" class="px-2 py-0.5 rounded bg-mistral-cream border border-mistral-beige-deep text-mistral-ink font-mono text-xs font-bold">0</span>
           </h3>
           <button onclick="clearMyAnthology()" class="text-xs text-rose-500 hover:underline px-3 py-1.5 rounded-lg border border-rose-500/20 hover:bg-rose-500/10 transition">

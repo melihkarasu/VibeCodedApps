@@ -40,7 +40,7 @@ module.exports = function(pageTemplate) {
               <span>Kişi Başı GSYİH</span>
             </button>
             <button onclick="setIndicator('SP.DYN.LE00.IN', 'Beklenen Yaşam Süresi', 'Yıl')" id="ind-life" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink font-semibold text-xs transition text-left flex flex-col justify-between">
-              <span class="text-lg mb-1">⏳</span>
+              <span class="text-lg mb-1"></span>
               <span>Yaşam Süresi</span>
             </button>
             <button onclick="setIndicator('FP.CPI.TOTL.ZG', 'TÜFE Enflasyon Oranı', 'Yıllık %')" id="ind-cpi" class="ind-btn p-3 rounded-2xl bg-white border border-mistral-hairline text-mistral-slate hover:text-mistral-ink font-semibold text-xs transition text-left flex flex-col justify-between">

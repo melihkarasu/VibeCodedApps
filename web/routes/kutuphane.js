@@ -52,7 +52,7 @@ module.exports = function(pageTemplate) {
             onclick="searchBooks()" 
             id="btn-search-book" 
             class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm transition shadow-lg shadow-emerald-600/20 shrink-0 flex items-center justify-center gap-2 cursor-pointer">
-            <span id="search-spinner" class="hidden animate-spin">⏳</span>
+            <span id="search-spinner" class="hidden animate-spin"></span>
             <span>Kitap Ara</span>
           </button>
         </div>
@@ -193,8 +193,7 @@ module.exports = function(pageTemplate) {
               ▶
             </button>
             <button onclick="stopSpeech()" class="w-8 h-8 rounded-lg bg-white hover:bg-rose-50 text-rose-600 border border-mistral-hairline font-bold flex items-center justify-center shadow-sm cursor-pointer" title="Durdur">
-              ⏹
-            </button>
+              </button>
             <span id="tts-status-text" class="text-xs font-semibold ml-1.5">Sesli okuma hazır</span>
           </div>
 

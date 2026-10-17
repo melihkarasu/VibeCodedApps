@@ -518,6 +518,9 @@
     el.innerText = `${m}:${s}`;
   }
 
+  const PLAY_ICON_SVG = '<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>';
+  const PAUSE_ICON_SVG = '<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>';
+
   function togglePauseGame() {
     if (gameState.isCompleted || !gameState.inGame) return;
     gameState.isPaused = !gameState.isPaused;
@@ -525,10 +528,10 @@
     const btn = document.getElementById('btn-pause-toggle');
     if (gameState.isPaused) {
       if (overlay) overlay.classList.remove('hidden');
-      if (btn) btn.innerText = '▶️';
+      if (btn) btn.innerHTML = PLAY_ICON_SVG;
     } else {
       if (overlay) overlay.classList.add('hidden');
-      if (btn) btn.innerText = '⏸️';
+      if (btn) btn.innerHTML = PAUSE_ICON_SVG;
     }
   }
 
@@ -536,7 +539,7 @@
     const overlay = document.getElementById('pause-overlay');
     const btn = document.getElementById('btn-pause-toggle');
     if (overlay) overlay.classList.add('hidden');
-    if (btn) btn.innerText = '⏸️';
+    if (btn) btn.innerHTML = PAUSE_ICON_SVG;
     gameState.isPaused = false;
   }
 
@@ -786,15 +789,8 @@
   function actionToggleNotes() {
     gameState.noteMode = !gameState.noteMode;
     const btn = document.getElementById('btn-note-mode');
-    const label = document.getElementById('note-mode-label');
-    if (btn && label) {
-      if (gameState.noteMode) {
-        btn.className = 'p-3 rounded-2xl bg-violet-600 text-white font-bold text-xs transition flex flex-col items-center gap-1 shadow';
-        label.innerText = 'Not: AÇIK';
-      } else {
-        btn.className = 'p-3 rounded-2xl bg-white border border-mistral-hairline hover:bg-mistral-cream text-mistral-ink font-bold text-xs transition flex flex-col items-center gap-1 shadow-sm';
-        label.innerText = 'Not: Kapalı';
-      }
+    if (btn) {
+      btn.classList.toggle('is-active', gameState.noteMode);
     }
   }
 
@@ -895,16 +891,17 @@
       counts[gameState.board[i]]++;
     }
     for (let num = 1; num <= 9; num++) {
-      const badge = document.getElementById(`remain-${num}`);
       const btn = document.getElementById(`numpad-${num}`);
       const left = Math.max(0, 9 - counts[num]);
-      if (badge) badge.innerText = left;
       if (btn) {
-        if (left === 0) {
-          btn.classList.add('opacity-40');
-        } else {
-          btn.classList.remove('opacity-40');
-        }
+        btn.classList.toggle('is-depleted', left === 0);
+        btn.title = `${num} Rakamı (Kalan: ${left}/9)`;
+        const segs = btn.querySelectorAll('.numpad-level');
+        segs.forEach(seg => {
+          const lvl = parseInt(seg.getAttribute('data-lvl'), 10);
+          seg.classList.toggle('is-filled', lvl <= left);
+          seg.classList.toggle('is-top-level', lvl === left && left > 0);
+        });
       }
     }
   }
@@ -916,25 +913,25 @@
     const bestEl = document.getElementById('best-score-label');
     const hLabel = document.getElementById('hint-btn-label');
     const hBtn = document.getElementById('btn-hint');
+    const noteBtn = document.getElementById('btn-note-mode');
 
     const cfg = DIFFICULTY_CONFIG[gameState.difficulty] || DIFFICULTY_CONFIG.medium;
     if (pBadge) pBadge.innerText = `ID: #${gameState.puzzleId}`;
-    if (dBadge) dBadge.innerHTML = `<span class="${cfg.symbolColor} font-mono">${cfg.symbol}</span> ${cfg.name}`;
+    if (dBadge) dBadge.innerText = cfg.name;
     if (mCounter) mCounter.innerText = `${gameState.mistakes}/3`;
+    if (noteBtn) noteBtn.classList.toggle('is-active', Boolean(gameState.noteMode));
 
-    // İpucu sayacı ve pasifleşme
+    // İpucu sayacı (metinsiz köşe rozeti) ve pasifleşme
     if (hLabel) {
-      hLabel.innerText = `İpucu (${gameState.hintsRemaining})`;
+      hLabel.innerText = String(gameState.hintsRemaining);
     }
     if (hBtn) {
       if (gameState.hintsRemaining <= 0) {
         hBtn.disabled = true;
         hBtn.classList.add('opacity-40', 'cursor-not-allowed');
-        hBtn.classList.remove('hover:bg-mistral-cream');
       } else {
         hBtn.disabled = false;
         hBtn.classList.remove('opacity-40', 'cursor-not-allowed');
-        hBtn.classList.add('hover:bg-mistral-cream');
       }
     }
 
@@ -1147,13 +1144,13 @@
                 ${isSelf ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-200 text-amber-900 font-sans">Sen</span>' : ''}
               </div>
               <div class="text-[10px] text-mistral-stone font-sans">
-                ${isBackendDaily ? '⏱️ En Hızlı Çözüm: ' + safeTime : 'ID: #' + escapeHtml(item.puzzleId || '')}
+                ${isBackendDaily ? 'En Hızlı Çözüm: ' + safeTime : 'ID: #' + escapeHtml(item.puzzleId || '')}
               </div>
             </div>
           </div>
           <div class="text-right">
             <div class="text-mistral-orange font-bold text-xs">${safeScore} Puan</div>
-            <div class="text-[10px] text-mistral-slate">⏱️ ${safeTime}</div>
+            <div class="text-[10px] text-mistral-slate">${safeTime}</div>
           </div>
         </div>
       `;
@@ -1163,12 +1160,12 @@
     if (myRankLabel && myRankScore) {
       if (userRank > 0 && userRecord) {
         myRankLabel.innerText = `Senin Durumun: #${userRank} • ${maskUsername(userRecord.user)}`;
-        myRankScore.innerText = `⏱️ ${formatTime(userRecord.time)} (${userRecord.score.toLocaleString('tr-TR')} Puan)`;
+        myRankScore.innerText = `${formatTime(userRecord.time)} (${userRecord.score.toLocaleString('tr-TR')} Puan)`;
       } else {
         const myIdx = rows.findIndex(i => i.isSelf);
         if (myIdx >= 0) {
           myRankLabel.innerText = `Senin Durumun: #${myIdx + 1} • m*****u`;
-          myRankScore.innerText = `⏱️ ${formatTime(rows[myIdx].time)} (${rows[myIdx].score.toLocaleString('tr-TR')} Puan)`;
+          myRankScore.innerText = `${formatTime(rows[myIdx].time)} (${rows[myIdx].score.toLocaleString('tr-TR')} Puan)`;
         } else {
           myRankLabel.innerText = 'Senin Durumun: Henüz dereceniz yok';
           myRankScore.innerText = '-';
@@ -1255,7 +1252,7 @@
               </div>
               <div class="text-right">
                 <span class="text-mistral-orange font-bold">${safeScore} Puan</span>
-                <span class="text-mistral-stone text-[10px] ml-2">⏱️ ${safeTime}</span>
+                <span class="text-mistral-stone text-[10px] ml-2">${safeTime}</span>
               </div>
             </div>
           `;
