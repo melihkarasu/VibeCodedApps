@@ -126,7 +126,7 @@ const SCALE = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
           const btn = document.getElementById('btn-autoscroll');
 
           if (isScrolling) {
-            icon.innerText = '⏸';
+            icon.innerText = '';
             text.innerText = 'Kaydırmayı Durdur';
             btn.className = 'w-full py-2.5 px-3 rounded-lg bg-mistral-orange text-white text-xs font-semibold transition flex items-center justify-center gap-1.5 shadow-xs';
             scrollTimer = setInterval(() => {

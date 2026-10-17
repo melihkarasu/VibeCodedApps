@@ -251,7 +251,7 @@ module.exports = function(pageTemplate) {
           <div class="p-6 rounded-2xl bg-white border border-mistral-hairline shadow-xl space-y-4">
             <div class="flex items-center justify-between">
               <h3 class="text-sm font-bold text-mistral-ink flex items-center gap-1.5">
-                <span>⭐</span> Favori Paritelerim
+                <span></span> Favori Paritelerim
               </h3>
               <button onclick="clearAllFavorites()" class="text-xs text-rose-400 hover:underline">Tümünü Sil</button>
             </div>

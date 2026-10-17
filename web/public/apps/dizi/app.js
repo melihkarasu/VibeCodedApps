@@ -500,7 +500,7 @@ const STORAGE_KEY = 'vibe_w…hlist';
           document.getElementById('stat-total-time').innerText = totalHours > 24 ? `${Math.floor(totalHours / 24)}G ${totalHours % 24}S` : `${totalHours} Saat`;
 
           const avgRating = ratedCount > 0 ? (totalRatings / ratedCount).toFixed(1) : '0.0';
-          document.getElementById('stat-avg-rating').innerText = '⭐ ' + avgRating;
+          document.getElementById('stat-avg-rating').innerText = '' + avgRating;
         }
 
         function showLoading(show, text = '') {

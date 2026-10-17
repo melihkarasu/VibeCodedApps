@@ -359,7 +359,7 @@ let currentBooks = [];
             if (panelPlay) panelPlay.innerText = '▶';
           });
 
-          document.getElementById('dock-play-icon').innerText = '⏸';
+          document.getElementById('dock-play-icon').innerText = '';
           document.getElementById('dock-play-text').innerText = 'Duraklat';
           document.getElementById('dock-status').innerText = 'ŞİMDİ ÇALIYOR';
           document.getElementById('dock-author').innerText = activeBook.authors +
@@ -367,7 +367,7 @@ let currentBooks = [];
             (t.length ? ' • ' + t.length : '');
 
           const panelPlay = document.getElementById('btn-panel-play');
-          if (panelPlay) panelPlay.innerText = '⏸';
+          if (panelPlay) panelPlay.innerText = '';
 
           updateTrackProgressLabel();
           renderTrackList();
@@ -570,11 +570,11 @@ let currentBooks = [];
         });
 
         player.addEventListener('play', () => {
-          document.getElementById('dock-play-icon').innerText = '⏸';
+          document.getElementById('dock-play-icon').innerText = '';
           document.getElementById('dock-play-text').innerText = 'Duraklat';
           document.getElementById('dock-status').innerText = 'ŞİMDİ ÇALIYOR';
           const panelPlay = document.getElementById('btn-panel-play');
-          if (panelPlay) panelPlay.innerText = '⏸';
+          if (panelPlay) panelPlay.innerText = '';
         });
 
         player.addEventListener('pause', () => {

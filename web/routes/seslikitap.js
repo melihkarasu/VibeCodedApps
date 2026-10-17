@@ -64,11 +64,11 @@ module.exports = function(pageTemplate) {
 
         <!-- Kontrol Butonları -->
         <div class="flex flex-wrap items-center justify-center gap-2">
-          <button onclick="prevTrack()" id="btn-prev-track" class="px-3 py-2 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink font-bold text-sm transition cursor-pointer" title="Önceki Bölüm">⏮</button>
-          <button onclick="skipBackward()" class="px-3 py-2 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink font-bold text-xs transition cursor-pointer" title="10 saniye geri">⏪ 10s</button>
+          <button onclick="prevTrack()" id="btn-prev-track" class="px-3 py-2 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink font-bold text-sm transition cursor-pointer" title="Önceki Bölüm"></button>
+          <button onclick="skipBackward()" class="px-3 py-2 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink font-bold text-xs transition cursor-pointer" title="10 saniye geri">10s</button>
           <button onclick="toggleAudioPlay()" id="btn-panel-play" class="px-6 py-2.5 rounded-lg bg-mistral-orange hover:bg-mistral-orange-deep text-white font-bold text-sm transition shadow cursor-pointer">▶</button>
-          <button onclick="skipForward()" class="px-3 py-2 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink font-bold text-xs transition cursor-pointer" title="10 saniye ileri">10s ⏩</button>
-          <button onclick="nextTrack()" id="btn-next-track" class="px-3 py-2 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink font-bold text-sm transition cursor-pointer" title="Sonraki Bölüm">⏭</button>
+          <button onclick="skipForward()" class="px-3 py-2 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink font-bold text-xs transition cursor-pointer" title="10 saniye ileri">10s </button>
+          <button onclick="nextTrack()" id="btn-next-track" class="px-3 py-2 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink font-bold text-sm transition cursor-pointer" title="Sonraki Bölüm"></button>
         </div>
 
         <!-- Hız ve Ses Kontrolleri -->

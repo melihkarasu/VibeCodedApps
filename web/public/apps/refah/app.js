@@ -14,7 +14,7 @@ const COUNTRY_META = {
 
         const INDICATORS = {
           'NY.GDP.PCAP.KD': { name: 'Kişi Başına GSYİH', unit: 'Sabit 2015 USD ($)', icon: '', decimals: 0 },
-          'SP.DYN.LE00.IN': { name: 'Beklenen Yaşam Süresi', unit: 'Yıl', icon: '⏳', decimals: 1 },
+          'SP.DYN.LE00.IN': { name: 'Beklenen Yaşam Süresi', unit: 'Yıl', icon: '', decimals: 1 },
           'FP.CPI.TOTL.ZG': { name: 'TÜFE Enflasyon Oranı', unit: 'Yıllık %', icon: '', decimals: 1 },
           'IT.NET.USER.ZS': { name: 'İnternet Kullanım Oranı', unit: '% Nüfus', icon: '', decimals: 1 },
           'EG.ELC.ACCS.ZS': { name: 'Elektrik Erişim Oranı', unit: '% Nüfus', icon: '', decimals: 1 },

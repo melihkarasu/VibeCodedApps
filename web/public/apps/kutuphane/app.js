@@ -471,7 +471,7 @@ function togglePlayPauseSpeech() {
   } else if (isPausedSpeech) {
     window.speechSynthesis.resume();
     isPausedSpeech = false;
-    document.getElementById('btn-tts-play').innerText = '⏸';
+    document.getElementById('btn-tts-play').innerText = '';
     document.getElementById('tts-status-text').innerText = 'Okunuyor (' + (currentParagraphIndex + 1) + '/' + currentBookParagraphs.length + ')';
   } else {
     startSpeechAt(currentParagraphIndex || 0);
@@ -506,7 +506,7 @@ function startSpeechAt(idx) {
   isPausedSpeech = false;
 
   document.getElementById('tts-player-bar').classList.remove('hidden');
-  document.getElementById('btn-tts-play').innerText = '⏸';
+  document.getElementById('btn-tts-play').innerText = '';
   document.getElementById('tts-status-text').innerText = 'Okunuyor (' + (idx + 1) + '/' + currentBookParagraphs.length + ')';
 
   // Önceki aktif paragraf vurgularını temizle

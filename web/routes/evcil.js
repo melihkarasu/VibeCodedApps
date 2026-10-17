@@ -99,7 +99,7 @@ module.exports = function(pageTemplate) {
             </div>
             <div class="p-2.5 rounded-xl bg-mistral-cream border border-mistral-beige-deep">
               <span class="text-[10px] text-mistral-stone block">Çocuk Dostu</span>
-              <strong class="text-mistral-ink font-bold text-xs" id="m-pet-friendly">⭐ 5/5</strong>
+              <strong class="text-mistral-ink font-bold text-xs" id="m-pet-friendly">5/5</strong>
             </div>
             <div class="p-2.5 rounded-xl bg-mistral-cream border border-mistral-beige-deep">
               <span class="text-[10px] text-mistral-stone block">Enerji Düzeyi</span>

@@ -149,7 +149,7 @@ let checkDebounceTimer = null;
           // Buton ve Kartı Yükleme Durumuna Al (DESIGN.md açık kehribar statü)
           btn.disabled = true;
           btn.classList.add('opacity-80', 'cursor-not-allowed');
-          btnIcon.innerText = '⏳';
+          btnIcon.innerText = '';
           btnText.innerText = '10+ Milyar Şifre Taranıyor...';
 
           card.className = 'p-5 rounded-2xl bg-amber-50 border-2 border-amber-300 flex items-start gap-4 transition shadow-sm';

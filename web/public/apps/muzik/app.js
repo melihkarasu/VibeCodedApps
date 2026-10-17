@@ -229,7 +229,7 @@ let currentResults = [];
 
           bar.classList.remove('hidden');
           bar.classList.add('flex');
-          btn.innerText = '⏸';
+          btn.innerText = '';
           tName.innerText = trackName;
           aName.innerText = artistName;
 
@@ -241,7 +241,7 @@ let currentResults = [];
           const btn = document.getElementById('btn-global-play');
           if (audio.paused) {
             audio.play();
-            btn.innerText = '⏸';
+            btn.innerText = '';
           } else {
             audio.pause();
             btn.innerText = '▶';

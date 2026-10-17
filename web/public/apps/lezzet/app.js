@@ -618,7 +618,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
 
               badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/80 text-white text-[10px] font-bold">Forkify (1M+ Global)</span>`;
               if (recipe.publisher) badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-indigo-500/80 text-white text-[10px] font-bold">${recipe.publisher}</span>`;
-              if (recipe.cooking_time) badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-teal-500/80 text-white text-[10px] font-bold">⏱️ ${recipe.cooking_time} dk</span>`;
+              if (recipe.cooking_time) badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-teal-500/80 text-white text-[10px] font-bold">${recipe.cooking_time} dk</span>`;
               if (recipe.servings) badges.innerHTML += `<span class="px-2.5 py-0.5 rounded-full bg-rose-500/80 text-white text-[10px] font-bold">${recipe.servings} Kişilik</span>`;
 
               if (recipe.source_url) {
