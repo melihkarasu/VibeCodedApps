@@ -18,8 +18,8 @@ module.exports = function(pageTemplate) {
 
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/sudoku/app.css?v=20261017c">
-      <script src="/static/apps/sudoku/app.js?v=20261017c" defer></script>
+      <link rel="stylesheet" href="/static/apps/sudoku/app.css?v=20261017d">
+      <script src="/static/apps/sudoku/app.js?v=20261017d" defer></script>
     `;
 
     const content = `
@@ -251,13 +251,21 @@ module.exports = function(pageTemplate) {
             </div>
           </div>
 
-          <!-- 2) ARAÇ ÇUBUĞU: GERİ AL - SİL - NOT AL - İPUCU (Tahta ile Tuş Takımı Arasında, Metinsiz Sadece Sembol) -->
+          <!-- 2) ARAÇ ÇUBUĞU: GERİ AL - İLERİ AL - SİL - NOT AL - İPUCU (Tahta ile Tuş Takımı Arasında, Metinsiz Sadece Sembol) -->
           <div class="sudoku-action-dock" role="toolbar" aria-label="Oyun Araçları">
             <!-- Geri Al (Undo) -->
-            <button type="button" onclick="actionUndo()" class="sudoku-tool-btn" aria-label="Geri Al" title="Geri Al (Ctrl+Z)">
+            <button type="button" onclick="actionUndo()" id="btn-undo" class="sudoku-tool-btn" aria-label="Geri Al" title="Geri Al (Ctrl+Z)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M9 14 4 9l5-5"/>
                 <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/>
+              </svg>
+            </button>
+
+            <!-- İleri Al (Redo) -->
+            <button type="button" onclick="actionRedo()" id="btn-redo" class="sudoku-tool-btn opacity-40" aria-label="İleri Al" title="Geri Alınan Hamleyi İleri Al (Ctrl+Y / Ctrl+Shift+Z)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 14 5-5-5-5"/>
+                <path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5v0A5.5 5.5 0 0 0 9.5 20H13"/>
               </svg>
             </button>
 
