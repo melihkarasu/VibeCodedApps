@@ -783,8 +783,8 @@ module.exports = function(pageTemplate) {
       <!-- Accordions Container -->
       <div id="accordions-container" class="space-y-5 mb-14">
         
-        <!-- 0. FAVORİLERİM AKORDİYONU (Sadece Oturum Açıkken Görünür) -->
-        <div id="section-favorites" class="accordion-item vibe-accordion-card mb-6 !border-amber-300">
+        <!-- 0. FAVORİLERİM AKORDİYONU (Sadece Oturum Açıkken ve Favori Sayısı > 0 İken Görünür) -->
+        <div id="section-favorites" class="hidden accordion-item vibe-accordion-card mb-6 !border-amber-300" style="display: none;">
           <!-- Accordion Header -->
           <button 
             type="button" 
@@ -838,8 +838,8 @@ module.exports = function(pageTemplate) {
           </div>
         </div>
 
-        <!-- 0B. GELİŞTİRİCİ ÖNERİLERİ AKORDİYONU (Herkese Açık) -->
-        <div id="section-developer-recommendations" class="accordion-item vibe-accordion-card mb-6 !border-emerald-300">
+        <!-- 0B. GELİŞTİRİCİ ÖNERİLERİ AKORDİYONU (Öneri Sayısı > 0 İken Görünür) -->
+        <div id="section-developer-recommendations" class="${devRecommendedIds.length === 0 ? 'hidden ' : ''}accordion-item vibe-accordion-card mb-6 !border-emerald-300" style="${devRecommendedIds.length === 0 ? 'display: none;' : ''}">
           <!-- Accordion Header -->
           <button 
             type="button" 
@@ -1045,7 +1045,13 @@ module.exports = function(pageTemplate) {
               const data = await res.json();
               if (data.success && Array.isArray(data.favorites)) {
                 try {
-                  const merged = Array.from(new Set([...data.favorites, ...getFavoritesSync()]));
+                  const localFavs = getFavoritesSync();
+                  const merged = Array.from(new Set([...data.favorites, ...localFavs]));
+                  localFavs.forEach(id => {
+                    if (!data.favorites.includes(id)) {
+                      saveFavoritesToAPI(id, 'add');
+                    }
+                  });
                   const json = JSON.stringify(merged);
                   if (user.id) localStorage.setItem('vibe_favs_' + user.id, json);
                   if (user.email) localStorage.setItem('vibe_favs_' + user.email, json);
@@ -1101,6 +1107,8 @@ module.exports = function(pageTemplate) {
           badge.innerText = validIds.length + ' Uygulama';
 
           if (validIds.length === 0) {
+            section.classList.add('hidden');
+            section.style.display = 'none';
             emptyState.classList.remove('hidden');
             grid.classList.add('hidden');
             grid.classList.remove('grid');
@@ -1108,6 +1116,8 @@ module.exports = function(pageTemplate) {
             return;
           }
           
+          section.classList.remove('hidden');
+          section.style.display = 'block';
           emptyState.classList.add('hidden');
           grid.classList.remove('hidden');
           grid.classList.add('grid');
@@ -1223,11 +1233,6 @@ module.exports = function(pageTemplate) {
             return;
           }
 
-          if (secFav) {
-            secFav.classList.remove('hidden');
-            secFav.style.display = 'block';
-          }
-
           const favs = getFavorites();
           const badge = document.getElementById('fav-badge-count');
           const emptyState = document.getElementById('fav-empty-state');
@@ -1251,6 +1256,10 @@ module.exports = function(pageTemplate) {
           if (!emptyState || !grid) return;
 
           if (favs.length === 0) {
+            if (secFav) {
+              secFav.classList.add('hidden');
+              secFav.style.display = 'none';
+            }
             emptyState.classList.remove('hidden');
             emptyState.style.display = 'block';
             grid.classList.add('hidden');
@@ -1258,6 +1267,10 @@ module.exports = function(pageTemplate) {
             grid.style.display = 'none';
             grid.innerHTML = '';
           } else {
+            if (secFav) {
+              secFav.classList.remove('hidden');
+              secFav.style.display = 'block';
+            }
             emptyState.classList.add('hidden');
             emptyState.style.display = 'none';
             grid.classList.remove('hidden');
