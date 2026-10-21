@@ -55,7 +55,7 @@ const pageTemplate = (title, content, extraHead = '') => `
   <!-- Precompiled Tailwind CSS (Zero Runtime / No CDN Delay) -->
   <link rel="stylesheet" href="/static/css/tailwind.min.css">
   <!-- Global Mistral AI Theme (Cache Destekli Statik CSS) -->
-  <link rel="stylesheet" href="/static/css/mistral-theme.css?v=20261021b">
+  <link rel="stylesheet" href="/static/css/mistral-theme.css?v=20261021c">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <!-- Favicon: Premium Siyah Zemin Üzerinde Geometrik MK Monogramı -->
@@ -277,25 +277,40 @@ const pageTemplate = (title, content, extraHead = '') => `
 
   <!-- Global Core Utilities & SSO Authentication (Cache Destekli Statik JS) -->
   <script data-cfasync="false" src="/static/js/core.js?v=20261016b"></script>
-  <!-- AdSense Sadece Yanlar (Side Rail) Koruması: Alt/Üst Anchor, Footer ve İçerik İçi Otomatik Reklam Temizleyici -->
+  <!-- AdSense Sadece Yanlar (Side Rail) Koruması: DOM'dan silmeden (no_div hatası üretmeden) alt/üst/içerik reklamlarını gizler -->
   <script data-cfasync="false">
     (function() {
-      function cleanNonSideRailAds() {
+      function enforceSideRailOnlyAds() {
         try {
           if (document.body) {
-            if (document.body.style.paddingBottom) document.body.style.setProperty('padding-bottom', '0px', 'important');
-            if (document.body.style.paddingTop) document.body.style.setProperty('padding-top', '0px', 'important');
-            if (document.body.style.marginBottom) document.body.style.setProperty('margin-bottom', '0px', 'important');
+            if (document.body.style.paddingBottom && document.body.style.paddingBottom !== '0px') {
+              document.body.style.setProperty('padding-bottom', '0px', 'important');
+            }
+            if (document.body.style.paddingTop && document.body.style.paddingTop !== '0px') {
+              document.body.style.setProperty('padding-top', '0px', 'important');
+            }
+            if (document.body.style.marginBottom && document.body.style.marginBottom !== '0px') {
+              document.body.style.setProperty('margin-bottom', '0px', 'important');
+            }
           }
           if (document.documentElement) {
-            if (document.documentElement.style.paddingBottom) document.documentElement.style.setProperty('padding-bottom', '0px', 'important');
-            if (document.documentElement.style.paddingTop) document.documentElement.style.setProperty('padding-top', '0px', 'important');
+            if (document.documentElement.style.paddingBottom && document.documentElement.style.paddingBottom !== '0px') {
+              document.documentElement.style.setProperty('padding-bottom', '0px', 'important');
+            }
+            if (document.documentElement.style.paddingTop && document.documentElement.style.paddingTop !== '0px') {
+              document.documentElement.style.setProperty('padding-top', '0px', 'important');
+            }
           }
-          // 1. google-auto-placed (in-page / footer üstü-altı otomatik reklam kutuları)
+          // 1. google-auto-placed (in-page / footer üstü-altı otomatik reklam kutuları) -> silmek yerine gizle (Error: no_div önlemi)
           document.querySelectorAll('.google-auto-placed').forEach(function(el) {
-            el.remove();
+            if (!el.hasAttribute('data-vibe-hidden')) {
+              el.setAttribute('data-vibe-hidden', '1');
+              el.style.setProperty('display', 'none', 'important');
+              el.style.setProperty('height', '0px', 'important');
+              el.style.setProperty('overflow', 'hidden', 'important');
+            }
           });
-          // 2. ins.adsbygoogle kontrolü: Sadece yan reklam (.vibe-rail-unit veya AdSense Siderail) kalabilir
+          // 2. ins.adsbygoogle kontrolü: Sadece yan reklam (AdSense Siderail veya .vibe-rail-unit) görünür kalır
           document.querySelectorAll('ins.adsbygoogle').forEach(function(ins) {
             if (ins.classList.contains('vibe-rail-unit') || ins.closest('.vibe-side-rail-ad')) return;
             var fmt = (ins.getAttribute('data-ad-format') || '').toLowerCase();
@@ -305,18 +320,28 @@ const pageTemplate = (title, content, extraHead = '') => `
             var isBottomOrTopAnchor = !!anchorStatus || styleAttr.indexOf('bottom:') !== -1 || styleAttr.indexOf('bottom :') !== -1 || (styleAttr.indexOf('width: 100%') !== -1) || (styleAttr.indexOf('width:100%') !== -1) || (styleAttr.indexOf('width: 100vw') !== -1);
             var isInsideContentOrFooter = !!(ins.closest('main') || ins.closest('header') || ins.closest('footer'));
             if (!isSideRail || isBottomOrTopAnchor || isInsideContentOrFooter) {
-              ins.remove();
+              if (!ins.hasAttribute('data-vibe-hidden')) {
+                ins.setAttribute('data-vibe-hidden', '1');
+                ins.style.setProperty('display', 'none', 'important');
+                ins.style.setProperty('visibility', 'hidden', 'important');
+                ins.style.setProperty('height', '0px', 'important');
+                ins.style.setProperty('min-height', '0px', 'important');
+                ins.style.setProperty('max-height', '0px', 'important');
+                ins.style.setProperty('width', '0px', 'important');
+                ins.style.setProperty('overflow', 'hidden', 'important');
+                ins.style.setProperty('pointer-events', 'none', 'important');
+              }
             }
           });
         } catch (e) {}
       }
-      cleanNonSideRailAds();
+      enforceSideRailOnlyAds();
       if (typeof MutationObserver !== 'undefined') {
-        var obs = new MutationObserver(function() { cleanNonSideRailAds(); });
+        var obs = new MutationObserver(function() { enforceSideRailOnlyAds(); });
         obs.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'data-anchor-status', 'data-ad-status'] });
       }
-      window.addEventListener('DOMContentLoaded', cleanNonSideRailAds);
-      window.addEventListener('load', cleanNonSideRailAds);
+      window.addEventListener('DOMContentLoaded', enforceSideRailOnlyAds);
+      window.addEventListener('load', enforceSideRailOnlyAds);
     })();
   </script>
 </body>
