@@ -625,7 +625,8 @@ pre, code:not(.inline-code) {
 
 /* =============================================================
    VİTRİN SAĞ & SOL KENAR (SIDE RAIL) ADSENSE ALANLARI
-   İçerik alanında (main) reklam görünmez; yalnızca geniş ekranlarda
+   İçerik alanında (main), üst/alt sabit bantlarda (anchor) ve
+   footer çevresinde reklam görünmez; yalnızca geniş ekranlarda
    sayfanın sağ ve sol boşluklarında (side rails) dikey olarak yer alır.
 ============================================================= */
 .vibe-side-rail-ad {
@@ -645,10 +646,10 @@ pre, code:not(.inline-code) {
     z-index: 30;
     pointer-events: auto;
   }
-  .vibe-side-rail-left {
+  .vibe-side-rail-ad[data-rail="left"] {
     left: max(0.75rem, calc((100vw - 72rem) / 2 - 180px));
   }
-  .vibe-side-rail-right {
+  .vibe-side-rail-ad[data-rail="right"] {
     right: max(0.75rem, calc((100vw - 72rem) / 2 - 180px));
   }
   .vibe-side-rail-ad ins.adsbygoogle {
@@ -658,13 +659,31 @@ pre, code:not(.inline-code) {
   }
 }
 
-/* İçerik alanı içine AdSense Otomatik Reklamlarının (In-Page / In-Article) girmesini engelle */
-main ins.adsbygoogle:not(.vibe-rail-unit),
-main .google-auto-placed,
-header .google-auto-placed,
-footer .google-auto-placed {
-  display: none !important;
-  height: 0 !important;
-  overflow: hidden !important;
+/* 1. AdSense'in body/html'e eklediği alt/üst boşlukları (Anchor Ad padding) ve footer kaymasını kesin engelle */
+html,
+body {
+  padding-bottom: 0 !important;
+  padding-top: 0 !important;
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
 }
 
+/* 2. İçerik içi (In-Page), Footer çevresi ve Alt/Üst Sabit (Anchor) reklamları tamamen gizle */
+main ins.adsbygoogle:not(.vibe-rail-unit),
+header ins.adsbygoogle,
+footer ins.adsbygoogle,
+.google-auto-placed,
+ins.adsbygoogle[data-anchor-status],
+ins.adsbygoogle[data-ad-status="unfilled"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}

@@ -55,7 +55,7 @@ const pageTemplate = (title, content, extraHead = '') => `
   <!-- Precompiled Tailwind CSS (Zero Runtime / No CDN Delay) -->
   <link rel="stylesheet" href="/static/css/tailwind.min.css">
   <!-- Global Mistral AI Theme (Cache Destekli Statik CSS) -->
-  <link rel="stylesheet" href="/static/css/mistral-theme.css?v=20261021a">
+  <link rel="stylesheet" href="/static/css/mistral-theme.css?v=20261021b">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <!-- Favicon: Premium Siyah Zemin Üzerinde Geometrik MK Monogramı -->
@@ -277,6 +277,48 @@ const pageTemplate = (title, content, extraHead = '') => `
 
   <!-- Global Core Utilities & SSO Authentication (Cache Destekli Statik JS) -->
   <script data-cfasync="false" src="/static/js/core.js?v=20261016b"></script>
+  <!-- AdSense Sadece Yanlar (Side Rail) Koruması: Alt/Üst Anchor, Footer ve İçerik İçi Otomatik Reklam Temizleyici -->
+  <script data-cfasync="false">
+    (function() {
+      function cleanNonSideRailAds() {
+        try {
+          if (document.body) {
+            if (document.body.style.paddingBottom) document.body.style.setProperty('padding-bottom', '0px', 'important');
+            if (document.body.style.paddingTop) document.body.style.setProperty('padding-top', '0px', 'important');
+            if (document.body.style.marginBottom) document.body.style.setProperty('margin-bottom', '0px', 'important');
+          }
+          if (document.documentElement) {
+            if (document.documentElement.style.paddingBottom) document.documentElement.style.setProperty('padding-bottom', '0px', 'important');
+            if (document.documentElement.style.paddingTop) document.documentElement.style.setProperty('padding-top', '0px', 'important');
+          }
+          // 1. google-auto-placed (in-page / footer üstü-altı otomatik reklam kutuları)
+          document.querySelectorAll('.google-auto-placed').forEach(function(el) {
+            el.remove();
+          });
+          // 2. ins.adsbygoogle kontrolü: Sadece yan reklam (.vibe-rail-unit veya AdSense Siderail) kalabilir
+          document.querySelectorAll('ins.adsbygoogle').forEach(function(ins) {
+            if (ins.classList.contains('vibe-rail-unit') || ins.closest('.vibe-side-rail-ad')) return;
+            var fmt = (ins.getAttribute('data-ad-format') || '').toLowerCase();
+            var anchorStatus = ins.getAttribute('data-anchor-status');
+            var styleAttr = (ins.getAttribute('style') || '').toLowerCase();
+            var isSideRail = fmt.indexOf('siderail') !== -1 || ins.hasAttribute('data-side-rail-status');
+            var isBottomOrTopAnchor = !!anchorStatus || styleAttr.indexOf('bottom:') !== -1 || styleAttr.indexOf('bottom :') !== -1 || (styleAttr.indexOf('width: 100%') !== -1) || (styleAttr.indexOf('width:100%') !== -1) || (styleAttr.indexOf('width: 100vw') !== -1);
+            var isInsideContentOrFooter = !!(ins.closest('main') || ins.closest('header') || ins.closest('footer'));
+            if (!isSideRail || isBottomOrTopAnchor || isInsideContentOrFooter) {
+              ins.remove();
+            }
+          });
+        } catch (e) {}
+      }
+      cleanNonSideRailAds();
+      if (typeof MutationObserver !== 'undefined') {
+        var obs = new MutationObserver(function() { cleanNonSideRailAds(); });
+        obs.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['style', 'data-anchor-status', 'data-ad-status'] });
+      }
+      window.addEventListener('DOMContentLoaded', cleanNonSideRailAds);
+      window.addEventListener('load', cleanNonSideRailAds);
+    })();
+  </script>
 </body>
 </html>
 `;

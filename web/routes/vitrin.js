@@ -684,14 +684,14 @@ module.exports = function(pageTemplate) {
 
     const content = `
       <!-- Sağ ve Sol Kenar (Side Rail) AdSense Alanları — Yalnızca Geniş Ekranlarda Sayfa Kenarlarında Görünür, İçeriğe Girmez -->
-      <aside class="vibe-side-rail-ad vibe-side-rail-left" aria-label="Sol Kenar Reklam Alanı">
+      <aside class="vibe-side-rail-ad" data-rail="left" aria-label="Sol Kenar Reklam Alanı">
         <ins class="adsbygoogle vibe-rail-unit"
              style="display:block;width:160px;min-height:600px"
              data-ad-client="ca-pub-8978837186965149"
              data-ad-format="vertical"
              data-full-width-responsive="false"></ins>
       </aside>
-      <aside class="vibe-side-rail-ad vibe-side-rail-right" aria-label="Sağ Kenar Reklam Alanı">
+      <aside class="vibe-side-rail-ad" data-rail="right" aria-label="Sağ Kenar Reklam Alanı">
         <ins class="adsbygoogle vibe-rail-unit"
              style="display:block;width:160px;min-height:600px"
              data-ad-client="ca-pub-8978837186965149"
