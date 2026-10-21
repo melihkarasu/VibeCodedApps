@@ -999,38 +999,17 @@ module.exports = function(pageTemplate) {
           }
         };
 
-        function getFavoritesSync() {
-          const user = getVitrinUser();
-          if (!user) return [];
-
-          const candidateKeys = [];
-          if (user.id) candidateKeys.push('vibe_favs_' + user.id);
-          if (user.email) candidateKeys.push('vibe_favs_' + user.email);
-          candidateKeys.push('vibe_favs_user', 'vibe_favorite_apps');
-
-          const foundSet = new Set();
-          for (const k of candidateKeys) {
-            try {
-              const raw = localStorage.getItem(k);
-              if (raw) {
-                const arr = JSON.parse(raw);
-                if (Array.isArray(arr)) {
-                  arr.forEach(id => {
-                    if (APPS_DATA[id]) foundSet.add(id);
-                  });
-                }
-              }
-            } catch(e) {}
-          }
-          return Array.from(foundSet);
-        }
-
+        // Favoriler bellekte (in-memory) tutulur; kalıcı kaynak yalnızca PostgreSQL (user_favorites tablosu)
         let favoritesCache = null;
         let isFetchingFavorites = false;
 
         async function fetchFavoritesFromAPI() {
           const user = getVitrinUser();
-          if (!user) return;
+          if (!user) {
+            favoritesCache = [];
+            updateFavoriteUI();
+            return;
+          }
           const token = localStorage.getItem('vibe_token');
           if (!token) return;
 
@@ -1044,28 +1023,12 @@ module.exports = function(pageTemplate) {
             if (res.ok) {
               const data = await res.json();
               if (data.success && Array.isArray(data.favorites)) {
-                try {
-                  const localFavs = getFavoritesSync();
-                  const merged = Array.from(new Set([...data.favorites, ...localFavs]));
-                  localFavs.forEach(id => {
-                    if (!data.favorites.includes(id)) {
-                      saveFavoritesToAPI(id, 'add');
-                    }
-                  });
-                  const json = JSON.stringify(merged);
-                  if (user.id) localStorage.setItem('vibe_favs_' + user.id, json);
-                  if (user.email) localStorage.setItem('vibe_favs_' + user.email, json);
-                  localStorage.setItem('vibe_favs_user', json);
-                  localStorage.setItem('vibe_favorite_apps', json);
-                  favoritesCache = merged;
-                } catch(e) {
-                  favoritesCache = data.favorites;
-                }
+                favoritesCache = data.favorites.filter(function(id) { return !!APPS_DATA[id]; });
                 updateFavoriteUI();
               }
             }
           } catch(err) {
-            console.warn('Favoriler sunucudan senkronize edilemedi:', err.message);
+            console.warn('Favoriler veritabanından çekilemedi:', err.message);
           } finally {
             isFetchingFavorites = false;
           }
@@ -1148,15 +1111,14 @@ module.exports = function(pageTemplate) {
         function getFavorites() {
           const user = getVitrinUser();
           if (!user) return [];
-          if (favoritesCache !== null) return favoritesCache;
-          return getFavoritesSync();
+          return favoritesCache || [];
         }
 
         async function saveFavoritesToAPI(appId, action) {
           const token = localStorage.getItem('vibe_token');
-          if (!token) return;
+          if (!token) return false;
           try {
-            await fetch('/api/favorites', {
+            const res = await fetch('/api/favorites', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -1164,27 +1126,14 @@ module.exports = function(pageTemplate) {
               },
               body: JSON.stringify({ app_id: appId, action: action })
             });
+            return res.ok;
           } catch(err) {
-            console.warn('Favori sunucuya kaydedilemedi:', err.message);
+            console.warn('Favori PostgreSQL veritabanına kaydedilemedi:', err.message);
+            return false;
           }
         }
 
-        function saveFavorites(list) {
-          const user = getVitrinUser();
-          if (!user) return;
-          try {
-            const json = JSON.stringify(list);
-            if (user.id) localStorage.setItem('vibe_favs_' + user.id, json);
-            if (user.email) localStorage.setItem('vibe_favs_' + user.email, json);
-            localStorage.setItem('vibe_favs_user', json);
-            localStorage.setItem('vibe_favorite_apps', json);
-          } catch(e) {}
-
-          favoritesCache = list;
-          updateFavoriteUI();
-        }
-
-        function toggleFav(e, appId) {
+        async function toggleFav(e, appId) {
           if (e) {
             e.preventDefault();
             e.stopPropagation();
@@ -1200,6 +1149,7 @@ module.exports = function(pageTemplate) {
           const idx = favs.indexOf(appId);
           const isAdding = idx < 0;
 
+          // Optimistik UI güncellemesi
           if (isAdding) {
             favs.unshift(appId);
             if (window.showToast) window.showToast('Favorilere eklendi!');
@@ -1208,8 +1158,15 @@ module.exports = function(pageTemplate) {
             if (window.showToast) window.showToast('Favorilerden kaldırıldı');
           }
 
-          saveFavorites(favs);
-          saveFavoritesToAPI(appId, isAdding ? 'add' : 'remove');
+          favoritesCache = favs;
+          updateFavoriteUI();
+
+          // Kalıcı kayıt doğrudan PostgreSQL veritabanına yapılır (localStorage kullanılmaz)
+          const ok = await saveFavoritesToAPI(appId, isAdding ? 'add' : 'remove');
+          if (!ok) {
+            // Hata durumunda UI'ı geri al
+            fetchFavoritesFromAPI();
+          }
         }
 
         function updateFavoriteUI() {
@@ -1306,8 +1263,8 @@ module.exports = function(pageTemplate) {
         });
 
         window.addEventListener('storage', function(e) {
-          if (e.key === 'vibe_user' || (e.key && e.key.startsWith('vibe_favs_'))) {
-            updateFavoriteUI();
+          if (e.key === 'vibe_user') {
+            fetchFavoritesFromAPI();
           }
         });
 
