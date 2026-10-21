@@ -288,6 +288,17 @@ router.get('/apps', async (req, res) => {
   }
 });
 
+
+// Geliştirici Önerileri - developer_recommended=true olan uygulamalar
+router.get('/apps/developer-recommendations', async (req, res) => {
+  try {
+    const apps = await supabaseRequest('/apps?select=id&developer_recommended=eq.true&order=sort_order.asc,created_at.asc');
+    res.json({ success: true, apps: apps.map(a => a.id) });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 router.post('/apps', async (req, res) => {
   const { id, category_id, name, desc, icon, url, action, status, sort_order } = req.body;
   if (!id || !name || !url) {
@@ -374,6 +385,26 @@ router.delete('/apps/:id', async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, error: 'Uygulama silinemedi: ' + err.message });
   }
+}
+
+// Geliştirici Önerisi Toggle - developer_recommended alanını güncelle
+router.patch('/apps/:id/developer-recommended', async (req, res) => {
+  const { developer_recommended } = req.body;
+  const appId = req.params.id;
+  if (typeof developer_recommended !== 'boolean') {
+    return res.status(400).json({ success: false, error: 'developer_recommended boolean olmalıdır' });
+  }
+  try {
+    const updated = await supabaseRequest('/apps?id=eq.' + encodeURIComponent(appId), {
+      method: 'PATCH',
+      body: JSON.stringify({ developer_recommended, updated_at: new Date().toISOString() })
+    });
+    res.json({ success: true, app: updated[0] });
+  } catch (err) {
+    res.status(500).json({ success: false, error: 'Geliştirici önerisi güncellenemedi: ' + err.message });
+  }
 });
+
+);
 
 module.exports = router;
