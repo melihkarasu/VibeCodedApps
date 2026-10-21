@@ -5,7 +5,9 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm install --production
 
-COPY . .
+COPY server.js template.js ./
+COPY public ./public
+COPY routes ./routes
 
 EXPOSE 3000
 

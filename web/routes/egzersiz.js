@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="/static/apps/egzersiz/app.css?v=20261017a.0" />
-      <script src="/static/apps/egzersiz/app.js?v=20261017a.0" defer></script>
+      <script src="/static/apps/egzersiz/app.js?v=20261021a.0" defer></script>
     `;
 
     const content = `

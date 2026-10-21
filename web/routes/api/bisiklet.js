@@ -17,7 +17,7 @@ router.get('/bisiklet/networks', async (req, res) => {
   }
 
   try {
-    const response = await fetch('http://api.citybik.es/v2/networks?fields=id,name,city,country,location', {
+    const response = await fetch('https://api.citybik.es/v2/networks?fields=id,name,city,country,location', {
       headers: { 'User-Agent': 'VibeCodedApps/1.0' },
       signal: AbortSignal.timeout(8000)
     });
@@ -54,7 +54,7 @@ router.get('/bisiklet/network/:id', async (req, res) => {
   }
 
   try {
-    const response = await fetch(`http://api.citybik.es/v2/networks/${encodeURIComponent(cleanId)}`, {
+    const response = await fetch(`https://api.citybik.es/v2/networks/${encodeURIComponent(cleanId)}`, {
       headers: { 'User-Agent': 'VibeCodedApps/1.0' },
       signal: AbortSignal.timeout(8000)
     });

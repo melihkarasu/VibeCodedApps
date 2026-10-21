@@ -592,7 +592,7 @@ function exportRoutine(format) {
     if (typeof showToast === 'function') showToast('JSON dosyası başarıyla indirildi.', 'success');
   } else if (format === 'print') {
     // 4. Yazdır / PDF Formatı
-    const printWindow = window.open('', '_blank');
+    // Safe Blob print preview
     if (!printWindow) {
       window.print();
       return;
@@ -647,8 +647,10 @@ function exportRoutine(format) {
       </html>
     `;
 
-    printWindow.document.write(printHtml);
-    printWindow.document.close();
+    const blob = new Blob([printHtml], { type: 'text/html;charset=utf-8' });
+    const blobUrl = URL.createObjectURL(blob);
+    window.open(blobUrl, '_blank', 'noopener,noreferrer');
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
   }
 }
 
