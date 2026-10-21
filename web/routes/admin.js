@@ -702,17 +702,6 @@ module.exports = function(pageTemplate) {
 
         function buildAppItemHtml(app) {
           const isActive = app.status !== 'hidden';
-          const isDevRec = app.developer_recommended === true;
-          
-          // Build star button HTML separately to avoid template literal issues
-          const starBtn = isDevRec
-            ? '<button type="button" onclick="toggleDeveloperRecommended(this)" data-app-id="' + app.id + '" data-dev-rec="true" class="p-1.5 rounded-lg hover:bg-emerald-50 text-emerald-600 hover:text-emerald-700 transition cursor-pointer bg-emerald-100" title="Geliştirici Önerisinden Kaldır"><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>'
-            : '<button type="button" onclick="toggleDeveloperRecommended(this)" data-app-id="' + app.id + '" data-dev-rec="false" class="p-1.5 rounded-lg hover:bg-emerald-50 text-emerald-600 hover:text-emerald-700 transition cursor-pointer" title="Geliştirici Önerisi Yap"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>';
-          
-          const statusBadge = isActive
-            ? '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold mr-1">Aktif</span>'
-            : '<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold mr-1">Gizli</span>';
-          
           return '<div class="admin-app-item p-3 rounded-xl border border-mistral-hairline-soft bg-mistral-cream/30 hover:border-mistral-orange/60 transition flex items-center justify-between gap-3" draggable="true" data-app-id="' + app.id + '">' +
             '<div class="flex items-center gap-2.5 min-w-0">' +
               '<span class="text-mistral-stone/50 hover:text-mistral-orange transition select-none text-xs shrink-0" title="Sürükleyerek sırala">⠿</span>' +
@@ -723,8 +712,9 @@ module.exports = function(pageTemplate) {
               '</div>' +
             '</div>' +
             '<div class="flex items-center gap-1 shrink-0">' +
-              statusBadge +
-              starBtn +
+              (isActive
+                ? '<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold mr-1">Aktif</span>'
+                : '<span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold mr-1">Gizli</span>') +
               '<button type="button" onclick="adminAppAction(this)" data-app-action="edit" data-app-id="' + app.id + '" class="p-1.5 rounded-lg hover:bg-mistral-cream text-mistral-slate hover:text-mistral-orange transition cursor-pointer" title="Düzenle"></button>' +
               '<button type="button" onclick="adminAppAction(this)" data-app-action="delete" data-app-id="' + app.id + '" class="p-1.5 rounded-lg hover:bg-rose-50 text-mistral-slate hover:text-rose-600 transition cursor-pointer" title="Sil"></button>' +
             '</div>' +
@@ -738,39 +728,6 @@ module.exports = function(pageTemplate) {
           if (!appId || !action) return;
           if (action === 'edit') openEditAppModal(appId);
           else if (action === 'delete') deleteApp(appId);
-        }
-
-        // Geliştirici Önerisi Toggle
-        async function toggleDeveloperRecommended(btn) {
-          const appId = btn.getAttribute('data-app-id');
-          const current = btn.getAttribute('data-dev-rec') === 'true';
-          const newVal = !current;
-          
-          const filledStar = '<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
-          const outlineStar = '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
-          
-          try {
-            const res = await fetch('/api/admin/apps/' + encodeURIComponent(appId) + '/developer-recommended', {
-              method: 'PATCH',
-              headers: getAuthHeaders(),
-              body: JSON.stringify({ developer_recommended: newVal })
-            });
-            const data = await res.json();
-            if (res.ok && data.success) {
-              if (window.showToast) window.showToast(newVal ? 'Geliştirici önerisi eklendi' : 'Geliştirici önerisi kaldırıldı');
-              // Update button state
-              btn.setAttribute('data-dev-rec', newVal);
-              btn.classList.toggle('bg-emerald-100', newVal);
-              btn.title = newVal ? 'Geliştirici Önerisinden Kaldır' : 'Geliştirici Önerisi Yap';
-              btn.innerHTML = newVal ? filledStar : outlineStar;
-              // Reload to update allAdminApps cache
-              loadAdminApps();
-            } else {
-              alert('Güncelleme başarısız: ' + (data.error || 'Bilinmeyen hata'));
-            }
-          } catch (e) {
-            alert('Ağ hatası: ' + e.message);
-          }
         }
 
         // Uygulama Sürükle/Bırak Motoru (kategori içi sıralama + kategoriler arası taşıma)
