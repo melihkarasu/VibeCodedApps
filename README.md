@@ -60,10 +60,10 @@ Sistem izole Docker ağı (`vibe-network`) üzerinde koşan mikro servislerden o
 
 ## 🔐 3. Güvenlik
 
-Projenin güvenliği; otonom penetrasyon testleri, SAST statik kod analizleri ve katmanlı savunma mimarisiyle en üst standartlara getirilmiştir.
+Projenin güvenliği; statik kaynak kod analizleri (SAST), dinamik güvenlik testleri (DAST), tedarik zinciri denetimleri ve katmanlı savunma mimarisiyle en üst standartlara getirilmiştir.
 
-### Güvenlik Denetim Araçları & Metodolojisi
-- **[melihkarasu/web-security-scanner](https://github.com/melihkarasu/web-security-scanner):** Projenin tüm güvenlik denetimleri, SAST statik kaynak kod analizleri, tedarik zinciri kontrolleri, HTTP güvenlik başlığı / DNS doğrulamaları, aktif zafiyet taramaları ve kanıt odaklı AI güvenlik analizleri **web-security-scanner** aracı ile gerçekleştirilmektedir.
+### Güvenlik Denetim Aracı & Metodolojisi
+- **[melihkarasu/web-security-scanner](https://github.com/melihkarasu/web-security-scanner):** Projenin tüm güvenlik denetimleri, SAST statik kaynak kod analizleri, 8 ekosistem tedarik zinciri (CVE/OSV) kontrolleri, HTTP güvenlik başlığı ve DNS savunma doğrulamaları, aktif zafiyet taramaları (SSRF, XSS, SQLi, CSRF, açık yönlendirme) ile kanıt doğrulamalı 4 aşamalı AI güvenlik analizleri **web-security-scanner** aracı ile gerçekleştirilmektedir.
 
 ### Uygulanan Kritik Savunma Önlemleri & Güvenlik Sertleştirmeleri
 1. **Çok Katmanlı SSRF & DNS Rebinding Savunması (CWE-918):**
@@ -146,6 +146,7 @@ Tüm uygulamalar `/` vitrininde kategoriler altında hiyerarşik olarak listelen
 - **📍 IP Coğrafi Konum & İstihbarat** (`/ip-konum`): SSRF korumalı genel IP lokasyonu, ISS ve ASN analizi.
 - **🎨 Harmoni: Renk & Kontrast Stüdyosu** (`/renk-studyosu`): The Color API ile renk şemaları, WCAG kontrast analizi ve CSS/Tailwind export.
 - **💻 HTTP Sözlüğü & Cihaz Taraması** (`/http-status`): HTTP durum kodları referansı ve canlı donanım/GPU analizi.
+- **🛡️ Web Security Scanner** (`/web-security-scanner`): HTTP güvenlik başlıkları, DNS/e-posta savunma kayıtları, SAST kaynak kod analizi ve birleşik güvenlik denetim konsolu ([melihkarasu/web-security-scanner](https://github.com/melihkarasu/web-security-scanner)).
 
 ### 🛠️ Web Araçları
 - **📱 QR Studio** (`/qr-studio`): qr-code-styling ile vektörel QR üretici, içerik türleri ve SVG/PNG indirme.
@@ -205,7 +206,7 @@ Tüm uygulamalar `/` vitrininde kategoriler altında hiyerarşik olarak listelen
 - **[Google Gemini](https://github.com/google-gemini):** Projenin kodlanması, modüler mikro servislerin inşası, güvenlik açıklarının onarımı ve full-stack geliştirme süreçlerinde kullanılan **Gemini 3.8 Flash** temel yapay zeka modeli.
 - **[VoltAgent / awesome-design-md](https://github.com/VoltAgent/awesome-design-md):** Vitrinde ve uygulamalarda kullanılan modern, editoryal ve zarif **Mistral AI Tasarım Sistemi** kurallarının (`design.md`) keşfedilmesini sağlayan tasarım reposu.
 - **[public-apis / public-apis](https://github.com/public-apis/public-apis):** Portföydeki mikro uygulamaların beslendiği açık, ücretsiz ve kamuya açık API kaynaklarının keşfedilmesini sağlayan küresel topluluk dizini.
-- **[melihkarasu/web-security-scanner](https://github.com/melihkarasu/web-security-scanner):** Projenin tüm güvenlik denetimleri, SAST statik kaynak kod analizleri, tedarik zinciri kontrolleri, HTTP güvenlik başlığı / DNS doğrulamaları, aktif zafiyet taramaları ve kanıt odaklı AI güvenlik analizleri **web-security-scanner** aracı ile gerçekleştirilmektedir.
+- **[melihkarasu / web-security-scanner](https://github.com/melihkarasu/web-security-scanner):** Projenin statik kaynak kod analizi (SAST), dinamik güvenlik testleri (DAST), tedarik zinciri (CVE) denetimi ve kanıt odaklı AI güvenlik doğrulama süreçlerini yürüten birleşik güvenlik tarama aracı.
 - **[Supabase GoTrue & PostgreSQL](https://github.com/supabase/gotrue):** GitHub ve Google OAuth SSO tekil kimlik doğrulama mimarisi ve Row Level Security (RLS) tabanlı veri izolasyonu.
 - **[Troy Hunt / Have I Been Pwned](https://haveibeenpwned.com/API/v3):** Güvenlik araçları modülünde sıfır bilgi garantili k-Anonymity (SHA-1) parola sızıntı denetim servisi.
 - **[The Green Web Foundation](https://www.thegreenwebfoundation.org/):** Web Karbon Ayak İzi uygulamasında veri merkezi yeşil enerji doğrulaması ve CO2 emisyon hesaplama modelleri.

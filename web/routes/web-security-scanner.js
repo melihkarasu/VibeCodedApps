@@ -234,7 +234,7 @@ module.exports = function(pageTemplate) {
                 <span>Tam Kapsamlı Standalone Sürüm</span>
               </div>
               <h2 class="text-lg sm:text-xl font-bold font-editorial text-mistral-ink">
-                SAST, Aktif İstismar Testleri, AI Red Team &amp; Konteyner Sandbox
+                SAST, Aktif Güvenlik Testleri, AI Red Team &amp; Konteyner Sandbox
               </h2>
               <p class="text-xs text-mistral-slate mt-1 max-w-3xl leading-relaxed">
                 Tarayıcı güvenlik sınırları (CORS) nedeniyle bu vitrin sayfasında üçüncü parti sitelere aktif test veya derin kaynak kod analizi yapılamaz. Tam yetenekli konsolu yerel makinenizde sıfır bağımlılıkla çalışan Python sunucusuyla başlatabilirsiniz.
@@ -259,7 +259,7 @@ module.exports = function(pageTemplate) {
           <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-stone-100">
             <div>
               <h3 class="text-lg font-bold font-editorial text-mistral-ink mb-1">Modern Web Güvenliği Kontrol Listesi</h3>
-              <p class="text-xs text-mistral-slate">VibeCodedApps, OWASP Top 10 ve Web Security Scanner güvenlik deneyimlerinden derlenen kritik kontrol noktaları.</p>
+              <p class="text-xs text-mistral-slate">VibeCodedApps, OWASP Top 10 ve Web Security Scanner güvenlik denetimlerinden derlenen kritik kontrol noktaları.</p>
             </div>
             <span class="text-xs font-mono px-3 py-1 rounded-full bg-orange-50 text-mistral-orange font-bold border border-orange-200">6 Altın İlke</span>
           </div>

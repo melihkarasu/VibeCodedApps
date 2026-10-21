@@ -6,7 +6,6 @@ networks:
 
 volumes:
   supabase_db_data:
-  web-security-scanner_reports:
 
 services:
   # -------------------------------------------------------------
@@ -164,22 +163,3 @@ services:
     expose:
       - "8000"
 
-  # -------------------------------------------------------------
-  # 7. AI Security Pentesting Agent (Web Security Scanner)
-  # -------------------------------------------------------------
-  web-security-scanner:
-    build:
-      context: ./security
-      dockerfile: Dockerfile
-    container_name: web-security-scanner
-    restart: unless-stopped
-    environment:
-      - STRIX_TARGET_URL=${STRIX_TARGET_URL:-http://vibe-nginx:80}
-      - STRIX_LLM=${STRIX_LLM:-gemini/gemini-2.5-pro}
-      - STRIX_LLM_API_KEY=${STRIX_LLM_API_KEY:-}
-    volumes:
-      - ./security/reports:/web-security-scanner/reports
-      - ./security/scripts:/web-security-scanner/scripts
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - vibe-network
