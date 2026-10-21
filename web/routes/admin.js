@@ -732,20 +732,14 @@ module.exports = function(pageTemplate) {
           else if (action === 'delete') deleteApp(appId);
         }
 
-        // Uygulama işlem yönlendirici (data-* attribute tabanlı, escape'siz)
-        function adminAppAction(btn) {
-          const appId = btn.getAttribute('data-app-id');
-          const action = btn.getAttribute('data-app-action');
-          if (!appId || !action) return;
-          if (action === 'edit') openEditAppModal(appId);
-          else if (action === 'delete') deleteApp(appId);
-        }
-
         // Geliştirici Önerisi Toggle
         async function toggleDeveloperRecommended(btn) {
           const appId = btn.getAttribute('data-app-id');
           const current = btn.getAttribute('data-dev-rec') === 'true';
           const newVal = !current;
+          
+          const filledStar = '<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+          const outlineStar = '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
           
           try {
             const res = await fetch('/api/admin/apps/' + encodeURIComponent(appId) + '/developer-recommended', {
@@ -760,9 +754,7 @@ module.exports = function(pageTemplate) {
               btn.setAttribute('data-dev-rec', newVal);
               btn.classList.toggle('bg-emerald-100', newVal);
               btn.title = newVal ? 'Geliştirici Önerisinden Kaldır' : 'Geliştirici Önerisi Yap';
-              btn.innerHTML = newVal 
-                ? '<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
-                : '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+              btn.innerHTML = newVal ? filledStar : outlineStar;
               // Reload to update allAdminApps cache
               loadAdminApps();
             } else {
