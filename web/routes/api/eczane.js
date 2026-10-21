@@ -1,5 +1,13 @@
 const express = require('express');
 const router = express.Router();
+
+// Standalone (GitHub Pages) sürümü için CORS desteği
+router.use('/nobetci-eczane', (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
 const fs = require('fs');
 const path = require('path');
 const { CACHE_DIR } = require('./cache');
