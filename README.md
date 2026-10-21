@@ -90,7 +90,7 @@ Projenin güvenliği; statik kaynak kod analizleri (SAST), dinamik güvenlik tes
 Tüm uygulamalar `/` vitrininde kategoriler altında hiyerarşik olarak listelenir, açılır/kapanır akordiyon panelleriyle yönetilir ve yıldız butonuyla en üstteki **⭐ Favorilerim** listesine eklenebilir. Uygulamalara erişim oturum açma zorunluluğuna bağlıdır.
 
 ### 🏥 Sağlık
-- **💊 İzmir Nöbetçi Eczane Radarı** (`/nobetci-eczane`): İzmir Büyükşehir Belediyesi Açık Veri Portalı API'si ve Leaflet haritası ile canlı cihaz GPS konum tespiti. İzin verilmediğinde varsayılan **C4PQ+8Q Konak, İzmir** merkez alınarak en yakın nöbetçi eczaneler sıralanır, tek tıkla arama (`tel:`) ve Google Maps yol tarifi sunulur.
+- **💊 Türkiye Nöbetçi Eczaneler Radarı** (`/nobetci-eczane`): EczaneAPI.com ve OpenStreetMap (Leaflet) haritası ile Türkiye genelinde **81 il ve tüm ilçelerde** güncel nöbetçi eczaneler, canlı GPS konum tespiti ve ters coğrafi kodlama (reverse-geocode). Konum izni verilmediğinde varsayılan **Anıtkabir, Çankaya / Ankara** merkez alınarak en yakın 5 nöbetçi eczane ve il genelindeki tüm nöbetçiler mesafeye göre sıralanır; tek tıkla arama (`tel:`) ve Google Maps yol tarifi sunulur.
 - **💊 İlaç & Prospektüs Rehberi** (`/ilac-rehberi`): openFDA & RxNorm veritabanı ile etken maddeler, prospektüs özeti ve yan etki analitiği.
 - **🏋️ İnteraktif Kas Anatomisi & Egzersiz** (`/kas-anatomisi`): workout-cool ve Wger verileriyle interaktif kas haritası, antrenman kurgusu ve veritabanına kaydedilen kişisel spor programı.
 - **🔬 Klinik Araştırmalar Radarı** (`/klinik-arastirma`): NIH ClinicalTrials.gov v2 API ile aktif klinik deneyler, faz aşamaları ve deneysel tedaviler.
@@ -192,7 +192,7 @@ Tüm uygulamalar `/` vitrininde kategoriler altında hiyerarşik olarak listelen
 | `/api/chords/library` | `GET` | `gitar.js` | Gitar akor diyagramları ve transpoze şarkı motoru |
 | `/api/poetry/random` | `GET` | `siir.js` | PoetryDB dünya şiirleri ve şair arşivi |
 | `/api/http/statuses` | `GET` | `httpstatus.js` | 1xx-5xx HTTP durum kodları referansı |
-| `/api/nobetci-eczane` | `GET` | `eczane.js` | İzmir BB Açık Veri Portalı canlı nöbetçi eczaneler servisi |
+| `/api/nobetci-eczane/*` | `GET` | `eczane.js` | EczaneAPI.com tabanlı Türkiye geneli (81 il ve tüm ilçeler) canlı nöbetçi eczaneler ve ters coğrafi kodlama (reverse-geocode) servisi |
 | `/api/ilac/*` | `GET` | `ilac.js` | openFDA & RxNorm ilaç prospektüsü ve advers olay analitiği |
 | `/api/egzersiz/*` | `GET` | `egzersiz.js` | workout-cool & Wger kas anatomisi ve egzersiz kütüphanesi |
 | `/api/klinik/*` | `GET` | `klinik.js` | NIH ClinicalTrials.gov v2 klinik araştırmalar servisi |
