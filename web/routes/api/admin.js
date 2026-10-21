@@ -385,7 +385,7 @@ router.delete('/apps/:id', async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, error: 'Uygulama silinemedi: ' + err.message });
   }
-}
+});
 
 // Geliştirici Önerisi Toggle - developer_recommended alanını güncelle
 router.patch('/apps/:id/developer-recommended', async (req, res) => {
@@ -404,7 +404,5 @@ router.patch('/apps/:id/developer-recommended', async (req, res) => {
     res.status(500).json({ success: false, error: 'Geliştirici önerisi güncellenemedi: ' + err.message });
   }
 });
-
-);
 
 module.exports = router;

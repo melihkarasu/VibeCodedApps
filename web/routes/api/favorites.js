@@ -115,4 +115,16 @@ router.post('/favorites', async (req, res) => {
   }
 });
 
+// GET /api/developer-recommendations - Geliştirici önerisi olan uygulamaları getir (Herkese açık)
+router.get('/developer-recommendations', async (req, res) => {
+  try {
+    const apps = await supabaseRequest(
+      '/apps?developer_recommended=eq.true&status=neq.hidden&select=id,sort_order,created_at&order=sort_order.asc,created_at.asc'
+    );
+    res.json({ success: true, apps: Array.isArray(apps) ? apps.map(a => a.id) : [] });
+  } catch (err) {
+    res.json({ success: true, apps: [] });
+  }
+});
+
 module.exports = router;

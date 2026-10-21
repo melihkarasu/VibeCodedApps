@@ -518,6 +518,7 @@ module.exports = function(pageTemplate) {
 
     // ===== Veritabanı Destekli Sıralama (Admin Sürükle/Bırak) =====
     // Sabit dizi yedek (fallback); DB erişilemezse vitrin asla kırılmaz.
+    let devRecommendedIds = [];
     try {
       const dbBase = (process.env.INTERNAL_SUPABASE_URL || process.env.SUPABASE_URL || 'http://vibe-supabase-kong:8000').replace(/\/app$/, '');
       let dbKey = process.env.SERVICE_ROLE_KEY;
@@ -539,6 +540,12 @@ module.exports = function(pageTemplate) {
         if (catsRes.ok && appsRes.ok) {
           const dbCats = await catsRes.json();
           const dbApps = await appsRes.json();
+          if (Array.isArray(dbApps)) {
+            devRecommendedIds = dbApps
+              .filter(a => a.developer_recommended === true && a.status !== 'hidden')
+              .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0))
+              .map(a => a.id);
+          }
           if (Array.isArray(dbCats) && dbCats.length > 0 && Array.isArray(dbApps)) {
             const descMap = {};
             const appExtra = {};
@@ -920,6 +927,7 @@ module.exports = function(pageTemplate) {
 
       <script>
         const APPS_DATA = ${JSON.stringify(appsMap)};
+        let developerRecommendationsCache = ${JSON.stringify(devRecommendedIds)};
         const STAR_OUTLINE_SVG = '${starOutlineSvg}';
         const STAR_SOLID_SVG = '<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
         const ARROW_RIGHT_SVG = '${arrowRightSvg}';
@@ -1058,15 +1066,15 @@ module.exports = function(pageTemplate) {
         }
 
         // ===== GELİŞTİRİCİ ÖNERİLERİ =====
-        let developerRecommendationsCache = null;
         let isFetchingDeveloperRecommendations = false;
 
         async function fetchDeveloperRecommendations() {
+          updateDeveloperRecommendationsUI();
           if (isFetchingDeveloperRecommendations) return;
           isFetchingDeveloperRecommendations = true;
 
           try {
-            const res = await fetch('/api/apps/developer-recommendations');
+            const res = await fetch('/api/developer-recommendations');
             if (res.ok) {
               const data = await res.json();
               if (data.success && Array.isArray(data.apps)) {
@@ -1089,69 +1097,42 @@ module.exports = function(pageTemplate) {
           
           if (!grid || !emptyState || !badge || !section) return;
           
-          if (!developerRecommendationsCache || developerRecommendationsCache.length === 0) {
+          const validIds = (developerRecommendationsCache || []).filter(function(id) { return !!APPS_DATA[id]; });
+          badge.innerText = validIds.length + ' Uygulama';
+
+          if (validIds.length === 0) {
             emptyState.classList.remove('hidden');
             grid.classList.add('hidden');
-            badge.innerText = '0 Uygulama';
+            grid.classList.remove('grid');
+            grid.innerHTML = '';
             return;
           }
           
           emptyState.classList.add('hidden');
           grid.classList.remove('hidden');
-          badge.innerText = developerRecommendationsCache.length + ' Uygulama';
+          grid.classList.add('grid');
           
-          grid.innerHTML = developerRecommendationsCache.map(function(appId) {
+          const favs = getFavorites();
+          grid.innerHTML = validIds.map(function(appId) {
             var app = APPS_DATA[appId];
-            if (!app) return '';
-            return '<div class="group vibe-app-card p-4 sm:p-5 rounded-2xl bg-white border border-mistral-hairline-soft shadow-xs hover:shadow-lg hover:-translate-y-1 hover:border-mistral-orange/40 transition-all duration-300 cursor-pointer" data-search="' + (app.id + ' ' + app.name + ' ' + app.desc).toLowerCase() + '" onclick="location.href=\'' + app.url + '\'">
-              <div class="flex items-start gap-3.5 sm:gap-4 mb-3.5">
-                <div class="vibe-app-icon">' + app.icon + '</div>
-                <h3 class="text-base font-bold font-editorial text-mistral-ink tracking-tight leading-snug line-clamp-2 min-w-0" title="' + app.name + '">' + app.name + '</h3>
-              </div>
-              <p class="text-mistral-slate text-xs sm:text-sm leading-relaxed">' + app.desc + '</p>
-            </div>' +
-              '<a href="' + app.url + '"' + (app.url.indexOf('http') === 0 ? ' target="_blank" rel="noopener"' : '') + ' class="vibe-card-cta">
-                <span>' + app.action + '</span>' +
+            var isFav = favs.indexOf(app.id) !== -1;
+            return '<div class="vibe-app-card group !border-emerald-200">' +
+              '<div>' +
+                '<div class="flex items-start justify-between gap-3 mb-3">' +
+                  '<div class="flex items-center gap-3 min-w-0">' +
+                    '<div class="vibe-app-icon">' + app.icon + '</div>' +
+                    '<h3 class="text-base font-bold font-editorial text-mistral-ink tracking-tight leading-snug line-clamp-2 min-w-0" title="' + app.name + '">' + app.name + '</h3>' +
+                  '</div>' +
+                  '<button type="button" onclick="toggleFav(event, \\\'' + app.id + '\\\')" title="Favorilere Ekle / Çıkar" class="vibe-fav-btn' + (isFav ? ' is-favorited' : '') + '">' + (isFav ? STAR_SOLID_SVG : STAR_OUTLINE_SVG) + '</button>' +
+                '</div>' +
+                '<p class="text-mistral-slate text-xs sm:text-sm leading-relaxed">' + app.desc + '</p>' +
+              '</div>' +
+              '<a href="' + app.url + '"' + (app.url.indexOf('http') === 0 ? ' target="_blank" rel="noopener"' : '') + ' class="vibe-card-cta">' +
+                '<span>' + app.action + '</span>' +
                 ARROW_RIGHT_SVG +
-              '</a>'; 
+              '</a>' +
+            '</div>';
           }).join('');
-        }
-
-        async function fetchFavoritesFromAPI() {
-          const user = getVitrinUser();
-          if (!user) return;
-          const token = localStorage.getItem('vibe_token');
-          if (!token) return;
-
-          if (isFetchingFavorites) return;
-          isFetchingFavorites = true;
-
-          try {
-            const res = await fetch('/api/favorites', {
-              headers: { 'Authorization': 'Bearer ' + token }
-            });
-            if (res.ok) {
-              const data = await res.json();
-              if (data.success && Array.isArray(data.favorites)) {
-                try {
-                  const merged = Array.from(new Set([...data.favorites, ...getFavoritesSync()]));
-                  const json = JSON.stringify(merged);
-                  if (user.id) localStorage.setItem('vibe_favs_' + user.id, json);
-                  if (user.email) localStorage.setItem('vibe_favs_' + user.email, json);
-                  localStorage.setItem('vibe_favs_user', json);
-                  localStorage.setItem('vibe_favorite_apps', json);
-                  favoritesCache = merged;
-                } catch(e) {
-                  favoritesCache = data.favorites;
-                }
-                updateFavoriteUI();
-              }
-            }
-          } catch(err) {
-            console.warn('Favoriler sunucudan senkronize edilemedi:', err.message);
-          } finally {
-            isFetchingFavorites = false;
-          }
         }
 
         function getFavorites() {
