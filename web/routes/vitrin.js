@@ -831,6 +831,61 @@ module.exports = function(pageTemplate) {
           </div>
         </div>
 
+        <!-- 0B. GELİŞTİRİCİ ÖNERİLERİ AKORDİYONU (Herkese Açık) -->
+        <div id="section-developer-recommendations" class="accordion-item vibe-accordion-card mb-6 !border-emerald-300">
+          <!-- Accordion Header -->
+          <button 
+            type="button" 
+            onclick="toggleAccordion('developer-recommendations')"
+            aria-expanded="true"
+            id="acc-btn-developer-recommendations"
+            class="w-full px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between text-left bg-emerald-50/40 hover:bg-emerald-50/70 transition group cursor-pointer select-none">
+            
+            <div class="flex items-center gap-3.5 sm:gap-4 min-w-0">
+              <span class="w-11 h-11 rounded-xl bg-emerald-100 border border-emerald-300 text-emerald-600 flex items-center justify-center shrink-0 shadow-xs">
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </span>
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <h2 class="text-lg sm:text-2xl font-bold font-editorial text-mistral-ink tracking-tight">
+                    Geliştirici Önerileri
+                  </h2>
+                  <span id="devrec-badge-count" class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold">
+                    0 Uygulama
+                  </span>
+                </div>
+                <p class="text-xs text-mistral-slate mt-0.5 font-normal line-clamp-1 sm:line-clamp-none">
+                  Ekip tarafından özenle seçilmiş, kalite ve yenilik standartlarında öne çıkan mikro uygulamalar
+                </p>
+              </div>
+            </div>
+
+            <!-- Chevron Icon -->
+            <div class="ml-3 shrink-0 flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-emerald-200 group-hover:bg-emerald-50 transition">
+              <svg id="chevron-developer-recommendations" class="w-4 h-4 text-emerald-700 transform transition-transform duration-300 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </button>
+
+          <!-- Accordion Body -->
+          <div id="acc-body-developer-recommendations" class="accordion-content px-4 sm:px-6 pb-5 sm:pb-6 pt-4 border-t border-emerald-200/80 bg-emerald-50/20 block">
+            <!-- Boş Durum (Öneri Yoksa) -->
+            <div id="devrec-empty-state" class="p-8 text-center rounded-xl bg-white border border-dashed border-emerald-300 text-mistral-slate text-sm">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-500 flex items-center justify-center mx-auto mb-2.5">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
+              <p class="font-bold text-mistral-ink">Henüz geliştirici önerisi olarak işaretlenmiş bir uygulama yok.</p>
+              <p class="text-xs text-mistral-stone mt-1 max-w-md mx-auto">
+                Yönetici panelindeki uygulama yönetim sayfasında yıldız butonuyla öne çıkan araçları bu alana ekleyebilirsiniz.
+              </p>
+            </div>
+
+            <!-- Öneri Kartlar Izgarası -->
+            <div id="devrec-cards-grid" class="hidden grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"></div>
+          </div>
+        </div>
+
         <!-- DİĞER KATEGORİLER -->
         ${accordionHtml}
       </div>
@@ -964,6 +1019,103 @@ module.exports = function(pageTemplate) {
 
         let favoritesCache = null;
         let isFetchingFavorites = false;
+
+        async function fetchFavoritesFromAPI() {
+          const user = getVitrinUser();
+          if (!user) return;
+          const token = localStorage.getItem('vibe_token');
+          if (!token) return;
+
+          if (isFetchingFavorites) return;
+          isFetchingFavorites = true;
+
+          try {
+            const res = await fetch('/api/favorites', {
+              headers: { 'Authorization': 'Bearer ' + token }
+            });
+            if (res.ok) {
+              const data = await res.json();
+              if (data.success && Array.isArray(data.favorites)) {
+                try {
+                  const merged = Array.from(new Set([...data.favorites, ...getFavoritesSync()]));
+                  const json = JSON.stringify(merged);
+                  if (user.id) localStorage.setItem('vibe_favs_' + user.id, json);
+                  if (user.email) localStorage.setItem('vibe_favs_' + user.email, json);
+                  localStorage.setItem('vibe_favs_user', json);
+                  localStorage.setItem('vibe_favorite_apps', json);
+                  favoritesCache = merged;
+                } catch(e) {
+                  favoritesCache = data.favorites;
+                }
+                updateFavoriteUI();
+              }
+            }
+          } catch(err) {
+            console.warn('Favoriler sunucudan senkronize edilemedi:', err.message);
+          } finally {
+            isFetchingFavorites = false;
+          }
+        }
+
+        // ===== GELİŞTİRİCİ ÖNERİLERİ =====
+        let developerRecommendationsCache = null;
+        let isFetchingDeveloperRecommendations = false;
+
+        async function fetchDeveloperRecommendations() {
+          if (isFetchingDeveloperRecommendations) return;
+          isFetchingDeveloperRecommendations = true;
+
+          try {
+            const res = await fetch('/api/apps/developer-recommendations');
+            if (res.ok) {
+              const data = await res.json();
+              if (data.success && Array.isArray(data.apps)) {
+                developerRecommendationsCache = data.apps;
+                updateDeveloperRecommendationsUI();
+              }
+            }
+          } catch(err) {
+            console.warn('Geliştirici önerileri yüklenemedi:', err.message);
+          } finally {
+            isFetchingDeveloperRecommendations = false;
+          }
+        }
+
+        function updateDeveloperRecommendationsUI() {
+          const grid = document.getElementById('devrec-cards-grid');
+          const emptyState = document.getElementById('devrec-empty-state');
+          const badge = document.getElementById('devrec-badge-count');
+          const section = document.getElementById('section-developer-recommendations');
+          
+          if (!grid || !emptyState || !badge || !section) return;
+          
+          if (!developerRecommendationsCache || developerRecommendationsCache.length === 0) {
+            emptyState.classList.remove('hidden');
+            grid.classList.add('hidden');
+            badge.innerText = '0 Uygulama';
+            return;
+          }
+          
+          emptyState.classList.add('hidden');
+          grid.classList.remove('hidden');
+          badge.innerText = developerRecommendationsCache.length + ' Uygulama';
+          
+          grid.innerHTML = developerRecommendationsCache.map(function(appId) {
+            var app = APPS_DATA[appId];
+            if (!app) return '';
+            return '<div class="group vibe-app-card p-4 sm:p-5 rounded-2xl bg-white border border-mistral-hairline-soft shadow-xs hover:shadow-lg hover:-translate-y-1 hover:border-mistral-orange/40 transition-all duration-300 cursor-pointer" data-search="' + (app.id + ' ' + app.name + ' ' + app.desc).toLowerCase() + '" onclick="location.href=\'' + app.url + '\'">
+              <div class="flex items-start gap-3.5 sm:gap-4 mb-3.5">
+                <div class="vibe-app-icon">' + app.icon + '</div>
+                <h3 class="text-base font-bold font-editorial text-mistral-ink tracking-tight leading-snug line-clamp-2 min-w-0" title="' + app.name + '">' + app.name + '</h3>
+              </div>
+              <p class="text-mistral-slate text-xs sm:text-sm leading-relaxed">' + app.desc + '</p>
+            </div>' +
+              '<a href="' + app.url + '"' + (app.url.indexOf('http') === 0 ? ' target="_blank" rel="noopener"' : '') + ' class="vibe-card-cta">
+                <span>' + app.action + '</span>' +
+                ARROW_RIGHT_SVG +
+              '</a>'; 
+          }).join('');
+        }
 
         async function fetchFavoritesFromAPI() {
           const user = getVitrinUser();
@@ -1220,6 +1372,7 @@ module.exports = function(pageTemplate) {
         document.addEventListener('DOMContentLoaded', () => {
           updateFavoriteUI();
           fetchFavoritesFromAPI();
+          fetchDeveloperRecommendations();
 
           document.addEventListener('click', function(e) {
             var cardLink = e.target.closest('a[href^="/app/"], a[href^="/sudoku"], a[href^="/web-security-scanner"], a[href^="/nobetci-"], a[href^="/ilac-"], a[href^="/kas-"], a[href^="/qr-"], a[href^="/doviz-"], a[href^="/lezzet-"], a[href^="/sozden-"], a[href^="/kultur-"], a[href^="/dizi-"], a[href^="/sanat-"], a[href^="/tatil-"], a[href^="/karbon-"], a[href^="/tarim-"], a[href^="/klasik-"], a[href^="/kuresel-"], a[href^="/oyun-"], a[href^="/sizinti-"], a[href^="/dns-"], a[href^="/github-"], a[href^="/doga-"], a[href^="/molekul-"], a[href^="/iss-"], a[href^="/cografya-"], a[href^="/hava-"], a[href^="/kripto-"], a[href^="/ip-"], a[href^="/gida-"], a[href^="/dunya-"], a[href^="/sehir-"], a[href^="/renk-"], a[href^="/sayilar-"], a[href^="/evcil-"], a[href^="/deniz-"], a[href^="/unesco-"], a[href^="/sesli-"], a[href^="/nobel-"], a[href^="/gitar-"], a[href^="/siir-"], a[href^="/http-"], a[href^="/dso-"], a[href^="/klinik-"]');
