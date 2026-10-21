@@ -55,7 +55,7 @@ const pageTemplate = (title, content, extraHead = '') => `
   <!-- Precompiled Tailwind CSS (Zero Runtime / No CDN Delay) -->
   <link rel="stylesheet" href="/static/css/tailwind.min.css">
   <!-- Global Mistral AI Theme (Cache Destekli Statik CSS) -->
-  <link rel="stylesheet" href="/static/css/mistral-theme.css?v=20261016b">
+  <link rel="stylesheet" href="/static/css/mistral-theme.css?v=20261021a">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <!-- Favicon: Premium Siyah Zemin Üzerinde Geometrik MK Monogramı -->
@@ -77,7 +77,7 @@ const pageTemplate = (title, content, extraHead = '') => `
       });
     }
   </script>
-  <!-- Immediate OAuth Hash Fragment Token Capture & URL Sanitizer -->
+  <!--Immediate OAuth Hash Fragment Token Capture & URL Sanitizer -->
   <script data-cfasync="false">
     (function() {
       try {
@@ -100,6 +100,18 @@ const pageTemplate = (title, content, extraHead = '') => `
       } catch(e) {}
     })();
   </script>
+  <!-- Google Analytics (melihkarasu.com GA4 & Google Tag) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZE8C5CHKY8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('set', 'linker', {'domains': ['melihkarasu.com', 'app.melihkarasu.com']});
+    gtag('js', new Date());
+    gtag('config', 'G-ZE8C5CHKY8', { 'anonymize_ip': true });
+    gtag('config', 'GT-PLVB6F4');
+  </script>
+  <!-- Google AdSense (melihkarasu.com Publisher ID) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8978837186965149" crossorigin="anonymous"></script>
   ${extraHead}
 </head>
 <body class="bg-mistral-canvas text-mistral-ink min-h-screen flex flex-col antialiased selection:bg-mistral-orange selection:text-white">

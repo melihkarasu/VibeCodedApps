@@ -683,6 +683,36 @@ module.exports = function(pageTemplate) {
     }).join('');
 
     const content = `
+      <!-- Sağ ve Sol Kenar (Side Rail) AdSense Alanları — Yalnızca Geniş Ekranlarda Sayfa Kenarlarında Görünür, İçeriğe Girmez -->
+      <aside class="vibe-side-rail-ad vibe-side-rail-left" aria-label="Sol Kenar Reklam Alanı">
+        <ins class="adsbygoogle vibe-rail-unit"
+             style="display:block;width:160px;min-height:600px"
+             data-ad-client="ca-pub-8978837186965149"
+             data-ad-format="vertical"
+             data-full-width-responsive="false"></ins>
+      </aside>
+      <aside class="vibe-side-rail-ad vibe-side-rail-right" aria-label="Sağ Kenar Reklam Alanı">
+        <ins class="adsbygoogle vibe-rail-unit"
+             style="display:block;width:160px;min-height:600px"
+             data-ad-client="ca-pub-8978837186965149"
+             data-ad-format="vertical"
+             data-full-width-responsive="false"></ins>
+      </aside>
+      <script>
+        (function() {
+          try {
+            if (window.innerWidth >= 1536) {
+              var rails = document.querySelectorAll('.vibe-side-rail-ad ins.adsbygoogle');
+              rails.forEach(function(ins) {
+                if (ins.getAttribute('data-ad-slot')) {
+                  (window.adsbygoogle = window.adsbygoogle || []).push({});
+                }
+              });
+            }
+          } catch (e) {}
+        })();
+      </script>
+
       <!-- Modern Vitrin Hero & Omni-Search Komuta Merkezi -->
       <section class="vibe-hero-card p-5 sm:p-8 mb-8">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-6">

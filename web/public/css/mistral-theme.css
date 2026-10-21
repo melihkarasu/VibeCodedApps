@@ -622,3 +622,49 @@ pre, code:not(.inline-code) {
     padding: 1rem;
   }
 }
+
+/* =============================================================
+   VİTRİN SAĞ & SOL KENAR (SIDE RAIL) ADSENSE ALANLARI
+   İçerik alanında (main) reklam görünmez; yalnızca geniş ekranlarda
+   sayfanın sağ ve sol boşluklarında (side rails) dikey olarak yer alır.
+============================================================= */
+.vibe-side-rail-ad {
+  display: none;
+}
+
+@media (min-width: 1536px) {
+  .vibe-side-rail-ad {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: fixed;
+    top: 5.5rem;
+    width: 160px;
+    min-height: 600px;
+    z-index: 30;
+    pointer-events: auto;
+  }
+  .vibe-side-rail-left {
+    left: max(0.75rem, calc((100vw - 72rem) / 2 - 180px));
+  }
+  .vibe-side-rail-right {
+    right: max(0.75rem, calc((100vw - 72rem) / 2 - 180px));
+  }
+  .vibe-side-rail-ad ins.adsbygoogle {
+    width: 160px;
+    min-height: 600px;
+    display: block;
+  }
+}
+
+/* İçerik alanı içine AdSense Otomatik Reklamlarının (In-Page / In-Article) girmesini engelle */
+main ins.adsbygoogle:not(.vibe-rail-unit),
+main .google-auto-placed,
+header .google-auto-placed,
+footer .google-auto-placed {
+  display: none !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
