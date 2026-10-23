@@ -63,7 +63,7 @@ Sistem izole Docker ağı (`vibe-network`) üzerinde koşan mikro servislerden o
 Projenin güvenliği; statik kaynak kod analizleri (SAST), dinamik güvenlik testleri (DAST), tedarik zinciri denetimleri ve katmanlı savunma mimarisiyle en üst standartlara getirilmiştir.
 
 ### Güvenlik Denetim Aracı & Metodolojisi
-- **[melihkarasu/web-security-scanner](https://github.com/melihkarasu/web-security-scanner):** Projenin tüm güvenlik denetimleri, SAST statik kaynak kod analizleri, 8 ekosistem tedarik zinciri (CVE/OSV) kontrolleri, HTTP güvenlik başlığı ve DNS savunma doğrulamaları, aktif zafiyet taramaları (SSRF, XSS, SQLi, CSRF, açık yönlendirme) ile kanıt doğrulamalı 4 aşamalı AI güvenlik analizleri **web-security-scanner** aracı ile gerçekleştirilmektedir.
+- **[melihkarasu/web-security-scanner](https://github.com/melihkarasu/web-security-scanner):** Projenin tüm güvenlik denetimleri; 7 dilde **128 kurallı derin SAST** statik kaynak kod analizleri (**PHP 2026 `php2shell` CVE-2026-109618/109619** ve **Node.js Ekim 2026 Güvenlik Bülteni CVE-2026-111497 Brotli RCE dahil 10 CVE** denetimi ve otomatik çözüm önerileri), 8 ekosistem tedarik zinciri (CVE/OSV) kontrolleri, HTTP güvenlik başlığı ve DNS savunma doğrulamaları, aktif zafiyet taramaları (SSRF, XSS, SQLi, CSRF, açık yönlendirme) ile kanıt doğrulamalı 4 aşamalı AI güvenlik analizleri **web-security-scanner** aracı ile gerçekleştirilmektedir.
 
 ### Uygulanan Kritik Savunma Önlemleri & Güvenlik Sertleştirmeleri
 1. **Çok Katmanlı SSRF & DNS Rebinding Savunması (CWE-918):**
@@ -146,7 +146,7 @@ Tüm uygulamalar `/` vitrininde kategoriler altında hiyerarşik olarak listelen
 - **📍 IP Coğrafi Konum & İstihbarat** (`/ip-konum`): SSRF korumalı genel IP lokasyonu, ISS ve ASN analizi.
 - **🎨 Harmoni: Renk & Kontrast Stüdyosu** (`/renk-studyosu`): The Color API ile renk şemaları, WCAG kontrast analizi ve CSS/Tailwind export.
 - **💻 HTTP Sözlüğü & Cihaz Taraması** (`/http-status`): HTTP durum kodları referansı ve canlı donanım/GPU analizi.
-- **🛡️ Web Security Scanner** (`/web-security-scanner`): HTTP güvenlik başlıkları, DNS/e-posta savunma kayıtları, SAST kaynak kod analizi ve birleşik güvenlik denetim konsolu ([melihkarasu/web-security-scanner](https://github.com/melihkarasu/web-security-scanner)).
+- **🛡️ Web Security Scanner** (`/web-security-scanner`): HTTP güvenlik başlıkları, DNS/e-posta savunma kayıtları, 128 kurallı SAST kaynak kod analizi (**PHP `php2shell`** & **Node.js Ekim 2026** güvenlik bülteni denetimleri dahil) ve birleşik güvenlik denetim konsolu ([melihkarasu/web-security-scanner](https://github.com/melihkarasu/web-security-scanner)).
 
 ### 🛠️ Web Araçları
 - **📱 QR Studio** (`/qr-studio`): qr-code-styling ile vektörel QR üretici, içerik türleri ve SVG/PNG indirme.
