@@ -87,3 +87,213 @@ INSERT INTO public.apps (id, category_id, name, "desc", icon, url, action, sort_
 INSERT INTO public.apps (id, category_id, name, "desc", icon, url, action, sort_order) VALUES ('http-status', 'gelistirici-araclari', 'HTTP Sözlüğü & Cihaz Röntgeni', '1xx-5xx HTTP durum kodları referansı, çözüm rehberi, cURL örnekleri ve canlı donanım/GPU parmak izi analizi.', '💻', '/http-status', 'Teşhisi Aç', 5) ON CONFLICT (id) DO UPDATE SET category_id=EXCLUDED.category_id, name=EXCLUDED.name, "desc"=EXCLUDED."desc", icon=EXCLUDED.icon, url=EXCLUDED.url, action=EXCLUDED.action, sort_order=EXCLUDED.sort_order;
 INSERT INTO public.categories (id, title, icon, color, sort_order) VALUES ('web-araclari', 'Web Araçları', '🛠️', 'undefined', 8) ON CONFLICT (id) DO UPDATE SET title=EXCLUDED.title, icon=EXCLUDED.icon, color=EXCLUDED.color, sort_order=EXCLUDED.sort_order;
 INSERT INTO public.apps (id, category_id, name, "desc", icon, url, action, sort_order) VALUES ('qr-studio', 'web-araclari', 'QR Studio', 'Vektörel, logolu, gradyan renkli ve çok formatlı (URL, Wi-Fi, vCard) profesyonel QR üretici.', '📱', '/qr-studio', 'Stüdyoyu Başlat', 0) ON CONFLICT (id) DO UPDATE SET category_id=EXCLUDED.category_id, name=EXCLUDED.name, "desc"=EXCLUDED."desc", icon=EXCLUDED.icon, url=EXCLUDED.url, action=EXCLUDED.action, sort_order=EXCLUDED.sort_order;
+
+-- =============================================================
+-- RBAC, Developer Recommendations & Admin RPC Functions
+-- =============================================================
+ALTER TABLE public.apps ADD COLUMN IF NOT EXISTS developer_recommended boolean DEFAULT false;
+
+ALTER ROLE service_role BYPASSRLS;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'categories' AND policyname = 'categories_service_role') THEN
+        CREATE POLICY categories_service_role ON public.categories FOR ALL TO service_role USING (true) WITH CHECK (true);
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'apps' AND policyname = 'apps_service_role') THEN
+        CREATE POLICY apps_service_role ON public.apps FOR ALL TO service_role USING (true) WITH CHECK (true);
+    END IF;
+END
+$$;
+
+-- Ensure owner account always retains admin role in auth.users even after OAuth metadata sync
+CREATE OR REPLACE FUNCTION public.ensure_owner_admin_role()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, auth
+AS $$
+BEGIN
+  IF NEW.email = 'karasu.mlh@gmail.com'
+     OR (NEW.raw_user_meta_data->>'user_name') = 'melihkarasu'
+     OR (NEW.raw_user_meta_data->>'preferred_username') = 'melihkarasu'
+  THEN
+    IF COALESCE(NEW.raw_app_meta_data->>'role', '') = '' OR (NEW.raw_app_meta_data->>'role') = 'authenticated' THEN
+      NEW.raw_app_meta_data := COALESCE(NEW.raw_app_meta_data, '{}'::jsonb) || '{"role": "admin"}'::jsonb;
+    END IF;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_ensure_owner_admin_role ON auth.users;
+CREATE TRIGGER trg_ensure_owner_admin_role
+BEFORE INSERT OR UPDATE ON auth.users
+FOR EACH ROW
+EXECUTE FUNCTION public.ensure_owner_admin_role();
+
+UPDATE auth.users
+SET raw_app_meta_data = COALESCE(raw_app_meta_data, '{}'::jsonb) || '{"role": "admin"}'::jsonb
+WHERE email = 'karasu.mlh@gmail.com'
+   OR (raw_user_meta_data->>'user_name') = 'melihkarasu'
+   OR (raw_user_meta_data->>'preferred_username') = 'melihkarasu';
+
+-- 1) get_user_role(uid uuid)
+CREATE OR REPLACE FUNCTION public.get_user_role(uid uuid)
+RETURNS text
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public, auth
+AS $$
+  SELECT COALESCE(
+    NULLIF(raw_app_meta_data->>'role', ''),
+    CASE
+      WHEN email = 'karasu.mlh@gmail.com'
+        OR (raw_user_meta_data->>'user_name') = 'melihkarasu'
+        OR (raw_user_meta_data->>'preferred_username') = 'melihkarasu'
+      THEN 'admin'
+      ELSE 'authenticated'
+    END
+  )
+  FROM auth.users
+  WHERE id = uid;
+$$;
+
+-- 2) get_admin_users()
+DROP FUNCTION IF EXISTS public.get_admin_users();
+CREATE OR REPLACE FUNCTION public.get_admin_users()
+RETURNS TABLE (
+  id uuid,
+  email varchar,
+  raw_user_meta_data jsonb,
+  raw_app_meta_data jsonb,
+  providers jsonb,
+  created_at timestamptz,
+  last_sign_in_at timestamptz,
+  banned_until timestamptz
+)
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public, auth
+AS $$
+  SELECT
+    u.id,
+    u.email::varchar,
+    COALESCE(u.raw_user_meta_data, '{}'::jsonb) AS raw_user_meta_data,
+    CASE
+      WHEN (u.email = 'karasu.mlh@gmail.com' OR (u.raw_user_meta_data->>'user_name') = 'melihkarasu')
+           AND COALESCE(u.raw_app_meta_data->>'role', '') = ''
+      THEN COALESCE(u.raw_app_meta_data, '{}'::jsonb) || '{"role": "admin"}'::jsonb
+      ELSE COALESCE(u.raw_app_meta_data, '{}'::jsonb)
+    END AS raw_app_meta_data,
+    COALESCE(
+      u.raw_app_meta_data->'providers',
+      CASE
+        WHEN u.raw_app_meta_data ? 'provider' THEN jsonb_build_array(u.raw_app_meta_data->>'provider')
+        ELSE '["github"]'::jsonb
+      END
+    ) AS providers,
+    u.created_at,
+    u.last_sign_in_at,
+    u.banned_until
+  FROM auth.users u
+  ORDER BY u.created_at ASC;
+$$;
+
+-- 3) admin_set_user_role(target_uid uuid, new_role text, caller_uid uuid)
+DROP FUNCTION IF EXISTS public.admin_set_user_role(uuid, text, uuid);
+CREATE OR REPLACE FUNCTION public.admin_set_user_role(target_uid uuid, new_role text, caller_uid uuid)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, auth
+AS $$
+DECLARE
+  caller_role text;
+  admin_count int;
+BEGIN
+  SELECT public.get_user_role(caller_uid) INTO caller_role;
+  IF caller_role IS DISTINCT FROM 'admin' AND caller_role IS DISTINCT FROM 'super_admin' THEN
+    RAISE EXCEPTION 'Yetkisiz islem';
+  END IF;
+
+  IF target_uid = caller_uid THEN
+    RAISE EXCEPTION 'Kendi rolunuzu degistiremezsiniz';
+  END IF;
+
+  IF new_role NOT IN ('admin', 'authenticated') THEN
+    RAISE EXCEPTION 'Gecersiz rol';
+  END IF;
+
+  IF new_role <> 'admin' THEN
+    SELECT count(*) INTO admin_count
+    FROM auth.users
+    WHERE (raw_app_meta_data->>'role') = 'admin' AND id <> target_uid;
+    IF admin_count < 1 THEN
+      RAISE EXCEPTION 'Son yoneticinin yetkisi kaldirilamaz';
+    END IF;
+  END IF;
+
+  UPDATE auth.users
+  SET raw_app_meta_data = COALESCE(raw_app_meta_data, '{}'::jsonb) || jsonb_build_object('role', new_role),
+      updated_at = now()
+  WHERE id = target_uid;
+
+  RETURN jsonb_build_object('id', target_uid, 'role', new_role);
+END;
+$$;
+
+-- 4) admin_set_user_ban(target_uid uuid, banned boolean, caller_uid uuid)
+DROP FUNCTION IF EXISTS public.admin_set_user_ban(uuid, boolean, uuid);
+CREATE OR REPLACE FUNCTION public.admin_set_user_ban(target_uid uuid, banned boolean, caller_uid uuid)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, auth
+AS $$
+DECLARE
+  caller_role text;
+  target_role text;
+  admin_count int;
+BEGIN
+  SELECT public.get_user_role(caller_uid) INTO caller_role;
+  IF caller_role IS DISTINCT FROM 'admin' AND caller_role IS DISTINCT FROM 'super_admin' THEN
+    RAISE EXCEPTION 'Yetkisiz islem';
+  END IF;
+
+  IF target_uid = caller_uid THEN
+    RAISE EXCEPTION 'Kendi hesabinizi askiya alamazsiniz';
+  END IF;
+
+  IF banned THEN
+    SELECT public.get_user_role(target_uid) INTO target_role;
+    IF target_role = 'admin' THEN
+      SELECT count(*) INTO admin_count
+      FROM auth.users
+      WHERE (raw_app_meta_data->>'role') = 'admin'
+        AND id <> target_uid
+        AND (banned_until IS NULL OR banned_until <= now());
+      IF admin_count < 1 THEN
+        RAISE EXCEPTION 'Son yonetici askiya alinamaz';
+      END IF;
+    END IF;
+  END IF;
+
+  UPDATE auth.users
+  SET banned_until = CASE WHEN banned THEN now() + interval '100 years' ELSE NULL END,
+      updated_at = now()
+  WHERE id = target_uid;
+
+  RETURN jsonb_build_object('id', target_uid, 'banned', banned);
+END;
+$$;
+
+GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.get_user_role(uuid) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.get_admin_users() TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.admin_set_user_role(uuid, text, uuid) TO anon, authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.admin_set_user_ban(uuid, boolean, uuid) TO anon, authenticated, service_role;
+
+NOTIFY pgrst, 'reload schema';

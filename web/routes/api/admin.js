@@ -33,7 +33,13 @@ async function supabaseRequest(path, options = {}) {
     const err = await res.text().catch(() => '');
     throw new Error(`Supabase error: ${res.status} ${err}`);
   }
-  return res.json();
+  const text = await res.text().catch(() => '');
+  if (!text || !text.trim()) return null;
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    return text;
+  }
 }
 
 // Admin Yetki Doğrulama Middleware (Saf Veritabanı Rolü / RBAC)
