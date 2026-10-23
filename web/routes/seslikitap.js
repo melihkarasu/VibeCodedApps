@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/seslikitap/app.js?v=20261017a" defer></script>
+      <script src="/static/apps/seslikitap/app.js?v=20261023a" defer></script>
     `;
 
     const content = `
@@ -64,11 +64,11 @@ module.exports = function(pageTemplate) {
 
         <!-- Kontrol Butonları -->
         <div class="flex flex-wrap items-center justify-center gap-2">
-          <button onclick="prevTrack()" id="btn-prev-track" class="px-3 py-2 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink font-bold text-sm transition cursor-pointer" title="Önceki Bölüm"></button>
+          <button onclick="prevTrack()" id="btn-prev-track" class="px-3 py-2 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink font-bold text-sm transition cursor-pointer" title="Önceki Bölüm"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg></button>
           <button onclick="skipBackward()" class="px-3 py-2 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink font-bold text-xs transition cursor-pointer" title="10 saniye geri">10s</button>
           <button onclick="toggleAudioPlay()" id="btn-panel-play" class="px-6 py-2.5 rounded-lg bg-mistral-orange hover:bg-mistral-orange-deep text-white font-bold text-sm transition shadow cursor-pointer">▶</button>
           <button onclick="skipForward()" class="px-3 py-2 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink font-bold text-xs transition cursor-pointer" title="10 saniye ileri">10s </button>
-          <button onclick="nextTrack()" id="btn-next-track" class="px-3 py-2 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink font-bold text-sm transition cursor-pointer" title="Sonraki Bölüm"></button>
+          <button onclick="nextTrack()" id="btn-next-track" class="px-3 py-2 rounded-lg bg-white hover:bg-mistral-cream border border-mistral-hairline text-mistral-ink font-bold text-sm transition cursor-pointer" title="Sonraki Bölüm"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg></button>
         </div>
 
         <!-- Hız ve Ses Kontrolleri -->
@@ -84,7 +84,7 @@ module.exports = function(pageTemplate) {
             </select>
           </div>
           <div class="flex items-center gap-2 flex-1 max-w-[240px]">
-            <button onclick="toggleMute()" id="btn-mute" class="text-mistral-ink hover:text-mistral-orange transition text-base cursor-pointer" title="Sessize Al"></button>
+            <button onclick="toggleMute()" id="btn-mute" class="text-mistral-ink hover:text-mistral-orange transition text-base cursor-pointer" title="Sessize Al"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></button>
             <input type="range" id="volume-bar" min="0" max="1" step="0.05" value="1" class="flex-1 accent-orange-600 cursor-pointer" oninput="setVolume(this.value)">
           </div>
           <span class="text-[10px] text-mistral-stone hidden sm:inline" id="progress-sync-note">Kaldığınız yer otomatik kaydedilir</span>

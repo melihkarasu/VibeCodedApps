@@ -100,7 +100,7 @@ module.exports = function(pageTemplate) {
         }
       </style>
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script src="/static/apps/eczane/app.js?v=20261017a.0" defer></script>
+      <script src="/static/apps/eczane/app.js?v=20261023a.0" defer></script>
     `;
 
     const content = `

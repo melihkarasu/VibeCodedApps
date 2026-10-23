@@ -186,7 +186,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
           container.innerHTML = activeIngredients.map((item, idx) => `
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-rose-500/20 border border-rose-500/40 text-rose-300 text-xs font-medium">
               <span>${item.raw}</span>
-              <button onclick="removeActiveIngredient(${idx})" class="hover:text-mistral-ink text-rose-400 font-bold ml-0.5 text-xs" title="Kaldır"></button>
+              <button onclick="removeActiveIngredient(${idx})" class="hover:text-mistral-ink text-rose-400 font-bold ml-0.5 text-xs" title="Kaldır"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </span>
           `).join('');
         }
@@ -577,9 +577,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
                   <button onclick="openRecipeModal('${id}', '${type}', '${source}')" class="text-xs text-rose-400 hover:text-rose-300 font-semibold transition">
                     Tarifi İncele &rarr;
                   </button>
-                  <button onclick="quickSaveRecipeByRenderedIdx(${idx})"" class="text-xs text-mistral-slate hover:text-amber-400 transition p-1" title="Deftere Kaydet">
-                    
-                  </button>
+                  <button onclick="quickSaveRecipeByRenderedIdx(${idx})" class="text-xs text-mistral-slate hover:text-amber-400 transition p-1" title="Deftere Kaydet"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
                 </div>
               </div>
             `;
@@ -836,9 +834,7 @@ let currentMode = 'kitchen'; // 'kitchen' | 'bar'
                 <button onclick="openRecipeModal('${item.id}', '${item.type}', '${item.source || ''}')" class="text-[11px] text-rose-400 hover:underline">
                   Görüntüle
                 </button>
-                <button onclick="removeSavedRecipe('${item.id}')" class="text-[11px] text-mistral-slate hover:text-red-400 transition" title="Sil">
-                  
-                </button>
+                <button onclick="removeSavedRecipe('${item.id}')" class="text-[11px] text-mistral-slate hover:text-red-400 transition" title="Sil"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
               </div>
             </div>
           `).join('');

@@ -183,9 +183,7 @@ let currentResults = [];
                   <button onclick="openLyricsModal(${idx})" class="text-xs text-pink-400 hover:text-pink-300 font-semibold transition">
                     Sözleri Oku &rarr;
                   </button>
-                  <button onclick="quickSaveSong(${idx})" class="text-xs text-mistral-slate hover:text-amber-400 transition p-1" title="Çalma Listeme Kaydet">
-                    
-                  </button>
+                  <button onclick="quickSaveSong(${idx})" class="text-xs text-mistral-slate hover:text-amber-400 transition p-1" title="Çalma Listeme Kaydet"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
                 </div>
               </div>
             `;
@@ -443,9 +441,7 @@ let currentResults = [];
                 <h4 class="font-bold text-xs text-mistral-ink truncate group-hover:text-pink-600 transition">${escapeHtml(song.trackName)}</h4>
                 <p class="text-[11px] text-mistral-slate truncate">${escapeHtml(song.artistName)}</p>
               </div>
-              <button onclick="removeSavedSong(${idx})" class="text-mistral-stone hover:text-rose-500 p-1 rounded-lg hover:bg-rose-50 transition" title="Listeden çıkar">
-                
-              </button>
+              <button onclick="removeSavedSong(${idx})" class="text-mistral-stone hover:text-rose-500 p-1 rounded-lg hover:bg-rose-50 transition" title="Listeden çıkar"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
           `).join('');
         }

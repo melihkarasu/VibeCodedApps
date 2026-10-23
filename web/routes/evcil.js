@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/evcil/app.js?v=20261017a" defer></script>
+      <script src="/static/apps/evcil/app.js?v=20261023a" defer></script>
     `;
 
     const content = `
@@ -33,7 +33,7 @@ module.exports = function(pageTemplate) {
             <input 
               type="text" 
               id="pet-search" 
-              placeholder="Irk adı veya mizaç ara (örn: Van, Kangal, Golden, Husky, sakin, oyuncu)..." 
+              placeholder="Irk adı, ülke veya mizaç ara (örn: Van, Kangal, Golden, Husky, sakin, oyuncu)..." 
               oninput="filterBreeds()"
               class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder:text-mistral-stone focus:outline-none focus:border-mistral-orange transition">
             <span class="absolute left-3.5 top-3 text-mistral-stone text-sm"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
@@ -52,11 +52,11 @@ module.exports = function(pageTemplate) {
         <!-- Mizaç Filtre Hapları -->
         <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-mistral-hairline text-xs">
           <span class="text-mistral-stone font-medium mr-1">Popüler Mizaçlar:</span>
-          <button onclick="setTemperamentFilter('oyuncu')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Oyuncu</button>
-          <button onclick="setTemperamentFilter('sakin')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Sakin & Uysal</button>
-          <button onclick="setTemperamentFilter('zeki')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Üstün Zekalı</button>
-          <button onclick="setTemperamentFilter('koruyucu')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-ink border border-mistral-beige-deep transition">Koruyucu & Sadık</button>
-          <button onclick="setTemperamentFilter('')" class="px-2.5 py-1 rounded-md bg-white hover:bg-mistral-cream text-mistral-stone border border-mistral-hairline transition">Filtreyi Temizle</button>
+          <button type="button" onclick="setTemperamentFilter('oyuncu')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper border border-mistral-beige-deep transition cursor-pointer">Oyuncu</button>
+          <button type="button" onclick="setTemperamentFilter('sakin')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper border border-mistral-beige-deep transition cursor-pointer">Sakin & Uysal</button>
+          <button type="button" onclick="setTemperamentFilter('zeki')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper border border-mistral-beige-deep transition cursor-pointer">Üstün Zekalı</button>
+          <button type="button" onclick="setTemperamentFilter('koruyucu')" class="px-2.5 py-1 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper border border-mistral-beige-deep transition cursor-pointer">Koruyucu & Sadık</button>
+          <button type="button" onclick="setTemperamentFilter('')" class="px-2.5 py-1 rounded-md bg-white hover:bg-mistral-cream text-mistral-stone border border-mistral-hairline transition cursor-pointer">Filtreyi Temizle</button>
         </div>
       </div>
 
@@ -67,14 +67,19 @@ module.exports = function(pageTemplate) {
         </div>
       </div>
 
-      <div id="pets-grid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
+      <div id="pets-grid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
         <!-- JS ile çizilir -->
       </div>
 
+      <!-- SAYFALAMA (PAGINATION) -->
+      <div id="pets-pagination" class="hidden mb-16 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white border border-mistral-hairline shadow-2xs"></div>
+
       <!-- IRK DETAY MODALI -->
-      <div id="pet-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+      <div id="pet-modal" onclick="if(event.target===this)closePetModal()" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
         <div class="relative w-full max-w-lg bg-white border border-mistral-hairline rounded-2xl shadow-xl overflow-hidden p-6 space-y-4">
-          <button onclick="closePetModal()" class="absolute top-4 right-4 w-8 h-8 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-slate hover:text-mistral-ink flex items-center justify-center text-sm font-bold transition"></button>
+          <button type="button" onclick="closePetModal()" aria-label="Kapat" title="Kapat" class="absolute top-3.5 right-3.5 z-20 w-8 h-8 rounded-lg bg-white/95 hover:bg-mistral-cream text-mistral-ink hover:text-mistral-orange border border-mistral-hairline shadow-sm flex items-center justify-center transition cursor-pointer">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
 
           <div class="aspect-video w-full rounded-xl overflow-hidden bg-mistral-cream border border-mistral-beige-deep flex items-center justify-center">
             <img id="m-pet-img" src="" alt="Irk" class="w-full h-full object-cover">

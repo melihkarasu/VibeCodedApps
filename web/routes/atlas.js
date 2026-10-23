@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/atlas/app.js?v=20261017a" defer></script>
+      <script src="/static/apps/atlas/app.js?v=20261023a" defer></script>
     `;
 
     const content = `
@@ -77,7 +77,7 @@ module.exports = function(pageTemplate) {
       <!-- ÜLKE DETAY MODALI -->
       <div id="country-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
         <div class="relative w-full max-w-xl bg-white border border-mistral-hairline rounded-2xl shadow-xl overflow-hidden p-6 space-y-5 animate-in fade-in duration-200">
-          <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-md text-mistral-ink font-boldbg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-slate hover:text-mistral-ink flex items-center justify-center text-sm font-bold transition"></button>
+          <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-slate hover:text-mistral-ink flex items-center justify-center text-sm font-bold transition"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
           
           <div class="flex items-center gap-4">
             <img id="m-flag" src="" alt="Bayrak" class="w-16 h-11 object-cover rounded-md border border-mistral-hairline shadow-2xs shrink-0">

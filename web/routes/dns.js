@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/dns/app.css?v=20261017a">
-      <script src="/static/apps/dns/app.js?v=20261017a" defer></script>
+      <link rel="stylesheet" href="/static/apps/dns/app.css?v=20261023a">
+      <script src="/static/apps/dns/app.js?v=20261023a" defer></script>
     `;
 
     const content = `

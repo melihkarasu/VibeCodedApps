@@ -56,7 +56,7 @@ const COUNTRY_META = {
               <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold shadow-sm" style="background-color: ${m.color}15; border-color: ${m.color}60; color: ${m.color};">
                 <span>${m.flag}</span>
                 <span>${m.name}</span>
-                <button onclick="toggleCountry('${code}')" class="ml-1 opacity-70 hover:opacity-100 font-bold"></button>
+                <button onclick="toggleCountry('${code}')" class="ml-1 opacity-70 hover:opacity-100 font-bold"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
               </span>
             `;
           }).join('');

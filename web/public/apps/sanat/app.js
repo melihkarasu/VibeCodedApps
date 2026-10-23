@@ -162,9 +162,7 @@ const ART_DB_APP_ID = 'sanat-galerisi';
                   <button onclick="openDeepZoomModal(${item.objectID})" class="text-xs text-purple-400 hover:text-purple-300 font-semibold transition">
                     Detayları Gör &rarr;
                   </button>
-                  <button onclick="quickSaveArt(${item.objectID}, '${item.title.replace(/'/g, "\\\\'")}', '${artist.replace(/'/g, "\\\\'")}', '${img}', '${date}')" class="text-xs text-mistral-slate hover:text-amber-400 transition p-1" title="Koleksiyonuma Kaydet">
-                    
-                  </button>
+                  <button onclick="quickSaveArt(${item.objectID}, '${item.title.replace(/'/g, "\\\\'")}', '${artist.replace(/'/g, "\\\\'")}', '${img}', '${date}')" class="text-xs text-mistral-slate hover:text-amber-400 transition p-1" title="Koleksiyonuma Kaydet"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
                 </div>
               </div>
             `;
@@ -373,9 +371,7 @@ const ART_DB_APP_ID = 'sanat-galerisi';
                 <p class="text-[10px] text-purple-400 truncate">${item.artist}</p>
                 <span class="text-[9px] text-mistral-stone font-mono">${item.date}</span>
               </div>
-              <button onclick="removeSavedArt(${item.id})" class="text-xs text-mistral-stone hover:text-rose-400 p-1 transition" title="Sil">
-                
-              </button>
+              <button onclick="removeSavedArt(${item.id})" class="text-xs text-mistral-stone hover:text-rose-400 p-1 transition" title="Sil"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
           `).join('');
         }

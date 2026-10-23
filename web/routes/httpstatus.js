@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/httpstatus/app.js?v=20261017a" defer></script>
+      <script src="/static/apps/httpstatus/app.js?v=20261023a" defer></script>
     `;
 
     const content = `
@@ -101,7 +101,7 @@ module.exports = function(pageTemplate) {
       <!-- KOD DETAY MODALI -->
       <div id="status-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
         <div class="relative w-full max-w-xl bg-white border border-mistral-hairline rounded-2xl shadow-2xl p-6 sm:p-8 space-y-5">
-          <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-slate hover:text-mistral-ink flex items-center justify-center text-sm font-bold transition"></button>
+          <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-md text-mistral-ink font-bold bg-mistral-cream hover:bg-mistral-cream-deeper text-mistral-slate hover:text-mistral-ink flex items-center justify-center text-sm font-bold transition"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 
           <div class="flex items-center gap-4">
             <span class="px-4 py-2 rounded-xl bg-mistral-cream border border-mistral-beige-deep text-2xl font-bold font-mono text-mistral-orange" id="m-code">404</span>

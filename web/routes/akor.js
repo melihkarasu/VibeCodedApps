@@ -1,7 +1,7 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/akor/app.js?v=20261017a" defer></script>
+      <script src="/static/apps/akor/app.js?v=20261023a" defer></script>
     `;
 
     const content = `

@@ -407,9 +407,7 @@ function renderShelf() {
           <span class="text-[9px] text-emerald-400 font-mono font-bold">%${item.progressPct || 0}</span>
         </div>
       </div>
-      <button onclick="removeFromShelf(${item.id})" class="text-xs text-mistral-stone hover:text-rose-400 p-1 transition cursor-pointer" title="Kaldır">
-        
-      </button>
+      <button onclick="removeFromShelf(${item.id})" class="text-xs text-mistral-stone hover:text-rose-400 p-1 transition cursor-pointer" title="Kaldır"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
   `).join('');
 }

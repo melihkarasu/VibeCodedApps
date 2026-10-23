@@ -2,8 +2,8 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
   const extraHead = `
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.js"></script>
-      <link rel="stylesheet" href="/static/apps/qr/app.css?v=20261017a">
-      <script src="/static/apps/qr/app.js?v=20261017a" defer></script>
+      <link rel="stylesheet" href="/static/apps/qr/app.css?v=20261023a">
+      <script src="/static/apps/qr/app.js?v=20261023a" defer></script>
     `;
 
   const content = `

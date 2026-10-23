@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/lezzet/app.css?v=20261017a">
-      <script src="/static/apps/lezzet/app.js?v=20261017a" defer></script>
+      <link rel="stylesheet" href="/static/apps/lezzet/app.css?v=20261023a">
+      <script src="/static/apps/lezzet/app.js?v=20261023a" defer></script>
     `;
 
     const content = `
@@ -164,9 +164,7 @@ module.exports = function(pageTemplate) {
         <div class="relative w-full max-w-2xl bg-white border border-mistral-hairline rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] flex flex-col">
           
           <!-- Kapat Butonu -->
-          <button onclick="closeModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white hover:bg-white text-mistral-slate hover:text-white flex items-center justify-center transition border border-mistral-hairline text-sm">
-            
-          </button>
+          <button onclick="closeModal()" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white hover:bg-mistral-cream text-mistral-slate hover:text-mistral-orange flex items-center justify-center transition border border-mistral-hairline text-sm"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 
           <!-- Modal Başlık Resmi -->
           <div class="relative h-64 sm:h-72 w-full overflow-hidden shrink-0">

@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/ilac/app.css?v=20261017a.0" />
-      <script src="/static/apps/ilac/app.js?v=20261017a.0" defer></script>
+      <link rel="stylesheet" href="/static/apps/ilac/app.css?v=20261023a.0" />
+      <script src="/static/apps/ilac/app.js?v=20261023a.0" defer></script>
     `;
 
     const content = `

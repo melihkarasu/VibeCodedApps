@@ -626,9 +626,7 @@ const CURRENCIES = {
                   <button onclick="loadFavoritePair('${f}', '${t}')" class="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 font-medium transition">
                     Yükle
                   </button>
-                  <button onclick="removeFavorite('${pair}')" class="text-xs text-mistral-stone hover:text-rose-400 transition">
-                    
-                  </button>
+                  <button onclick="removeFavorite('${pair}')" class="text-xs text-mistral-stone hover:text-rose-400 transition"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
                 </div>
               </div>
             `;

@@ -130,9 +130,7 @@ const SHELF_KEY = '***';
                 <button onclick="playBirdSound('${b.soundUrl}', '${b.commonName.replace(/'/g, "\\\\'")}', '${b.sciName.replace(/'/g, "\\\\'")}', '${b.place.replace(/'/g, "\\\\'")}', '${b.photo}')" class="text-emerald-400 hover:underline font-bold">
                   Sesi Çal &rarr;
                 </button>
-                <button onclick="saveToNatureShelf('${b.commonName.replace(/'/g, "\\\\'")}', '${b.sciName.replace(/'/g, "\\\\'")}', '${b.place.replace(/'/g, "\\\\'")}', '${b.photo}', '${b.soundUrl}')" class="p-1.5 text-mistral-slate hover:text-amber-400 transition" title="Doğa Defterime Kaydet">
-                  
-                </button>
+                <button onclick="saveToNatureShelf('${b.commonName.replace(/'/g, "\\\\'")}', '${b.sciName.replace(/'/g, "\\\\'")}', '${b.place.replace(/'/g, "\\\\'")}', '${b.photo}', '${b.soundUrl}')" class="p-1.5 text-mistral-slate hover:text-amber-400 transition" title="Doğa Defterime Kaydet"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
               </div>
             </div>
           `).join('');
@@ -399,9 +397,7 @@ const SHELF_KEY = '***';
                 <p class="text-[10px] text-emerald-400/90 font-mono italic truncate">${b.sciName}</p>
                 <span class="text-[9px] text-mistral-stone">${b.date}</span>
               </div>
-              <button onclick="removeFromNatureShelf('${b.id}')" class="text-xs text-mistral-stone hover:text-rose-400 p-1 transition" title="Sil">
-                
-              </button>
+              <button onclick="removeFromNatureShelf('${b.id}')" class="text-xs text-mistral-stone hover:text-rose-400 p-1 transition" title="Sil"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
           `).join('');
         }

@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/sanat/app.css?v=20261017a">
-      <script src="/static/apps/sanat/app.js?v=20261017a" defer></script>
+      <link rel="stylesheet" href="/static/apps/sanat/app.css?v=20261023a">
+      <script src="/static/apps/sanat/app.js?v=20261023a" defer></script>
     `;
 
     const content = `
@@ -188,9 +188,7 @@ module.exports = function(pageTemplate) {
                 <span id="modal-art-save-icon"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></span> <span id="modal-art-save-text">Koleksiyona Ekle</span>
               </button>
 
-              <button onclick="closeZoomModal()" class="w-9 h-9 rounded-full bg-white hover:bg-mistral-cream-light text-mistral-slate hover:text-mistral-ink font-bold flex items-center justify-center transition border border-mistral-hairline text-sm">
-                
-              </button>
+              <button onclick="closeZoomModal()" class="w-9 h-9 rounded-full bg-white hover:bg-mistral-cream-light text-mistral-slate hover:text-mistral-ink font-bold flex items-center justify-center transition border border-mistral-hairline text-sm"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
           </div>
 

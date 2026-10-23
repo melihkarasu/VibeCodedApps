@@ -2,7 +2,7 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <script src="/static/apps/refah/app.js?v=20261017a" defer></script>
+      <script src="/static/apps/refah/app.js?v=20261023a" defer></script>
     `;
 
     const content = `

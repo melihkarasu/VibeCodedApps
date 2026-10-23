@@ -173,9 +173,7 @@ const WISHLIST_KEY = '***';
                   <a href="${url}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs transition flex items-center gap-1">
                     <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></span> Oyunu Al &rarr;
                   </a>
-                  <button onclick="saveToWishlistRendered(${idx}, 'free', '${worth}')" class="p-1.5 text-mistral-slate hover:text-amber-400 transition" title="İstek Listeme Kaydet">
-                    
-                  </button>
+                  <button onclick="saveToWishlistRendered(${idx}, 'free', '${worth}')" class="p-1.5 text-mistral-slate hover:text-amber-400 transition" title="İstek Listeme Kaydet"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
                 </div>
               </div>
             `;
@@ -237,9 +235,7 @@ const WISHLIST_KEY = '***';
                   <a href="${dealUrl}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs transition flex items-center gap-1">
                     <span>Fırsatı Gör</span> &rarr;
                   </a>
-                  <button onclick="saveToWishlistRendered(${idx}, 'deals')" class="p-1.5 text-mistral-slate hover:text-amber-400 transition" title="İstek Listeme Kaydet">
-                    
-                  </button>
+                  <button onclick="saveToWishlistRendered(${idx}, 'deals')" class="p-1.5 text-mistral-slate hover:text-amber-400 transition" title="İstek Listeme Kaydet"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
                 </div>
               </div>
             `;
@@ -323,9 +319,7 @@ const WISHLIST_KEY = '***';
                   <span class="text-mistral-stone line-through">${item.oldPrice}</span>
                 </div>
               </div>
-              <button onclick="removeFromWishlist('${item.id}')" class="text-mistral-stone hover:text-rose-400 p-1 text-xs transition" title="Sil">
-                
-              </button>
+              <button onclick="removeFromWishlist('${item.id}')" class="text-mistral-stone hover:text-rose-400 p-1 text-xs transition" title="Sil"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
           `).join('');
         }

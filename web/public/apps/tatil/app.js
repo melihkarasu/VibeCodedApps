@@ -192,7 +192,7 @@ const COUNTRY_FLAGS = {
               <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border ${isTr ? 'border-amber-500/50 bg-amber-500/10 text-amber-300' : 'border-mistral-hairline text-mistral-ink'} text-xs font-bold shadow-sm">
                 <span>${info.flag}</span>
                 <span>${info.name}</span>
-                <button onclick="toggleCountry('${code}')" class="ml-1 text-mistral-stone hover:text-rose-400 font-bold transition"></button>
+                <button onclick="toggleCountry('${code}')" class="ml-1 text-mistral-stone hover:text-rose-400 font-bold transition"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
               </span>
             `;
           }).join('');

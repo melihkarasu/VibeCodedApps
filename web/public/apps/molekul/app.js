@@ -249,7 +249,7 @@ const STORAGE_KEY = '***';
                 </div>
                 <div class="pt-2 border-t border-mistral-hairline-soft flex items-center justify-between mt-2.5 text-xs">
                   <span class="text-mistral-orange font-bold text-[10px]">3D Aç &rarr;</span>
-                  <button onclick="event.stopPropagation(); removeMolecule('${mName}')" class="text-mistral-slate hover:text-rose-500 text-xs"></button>
+                  <button onclick="event.stopPropagation(); removeMolecule('${mName}')" class="text-mistral-slate hover:text-rose-500 text-xs"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
                 </div>
               </div>
             `;

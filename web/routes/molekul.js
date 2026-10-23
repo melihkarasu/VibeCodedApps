@@ -2,8 +2,8 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/2.4.2/3Dmol-min.js"></script>
-      <link rel="stylesheet" href="/static/apps/molekul/app.css?v=20261017a">
-      <script src="/static/apps/molekul/app.js?v=20261017a" defer></script>
+      <link rel="stylesheet" href="/static/apps/molekul/app.css?v=20261023a">
+      <script src="/static/apps/molekul/app.js?v=20261023a" defer></script>
     `;
 
     const content = `

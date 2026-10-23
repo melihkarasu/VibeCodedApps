@@ -2,8 +2,8 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <link rel="stylesheet" href="/static/apps/dso/app.css?v=20261017a.0" />
-      <script src="/static/apps/dso/app.js?v=20261017a.0" defer></script>
+      <link rel="stylesheet" href="/static/apps/dso/app.css?v=20261023a.0" />
+      <script src="/static/apps/dso/app.js?v=20261023a.0" defer></script>
     `;
 
     const content = `

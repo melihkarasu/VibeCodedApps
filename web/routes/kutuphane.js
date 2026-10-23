@@ -2,8 +2,8 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     // Dijital Kütüphane Özel Varlıkları (Cache Destekli Modüler CSS & JS)
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/kutuphane/app.css?v=20261017a">
-      <script src="/static/apps/kutuphane/app.js?v=20261017a" defer></script>
+      <link rel="stylesheet" href="/static/apps/kutuphane/app.css?v=20261023a">
+      <script src="/static/apps/kutuphane/app.js?v=20261023a" defer></script>
     `;
 
     const content = `
@@ -76,7 +76,7 @@ module.exports = function(pageTemplate) {
             <h3 class="text-xs font-bold text-mistral-ink uppercase tracking-wider flex items-center gap-1.5" id="search-results-header">
               <span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span> Arama Sonuçları
             </h3>
-            <button onclick="closeSearchResults()" class="text-xs text-mistral-slate hover:text-mistral-ink cursor-pointer">Sonuçları Kapat </button>
+            <button onclick="closeSearchResults()" class="text-xs text-mistral-slate hover:text-mistral-ink cursor-pointer">Sonuçları Kapat <svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4" id="search-results-grid">
             <!-- app.js ile doldurulur -->
@@ -157,9 +157,9 @@ module.exports = function(pageTemplate) {
             
             <!-- Tema Seçici (Koyu / Sepya / Açık) -->
             <div class="flex p-0.5 rounded-xl bg-white border border-mistral-hairline text-xs">
-              <button onclick="setReaderTheme('dark')" id="theme-btn-dark" class="px-2.5 py-1 rounded-lg text-mistral-slate font-bold transition cursor-pointer" title="Koyu Mod"></button>
-              <button onclick="setReaderTheme('sepya')" id="theme-btn-sepya" class="px-2.5 py-1 rounded-lg text-mistral-slate font-bold transition cursor-pointer" title="Sepya Kitap Kağıdı"></button>
-              <button onclick="setReaderTheme('light')" id="theme-btn-light" class="px-2.5 py-1 rounded-lg text-mistral-slate font-bold transition cursor-pointer" title="Açık Mod"></button>
+              <button onclick="setReaderTheme('dark')" id="theme-btn-dark" class="px-2.5 py-1 rounded-lg text-mistral-slate font-bold transition cursor-pointer" title="Koyu Mod"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></button>
+              <button onclick="setReaderTheme('sepya')" id="theme-btn-sepya" class="px-2.5 py-1 rounded-lg text-mistral-slate font-bold transition cursor-pointer" title="Sepya Kitap Kağıdı"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></button>
+              <button onclick="setReaderTheme('light')" id="theme-btn-light" class="px-2.5 py-1 rounded-lg text-mistral-slate font-bold transition cursor-pointer" title="Açık Mod"><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></button>
             </div>
 
             <!-- Font Ailesi (Serif / Sans) -->
@@ -192,8 +192,7 @@ module.exports = function(pageTemplate) {
             <button onclick="togglePlayPauseSpeech()" id="btn-tts-play" class="w-8 h-8 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold flex items-center justify-center shadow cursor-pointer">
               ▶
             </button>
-            <button onclick="stopSpeech()" class="w-8 h-8 rounded-lg bg-white hover:bg-rose-50 text-rose-600 border border-mistral-hairline font-bold flex items-center justify-center shadow-sm cursor-pointer" title="Durdur">
-              </button>
+            <button onclick="stopSpeech()" class="w-8 h-8 rounded-lg bg-white hover:bg-rose-50 text-rose-600 border border-mistral-hairline font-bold flex items-center justify-center shadow-sm cursor-pointer" title="Durdur"><svg class="w-3.5 h-3.5 inline-block shrink-0 fill-current" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg></button>
             <span id="tts-status-text" class="text-xs font-semibold ml-1.5">Sesli okuma hazır</span>
           </div>
 

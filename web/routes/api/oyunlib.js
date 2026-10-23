@@ -1,11 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const https = require('https');
-const crypto = require('crypto');
-const { isPrivateAddress } = require('./utils');
 
 // =============================================================
-// 15. RAWG / Oyun Kütüphanesi & Keşif
+// 15. FreeToGame / Oyun Kütüphanesi & Keşif (Tüm Oyunlar + Sayfalama)
 // =============================================================
 const gameLibCache = new Map();
 
@@ -36,7 +33,7 @@ router.get('/oyun-lib/search', async (req, res) => {
     const output = {
       success: true,
       count: games.length,
-      games: games.slice(0, 48).map(g => ({
+      games: games.map(g => ({
         id: g.id,
         title: g.title,
         thumbnail: g.thumbnail,
@@ -52,7 +49,7 @@ router.get('/oyun-lib/search', async (req, res) => {
 
     gameLibCache.set(cacheKey, { data: output, timestamp: Date.now() });
     res.json(output);
-  } catch(err) {
+  } catch (err) {
     res.status(500).json({ success: false, error: 'Oyun kütüphanesine erişilemedi' });
   }
 });

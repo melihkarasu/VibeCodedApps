@@ -2,8 +2,8 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
         const extraHead = `
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <link rel="stylesheet" href="/static/apps/tarim/app.css?v=20261017a">
-      <script src="/static/apps/tarim/app.js?v=20261017a" defer></script>
+      <link rel="stylesheet" href="/static/apps/tarim/app.css?v=20261023a">
+      <script src="/static/apps/tarim/app.js?v=20261023a" defer></script>
     `;
 
     const content = `
@@ -40,7 +40,7 @@ module.exports = function(pageTemplate) {
             <div class="relative">
               <input type="text" id="input-region-search" placeholder="Örn: Polatlı, Söke, Ceyhan, Kumluca, Bafra, Akhisar, İpsala..." oninput="handleSearchInput(event)" onfocus="handleSearchFocus()" onkeydown="handleSearchKeydown(event)" autocomplete="off" class="w-full pl-10 pr-8 py-3 rounded-xl bg-white border border-mistral-hairline text-sm font-semibold text-mistral-ink placeholder-slate-500 focus:border-teal-400 focus:outline-none">
               <span class="absolute left-3.5 top-3.5 text-mistral-stone text-base"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-              <button onclick="clearSearchInput()" id="btn-clear-search" class="hidden absolute right-3 top-3 text-mistral-stone hover:text-mistral-slate text-sm"></button>
+              <button onclick="clearSearchInput()" id="btn-clear-search" class="hidden absolute right-3 top-3 text-mistral-stone hover:text-mistral-slate text-sm"><svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
 
             <!-- Otomatik Tamamlama Açılır Kutusu (Autocomplete Dropdown) -->
