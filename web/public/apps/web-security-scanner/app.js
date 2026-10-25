@@ -290,11 +290,23 @@ function evaluateHeaders(headerMap) {
     };
   }
 
-  // Sızıntı kontrolü (Server, X-Powered-By)
+  // Sızıntı kontrolü (Server, X-Powered-By) ve PHP 2026 Açık Denetimi (CVE-2026-109618 / 109619 / 115560)
   for (const leakKey of LEAK_HEADERS) {
     if (headerMap[leakKey]) {
-      leaks.push({ header: leakKey, value: headerMap[leakKey] });
-      earnedScore = Math.max(0, earnedScore - 5); // Ceza
+      const val = headerMap[leakKey];
+      const phpMatch = val.match(/PHP\/([0-9]+\.[0-9]+\.[0-9]+)/i);
+      let isVulnPhp = false;
+      let phpNote = 'Sunucu sürüm bilgisi saldırganlara teknoloji yığını ifşa ediyor. Gizlenmesi önerilir.';
+      if (phpMatch) {
+        const [maj, minV, patV] = phpMatch[1].split('.').map(Number);
+        if (maj < 8 || (maj === 8 && minV <= 1) || (maj === 8 && minV === 2 && patV < 35) || (maj === 8 && minV === 3 && patV < 36) || (maj === 8 && minV === 4 && patV < 27) || (maj === 8 && minV === 5 && patV < 12)) {
+          isVulnPhp = true;
+          phpNote = `⚠️ KRİTİK: Tespit edilen PHP/${phpMatch[1]} sürümü PHP.net 2026 bültenlerindeki CVE-2026-109618, CVE-2026-109619 ve CVE-2026-115560 açıklarına karşı savunmasızdır! Derhal yamalı sürüme (8.5.12, 8.4.27, 8.3.36, 8.2.35) güncellenmeli ve session.upload_progress.enabled = Off yapılmalıdır.`;
+          earnedScore = Math.max(0, earnedScore - 15);
+        }
+      }
+      leaks.push({ header: leakKey, value: val, isVuln: isVulnPhp, note: phpNote });
+      earnedScore = Math.max(0, earnedScore - 5); // Standart sızıntı cezası
     }
   }
 
@@ -647,10 +659,10 @@ function renderLeaks(leaks) {
 
   card.classList.remove('hidden');
   container.innerHTML = leaks.map(l => `
-    <div class="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs">
+    <div class="p-2.5 rounded-lg ${l.isVuln ? 'bg-rose-100 border-rose-300' : 'bg-rose-50 border-rose-200'} text-xs">
       <span class="font-bold font-mono text-rose-800">${escapeHtml(l.header)}:</span>
       <span class="font-mono text-rose-700 ml-1">${escapeHtml(l.value)}</span>
-      <p class="text-[11px] text-rose-600 mt-1">Sunucu sürüm bilgisi saldırganlara teknoloji yığını ifşa ediyor. Gizlenmesi önerilir.</p>
+      <p class="text-[11px] ${l.isVuln ? 'text-rose-800 font-semibold' : 'text-rose-600'} mt-1">${escapeHtml(l.note || 'Sunucu sürüm bilgisi saldırganlara teknoloji yığını ifşa ediyor. Gizlenmesi önerilir.')}</p>
     </div>
   `).join('');
 }
