@@ -53,7 +53,7 @@ module.exports = function(pageTemplate) {
           </div>
           <h2 class="text-xl sm:text-2xl font-bold font-editorial text-mistral-ink mb-1">Web Sitesi Güvenlik Taraması</h2>
           <p class="text-xs sm:text-sm text-mistral-slate leading-relaxed">
-            Hedef siteye hiçbir zararlı payload göndermeden, yalnızca açık DNS/DoH kayıtlarını ve HTTP güvenlik başlıklarını (CSP, HSTS, X-Frame-Options, DMARC) pasif yöntemlerle denetler.
+            Bu vitrin sürümü hedef siteye hiçbir istek göndermez: yalnızca açık DNS/DoH kayıtlarını ve (elle yapıştırılan) HTTP güvenlik başlıklarını (CSP, HSTS, X-Frame-Options, DMARC) pasif yöntemlerle denetler. Hedefin sunucusuna canlı istek atan denetimler yalnızca yerel (standalone) sürümde çalışır.
           </p>
         </div>
 
@@ -234,10 +234,10 @@ module.exports = function(pageTemplate) {
                 <span>Tam Kapsamlı Standalone Sürüm</span>
               </div>
               <h2 class="text-lg sm:text-xl font-bold font-editorial text-mistral-ink">
-                SAST, Aktif Güvenlik Testleri, AI Red Team &amp; Konteyner Sandbox
+                Kanıt Doğrulamalı AI Red Team, NVD/CISA KEV Tehdit İstihbaratı, Headless-Chromium XSS Kanıtı &amp; Strix Sandbox
               </h2>
               <p class="text-xs text-mistral-slate mt-1 max-w-3xl leading-relaxed">
-                Tarayıcı güvenlik sınırları (CORS) nedeniyle bu vitrin sayfasında üçüncü parti sitelere aktif test veya derin kaynak kod analizi yapılamaz. Tam yetenekli konsolu yerel makinenizde sıfır bağımlılıkla çalışan Python sunucusuyla başlatabilirsiniz.
+                Tam sürüm; aktif DAST testleri, 7 dilde SAST, 8 ekosistemde OSV/CVE taraması, kanıtı HTTP yanıtıyla doğrulanan AI Red Team ajanları, NVD/OSV/CISA KEV tehdit istihbaratı, gerçek tarayıcıda (headless Chromium) XSS çalıştırma kanıtı, tarama geçmişi/fark raporu ve Strix konteyner sandbox'ı içerir. Aktif testler ve hedefe giden canlı istekler <strong>yalnızca yerel (standalone) sürümde</strong> çalışır; bu vitrin sayfası üçüncü parti sunuculara istek göndermez. Konsolu yerel makinenizde sıfır bağımlılıkla tek komutla başlatabilirsiniz.
               </p>
             </div>
             <div class="flex flex-wrap gap-2 shrink-0">

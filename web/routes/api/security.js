@@ -70,6 +70,18 @@ router.get('/security/headers', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Yalnızca HTTP ve HTTPS desteklenir' });
     }
 
+    // Barındırılan (vitrin) sürümde üçüncü parti sunuculara CANLI İSTEK yapılmaz.
+    // Başka bir alan adına/sunucuya gönderilen canlı istek, hedefin WAF/IDS sistemi tarafından
+    // tarama veya saldırı olarak algılanabilir; bu nedenle canlı HTTP başlık denetimi yalnızca
+    // yerel (standalone) sürümde çalışır. Yerelde açıkça açmak için: WSS_ALLOW_OUTBOUND_HEADERS=1
+    if (process.env.WSS_ALLOW_OUTBOUND_HEADERS !== '1') {
+      return res.status(403).json({
+        success: false,
+        local_only: true,
+        error: 'Canlı HTTP başlık taraması yalnızca yerel (standalone) sürümde çalışır. Bu vitrin sürümü üçüncü parti sunuculara istek göndermez; pasif DNS/DoH denetimini kullanın.'
+      });
+    }
+
     // SSRF ve DNS Rebinding Koruması (utils.js)
     if (await isPrivateAddress(parsed.hostname)) {
       return res.status(403).json({ success: false, error: 'Yerel ve iç ağ IP adresleri taranamamaktadır (SSRF Koruması)' });
