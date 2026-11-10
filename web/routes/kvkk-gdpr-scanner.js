@@ -210,9 +210,8 @@ module.exports = function(pageTemplate) {
 
   // 3. Ana Uygulama Arayüzü
   router.get('/', (req, res) => {
+    const extraHead = '<link rel="stylesheet" href="/static/apps/kvkk-gdpr-scanner/app.css?v=20261111">';
     const content = `
-    <link rel="stylesheet" href="/static/apps/kvkk-gdpr-scanner/app.css">
-
     <div class="kvkk-shell max-w-6xl mx-auto py-4 sm:py-6 px-4 space-y-6">
 
       <!-- Üst Başlık & Durum Çubuğu -->
@@ -295,7 +294,7 @@ module.exports = function(pageTemplate) {
               </div>
             </label>
           </div>
-          <div id="selected-files-summary" class="hidden flex items-center justify-between bg-mistral-tint px-3.5 py-2.5 rounded-lg text-xs">
+          <div id="selected-files-summary" class="hidden kvkk-summary-bar bg-mistral-tint px-3.5 py-2.5 rounded-lg text-xs">
             <span id="selected-files-text" class="font-mono text-mistral-text">0 dosya yüklendi</span>
             <button type="button" onclick="runProjectAudit()" class="kvkk-btn kvkk-btn-primary text-xs">
               ⚖️ KVKK &amp; GDPR Uyum Denetimini Başlat
@@ -496,7 +495,7 @@ module.exports = function(pageTemplate) {
     </div>
 
     <!-- LocalStorage AI Yapılandırma Modalı (WSS Uyumlu) -->
-    <div id="ai-config-modal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div id="ai-config-modal" class="kvkk-modal-backdrop hidden" onclick="if(event.target===this)closeAIConfigModal()">
       <div class="kvkk-card max-w-lg w-full p-5 space-y-4 bg-white shadow-2xl">
         <div class="flex items-center justify-between border-b border-mistral-hairline pb-3">
           <div>
@@ -560,10 +559,10 @@ module.exports = function(pageTemplate) {
       </div>
     </div>
 
-    <script data-cfasync="false" src="/static/apps/kvkk-gdpr-scanner/app.js"></script>
+    <script data-cfasync="false" src="/static/apps/kvkk-gdpr-scanner/app.js?v=20261111"></script>
     `;
 
-    res.send(pageTemplate('KVKK & GDPR Scanner', content, req));
+    res.send(pageTemplate('KVKK & GDPR Scanner — Hukuki Kod ve Uyum Denetçisi', content, extraHead));
   });
 
   return router;

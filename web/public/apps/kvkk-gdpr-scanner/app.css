@@ -1,4 +1,29 @@
-/* VibeCoding KVKK & GDPR Scanner — Mistral Design System */
+/* KVKK & GDPR Scanner — Mistral Design System & Precompiled Utility Polyfills */
+.kvkk-shell .hidden,
+#ai-config-modal.hidden {
+  display: none !important;
+}
+
+.kvkk-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.kvkk-summary-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
 .kvkk-brand-icon {
   width: 2.5rem;
   height: 2.5rem;
@@ -13,10 +38,17 @@
 }
 
 .kvkk-card {
-  background: var(--mistral-surface, #ffffff);
-  border: 1px solid var(--mistral-border, #e6e2d8);
+  background: var(--vibe-surface, #ffffff);
+  border: 1px solid var(--vibe-hairline, #e2e8f0);
   border-radius: 1rem;
-  box-shadow: 0 1px 2px rgba(20, 18, 15, 0.03);
+  box-shadow: var(--vibe-shadow-sm, 0 1px 3px rgba(15, 23, 42, 0.05));
+}
+
+.kvkk-dropzone {
+  background: var(--vibe-canvas, #FFFDF9);
+}
+.kvkk-dropzone:hover {
+  background: rgba(250, 82, 15, 0.03);
 }
 
 .kvkk-pill {
@@ -25,10 +57,10 @@
   padding: 0.15rem 0.55rem;
   border-radius: 9999px;
   font-size: 0.68rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-weight: 600;
-  background: rgba(20, 18, 15, 0.06);
-  color: var(--mistral-text, #181614);
+  background: rgba(15, 23, 42, 0.06);
+  color: var(--vibe-ink, #0F172A);
 }
 
 .kvkk-pill-accent {
@@ -46,6 +78,7 @@
   font-weight: 600;
   transition: all 0.15s ease;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .kvkk-btn-primary {
@@ -58,9 +91,9 @@
 }
 
 .kvkk-btn-outline {
-  background: transparent;
-  color: var(--mistral-text, #181614);
-  border: 1px solid var(--mistral-border, #d8d3c8);
+  background: #ffffff;
+  color: var(--vibe-ink, #0F172A);
+  border: 1px solid var(--vibe-hairline-strong, #cbd5e1);
 }
 .kvkk-btn-outline:hover {
   border-color: #FA520F;
@@ -68,8 +101,8 @@
 }
 
 .kvkk-btn-ghost {
-  background: rgba(20, 18, 15, 0.04);
-  color: var(--mistral-text, #181614);
+  background: rgba(15, 23, 42, 0.04);
+  color: var(--vibe-ink, #0F172A);
   border: 1px solid transparent;
 }
 .kvkk-btn-ghost:hover {
@@ -82,14 +115,14 @@
   border-radius: 0.5rem;
   font-size: 0.76rem;
   font-weight: 600;
-  color: var(--mistral-muted, #6f6a61);
+  color: var(--vibe-slate, #475569);
   background: transparent;
   transition: all 0.15s ease;
   cursor: pointer;
 }
 .kvkk-tab:hover {
-  color: var(--mistral-text, #181614);
-  background: rgba(20, 18, 15, 0.04);
+  color: var(--vibe-ink, #0F172A);
+  background: rgba(15, 23, 42, 0.04);
 }
 .kvkk-tab.active {
   background: #FA520F;
@@ -101,23 +134,139 @@
   border-radius: 0.45rem;
   font-size: 0.7rem;
   font-weight: 500;
-  border: 1px solid var(--mistral-border, #e0dbd0);
-  background: rgba(20, 18, 15, 0.02);
-  color: var(--mistral-text, #181614);
+  border: 1px solid var(--vibe-hairline-strong, #cbd5e1);
+  background: #ffffff;
+  color: var(--vibe-ink, #0F172A);
   cursor: pointer;
   transition: all 0.15s ease;
 }
-.kvkk-chip:hover, .kvkk-chip.active {
+.kvkk-chip:hover,
+.kvkk-chip.active {
   border-color: #FA520F;
   background: rgba(250, 82, 15, 0.1);
   color: #FA520F;
 }
 
 .kvkk-code-block {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.72rem;
   line-height: 1.45;
   padding: 0.75rem;
   border-radius: 0.5rem;
   overflow-x: auto;
+  margin: 0;
+}
+
+/* Precompiled Tailwind Static Build Missing Token Polyfills */
+.kvkk-shell .text-mistral-text,
+#ai-config-modal .text-mistral-text,
+.kvkk-shell .hover\:text-mistral-text:hover,
+#ai-config-modal .hover\:text-mistral-text:hover {
+  color: var(--vibe-ink, #0F172A);
+}
+.kvkk-shell .text-mistral-muted,
+#ai-config-modal .text-mistral-muted {
+  color: var(--vibe-stone, #64748B);
+}
+.kvkk-shell .border-mistral-border,
+#ai-config-modal .border-mistral-border {
+  border-color: var(--vibe-hairline-strong, #CBD5E1);
+}
+.kvkk-shell .border-mistral-orange\/40 {
+  border-color: rgba(250, 82, 15, 0.4);
+}
+.kvkk-shell .bg-mistral-tint {
+  background-color: #F8FAFC;
+}
+.kvkk-shell .bg-mistral-tint\/30 {
+  background-color: rgba(248, 250, 252, 0.65);
+}
+.kvkk-shell .bg-mistral-tint\/60 {
+  background-color: #FFFDF9;
+}
+.kvkk-shell .bg-emerald-500\/15 {
+  background-color: rgba(16, 185, 129, 0.15);
+}
+.kvkk-shell .bg-emerald-500\/10 {
+  background-color: rgba(16, 185, 129, 0.1);
+}
+.kvkk-shell .border-emerald-500\/20 {
+  border-color: rgba(16, 185, 129, 0.25);
+}
+.kvkk-shell .border-emerald-500\/30 {
+  border-color: rgba(16, 185, 129, 0.35);
+}
+.kvkk-shell .bg-blue-500\/15 {
+  background-color: rgba(59, 130, 246, 0.15);
+}
+.kvkk-shell .border-blue-500\/30 {
+  border-color: rgba(59, 130, 246, 0.35);
+}
+.kvkk-shell .bg-amber-500\/15 {
+  background-color: rgba(245, 158, 11, 0.16);
+}
+.kvkk-shell .border-amber-500\/30 {
+  border-color: rgba(245, 158, 11, 0.35);
+}
+.kvkk-shell .bg-red-500\/15 {
+  background-color: rgba(239, 68, 68, 0.15);
+}
+.kvkk-shell .bg-red-500\/10 {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+.kvkk-shell .border-red-500\/30 {
+  border-color: rgba(239, 68, 68, 0.35);
+}
+.kvkk-shell .text-red-600,
+#ai-config-modal .text-red-600 {
+  color: #DC2626;
+}
+.kvkk-shell .bg-red-950\/90 {
+  background-color: #2A0A0E;
+}
+.kvkk-shell .text-red-100 {
+  color: #FEE2E2;
+}
+.kvkk-shell .bg-emerald-950\/90 {
+  background-color: #06281E;
+}
+.kvkk-shell .text-emerald-100 {
+  color: #D1FAE5;
+}
+.kvkk-shell .font-serif {
+  font-family: 'Newsreader', Georgia, serif;
+}
+.kvkk-shell .border-collapse {
+  border-collapse: collapse;
+}
+.kvkk-shell .whitespace-nowrap {
+  white-space: nowrap;
+}
+.kvkk-shell .max-w-none {
+  max-width: none;
+}
+.kvkk-shell .pb-5 {
+  padding-bottom: 1.25rem;
+}
+.kvkk-shell .pl-3 {
+  padding-left: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .kvkk-shell.sm\:py-6 {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .kvkk-shell .lg\:flex-row {
+    flex-direction: row;
+  }
+  .kvkk-shell .lg\:items-center {
+    align-items: center;
+  }
+  .kvkk-shell .lg\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
