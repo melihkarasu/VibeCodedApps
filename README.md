@@ -147,6 +147,8 @@ Tüm uygulamalar `/` vitrininde kategoriler altında hiyerarşik olarak listelen
 - **🎨 Harmoni: Renk & Kontrast Stüdyosu** (`/renk-studyosu`): The Color API ile renk şemaları, WCAG kontrast analizi ve CSS/Tailwind export.
 - **💻 HTTP Sözlüğü & Cihaz Taraması** (`/http-status`): HTTP durum kodları referansı ve canlı donanım/GPU analizi.
 - **🛡️ Web Security Scanner** (`/web-security-scanner`): HTTP güvenlik başlıkları, DNS/e-posta savunma kayıtları, 128 kurallı SAST kaynak kod analizi (**PHP `php2shell`** & **Node.js Ekim 2026** güvenlik bülteni denetimleri dahil) ve birleşik güvenlik denetim konsolu ([melihkarasu/web-security-scanner](https://github.com/melihkarasu/web-security-scanner)).
+- **VibeCoding Security Rules:** AI kodlama ajanları (Codex `AGENTS.md`, Cursor `.cursorrules`, Claude Code `CLAUDE.md`, OpenClaw `SKILL.md`) için 146 SAST kuralı, 16 DAST modülü, Claude-Red ofansif oyun kitapları ve 2026 PHP/Node.js/Next.js güvenlik bültenlerini içeren güvenli kodlama yönergesi ([melihkarasu/vibecoding-security-rules](https://github.com/melihkarasu/vibecoding-security-rules)).
+- **VibeCoding KVKK & GDPR Rules:** AI kodlama ajanları için 6698 sayılı KVKK (2024/2026 reformları ve 2026 idari ceza matrisi), AB GDPR, 6563 sayılı ETK (İYS), 6502 sayılı TKHK (Mesafeli Sözleşmeler) ve 5651 sayılı Kanun uyumlu Privacy-by-Design kodlama ve denetim yeteneği ([melihkarasu/vibecoding-kvkk-gdpr](https://github.com/melihkarasu/vibecoding-kvkk-gdpr)).
 
 ### 🛠️ Web Araçları
 - **📱 QR Studio** (`/qr-studio`): qr-code-styling ile vektörel QR üretici, içerik türleri ve SVG/PNG indirme.
