@@ -30,6 +30,7 @@ app.use('/api', require('./routes/api'));
 // 2. Vitrin & SSO Auth Sayfaları (Ana Sayfa Doğrudan /)
 // -------------------------------------------------------------
 app.get('/', require('./routes/vitrin')(pageTemplate));
+require('./routes/test-legal')(app, pageTemplate);
 app.get('/app', (req, res) => res.redirect(301, '/'));
 
 app.get(['/auth', '/app/auth'], require('./routes/auth')(pageTemplate));
@@ -55,6 +56,7 @@ const routeMap = [
   { paths: ['/oyun-radar', '/app/oyun-radar'], route: './routes/oyun' },
   { paths: ['/sizinti-kontrol', '/app/sizinti-kontrol'], route: './routes/sizinti' },
   { paths: ['/web-security-scanner', '/app/web-security-scanner'], route: './routes/web-security-scanner' },
+  { paths: ['/vibecoding-kvkk-gdpr-scanner', '/app/vibecoding-kvkk-gdpr-scanner'], route: './routes/vibecoding-kvkk-gdpr-scanner' },
   { paths: ['/dns-kontrol', '/app/dns-kontrol'], route: './routes/dns' },
   { paths: ['/github-analitik', '/app/github-analitik'], route: './routes/github' },
   { paths: ['/doga-sesleri', '/app/doga-sesleri'], route: './routes/doga' },

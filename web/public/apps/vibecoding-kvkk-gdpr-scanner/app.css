@@ -1,0 +1,123 @@
+/* VibeCoding KVKK & GDPR Scanner — Mistral Design System */
+.kvkk-brand-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: rgba(250, 82, 15, 0.12);
+  color: #FA520F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(250, 82, 15, 0.25);
+  flex-shrink: 0;
+}
+
+.kvkk-card {
+  background: var(--mistral-surface, #ffffff);
+  border: 1px solid var(--mistral-border, #e6e2d8);
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(20, 18, 15, 0.03);
+}
+
+.kvkk-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 600;
+  background: rgba(20, 18, 15, 0.06);
+  color: var(--mistral-text, #181614);
+}
+
+.kvkk-pill-accent {
+  background: rgba(250, 82, 15, 0.14);
+  color: #FA520F;
+}
+
+.kvkk-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.625rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.kvkk-btn-primary {
+  background: #FA520F;
+  color: #ffffff;
+  border: 1px solid #FA520F;
+}
+.kvkk-btn-primary:hover {
+  background: #e04406;
+}
+
+.kvkk-btn-outline {
+  background: transparent;
+  color: var(--mistral-text, #181614);
+  border: 1px solid var(--mistral-border, #d8d3c8);
+}
+.kvkk-btn-outline:hover {
+  border-color: #FA520F;
+  color: #FA520F;
+}
+
+.kvkk-btn-ghost {
+  background: rgba(20, 18, 15, 0.04);
+  color: var(--mistral-text, #181614);
+  border: 1px solid transparent;
+}
+.kvkk-btn-ghost:hover {
+  background: rgba(250, 82, 15, 0.1);
+  color: #FA520F;
+}
+
+.kvkk-tab {
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.5rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--mistral-muted, #6f6a61);
+  background: transparent;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+.kvkk-tab:hover {
+  color: var(--mistral-text, #181614);
+  background: rgba(20, 18, 15, 0.04);
+}
+.kvkk-tab.active {
+  background: #FA520F;
+  color: #ffffff;
+}
+
+.kvkk-chip {
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  border: 1px solid var(--mistral-border, #e0dbd0);
+  background: rgba(20, 18, 15, 0.02);
+  color: var(--mistral-text, #181614);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.kvkk-chip:hover, .kvkk-chip.active {
+  border-color: #FA520F;
+  background: rgba(250, 82, 15, 0.1);
+  color: #FA520F;
+}
+
+.kvkk-code-block {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
