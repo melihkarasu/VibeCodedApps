@@ -563,11 +563,7 @@ module.exports = function(pageTemplate) {
     <script src="/static/apps/kvkk-gdpr-scanner/app.js"></script>
     `;
 
-    res.send(pageTemplate({
-      title: 'KVKK & GDPR Scanner — Hukuki Kod ve Uyum Denetçisi',
-      description: '6698 KVKK, AB GDPR, 6563 ETK (İYS) ve 6502 TKHK kurallarına göre kaynak kod, GitHub repo ve canlı web sitesi uyum tarayıcısı.',
-      content
-    }));
+    res.send(pageTemplate('KVKK & GDPR Scanner', content, req));
   });
 
   return router;
