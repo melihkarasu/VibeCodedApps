@@ -91,7 +91,11 @@ const routeMap = [
 
 routeMap.forEach(item => {
   const handler = require(item.route)(pageTemplate);
-  app.get(item.paths, handler);
+  if (handler && Array.isArray(handler.stack)) {
+    app.use(item.paths, handler);
+  } else {
+    app.get(item.paths, handler);
+  }
 });
 
 // Sunucuyu Başlat
