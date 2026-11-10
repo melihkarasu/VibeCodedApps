@@ -68,7 +68,7 @@ module.exports = function(pageTemplate) {
         method: 'GET',
         redirect: 'manual',
         headers: {
-          'User-Agent': 'VibeCoding-KVKK-GDPR-Scanner/1.0 (+https://github.com/melihkarasu/vibecoding-kvkk-gdpr-scanner)',
+          'User-Agent': 'KVKK-GDPR-Scanner/1.0 (+https://github.com/melihkarasu/kvkk-gdpr-scanner)',
           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
         },
         signal: AbortSignal.timeout(12000)
@@ -175,8 +175,8 @@ module.exports = function(pageTemplate) {
         const headers = { 'Content-Type': 'application/json' };
         if (apiKey) headers['Authorization'] = `Bearer ${apiKey}`;
         if (provider === 'openrouter') {
-          headers['HTTP-Referer'] = 'https://app.melihkarasu.com/vibecoding-kvkk-gdpr-scanner';
-          headers['X-Title'] = 'VibeCoding KVKK & GDPR Scanner';
+          headers['HTTP-Referer'] = 'https://app.melihkarasu.com/kvkk-gdpr-scanner';
+          headers['X-Title'] = 'KVKK & GDPR Scanner';
         }
 
         const oRes = await fetch(endpoint, {
@@ -211,7 +211,7 @@ module.exports = function(pageTemplate) {
   // 3. Ana Uygulama Arayüzü
   router.get('/', (req, res) => {
     const content = `
-    <link rel="stylesheet" href="/static/apps/vibecoding-kvkk-gdpr-scanner/app.css">
+    <link rel="stylesheet" href="/static/apps/kvkk-gdpr-scanner/app.css">
 
     <div class="kvkk-shell max-w-6xl mx-auto py-4 sm:py-6 px-4 space-y-6">
 
@@ -229,7 +229,7 @@ module.exports = function(pageTemplate) {
           </div>
           <div>
             <div class="flex flex-wrap items-center gap-2">
-              <h1 class="text-xl sm:text-2xl font-serif font-medium text-mistral-text tracking-tight">VibeCoding KVKK &amp; GDPR Scanner</h1>
+              <h1 class="text-xl sm:text-2xl font-serif font-medium text-mistral-text tracking-tight">KVKK &amp; GDPR Scanner</h1>
               <span class="kvkk-pill kvkk-pill-accent">2026 Ceza Matrisi</span>
               <span class="kvkk-pill">36 SAST &amp; Web Kuralı</span>
             </div>
@@ -560,11 +560,11 @@ module.exports = function(pageTemplate) {
       </div>
     </div>
 
-    <script src="/static/apps/vibecoding-kvkk-gdpr-scanner/app.js"></script>
+    <script src="/static/apps/kvkk-gdpr-scanner/app.js"></script>
     `;
 
     res.send(pageTemplate({
-      title: 'VibeCoding KVKK & GDPR Scanner — Hukuki Kod ve Uyum Denetçisi',
+      title: 'KVKK & GDPR Scanner — Hukuki Kod ve Uyum Denetçisi',
       description: '6698 KVKK, AB GDPR, 6563 ETK (İYS) ve 6502 TKHK kurallarına göre kaynak kod, GitHub repo ve canlı web sitesi uyum tarayıcısı.',
       content
     }));

@@ -63,7 +63,7 @@ const APP_SVGS = {
   'web-security-scanner': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>',
   'vibecoding-security-rules': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>',
   'vibecoding-kvkk-gdpr': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>',
-  'vibecoding-kvkk-gdpr-scanner': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m16 16 2-5 2 5"/><path d="m4 16 2-5 2 5"/><path d="M12 7v9"/></svg>',
+  'kvkk-gdpr-scanner': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m16 16 2-5 2 5"/><path d="m4 16 2-5 2 5"/><path d="M12 7v9"/></svg>',
   'ip-konum': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
   'renk-studyosu': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z"/><path d="m5 2 5 5"/><path d="M2 13h15"/><path d="M22 20a2 2 0 1 1-4 0c0-1.6 1.7-2.4 2-4 .3 1.6 2 2.4 2 4Z"/></svg>',
   'http-status': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>',
@@ -492,11 +492,11 @@ module.exports = function(pageTemplate) {
             action: "GitHub Reposunu Aç"
           },
           {
-            id: "vibecoding-kvkk-gdpr-scanner",
-            name: "VibeCoding KVKK & GDPR Scanner",
-            icon: getAppSvg("vibecoding-kvkk-gdpr-scanner", "gelistirici-araclari"),
+            id: "kvkk-gdpr-scanner",
+            name: "KVKK & GDPR Scanner",
+            icon: getAppSvg("kvkk-gdpr-scanner", "gelistirici-araclari"),
             desc: "Proje klasörü, GitHub repo, SQL/form kodu ve canlı URL üzerinde 2026 ceza matrisi ve LocalStorage LLM destekli KVKK & GDPR ihlal tarayıcısı.",
-            url: "/vibecoding-kvkk-gdpr-scanner",
+            url: "/kvkk-gdpr-scanner",
             action: "Tarayıcıyı Başlat"
           },
           {

@@ -56,7 +56,7 @@ const routeMap = [
   { paths: ['/oyun-radar', '/app/oyun-radar'], route: './routes/oyun' },
   { paths: ['/sizinti-kontrol', '/app/sizinti-kontrol'], route: './routes/sizinti' },
   { paths: ['/web-security-scanner', '/app/web-security-scanner'], route: './routes/web-security-scanner' },
-  { paths: ['/vibecoding-kvkk-gdpr-scanner', '/app/vibecoding-kvkk-gdpr-scanner'], route: './routes/vibecoding-kvkk-gdpr-scanner' },
+  { paths: ['/kvkk-gdpr-scanner', '/app/kvkk-gdpr-scanner'], route: './routes/kvkk-gdpr-scanner' },
   { paths: ['/dns-kontrol', '/app/dns-kontrol'], route: './routes/dns' },
   { paths: ['/github-analitik', '/app/github-analitik'], route: './routes/github' },
   { paths: ['/doga-sesleri', '/app/doga-sesleri'], route: './routes/doga' },
