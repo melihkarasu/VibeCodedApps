@@ -931,3 +931,123 @@ async function runAILegalAudit() {
   const findingsSummary = SCAN_STATE.findings.map((f, i) =>
     (i + 1) + '. [' + f.severity + '] ' + f.ruleId + ' - ' + f.title + ' (Dosya: ' + f.file + ':' + f.line + ') | Dayanak: ' + f.legalBasis + ' | Ceza: ' + f.penalty2026 + '\nKod:\n' + f.snippet
   ).join('\n\n');
+
+  const userPrompt = 'Proje Uyum Skoru: ' + SCAN_STATE.score + '/100 (Not: ' + SCAN_STATE.grade + ')\nTaranan Dosya Sayısı: ' + SCAN_STATE.files.length + '\nToplam İhlal Sayısı: ' + SCAN_STATE.findings.length + '\n\nTespit Edilen Bulgular:\n' + (findingsSummary || 'Doğrudan statik ihlal bulunmadı.') + '\n\nLütfen bu projeyi KVKK ve GDPR açısından denetle ve uygulanabilir kod yamalarını üret.';
+
+  try {
+    const reply = await callLLMWithConfig(systemPrompt, userPrompt);
+    SCAN_STATE.lastAIReport = reply;
+    output.textContent = reply;
+  } catch (err) {
+    output.textContent = '⚠️ AI Analiz Hatası: ' + (err.message || err);
+  } finally {
+    loading.classList.add('hidden');
+  }
+}
+
+async function generateAIDocument(docType) {
+  const panel = document.getElementById('ai-audit-panel');
+  const loading = document.getElementById('ai-report-loading');
+  const output = document.getElementById('ai-report-output');
+  panel.classList.remove('hidden');
+  loading.classList.remove('hidden');
+
+  const fileNames = SCAN_STATE.files.map(f => f.path).join(', ');
+  const prompt = docType === 'aydinlatma'
+    ? 'Bu yazılım projesi (Dosyalar: ' + fileNames + ') için KVKK Madde 10 ve GDPR Madde 13 uyumlu Katmanlı Aydınlatma Metni ve 6563 ETK uyumlu Ticari Elektronik İleti Açık Rıza Metni taslağını Markdown olarak hazırla.'
+    : 'Bu yazılım projesi (Dosyalar: ' + fileNames + ') için KVK Kurulu 2019/10 sayılı Kararı (72 Saat Kuralı) ve GDPR Madde 33-34 uyumlu docs/veri-ihlali-mudahale-plani.md dosyasını saat saat eylem planıyla hazırla.';
+
+  try {
+    const reply = await callLLMWithConfig('Sen KVKK ve GDPR uzmanı bir bilişim hukukçususun.', prompt);
+    SCAN_STATE.lastAIReport = reply;
+    output.textContent = reply;
+  } catch (err) {
+    output.textContent = '⚠️ Belge Üretim Hatası: ' + (err.message || err);
+  } finally {
+    loading.classList.add('hidden');
+  }
+}
+
+async function sendAIFollowup() {
+  const input = document.getElementById('ai-followup-input');
+  const question = input.value.trim();
+  if (!question) return;
+  input.value = '';
+
+  const loading = document.getElementById('ai-report-loading');
+  const output = document.getElementById('ai-report-output');
+  loading.classList.remove('hidden');
+
+  try {
+    const context = SCAN_STATE.findings.map(f => f.ruleId + ': ' + f.title + ' (' + f.file + ':' + f.line + ')').join('; ');
+    const reply = await callLLMWithConfig('Sen KVKK, GDPR, 6563 ETK ve Privacy-by-Design kodlama uzmanısın.', 'Mevcut Proje Bulguları: ' + context + '\n\nKullanıcı Sorusu: ' + question);
+    output.textContent = (SCAN_STATE.lastAIReport ? SCAN_STATE.lastAIReport + '\n\n---\n\n' : '') + '💬 Soru: ' + question + '\n\n' + reply;
+    SCAN_STATE.lastAIReport = output.textContent;
+  } catch (err) {
+    output.textContent += '\n\n⚠️ Hata: ' + (err.message || err);
+  } finally {
+    loading.classList.add('hidden');
+  }
+}
+
+function copyAIReport() {
+  if (!SCAN_STATE.lastAIReport) return;
+  navigator.clipboard.writeText(SCAN_STATE.lastAIReport);
+}
+
+function downloadBlob(filename, content, mime) {
+  const blob = new Blob([content], { type: mime });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 200);
+}
+
+function exportComplianceMarkdown() {
+  const now = new Date().toISOString();
+  let md = '# ⚖️ VibeCoding KVKK & GDPR Uyum Denetim Raporu\n\n';
+  md += '- **Tarih:** ' + now + '\n';
+  md += '- **Uyum Skoru:** ' + SCAN_STATE.score + ' / 100 (Not: **' + SCAN_STATE.grade + '**)\n';
+  md += '- **Taranan Dosya Sayısı:** ' + SCAN_STATE.files.length + '\n';
+  md += '- **Toplam Bulgu:** ' + SCAN_STATE.findings.length + '\n';
+  md += '- **2026 TR İdari Para Cezası Riski:** ' + SCAN_STATE.trMinPenalty.toLocaleString('tr-TR') + ' TL – ' + SCAN_STATE.trMaxPenalty.toLocaleString('tr-TR') + ' TL\n\n';
+  md += '## 📋 10 Maddelik Özet Uyum Tablosu\n\n';
+  md += '| Denetim Alanı | Mevzuat Dayanağı | Durum | 2026 Ceza Riski | Bulgu Özeti |\n';
+  md += '| :--- | :--- | :---: | :--- | :--- |\n';
+  SCAN_STATE.domainSummary.forEach(r => {
+    md += '| ' + r.title + ' | ' + r.legalBasis + ' | **' + r.status + '** | ' + (r.findingsCount > 0 ? r.penaltyText : '—') + ' | ' + r.summary + ' |\n';
+  });
+  md += '\n## 🔍 Detaylı Teknik Bulgular ve Çözüm Önerileri\n\n';
+  SCAN_STATE.findings.forEach((f, idx) => {
+    md += '### ' + (idx + 1) + '. [' + f.severity + '] ' + f.ruleId + ' — ' + f.title + '\n';
+    md += '- **Dosya ve Satır:** `' + f.file + ':' + f.line + '`\n';
+    md += '- **Yasal Dayanak:** ' + f.legalBasis + '\n';
+    md += '- **2026 Ceza Karşılığı:** ' + f.penalty2026 + '\n';
+    md += '- **Tespit:** ' + f.finding + '\n';
+    md += '- **Önerilen Düzeltme:** ' + f.remediation + '\n\n';
+    md += '```\n' + (f.fixCode || f.remediation) + '\n```\n\n';
+  });
+  if (SCAN_STATE.lastAIReport) {
+    md += '\n## 🤖 AI Hukukçu & Privacy Mühendisi Analizi\n\n' + SCAN_STATE.lastAIReport + '\n';
+  }
+  downloadBlob('kvkk-gdpr-uyum-raporu.md', md, 'text/markdown;charset=utf-8');
+}
+
+function exportComplianceJSON() {
+  downloadBlob('kvkk-gdpr-uyum-raporu.json', JSON.stringify(SCAN_STATE, null, 2), 'application/json;charset=utf-8');
+}
+
+function exportBreachPlanTemplate() {
+  const tpl = '# 🚨 Kişisel Veri İhlali Müdahale ve 72 Saat Bildirim Planı\n\n**Yasal Dayanak:** 6698 Sayılı KVKK m.12/5, KVK Kurulu 24.01.2019 tarih ve 2019/10 sayılı Kararı ve AB GDPR Madde 33-34.\n\n## 1. Kritik Süre Kuralı (72 Saat)\nVeri ihlalinin öğrenildiği andan itibaren gecikmeksizin ve **en geç 72 SAAT içinde** Kişisel Verileri Koruma Kuruluna (https://ihlalbildirimi.kvkk.gov.tr/) ve ilgili kişilere bildirim yapılması zorunludur.\n\n## 2. Saat Saat Eylem Planı\n- **0 – 4. Saat (İzolasyon & Kanıt Koruma):** Sızan anahtarları (service_role, JWT secret) derhal iptal et/döndür, RLS politikalarını kilitle, audit_logs kayıtlarını salt-okunur yedekle.\n- **4 – 24. Saat (Etki Analizi):** Etkilenen kişi sayısını ve veri kategorilerini tespit et.\n- **24 – 48. Saat (Form Hazırlığı):** KVKK Kişisel Veri İhlali Bildirim Formunu hazırla.\n- **48 – 72. Saat (Resmi Bildirim & Tebligat):** Kurul bildirimini tamamla ve etkilenen kullanıcılara şeffaf bildirim yap.\n';
+  downloadBlob('veri-ihlali-mudahale-plani.md', tpl, 'text/markdown;charset=utf-8');
+}
+
+function escapeHtml(str) {
+  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateAIStatusButton();
+});

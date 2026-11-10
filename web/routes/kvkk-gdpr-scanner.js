@@ -560,7 +560,7 @@ module.exports = function(pageTemplate) {
       </div>
     </div>
 
-    <script src="/static/apps/kvkk-gdpr-scanner/app.js"></script>
+    <script data-cfasync="false" src="/static/apps/kvkk-gdpr-scanner/app.js"></script>
     `;
 
     res.send(pageTemplate('KVKK & GDPR Scanner', content, req));
