@@ -49,9 +49,8 @@ const pageTemplate = (title, content, extraHead = '') => `
   })();
   </script>
   <title>${title} - VibeCodedApps</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Self-Hosted Local Fonts (KVKK m.9 & GDPR Art. 44 IP Leak Prevention) -->
+  <link rel="stylesheet" href="/static/vendor/fonts/fonts.css">
   <!-- Precompiled Tailwind CSS (Zero Runtime / No CDN Delay) -->
   <link rel="stylesheet" href="/static/css/tailwind.min.css">
   <!-- Global Mistral AI Theme (Cache Destekli Statik CSS) -->
