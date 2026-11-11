@@ -1,8 +1,70 @@
 const express = require('express');
+const crypto = require('crypto');
 const dns = require('dns').promises;
 const net = require('net');
 const fs = require('fs');
 const path = require('path');
+
+const _vertexTokenCache = new Map();
+
+async function getVertexAccessToken(rawSa) {
+  let info;
+  try {
+    info = typeof rawSa === 'object' && rawSa ? rawSa : JSON.parse(String(rawSa || '').trim());
+  } catch (err) {
+    throw new Error('Geçersiz Vertex Service Account JSON formatı.');
+  }
+  if (!info.client_email || !info.private_key) {
+    throw new Error('Service Account JSON içinde client_email veya private_key eksik.');
+  }
+
+  const cacheKey = info.client_email;
+  const now = Math.floor(Date.now() / 1000);
+  const cached = _vertexTokenCache.get(cacheKey);
+  if (cached && cached.exp > now + 60) {
+    return { token: cached.token, projectId: info.project_id || '' };
+  }
+
+  const headerB64 = Buffer.from(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).toString('base64url');
+  const claimB64 = Buffer.from(JSON.stringify({
+    iss: info.client_email,
+    sub: info.client_email,
+    aud: 'https://oauth2.googleapis.com/token',
+    scope: 'https://www.googleapis.com/auth/cloud-platform',
+    iat: now,
+    exp: now + 3600
+  })).toString('base64url');
+
+  const signingInput = `${headerB64}.${claimB64}`;
+  const signer = crypto.createSign('RSA-SHA256');
+  signer.update(signingInput);
+  signer.end();
+  const normalizedPem = String(info.private_key).replace(/\\n/g, '\n');
+  const signatureB64 = signer.sign(normalizedPem).toString('base64url');
+  const assertion = `${signingInput}.${signatureB64}`;
+
+  const bodyParams = new URLSearchParams({
+    grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+    assertion
+  });
+
+  const tokRes = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: bodyParams.toString(),
+    signal: AbortSignal.timeout(15000)
+  });
+  const tokData = await tokRes.json();
+  if (!tokRes.ok || !tokData.access_token) {
+    throw new Error((tokData && (tokData.error_description || tokData.error)) || `Vertex OAuth token hatası (HTTP ${tokRes.status})`);
+  }
+
+  _vertexTokenCache.set(cacheKey, {
+    token: tokData.access_token,
+    exp: now + Number(tokData.expires_in || 3600)
+  });
+  return { token: tokData.access_token, projectId: info.project_id || '' };
+}
 
 function isPrivateIP(ip) {
   if (!ip) return true;
@@ -99,7 +161,7 @@ module.exports = function(pageTemplate) {
     }
   });
 
-  // 2. LLM API Proxy (Kullanıcının localStorage'daki AI ayarlarıyla CORS engeline takılmadan analiz yapabilmesi için)
+  // 2. LLM API Proxy (Gemini, Vertex AI, OpenAI, Anthropic, OpenRouter, Groq, Ollama)
   router.post('/api/ai-analyze', express.json({ limit: '2mb' }), async (req, res) => {
     try {
       const { ai_config, system_prompt, user_prompt } = req.body || {};
@@ -107,20 +169,64 @@ module.exports = function(pageTemplate) {
         return res.status(400).json({ success: false, error: 'AI yapılandırması ve analiz istemi (prompt) zorunludur.' });
       }
       const provider = String(ai_config.provider || 'gemini').toLowerCase();
-      const apiKey = String(ai_config.api_key || ai_config.apiKey || '').trim();
-      const model = String(ai_config.model || 'gemini-2.5-flash').trim();
+      const authObj = (ai_config.auth && typeof ai_config.auth === 'object') ? ai_config.auth : {};
+      const authType = String(ai_config.auth_type || authObj.type || 'service_account').toLowerCase();
+      const rawAuthValue = String(authObj.value || ai_config.service_account_json || ai_config.api_key || ai_config.apiKey || '').trim();
+      const apiKey = String(ai_config.api_key || ai_config.apiKey || rawAuthValue || '').trim();
+      const model = String(ai_config.model || 'gemini-3.8-flash').trim();
       const temperature = typeof ai_config.temperature === 'number' ? ai_config.temperature : 0.2;
 
-      if (provider !== 'ollama' && !apiKey) {
+      if (provider !== 'ollama' && provider !== 'custom' && !rawAuthValue && !apiKey) {
         return res.status(400).json({
           success: false,
-          error: 'API anahtarı bulunamadı. Lütfen sağ üstteki "AI Ayarları (LocalStorage)" panelinden API anahtarınızı kaydedin.'
+          error: 'Kimlik bilgisi bulunamadı. Lütfen sağ üstteki "AI Ayarları" panelinden API anahtarınızı veya Vertex Service Account bilginizi kaydedin.'
         });
       }
 
       let replyText = '';
 
-      if (provider === 'gemini' || provider === 'google') {
+      if (provider === 'vertex' || provider === 'google-vertex') {
+        let projectId = String(ai_config.project_id || '').trim();
+        const region = String(ai_config.region || 'global').trim().toLowerCase() || 'global';
+        const vertexModel = model === 'gemini-3.1-pro' ? 'gemini-3.1-pro-preview' : model;
+        const hostPrefix = region === 'global' ? 'https://aiplatform.googleapis.com' : `https://${encodeURIComponent(region)}-aiplatform.googleapis.com`;
+
+        const vHeaders = { 'Content-Type': 'application/json' };
+        let querySuffix = '';
+
+        if (authType === 'api_key' && !rawAuthValue.startsWith('{')) {
+          if (!projectId) {
+            throw new Error('Vertex API Key kullanımında Google Cloud Project ID alanı zorunludur.');
+          }
+          querySuffix = `?key=${encodeURIComponent(apiKey)}`;
+        } else {
+          const saResult = await getVertexAccessToken(rawAuthValue);
+          if (!projectId && saResult.projectId) {
+            projectId = saResult.projectId;
+          }
+          if (!projectId) {
+            throw new Error('Google Cloud Project ID bulunamadı. Lütfen Project ID girin veya geçerli bir Service Account JSON yapıştırın.');
+          }
+          vHeaders['Authorization'] = `Bearer ${saResult.token}`;
+        }
+
+        const vertexUrl = `${hostPrefix}/v1/projects/${encodeURIComponent(projectId)}/locations/${encodeURIComponent(region)}/publishers/google/models/${encodeURIComponent(vertexModel)}:generateContent${querySuffix}`;
+        const vRes = await fetch(vertexUrl, {
+          method: 'POST',
+          headers: vHeaders,
+          body: JSON.stringify({
+            ...(system_prompt ? { systemInstruction: { parts: [{ text: system_prompt }] } } : {}),
+            contents: [{ role: 'user', parts: [{ text: user_prompt }] }],
+            generationConfig: { temperature }
+          }),
+          signal: AbortSignal.timeout(90000)
+        });
+        const vData = await vRes.json();
+        if (!vRes.ok) {
+          throw new Error((vData.error && vData.error.message) || `Vertex AI hatası: HTTP ${vRes.status}`);
+        }
+        replyText = vData?.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || '';
+      } else if (provider === 'gemini' || provider === 'google') {
         const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`;
         const gRes = await fetch(geminiUrl, {
           method: 'POST',
@@ -210,7 +316,7 @@ module.exports = function(pageTemplate) {
 
   // 3. Ana Uygulama Arayüzü
   router.get('/', (req, res) => {
-    const extraHead = '<link rel="stylesheet" href="/static/apps/kvkk-gdpr-scanner/app.css?v=20261111">';
+    const extraHead = '<link rel="stylesheet" href="/static/apps/kvkk-gdpr-scanner/app.css?v=20261111b">';
     const content = `
     <div class="kvkk-shell max-w-6xl mx-auto py-4 sm:py-6 px-4 space-y-6">
 
@@ -244,7 +350,7 @@ module.exports = function(pageTemplate) {
           </button>
           <button type="button" onclick="openAIConfigModal()" class="kvkk-btn kvkk-btn-outline text-xs flex items-center gap-1.5" id="ai-status-btn">
             <span id="ai-status-dot" class="w-2 h-2 rounded-full bg-amber-500"></span>
-            <span id="ai-status-label">AI Ayarları (LocalStorage)</span>
+            <span id="ai-status-label">AI Ayarları</span>
           </button>
           <a href="https://github.com/melihkarasu/vibecoding-kvkk-gdpr" target="_blank" rel="noopener noreferrer" class="kvkk-btn kvkk-btn-ghost text-xs">
             <span>📚 Kural Seti (Skill)</span>
@@ -449,7 +555,7 @@ module.exports = function(pageTemplate) {
               <span class="text-lg">⚖️</span>
               <div>
                 <h3 class="text-sm font-bold text-mistral-text">AI Hukukçu &amp; Privacy-by-Design Mühendislik Raporu</h3>
-                <p class="text-[11px] text-mistral-muted" id="ai-report-meta">LocalStorage LLM yapılandırması ile üretildi (PII Maskeli)</p>
+                <p class="text-[11px] text-mistral-muted" id="ai-report-meta">Seçili LLM yapılandırması ile üretildi (PII Maskeli)</p>
               </div>
             </div>
             <div class="flex items-center gap-1.5">
@@ -494,14 +600,14 @@ module.exports = function(pageTemplate) {
       </section>
     </div>
 
-    <!-- LocalStorage AI Yapılandırma Modalı (WSS Uyumlu) -->
+    <!-- AI & LLM Yapılandırma Modalı -->
     <div id="ai-config-modal" class="kvkk-modal-backdrop hidden" onclick="if(event.target===this)closeAIConfigModal()">
-      <div class="kvkk-card max-w-lg w-full p-5 space-y-4 bg-white shadow-2xl">
+      <div class="kvkk-card max-w-xl w-full p-5 space-y-4 bg-white shadow-2xl">
         <div class="flex items-center justify-between border-b border-mistral-hairline pb-3">
           <div>
-            <h3 class="text-base font-bold text-mistral-text">🤖 LLM &amp; AI Analiz Yapılandırması (LocalStorage)</h3>
+            <h3 class="text-base font-bold text-mistral-text">🤖 AI &amp; LLM Analiz Ayarları</h3>
             <p class="text-[11px] text-mistral-muted">
-              Ayarlarınız WSS ile uyumlu olarak yalnızca tarayıcınızın <code>localStorage</code> hafızasında (<code>kvkk_ai_config</code>) saklanır.
+              Google Gemini API, Google Cloud Vertex AI (bölge: global), OpenAI veya Claude yapılandırması. Kimlik bilgileriniz sunucuya kaydedilmez; yalnızca kendi tarayıcınızda tutulur.
             </p>
           </div>
           <button type="button" onclick="closeAIConfigModal()" class="text-mistral-muted hover:text-mistral-text text-lg font-bold">&times;</button>
@@ -511,32 +617,69 @@ module.exports = function(pageTemplate) {
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block font-semibold text-mistral-text mb-1">LLM Sağlayıcısı (Provider)</label>
-              <select id="ai-provider" onchange="onAIProviderChange()" class="w-full px-3 py-2 rounded-lg border border-mistral-border bg-white text-mistral-text">
-                <option value="gemini">Google Gemini API</option>
-                <option value="openai">OpenAI API</option>
+              <select id="ai-provider" onchange="onAIProviderChange()" class="w-full px-3 py-2 rounded-lg border border-mistral-border bg-white text-mistral-text font-mono text-xs">
+                <option value="gemini">Google Gemini API (AI Studio)</option>
+                <option value="vertex">Google Cloud Vertex AI (Bölge: global)</option>
+                <option value="openai">OpenAI Compatible (OpenAI / DeepSeek vb.)</option>
                 <option value="anthropic">Anthropic Claude API</option>
-                <option value="openrouter">OpenRouter API</option>
+                <option value="openrouter">OpenRouter</option>
                 <option value="groq">Groq Cloud API</option>
-                <option value="custom">Özel OpenAI-Uyumlu / Yerel</option>
+                <option value="ollama">Ollama (Lokal / Host)</option>
+                <option value="custom">Özel OpenAI-Uyumlu Endpoint</option>
               </select>
             </div>
             <div>
-              <label class="block font-semibold text-mistral-text mb-1">Model Adı</label>
-              <input type="text" id="ai-model" value="gemini-2.5-flash" placeholder="gemini-2.5-flash / gpt-4o / claude-sonnet-4-5"
+              <div class="flex items-center justify-between mb-1">
+                <label class="font-semibold text-mistral-text">Model Adı</label>
+                <span class="text-[10px] text-mistral-muted font-mono">Hızlı seç:</span>
+              </div>
+              <input type="text" id="ai-model" value="gemini-3.8-flash" placeholder="gemini-3.8-flash"
                 class="w-full px-3 py-2 font-mono rounded-lg border border-mistral-border bg-white text-mistral-text">
+              <div class="flex flex-wrap gap-1 pt-1.5">
+                <button type="button" onclick="setModelPreset('gemini-3.8-flash')" class="kvkk-chip text-[10px] font-mono">gemini-3.8-flash</button>
+                <button type="button" onclick="setModelPreset('gemini-3.1-pro-preview')" class="kvkk-chip text-[10px] font-mono">gemini-3.1-pro</button>
+                <button type="button" onclick="setModelPreset('gpt-4o')" class="kvkk-chip text-[10px] font-mono">gpt-4o</button>
+                <button type="button" onclick="setModelPreset('claude-sonnet-4-5')" class="kvkk-chip text-[10px] font-mono">claude-sonnet-4-5</button>
+              </div>
             </div>
           </div>
 
-          <div>
-            <label class="block font-semibold text-mistral-text mb-1">API Anahtarı (LocalStorage'da Tutulur)</label>
-            <input type="password" id="ai-api-key" placeholder="AIza... / sk-... / sk-ant-..."
+          <!-- Vertex AI Özel Alanları (Project ID, Region, Auth Type) -->
+          <div id="ai-vertex-fields" class="hidden grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+            <div id="ai-project-id-container">
+              <label class="block font-semibold text-mistral-text mb-1">Project ID (Google Cloud)</label>
+              <input type="text" id="ai-project-id" placeholder="my-gcp-project-id"
+                class="w-full px-3 py-2 font-mono rounded-lg border border-mistral-border bg-white text-mistral-text">
+            </div>
+            <div id="ai-region-container">
+              <label class="block font-semibold text-mistral-text mb-1">Bölge (Region)</label>
+              <input type="text" id="ai-region" value="global" placeholder="global"
+                class="w-full px-3 py-2 font-mono rounded-lg border border-mistral-border bg-white text-mistral-text">
+              <p class="text-[10px] text-emerald-600 font-semibold mt-0.5">Önerilen bölge: "global"</p>
+            </div>
+            <div id="ai-auth-type-container">
+              <label class="block font-semibold text-mistral-text mb-1">Vertex Kimlik Doğrulama</label>
+              <select id="ai-auth-type" onchange="onAuthTypeChange()" class="w-full px-3 py-2 rounded-lg border border-mistral-border bg-white text-mistral-text font-mono text-xs">
+                <option value="service_account">Service Account (JSON - Önerilen)</option>
+                <option value="api_key">Vertex API Key</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Base URL Alanı (OpenAI Compatible / Ollama / Custom için) -->
+          <div id="ai-base-url-container" class="hidden">
+            <label class="block font-semibold text-mistral-text mb-1">Base URL (Endpoint)</label>
+            <input type="text" id="ai-base-url" placeholder="https://api.openai.com/v1"
               class="w-full px-3 py-2 font-mono rounded-lg border border-mistral-border bg-white text-mistral-text">
           </div>
 
-          <div>
-            <label class="block font-semibold text-mistral-text mb-1">Özel Base URL (Sadece Özel Endpoint / Proxy için)</label>
-            <input type="text" id="ai-base-url" placeholder="https://api.openai.com/v1"
+          <!-- API Key / Service Account JSON Alanı -->
+          <div id="ai-api-key-wrapper">
+            <label id="ai-auth-label" class="block font-semibold text-mistral-text mb-1">Google Gemini API Key (AIza...)</label>
+            <input type="password" id="ai-api-key" placeholder="AIzaSy..."
               class="w-full px-3 py-2 font-mono rounded-lg border border-mistral-border bg-white text-mistral-text">
+            <textarea id="ai-service-account-json" rows="4" placeholder='{"type": "service_account", "project_id": "...", "private_key": "-----BEGIN PRIVATE KEY-----...", "client_email": "..."}'
+              class="hidden w-full px-3 py-2 font-mono text-[11px] rounded-lg border border-mistral-border bg-white text-mistral-text"></textarea>
           </div>
 
           <div class="flex items-center justify-between pt-1">
@@ -553,13 +696,13 @@ module.exports = function(pageTemplate) {
           </button>
           <div class="flex gap-2">
             <button type="button" onclick="closeAIConfigModal()" class="kvkk-btn kvkk-btn-ghost text-xs">İptal</button>
-            <button type="button" onclick="saveAIConfig()" class="kvkk-btn kvkk-btn-primary text-xs">💾 LocalStorage'a Kaydet</button>
+            <button type="button" onclick="saveAIConfig()" class="kvkk-btn kvkk-btn-primary text-xs">💾 Ayarları Kaydet</button>
           </div>
         </div>
       </div>
     </div>
 
-    <script data-cfasync="false" src="/static/apps/kvkk-gdpr-scanner/app.js?v=20261111"></script>
+    <script data-cfasync="false" src="/static/apps/kvkk-gdpr-scanner/app.js?v=20261111b"></script>
     `;
 
     res.send(pageTemplate('KVKK & GDPR Scanner — Hukuki Kod ve Uyum Denetçisi', content, extraHead));

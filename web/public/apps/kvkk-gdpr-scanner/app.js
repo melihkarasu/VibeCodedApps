@@ -3,7 +3,7 @@
  * 6698 Sayılı KVKK (2024/2026 Reformları), AB GDPR (EU 2016/679), 6563 ETK (İYS),
  * 6502 TKHK (Mesafeli Sözleşmeler) ve 5651 Sayılı Kanun Uyum Denetçisi
  * - Statik Kod Analizi (SAST) + Proje Yapısı & Canlı URL Denetim Motoru
- * - WSS Uyumlu LocalStorage LLM Yapılandırması (kvkk_ai_config / wss_ai_config)
+ * - Tarayıcı İçi LLM Yapılandırması (Gemini API, Vertex AI, OpenAI, Claude, OpenRouter, Ollama)
  * - Otomatik PII & Sır Maskeleme (TCKN, IBAN, Kart, E-posta, Telefon, API Key)
  */
 
@@ -824,20 +824,42 @@ function loadSampleVulnerableProject() {
 function getAIConfig() {
   try {
     const rawKvkk = localStorage.getItem('kvkk_ai_config');
-    if (rawKvkk) return JSON.parse(rawKvkk);
-    const rawWss = localStorage.getItem('wss_ai_config');
-    if (rawWss) {
-      const parsed = JSON.parse(rawWss);
+    if (rawKvkk) {
+      const parsed = JSON.parse(rawKvkk);
       return {
         provider: parsed.provider || 'gemini',
-        model: parsed.model || 'gemini-2.5-flash',
-        api_key: parsed.api_key || parsed.apiKey || '',
-        base_url: parsed.base_url || parsed.baseUrl || '',
-        redact_pii: true
+        model: parsed.model || 'gemini-3.8-flash',
+        api_key: parsed.api_key || '',
+        service_account_json: parsed.service_account_json || (parsed.auth && parsed.auth.type === 'service_account' ? parsed.auth.value : '') || '',
+        project_id: parsed.project_id || '',
+        region: parsed.region || 'global',
+        auth_type: parsed.auth_type || (parsed.auth && parsed.auth.type) || 'service_account',
+        base_url: parsed.base_url || '',
+        redact_pii: parsed.redact_pii !== false
       };
     }
   } catch (_) {}
-  return { provider: 'gemini', model: 'gemini-2.5-flash', api_key: '', base_url: '', redact_pii: true };
+  return {
+    provider: 'gemini',
+    model: 'gemini-3.8-flash',
+    api_key: '',
+    service_account_json: '',
+    project_id: '',
+    region: 'global',
+    auth_type: 'service_account',
+    base_url: '',
+    redact_pii: true
+  };
+}
+
+function hasValidAICredential(cfg) {
+  if (!cfg) return false;
+  if (cfg.provider === 'ollama' || cfg.provider === 'custom') return true;
+  if (cfg.provider === 'vertex') {
+    if (cfg.auth_type === 'api_key') return !!(cfg.api_key && cfg.api_key.length > 5);
+    return !!(cfg.service_account_json && cfg.service_account_json.includes('private_key'));
+  }
+  return !!(cfg.api_key && cfg.api_key.length > 5);
 }
 
 function updateAIStatusButton() {
@@ -845,22 +867,71 @@ function updateAIStatusButton() {
   const dot = document.getElementById('ai-status-dot');
   const label = document.getElementById('ai-status-label');
   if (!dot || !label) return;
-  if (cfg.api_key && cfg.api_key.length > 5) {
+  if (hasValidAICredential(cfg) && (cfg.api_key || cfg.service_account_json)) {
     dot.className = 'w-2 h-2 rounded-full bg-emerald-500';
     label.textContent = 'AI Hazır (' + cfg.provider.toUpperCase() + ' · ' + cfg.model + ')';
   } else {
     dot.className = 'w-2 h-2 rounded-full bg-amber-500';
-    label.textContent = 'AI Ayarları (LocalStorage)';
+    label.textContent = 'AI Ayarları';
+  }
+}
+
+function setModelPreset(name) {
+  const modelEl = document.getElementById('ai-model');
+  if (modelEl) modelEl.value = name;
+}
+
+function syncAIModalFieldVisibility() {
+  const p = document.getElementById('ai-provider')?.value || 'gemini';
+  const authType = document.getElementById('ai-auth-type')?.value || 'service_account';
+  const vertexFields = document.getElementById('ai-vertex-fields');
+  const baseUrlBox = document.getElementById('ai-base-url-container');
+  const authLabel = document.getElementById('ai-auth-label');
+  const apiKeyInput = document.getElementById('ai-api-key');
+  const saTextarea = document.getElementById('ai-service-account-json');
+
+  if (vertexFields) vertexFields.classList.toggle('hidden', p !== 'vertex');
+  if (baseUrlBox) baseUrlBox.classList.toggle('hidden', !(p === 'openai' || p === 'ollama' || p === 'custom'));
+
+  const useServiceAccount = (p === 'vertex' && authType === 'service_account');
+  if (apiKeyInput) apiKeyInput.classList.toggle('hidden', useServiceAccount);
+  if (saTextarea) saTextarea.classList.toggle('hidden', !useServiceAccount);
+
+  if (authLabel) {
+    if (p === 'vertex') {
+      authLabel.textContent = useServiceAccount
+        ? 'Vertex Service Account JSON İçeriği'
+        : 'Vertex AI API Anahtarı';
+    } else if (p === 'gemini') {
+      authLabel.textContent = 'Google Gemini API Anahtarı (AIza...)';
+    } else if (p === 'anthropic') {
+      authLabel.textContent = 'Anthropic API Anahtarı (sk-ant-...)';
+    } else if (p === 'openrouter') {
+      authLabel.textContent = 'OpenRouter API Anahtarı (sk-or-...)';
+    } else if (p === 'ollama') {
+      authLabel.textContent = 'API Anahtarı (Yerel Ollama için boş bırakılabilir)';
+    } else {
+      authLabel.textContent = 'API Anahtarı (sk-...)';
+    }
   }
 }
 
 function openAIConfigModal() {
   const cfg = getAIConfig();
   document.getElementById('ai-provider').value = cfg.provider || 'gemini';
-  document.getElementById('ai-model').value = cfg.model || 'gemini-2.5-flash';
+  document.getElementById('ai-model').value = cfg.model || 'gemini-3.8-flash';
   document.getElementById('ai-api-key').value = cfg.api_key || '';
+  const saEl = document.getElementById('ai-service-account-json');
+  if (saEl) saEl.value = cfg.service_account_json || '';
+  const projEl = document.getElementById('ai-project-id');
+  if (projEl) projEl.value = cfg.project_id || '';
+  const regEl = document.getElementById('ai-region');
+  if (regEl) regEl.value = cfg.region || 'global';
+  const authTypeEl = document.getElementById('ai-auth-type');
+  if (authTypeEl) authTypeEl.value = cfg.auth_type || 'service_account';
   document.getElementById('ai-base-url').value = cfg.base_url || '';
   document.getElementById('ai-redact-pii').checked = cfg.redact_pii !== false;
+  syncAIModalFieldVisibility();
   document.getElementById('ai-config-modal').classList.remove('hidden');
 }
 
@@ -868,21 +939,60 @@ function closeAIConfigModal() {
   document.getElementById('ai-config-modal').classList.add('hidden');
 }
 
+function onAuthTypeChange() {
+  syncAIModalFieldVisibility();
+}
+
 function onAIProviderChange() {
   const p = document.getElementById('ai-provider').value;
   const m = document.getElementById('ai-model');
-  if (p === 'gemini') m.value = 'gemini-2.5-flash';
-  else if (p === 'openai') m.value = 'gpt-4o';
-  else if (p === 'anthropic') m.value = 'claude-sonnet-4-5';
-  else if (p === 'openrouter') m.value = 'google/gemini-2.5-flash';
+  const baseEl = document.getElementById('ai-base-url');
+  const regEl = document.getElementById('ai-region');
+
+  if (p === 'gemini' || p === 'vertex') m.value = 'gemini-3.8-flash';
+  else if (p === 'openai') {
+    m.value = 'gpt-4o';
+    if (baseEl && (!baseEl.value || baseEl.value.includes('localhost:11434'))) baseEl.value = 'https://api.openai.com/v1';
+  } else if (p === 'anthropic') m.value = 'claude-sonnet-4-5';
+  else if (p === 'openrouter') m.value = 'google/gemini-3.8-flash';
   else if (p === 'groq') m.value = 'llama-3.3-70b-versatile';
+  else if (p === 'ollama') {
+    m.value = 'gemma3:12b';
+    if (baseEl && (!baseEl.value || baseEl.value.includes('api.openai.com'))) baseEl.value = 'http://localhost:11434/v1';
+  }
+
+  if (p === 'vertex' && regEl && !regEl.value) {
+    regEl.value = 'global';
+  }
+  syncAIModalFieldVisibility();
 }
 
 function saveAIConfig() {
+  const provider = document.getElementById('ai-provider').value;
+  const authType = document.getElementById('ai-auth-type')?.value || 'service_account';
+  const saJson = (document.getElementById('ai-service-account-json')?.value || '').trim();
+  let projectId = (document.getElementById('ai-project-id')?.value || '').trim();
+
+  if (provider === 'vertex' && authType === 'service_account' && saJson && !projectId) {
+    try {
+      const parsedSa = JSON.parse(saJson);
+      if (parsedSa && parsedSa.project_id) projectId = parsedSa.project_id;
+    } catch (_) {}
+  }
+
+  const apiKey = document.getElementById('ai-api-key').value.trim();
   const cfg = {
-    provider: document.getElementById('ai-provider').value,
-    model: document.getElementById('ai-model').value.trim() || 'gemini-2.5-flash',
-    api_key: document.getElementById('ai-api-key').value.trim(),
+    provider: provider,
+    model: document.getElementById('ai-model').value.trim() || 'gemini-3.8-flash',
+    api_key: apiKey,
+    service_account_json: saJson,
+    project_id: projectId,
+    region: (document.getElementById('ai-region')?.value || 'global').trim() || 'global',
+    auth_type: authType,
+    auth: {
+      type: authType,
+      value: (provider === 'vertex' && authType === 'service_account') ? saJson : apiKey
+    },
     base_url: document.getElementById('ai-base-url').value.trim(),
     redact_pii: document.getElementById('ai-redact-pii').checked
   };
@@ -899,9 +1009,9 @@ function clearAIConfig() {
 
 async function callLLMWithConfig(systemPrompt, userPrompt) {
   const cfg = getAIConfig();
-  if (!cfg.api_key && cfg.provider !== 'custom') {
+  if (!hasValidAICredential(cfg)) {
     openAIConfigModal();
-    throw new Error('Lütfen önce LocalStorage AI Ayarları penceresinden API anahtarınızı kaydedin.');
+    throw new Error('Lütfen önce AI Ayarları penceresinden API anahtarınızı veya Vertex kimlik bilginizi kaydedin.');
   }
 
   const finalUserPrompt = cfg.redact_pii !== false ? maskPIIAndSecrets(userPrompt) : userPrompt;
@@ -1007,7 +1117,7 @@ function downloadBlob(filename, content, mime) {
 
 function exportComplianceMarkdown() {
   const now = new Date().toISOString();
-  let md = '# ⚖️ VibeCoding KVKK & GDPR Uyum Denetim Raporu\n\n';
+  let md = '# ⚖️ KVKK & GDPR Uyum Denetim Raporu\n\n';
   md += '- **Tarih:** ' + now + '\n';
   md += '- **Uyum Skoru:** ' + SCAN_STATE.score + ' / 100 (Not: **' + SCAN_STATE.grade + '**)\n';
   md += '- **Taranan Dosya Sayısı:** ' + SCAN_STATE.files.length + '\n';

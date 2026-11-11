@@ -495,7 +495,7 @@ module.exports = function(pageTemplate) {
             id: "kvkk-gdpr-scanner",
             name: "KVKK & GDPR Scanner",
             icon: getAppSvg("kvkk-gdpr-scanner", "gelistirici-araclari"),
-            desc: "Proje klasörü, GitHub repo, SQL/form kodu ve canlı URL üzerinde 2026 ceza matrisi ve LocalStorage LLM destekli KVKK & GDPR ihlal tarayıcısı.",
+            desc: "Proje klasörü, GitHub repo, SQL/form kodu ve canlı URL üzerinde 2026 ceza matrisi ve Gemini / Vertex AI destekli KVKK & GDPR ihlal tarayıcısı.",
             url: "/kvkk-gdpr-scanner",
             action: "Tarayıcıyı Başlat"
           },
