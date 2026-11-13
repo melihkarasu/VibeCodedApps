@@ -1,0 +1,370 @@
+[
+  {
+    "id": "nobetci-eczane",
+    "name": "Nöbetçi Eczaneler",
+    "routeFile": "web/routes/eczane.js",
+    "publicDir": "web/public/apps/eczane",
+    "standaloneDir": "nobetci-eczane",
+    "exportable": true
+  },
+  {
+    "id": "ilac-rehberi",
+    "name": "İlaç & Prospektüs Rehberi",
+    "routeFile": "web/routes/ilac.js",
+    "publicDir": "web/public/apps/ilac",
+    "standaloneDir": "ilac-rehberi",
+    "exportable": true
+  },
+  {
+    "id": "kas-anatomisi",
+    "name": "İnteraktif Kas Anatomisi & Egzersiz",
+    "routeFile": "web/routes/egzersiz.js",
+    "publicDir": "web/public/apps/egzersiz",
+    "standaloneDir": "kas-anatomisi",
+    "exportable": true
+  },
+  {
+    "id": "klinik-arastirma",
+    "name": "Klinik Araştırmalar Radarı",
+    "routeFile": "web/routes/klinik.js",
+    "publicDir": "web/public/apps/klinik",
+    "standaloneDir": "klinik-arastirma",
+    "exportable": true
+  },
+  {
+    "id": "dso-saglik",
+    "name": "Küresel Sağlık Atlası (DSÖ)",
+    "routeFile": "web/routes/dso.js",
+    "publicDir": "web/public/apps/dso",
+    "standaloneDir": "dso-saglik",
+    "exportable": true
+  },
+  {
+    "id": "tarim-hava",
+    "name": "Akıllı Tarım & Zirai Hava",
+    "routeFile": "web/routes/tarim.js",
+    "publicDir": "web/public/apps/tarim",
+    "standaloneDir": "tarim-hava",
+    "exportable": true
+  },
+  {
+    "id": "karbon-metre",
+    "name": "Web Karbon Ayak İzi",
+    "routeFile": "web/routes/karbon.js",
+    "publicDir": "web/public/apps/karbon",
+    "standaloneDir": "karbon-metre",
+    "exportable": true
+  },
+  {
+    "id": "doga-sesleri",
+    "name": "Kuş Sesi Dedektifi",
+    "routeFile": "web/routes/doga.js",
+    "publicDir": "web/public/apps/doga",
+    "standaloneDir": "doga-sesleri",
+    "exportable": true
+  },
+  {
+    "id": "cografya-atlasi",
+    "name": "Küresel Coğrafya Atlası",
+    "routeFile": "web/routes/atlas.js",
+    "publicDir": "web/public/apps/atlas",
+    "standaloneDir": "cografya-atlasi",
+    "exportable": true
+  },
+  {
+    "id": "hava-kalitesi",
+    "name": "Canlı Hava Kalitesi Radarı",
+    "routeFile": "web/routes/havakalite.js",
+    "publicDir": "web/public/apps/havakalite",
+    "standaloneDir": "hava-kalitesi",
+    "exportable": true
+  },
+  {
+    "id": "sehir-bisiklet",
+    "name": "Şehir Bisiklet Rehberi",
+    "routeFile": "web/routes/bisiklet.js",
+    "publicDir": "web/public/apps/bisiklet",
+    "standaloneDir": "sehir-bisiklet",
+    "exportable": true
+  },
+  {
+    "id": "deniz-dalga",
+    "name": "Mavi Rota: Dalga & Sörf Radarı",
+    "routeFile": "web/routes/deniz.js",
+    "publicDir": "web/public/apps/deniz",
+    "standaloneDir": "deniz-dalga",
+    "exportable": true
+  },
+  {
+    "id": "molekul-studyosu",
+    "name": "3D Molekül Stüdyosu",
+    "routeFile": "web/routes/molekul.js",
+    "publicDir": "web/public/apps/molekul",
+    "standaloneDir": "molekul-studyosu",
+    "exportable": true
+  },
+  {
+    "id": "sayilar-atlasi",
+    "name": "Sayılar Atlası & Matematik",
+    "routeFile": "web/routes/sayilar.js",
+    "publicDir": "web/public/apps/sayilar",
+    "standaloneDir": "sayilar-atlasi",
+    "exportable": true
+  },
+  {
+    "id": "sanat-galerisi",
+    "name": "Global Sanat Galerisi",
+    "routeFile": "web/routes/sanat.js",
+    "publicDir": "web/public/apps/sanat",
+    "standaloneDir": "sanat-galerisi",
+    "exportable": true
+  },
+  {
+    "id": "klasik-kutuphane",
+    "name": "Dijital Kütüphane",
+    "routeFile": "web/routes/kutuphane.js",
+    "publicDir": "web/public/apps/kutuphane",
+    "standaloneDir": "klasik-kutuphane",
+    "exportable": true
+  },
+  {
+    "id": "tatil-takvimi",
+    "name": "Küresel Tatil Takvimi",
+    "routeFile": "web/routes/tatil.js",
+    "publicDir": "web/public/apps/tatil",
+    "standaloneDir": "tatil-takvimi",
+    "exportable": true
+  },
+  {
+    "id": "sesli-kitap",
+    "name": "Sesli Kütüphane (LibriVox)",
+    "routeFile": "web/routes/seslikitap.js",
+    "publicDir": "web/public/apps/seslikitap",
+    "standaloneDir": "sesli-kitap",
+    "exportable": true
+  },
+  {
+    "id": "siir-antolojisi",
+    "name": "Şiir Vahası: Şiir Antolojisi",
+    "routeFile": "web/routes/siir.js",
+    "publicDir": "web/public/apps/siir",
+    "standaloneDir": "siir-antolojisi",
+    "exportable": true
+  },
+  {
+    "id": "kultur-arena",
+    "name": "Kültür Arenası & Trivia",
+    "routeFile": "web/routes/kultur.js",
+    "publicDir": "web/public/apps/kultur",
+    "standaloneDir": "kultur-arena",
+    "exportable": true
+  },
+  {
+    "id": "oyun-radar",
+    "name": "Steam & Epic Fırsat Avcısı",
+    "routeFile": "web/routes/oyun.js",
+    "publicDir": "web/public/apps/oyun",
+    "standaloneDir": "oyun-radar",
+    "exportable": true
+  },
+  {
+    "id": "oyun-arsivi",
+    "name": "Oyun Keşif Kütüphanesi",
+    "routeFile": "web/routes/oyunlib.js",
+    "publicDir": "web/public/apps/oyunlib",
+    "standaloneDir": "oyun-arsivi",
+    "exportable": true
+  },
+  {
+    "id": "oyun-rekorlari",
+    "name": "Speedrun Oyun Rekorları",
+    "routeFile": "web/routes/speedrun.js",
+    "publicDir": "web/public/apps/speedrun",
+    "standaloneDir": "oyun-rekorlari",
+    "exportable": true
+  },
+  {
+    "id": "dizi-rehberi",
+    "name": "Dizi & Sezon Takipçisi",
+    "routeFile": "web/routes/dizi.js",
+    "publicDir": "web/public/apps/dizi",
+    "standaloneDir": "dizi-rehberi",
+    "exportable": true
+  },
+  {
+    "id": "sozden-sarkiya",
+    "name": "Sözden Şarkıya",
+    "routeFile": "web/routes/muzik.js",
+    "publicDir": "web/public/apps/muzik",
+    "standaloneDir": "sozden-sarkiya",
+    "exportable": true
+  },
+  {
+    "id": "lezzet-atolyesi",
+    "name": "Lezzet Atölyesi",
+    "routeFile": "web/routes/lezzet.js",
+    "publicDir": "web/public/apps/lezzet",
+    "standaloneDir": "lezzet-atolyesi",
+    "exportable": true
+  },
+  {
+    "id": "gida-alerji",
+    "name": "Gıda Dedektifi & Alerjen Kalkanı",
+    "routeFile": "web/routes/gida.js",
+    "publicDir": "web/public/apps/gida",
+    "standaloneDir": "gida-alerji",
+    "exportable": true
+  },
+  {
+    "id": "dunya-radyo",
+    "name": "Dünya Radyo Kulesi",
+    "routeFile": "web/routes/radyo.js",
+    "publicDir": "web/public/apps/radyo",
+    "standaloneDir": "dunya-radyo",
+    "exportable": true
+  },
+  {
+    "id": "evcil-rehber",
+    "name": "Evcil Dostlar Ansiklopedisi",
+    "routeFile": "web/routes/evcil.js",
+    "publicDir": "web/public/apps/evcil",
+    "standaloneDir": "evcil-rehber",
+    "exportable": true
+  },
+  {
+    "id": "gitar-akor",
+    "name": "Akustik: Gitar Akor & Tab",
+    "routeFile": "web/routes/akor.js",
+    "publicDir": "web/public/apps/akor",
+    "standaloneDir": "gitar-akor",
+    "exportable": true
+  },
+  {
+    "id": "doviz-cevirici",
+    "name": "Anlık Döviz Çevirici",
+    "routeFile": "web/routes/doviz.js",
+    "publicDir": "web/public/apps/doviz",
+    "standaloneDir": "doviz-cevirici",
+    "exportable": true
+  },
+  {
+    "id": "kuresel-gostergeler",
+    "name": "Küresel Refah Göstergesi",
+    "routeFile": "web/routes/refah.js",
+    "publicDir": "web/public/apps/refah",
+    "standaloneDir": "kuresel-gostergeler",
+    "exportable": true
+  },
+  {
+    "id": "kripto-trend",
+    "name": "Kripto Trend & Piyasa Radarı",
+    "routeFile": "web/routes/kripto.js",
+    "publicDir": "web/public/apps/kripto",
+    "standaloneDir": "kripto-trend",
+    "exportable": true
+  },
+  {
+    "id": "dns-kontrol",
+    "name": "DNS Kontrol & Ağ Teşhisi",
+    "routeFile": "web/routes/dns.js",
+    "publicDir": "web/public/apps/dns",
+    "standaloneDir": "dns-kontrol",
+    "exportable": true
+  },
+  {
+    "id": "sizinti-kontrol",
+    "name": "Sızıntı Kontrolü & Güvenlik",
+    "routeFile": "web/routes/sizinti.js",
+    "publicDir": "web/public/apps/sizinti",
+    "standaloneDir": "sizinti-kontrol",
+    "exportable": true
+  },
+  {
+    "id": "ip-konum",
+    "name": "IP Coğrafi Konum & İstihbarat",
+    "routeFile": "web/routes/ipgeo.js",
+    "publicDir": "web/public/apps/ipgeo",
+    "standaloneDir": "ip-konum",
+    "exportable": true
+  },
+  {
+    "id": "renk-studyosu",
+    "name": "Harmoni: Renk & Kontrast Stüdyosu",
+    "routeFile": "web/routes/renk.js",
+    "publicDir": "web/public/apps/renk",
+    "standaloneDir": "renk-studyosu",
+    "exportable": true
+  },
+  {
+    "id": "http-status",
+    "name": "HTTP Sözlüğü & Cihaz Röntgeni",
+    "routeFile": "web/routes/httpstatus.js",
+    "publicDir": "web/public/apps/httpstatus",
+    "standaloneDir": "http-status",
+    "exportable": true
+  },
+  {
+    "id": "qr-studio",
+    "name": "QR Studio",
+    "routeFile": "web/routes/qr.js",
+    "publicDir": "web/public/apps/qr",
+    "standaloneDir": "qr-studio",
+    "exportable": true
+  },
+  {
+    "id": "github-profil",
+    "name": "GitHub Profil Analitiği & Kart Üretici",
+    "routeFile": "web/routes/github.js",
+    "publicDir": "web/public/apps/github",
+    "standaloneDir": "github-profil",
+    "exportable": true
+  },
+  {
+    "id": "iss-radar",
+    "name": "Where is ISS? Canlı Uzay İstasyonu Radarı",
+    "routeFile": "web/routes/iss.js",
+    "publicDir": "web/public/apps/iss",
+    "standaloneDir": "iss-radar",
+    "exportable": true
+  },
+  {
+    "id": "nobel-arsivi",
+    "name": "Nobel Ödülleri Arşivi & Bilim Hafızası",
+    "routeFile": "web/routes/nobel.js",
+    "publicDir": "web/public/apps/nobel",
+    "standaloneDir": "nobel-arsivi",
+    "exportable": true
+  },
+  {
+    "id": "unesco-atlas",
+    "name": "UNESCO Dünya Mirası Atlası & Keşif Haritası",
+    "routeFile": "web/routes/unesco.js",
+    "publicDir": "web/public/apps/unesco",
+    "standaloneDir": "unesco-atlas",
+    "exportable": true
+  },
+  {
+    "id": "sudoku-arena",
+    "name": "Sudoku Arena",
+    "routeFile": "web/routes/sudoku.js",
+    "publicDir": "web/public/apps/sudoku",
+    "standaloneDir": "sudoku-arena",
+    "exportable": true
+  },
+  {
+    "id": "kvkk-gdpr-scanner",
+    "name": "KVKK & GDPR Scanner",
+    "routeFile": "web/routes/kvkk-gdpr-scanner.js",
+    "publicDir": "web/public/apps/kvkk-gdpr-scanner",
+    "standaloneDir": "kvkk-gdpr-scanner",
+    "exportable": true
+  },
+  {
+    "id": "web-security-scanner",
+    "name": "Web Security Scanner",
+    "routeFile": "web/routes/web-security-scanner.js",
+    "publicDir": "web/public/apps/web-security-scanner",
+    "standaloneDir": "web-security-scanner",
+    "exportable": false
+  }
+]

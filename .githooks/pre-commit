@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Every commit in VibeCodedApps triggers continuous verification automatically
+node scripts/verify-sync.mjs --ci

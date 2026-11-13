@@ -1,0 +1,14 @@
+{
+  "name": "vibe-coded-apps-monorepo",
+  "version": "2.0.0",
+  "private": true,
+  "description": "VibeCodedApps monorepo automation: single-source skill syncing, standalone exporting, and continuous verification.",
+  "scripts": {
+    "sync:skills": "node scripts/sync-skills.mjs",
+    "sync:skills:check": "node scripts/sync-skills.mjs --check",
+    "export:standalone": "node scripts/export-standalone.mjs",
+    "verify:sync": "node scripts/verify-sync.mjs",
+    "verify:ci": "node scripts/verify-sync.mjs --ci",
+    "verify:strict": "node scripts/verify-sync.mjs --strict"
+  }
+}

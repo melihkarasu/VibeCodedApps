@@ -320,6 +320,7 @@ const pageTemplate = (title, content, extraHead = '') => `
   </script>
 
   <!-- Global Core Utilities & SSO Authentication (Cache Destekli Statik JS) -->
+  <script data-cfasync="false" src="/static/js/vibe-runtime.js?v=20261113a"></script>
   <script data-cfasync="false" src="/static/js/core.js?v=20261016b"></script>
   <!-- AdSense Sadece Yanlar (Side Rail) Koruması: DOM'dan silmeden (no_div hatası üretmeden) alt/üst/içerik reklamlarını gizler -->
   <script data-cfasync="false">
