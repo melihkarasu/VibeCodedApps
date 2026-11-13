@@ -30,7 +30,7 @@ app.use('/api', require('./routes/api'));
 // 2. Vitrin & SSO Auth Sayfaları (Ana Sayfa Doğrudan /)
 // -------------------------------------------------------------
 app.get('/', require('./routes/vitrin')(pageTemplate));
-require('./routes/test-legal')(app, pageTemplate);
+require('./routes/legal')(app, pageTemplate);
 app.get('/app', (req, res) => res.redirect(301, '/'));
 
 app.get(['/auth', '/app/auth'], require('./routes/auth')(pageTemplate));

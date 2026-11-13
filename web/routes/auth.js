@@ -21,8 +21,9 @@ module.exports = function(pageTemplate) {
           </a>
         </div>
 
-        <div class="mt-8 pt-6 border-t border-mistral-hairline text-xs text-mistral-stone text-center">
-          Kimlik doğrulama istekleri izole Supabase GoTrue servisiyle güvenli şekilde yönetilmektedir. Oturumunuz siz çıkış yapmadığınız sürece açık kalır.
+        <div class="mt-8 pt-6 border-t border-mistral-hairline text-xs text-mistral-stone text-center space-y-2 leading-relaxed">
+          <p>Kimlik doğrulama istekleri izole Supabase GoTrue servisiyle güvenli şekilde yönetilmektedir. Oturumunuz siz çıkış yapmadığınız sürece açık kalır.</p>
+          <p>Giriş yaptığınızda kimlik ve profil verileriniz, hizmetin sunulması hukuki sebebine (KVKK m.5/2-c) dayanılarak işlenir. Detaylı bilgi için <a href="/aydinlatma-metni" class="text-mistral-orange underline font-medium">Aydınlatma Metni</a> ve <a href="/kullanim-kosullari" class="text-mistral-orange underline font-medium">Kullanım Koşulları</a> sayfalarını inceleyebilirsiniz.</p>
         </div>
       </div>
     `;

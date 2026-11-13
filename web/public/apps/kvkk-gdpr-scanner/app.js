@@ -306,23 +306,49 @@ function analyzeProjectFiles(files) {
       });
     }
 
-    // 7. ÇEREZ (COOKIE) & İZLEYİCİ (TRACKER) ÖNCEDEN RIZA KURALLARI
-    const trackerMatch = /(?:googletagmanager\.com\/gtag\/js|connect\.facebook\.net|static\.hotjar\.com|clarity\.ms\/tag|analytics\.tiktok\.com)/i.exec(c);
-    if (trackerMatch && !/consent|riza|cookie_preferences|hasAnalyticsConsent|ConsentGate/i.test(c)) {
-      const line = findLineNumber(c, trackerMatch.index);
+    // 2B. TAM SAYFA HTML ŞABLONLARINDA AYDINLATMA METNİ & ÇEREZ POLİTİKASI BAĞLANTISI KONTROLÜ
+    if (/<!DOCTYPE\s+html|<html[\s>]/i.test(c) && /<footer|vibeCookieBanner|shCookieBanner/i.test(c)) {
+      const hasAydinlatmaLink = /aydinlatma-metni|aydınlatma\s+metni|aydinlatma_metni/i.test(c);
+      const hasCerezLink = /cerez-politikasi|çerez\s+politikası|cookie-policy/i.test(c);
+      if (!hasAydinlatmaLink || !hasCerezLink) {
+        findings.push({
+          ruleId: 'KVKK-INFO-001',
+          domainId: 'FORMS_CONSENT',
+          severity: 'HIGH',
+          title: 'Sayfa Genelinde / Alt Bilgide (Footer) Aydınlatma Metni veya Çerez Politikası Bağlantısı Eksik',
+          legalBasis: 'KVKK m.10 (Ceza m.18/1-a) · Aydınlatma Tebliği · KVKK Çerez Rehberi · GDPR Art. 13',
+          penalty2026: '85.437 TL – 1.709.200 TL',
+          file: f.path,
+          line: 1,
+          snippet: getLineSnippet(c, 1),
+          finding: 'Zorunlu çerezler, güvenlik logları ve SSO süreçleri açık rızaya tabi olmasa dahi KVKK m.10 uyarınca Aydınlatma Metni ve Çerez Politikası bağlantılarının her sayfada (masaüstü ve mobil footer dahil) erişilebilir olması zorunludur.',
+          remediation: 'Footer alanına oturum kilidi arkasında kalmayan /aydinlatma-metni ve /cerez-politikasi bağlantıları ekleyin.',
+          fixCode: '<a href="/aydinlatma-metni">Aydınlatma Metni</a> · <a href="/cerez-politikasi">Çerez Politikası</a>'
+        });
+      }
+    }
+
+    // 7. ÇEREZ (COOKIE) & İZLEYİCİ (TRACKER) ÖNCEDEN RIZA KURALLARI (GA4 + AdSense + Pixel + Hotjar + Clarity)
+    const cNoHtmlComments = c.replace(/<!--[\s\S]*?-->/g, (m) => m.replace(/[^\n]/g, ' '));
+    const staticTrackerTagMatch = /<script[^>]+src=["'][^"']*(?:googletagmanager\.com\/gtag\/js|pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js|connect\.facebook\.net|static\.hotjar\.com|clarity\.ms\/tag|analytics\.tiktok\.com)[^"']*["'][^>]*>/i.exec(cNoHtmlComments);
+    const rawTrackerMatch = /(?:googletagmanager\.com\/gtag\/js|pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js|connect\.facebook\.net|static\.hotjar\.com|clarity\.ms\/tag|analytics\.tiktok\.com)/i.exec(c);
+    const hasConsentGate = /consent|riza|cookie_preferences|hasAnalyticsConsent|ConsentGate|__vibeLoadConsentScripts|__shLoadConsentScripts/i.test(c);
+    if (staticTrackerTagMatch || (rawTrackerMatch && !hasConsentGate)) {
+      const mObj = staticTrackerTagMatch || rawTrackerMatch;
+      const line = findLineNumber(c, mObj.index);
       findings.push({
         ruleId: 'KVKK-COOK-001',
         domainId: 'COOKIES_TRACKERS',
         severity: 'HIGH',
-        title: 'Açık Rıza (Opt-In) Alınmadan Çalışan 3. Taraf Analitik / Pazarlama Takip Betiği',
-        legalBasis: 'KVKK Çerez Uygulamaları Rehberi · ePrivacy Art. 5(3) · GDPR Art. 6(1)(a)',
+        title: 'Açık Rıza (Opt-In) Alınmadan Yüklenen 3. Taraf Analitik / Reklam (AdSense) Takip Betiği',
+        legalBasis: 'KVKK Çerez Uygulamaları Rehberi · KVKK m.9 · ePrivacy Art. 5(3) · GDPR Art. 6(1)(a)',
         penalty2026: '85.437 TL – 1.709.200 TL',
         file: f.path,
         line: line,
         snippet: getLineSnippet(c, line),
-        finding: 'Google Analytics / Meta Pixel / Hotjar / Clarity takip betiği kullanıcı çerez onayı kontrol edilmeden doğrudan sayfaya gömülmüş.',
-        remediation: 'Zorunlu olmayan tüm analitik ve pazarlama betiklerini yalnızca kullanıcı Çerez Bannerında açık onay verdikten sonra yükleyin.',
-        fixCode: 'if (cookieConsent.analytics === true) { loadGoogleAnalytics(); }'
+        finding: 'Google Analytics, Google AdSense, Meta Pixel, Hotjar veya Clarity betiği statik <script src=...> etiketiyle veya rıza kapısı olmadan doğrudan sayfaya gömülmüş (Consent Mode denied olsa dahi betik yüklenirken ziyaretçi IP adresi yurt dışına aktarılır).',
+        remediation: 'Üçüncü taraf analitik ve reklam betiklerini HTML içine statik gömmeyin; yalnızca kullanıcı Çerez Tercih Panelinde açık onay verdikten sonra dinamik olarak (document.createElement("script")) yükleyin.',
+        fixCode: 'if (consent.analytics === true) { const s = document.createElement("script"); s.src = "https://www.googletagmanager.com/gtag/js?id=..."; document.head.appendChild(s); }'
       });
     }
 

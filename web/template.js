@@ -99,18 +99,51 @@ const pageTemplate = (title, content, extraHead = '') => `
       } catch(e) {}
     })();
   </script>
-  <!-- Google Analytics (melihkarasu.com GA4 & Google Tag) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZE8C5CHKY8"></script>
-  <script>
+  <!-- Privacy-by-Default ConsentGate: Analytics & AdSense load ONLY after explicit user opt-in (KVKK Çerez Rehberi & GDPR) -->
+  <script data-cfasync="false">
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('set', 'linker', {'domains': ['melihkarasu.com', 'app.melihkarasu.com']});
-    gtag('js', new Date());
-    gtag('config', 'G-ZE8C5CHKY8', { 'anonymize_ip': true });
-    gtag('config', 'GT-PLVB6F4');
+    gtag('consent', 'default', {
+      'analytics_storage': 'denied',
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied'
+    });
+    window.__vibeLoadConsentScripts = function(consentObj) {
+      if (!consentObj) return;
+      gtag('consent', 'update', {
+        'analytics_storage': consentObj.analytics ? 'granted' : 'denied',
+        'ad_storage': consentObj.ads ? 'granted' : 'denied',
+        'ad_user_data': consentObj.ads ? 'granted' : 'denied',
+        'ad_personalization': consentObj.ads ? 'granted' : 'denied'
+      });
+      if (consentObj.analytics && !window.__vibeGaLoaded) {
+        window.__vibeGaLoaded = true;
+        var sGa = document.createElement('script');
+        sGa.async = true;
+        sGa.src = 'https://www.googletagmanager.com/gtag/js?id=G-ZE8C5CHKY8';
+        document.head.appendChild(sGa);
+        gtag('set', 'linker', {'domains': ['melihkarasu.com', 'app.melihkarasu.com']});
+        gtag('js', new Date());
+        gtag('config', 'G-ZE8C5CHKY8', { 'anonymize_ip': true });
+        gtag('config', 'GT-PLVB6F4');
+      }
+      if (consentObj.ads && !window.__vibeAdsLoaded) {
+        window.__vibeAdsLoaded = true;
+        var sAds = document.createElement('script');
+        sAds.async = true;
+        sAds.crossOrigin = 'anonymous';
+        sAds.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8978837186965149';
+        document.head.appendChild(sAds);
+      }
+    };
+    try {
+      var _savedVibeConsent = JSON.parse(localStorage.getItem('vibe_cookie_consent_v1') || 'null');
+      if (_savedVibeConsent && (_savedVibeConsent.analytics || _savedVibeConsent.ads)) {
+        window.__vibeLoadConsentScripts(_savedVibeConsent);
+      }
+    } catch (e) {}
   </script>
-  <!-- Google AdSense (melihkarasu.com Publisher ID) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8978837186965149" crossorigin="anonymous"></script>
   ${extraHead}
 </head>
 <body class="bg-mistral-canvas text-mistral-ink min-h-screen flex flex-col antialiased selection:bg-mistral-orange selection:text-white">
@@ -221,6 +254,15 @@ const pageTemplate = (title, content, extraHead = '') => `
         </a>
       </div>
     </div>
+    <div class="max-w-6xl mx-auto mt-4 pt-4 border-t border-mistral-beige-deep/70 flex flex-wrap items-center justify-between gap-3 text-xs text-mistral-slate">
+      <nav aria-label="Yasal Bilgilendirme Bağlantıları" class="flex flex-wrap items-center gap-4 sm:gap-6">
+        <a href="/aydinlatma-metni" class="hover:text-mistral-orange transition font-medium">Aydınlatma Metni</a>
+        <a href="/gizlilik-politikasi" class="hover:text-mistral-orange transition font-medium">Gizlilik Politikası</a>
+        <a href="/cerez-politikasi" class="hover:text-mistral-orange transition font-medium">Çerez Politikası</a>
+        <a href="/kullanim-kosullari" class="hover:text-mistral-orange transition font-medium">Kullanım Koşulları</a>
+        <button type="button" onclick="window.openVibeCookieModal && window.openVibeCookieModal()" class="hover:text-mistral-orange transition font-medium cursor-pointer">Çerez Tercihleri</button>
+      </nav>
+    </div>
   </footer>
 
   <!-- Global Auth Guard Overlay (Giriş Yapmamış Kullanıcılar İçin Sayfa Kilidi) -->
@@ -248,6 +290,9 @@ const pageTemplate = (title, content, extraHead = '') => `
           &larr; Ana Sayfaya Dön
         </a>
       </div>
+      <p class="mt-5 pt-4 border-t border-stone-200 text-[11px] text-mistral-slate leading-relaxed">
+        Giriş yaptığınızda kimlik ve profil verileriniz, hizmetin sunulması hukuki sebebine (KVKK m.5/2-c) dayanılarak işlenir. Detaylar için <a href="/aydinlatma-metni" class="text-mistral-orange underline font-medium">Aydınlatma Metni</a> ve <a href="/kullanim-kosullari" class="text-mistral-orange underline font-medium">Kullanım Koşulları</a> sayfalarını inceleyebilirsiniz.
+      </p>
     </div>
   </div>
 
@@ -255,7 +300,7 @@ const pageTemplate = (title, content, extraHead = '') => `
     (function() {
       try {
         var p = window.location.pathname;
-        var isPublic = p === '/' || p === '/auth' || p === '/app/auth' || p === '/app' || p === '/admin' || p === '/app/admin';
+        var cleanPath = p.replace(/\/+$/, '') || '/'; var isPublic = ['/', '/auth', '/app/auth', '/app', '/admin', '/app/admin', '/aydinlatma-metni', '/app/aydinlatma-metni', '/gizlilik-politikasi', '/app/gizlilik-politikasi', '/cerez-politikasi', '/app/cerez-politikasi', '/kullanim-kosullari', '/app/kullanim-kosullari'].indexOf(cleanPath) !== -1;
         if (!isPublic) {
           var user = localStorage.getItem('vibe_user');
           if (!user) {
@@ -341,6 +386,150 @@ const pageTemplate = (title, content, extraHead = '') => `
       }
       window.addEventListener('DOMContentLoaded', enforceSideRailOnlyAds);
       window.addEventListener('load', enforceSideRailOnlyAds);
+    })();
+  </script>
+
+  <!-- KVKK & GDPR Uyumlu Çerez Aydınlatma Bandı ve Tercih Yönetim Modalı -->
+  <div id="vibeCookieBanner" class="fixed bottom-4 left-4 right-4 z-50 max-w-5xl mx-auto bg-mistral-cream border border-mistral-beige-deep rounded-2xl shadow-2xl p-4 sm:p-5 hidden" role="region" aria-label="Çerez ve Gizlilik Bildirimi">
+    <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+      <div class="text-xs sm:text-sm text-mistral-slate leading-relaxed flex-1">
+        <div class="font-bold text-mistral-ink text-sm sm:text-base mb-1">Çerez ve Kişisel Veri Bilgilendirmesi</div>
+        Platformun temel işlevlerini sunmak ve oturum (SSO) durumunuzu korumak için zorunlu teknolojiler (KVKK m.5/2-c, f kapsamında onaya tabi olmaksızın) kullanılmaktadır. Açık rıza vermeniz halinde anonim trafik analizi (Google Analytics) ve yan sütun reklam gösterimi (Google AdSense) çerezleri etkinleştirilir. Detaylı bilgi için <a href="/aydinlatma-metni" class="text-mistral-orange underline font-medium">Aydınlatma Metni</a> ve <a href="/cerez-politikasi" class="text-mistral-orange underline font-medium">Çerez Politikası</a> sayfalarını inceleyebilirsiniz.
+      </div>
+      <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto shrink-0">
+        <button type="button" onclick="window.openVibeCookieModal()" class="vibe-btn vibe-btn-sm vibe-btn-secondary flex-1 lg:flex-initial justify-center cursor-pointer" style="background:#FFFFFF !important; color:#0F172A !important; border:1px solid #CBD5E1 !important;">
+          Tercihleri Yönet
+        </button>
+        <button type="button" onclick="window.saveVibeCookieConsent('essential')" class="vibe-btn vibe-btn-sm flex-1 lg:flex-initial justify-center cursor-pointer" style="background:#1E293B !important; color:#FFFFFF !important; border:1px solid #0F172A !important;">
+          Sadece Zorunlular
+        </button>
+        <button type="button" onclick="window.saveVibeCookieConsent('all')" class="vibe-btn vibe-btn-sm vibe-btn-primary flex-1 lg:flex-initial justify-center cursor-pointer">
+          Tümünü Kabul Et
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="vibeCookieModalBackdrop" class="fixed inset-0 z-50 bg-stone-950/60 backdrop-blur-xs hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="vibeCookieModalTitle">
+    <div class="bg-mistral-cream border border-mistral-beige-deep rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 shadow-2xl text-mistral-ink">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-mistral-beige-deep">
+        <h3 id="vibeCookieModalTitle" class="text-lg sm:text-xl font-bold font-editorial text-mistral-ink">Çerez ve Gizlilik Tercihleri</h3>
+        <button type="button" onclick="window.closeVibeCookieModal()" class="w-8 h-8 rounded-lg border border-mistral-beige-deep bg-white text-mistral-slate hover:text-mistral-ink flex items-center justify-center text-sm font-bold cursor-pointer" aria-label="Kapat">✕</button>
+      </div>
+      <p class="text-xs sm:text-sm text-mistral-slate leading-relaxed mb-4">
+        Zorunlu teknolojiler hizmetin sunulması için kanuni istisna kapsamında çalışır. Analitik ve reklam çerezleri ise varsayılan olarak kapalıdır; aşağıdan dilediğiniz zaman açık rıza verebilir veya geri çekebilirsiniz. <a href="/aydinlatma-metni" class="text-mistral-orange underline font-medium">Aydınlatma Metni</a>
+      </p>
+
+      <div class="space-y-3">
+        <div class="p-3.5 rounded-xl bg-white border border-mistral-beige-deep">
+          <div class="flex items-center justify-between gap-2 mb-1">
+            <span class="font-semibold text-sm text-mistral-ink">1. Zorunlu ve İşlevsel Teknolojiler</span>
+            <span class="px-2.5 py-0.5 rounded-full font-mono text-[10px] font-bold uppercase" style="background:#FFF7ED !important; color:#EA580C !important; border:1px solid #FED7AA !important;">Her Zaman Aktif</span>
+          </div>
+          <p class="text-xs text-mistral-slate leading-relaxed">
+            Mikro uygulamaların çalışması, GitHub/Google SSO oturumunuzun korunması (<code>vibe_token</code>, <code>vibe_user</code>) ve çerez tercihlerinizin hatırlanması için zorunludur.
+          </p>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-white border border-mistral-beige-deep">
+          <div class="flex items-center justify-between gap-2 mb-1">
+            <label for="vibeConsentAnalytics" class="font-semibold text-sm text-mistral-ink cursor-pointer">2. Performans ve Analitik Çerezleri (Açık Rıza)</label>
+            <input type="checkbox" id="vibeConsentAnalytics" class="w-4 h-4 accent-orange-600 rounded cursor-pointer">
+          </div>
+          <p class="text-xs text-mistral-slate leading-relaxed">
+            Hangi mikro uygulamaların daha sık kullanıldığını ve sayfa performansını anonim olarak ölçmemize (Google Analytics) yardımcı olur.
+          </p>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-white border border-mistral-beige-deep">
+          <div class="flex items-center justify-between gap-2 mb-1">
+            <label for="vibeConsentAds" class="font-semibold text-sm text-mistral-ink cursor-pointer">3. Reklam ve Pazarlama Çerezleri (Açık Rıza)</label>
+            <input type="checkbox" id="vibeConsentAds" class="w-4 h-4 accent-orange-600 rounded cursor-pointer">
+          </div>
+          <p class="text-xs text-mistral-slate leading-relaxed">
+            Platformun ücretsiz sürdürülebilirliğini desteklemek amacıyla yalnızca geniş ekran yan sütunlarında (Side Rail) gösterilen Google AdSense reklamları için kullanılır.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-end gap-2.5 mt-5 pt-4 border-t border-mistral-beige-deep">
+        <button type="button" onclick="window.saveVibeCookieConsent('essential')" class="vibe-btn vibe-btn-sm cursor-pointer" style="background:#1E293B !important; color:#FFFFFF !important; border:1px solid #0F172A !important;">
+          Tümünü Reddet
+        </button>
+        <button type="button" onclick="window.saveVibeCookieCustom()" class="vibe-btn vibe-btn-sm vibe-btn-secondary cursor-pointer" style="background:#FFFFFF !important; color:#0F172A !important; border:1px solid #CBD5E1 !important;">
+          Seçimi Kaydet
+        </button>
+        <button type="button" onclick="window.saveVibeCookieConsent('all')" class="vibe-btn vibe-btn-sm vibe-btn-primary cursor-pointer">
+          Tümünü Kabul Et
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script data-cfasync="false">
+    (function() {
+      var STORAGE_KEY = 'vibe_cookie_consent_v1';
+      var banner = document.getElementById('vibeCookieBanner');
+      var modal = document.getElementById('vibeCookieModalBackdrop');
+      var chkAnalytics = document.getElementById('vibeConsentAnalytics');
+      var chkAds = document.getElementById('vibeConsentAds');
+
+      function getSavedConsent() {
+        try {
+          var raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      window.saveVibeCookieConsent = function(mode) {
+        var consentObj = {
+          essential: true,
+          analytics: mode === 'all',
+          ads: mode === 'all',
+          policyVersion: '2026.11-v1',
+          updatedAt: new Date().toISOString()
+        };
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(consentObj)); } catch (e) {}
+        if (typeof window.__vibeLoadConsentScripts === 'function') {
+          window.__vibeLoadConsentScripts(consentObj);
+        }
+        if (banner) banner.classList.add('hidden');
+        if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+      };
+
+      window.saveVibeCookieCustom = function() {
+        var consentObj = {
+          essential: true,
+          analytics: !!(chkAnalytics && chkAnalytics.checked),
+          ads: !!(chkAds && chkAds.checked),
+          policyVersion: '2026.11-v1',
+          updatedAt: new Date().toISOString()
+        };
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(consentObj)); } catch (e) {}
+        if (typeof window.__vibeLoadConsentScripts === 'function') {
+          window.__vibeLoadConsentScripts(consentObj);
+        }
+        if (banner) banner.classList.add('hidden');
+        if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+      };
+
+      window.openVibeCookieModal = function() {
+        var current = getSavedConsent() || { analytics: false, ads: false };
+        if (chkAnalytics) chkAnalytics.checked = !!current.analytics;
+        if (chkAds) chkAds.checked = !!current.ads;
+        if (modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+      };
+
+      window.closeVibeCookieModal = function() {
+        if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+      };
+
+      var existing = getSavedConsent();
+      if (!existing) {
+        if (banner) banner.classList.remove('hidden');
+      }
     })();
   </script>
 </body>
