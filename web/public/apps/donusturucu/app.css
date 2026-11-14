@@ -1,0 +1,4 @@
+#data-input-area, #data-output-area {
+  resize: vertical;
+  min-height: 220px;
+}
