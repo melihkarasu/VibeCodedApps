@@ -87,13 +87,16 @@ const routeMap = [
   { paths: ['/kas-anatomisi', '/app/kas-anatomisi'], route: './routes/egzersiz' },
   { paths: ['/klinik-arastirma', '/app/klinik-arastirma'], route: './routes/klinik' },
   { paths: ['/dso-saglik', '/app/dso-saglik'], route: './routes/dso' },
-  { paths: ['/lezzet-atolyesi', '/app/lezzet-atolyesi'], route: './routes/lezzet' }
+  { paths: ['/lezzet-atolyesi', '/app/lezzet-atolyesi'], route: './routes/lezzet' },
+  { paths: ['/gorsel-boyutlandirici', '/app/gorsel-boyutlandirici'], route: './routes/gorsel' },
+  { paths: ['/dosya-donusturucu', '/app/dosya-donusturucu'], route: './routes/donusturucu' },
+  { paths: ['/barkod-studyosu', '/app/barkod-studyosu'], route: './routes/barkod' }
 ];
 
 // scripts/apps-manifest.json içindeki yeni uygulamaları otomatik olarak routeMap'e dahil et
 try {
   const fs = require('fs');
-  const manifestPath = path.join(__dirname, '..', 'scripts', 'apps-manifest.json');
+  const manifestPath = fs.existsSync(path.join(__dirname, 'apps-manifest.json')) ? path.join(__dirname, 'apps-manifest.json') : path.join(__dirname, '..', 'scripts', 'apps-manifest.json');
   if (fs.existsSync(manifestPath)) {
     const registeredRoutes = new Set(routeMap.map(r => r.route));
     const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
