@@ -36,10 +36,31 @@
   border-radius: 9999px;
 }
 
+.quake-dot-ref { background-color: #2563eb; }
 .quake-dot-low { background-color: #10b981; }
 .quake-dot-mid { background-color: #f59e0b; }
 .quake-dot-high { background-color: #fa520f; }
 .quake-dot-crit { background-color: #dc2626; }
+
+.quake-source-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.35rem;
+}
+
+.quake-source-kandilli {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.quake-source-usgs {
+  background-color: #f5f5f4;
+  color: #57534e;
+  border: 1px solid #d6d3d1;
+}
 
 .quake-item-card {
   border: 1px solid #e7e5e4;

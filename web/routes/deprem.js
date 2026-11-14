@@ -2,9 +2,9 @@ module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous" />
-      <link rel="stylesheet" href="/static/apps/deprem/app.css?v=20261114a" />
+      <link rel="stylesheet" href="/static/apps/deprem/app.css?v=20261114b" />
       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
-      <script src="/static/apps/deprem/app.js?v=20261114a" defer></script>
+      <script src="/static/apps/deprem/app.js?v=20261114b" defer></script>
     `;
 
     const content = `
@@ -28,7 +28,7 @@ module.exports = function(pageTemplate) {
             <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">Canlı Deprem Haritası &amp; Sismik Radar</h1>
           </div>
           <p class="text-mistral-slate text-sm mt-0.5 font-normal">
-            USGS canlı sismik veri akışı ve OpenStreetMap haritası ile Türkiye, çevre bölgeler ve dünya genelindeki son depremler.
+            Kandilli Rasathanesi ve USGS canlı sismik veri akışı; Anıtkabir referans konumu ve OpenStreetMap ile Türkiye ve dünya depremleri.
           </p>
         </div>
 
@@ -48,9 +48,18 @@ module.exports = function(pageTemplate) {
       <section class="vibe-panel-card p-5 mb-6 space-y-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-end">
           <div class="lg:col-span-3">
+            <label for="filter-source" class="block text-xs font-semibold text-mistral-slate mb-1.5">Veri Kaynağı</label>
+            <select id="filter-source" onchange="onFilterChange()" class="w-full px-3 py-2.5 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange">
+              <option value="combined" selected>Kandilli + USGS (Birleşik)</option>
+              <option value="kandilli">Yalnızca Kandilli Rasathanesi</option>
+              <option value="usgs">Yalnızca USGS (Küresel)</option>
+            </select>
+          </div>
+
+          <div class="lg:col-span-3">
             <label for="filter-region" class="block text-xs font-semibold text-mistral-slate mb-1.5">Bölge Kapsamı</label>
             <select id="filter-region" onchange="onFilterChange()" class="w-full px-3 py-2.5 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange">
-              <option value="turkey" selected>Türkiye ve Çevresi</option>
+              <option value="turkey" selected>Türkiye (Anıtkabir Merkezli)</option>
               <option value="marmara">Marmara Bölgesi</option>
               <option value="aegean">Ege &amp; Batı Anadolu</option>
               <option value="east">Doğu &amp; Güneydoğu Anadolu</option>
@@ -62,8 +71,8 @@ module.exports = function(pageTemplate) {
           <div class="lg:col-span-2">
             <label for="filter-minmag" class="block text-xs font-semibold text-mistral-slate mb-1.5">Min. Büyüklük</label>
             <select id="filter-minmag" onchange="onFilterChange()" class="w-full px-3 py-2.5 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink font-medium focus:outline-none focus:border-mistral-orange">
-              <option value="1.0">Tümü (M 1.0+)</option>
-              <option value="2.5" selected>M 2.5+</option>
+              <option value="1.0" selected>Tümü (M 1.0+)</option>
+              <option value="2.5">M 2.5+</option>
               <option value="4.0">M 4.0+</option>
               <option value="5.0">M 5.0+</option>
               <option value="6.0">M 6.0+</option>
@@ -79,11 +88,6 @@ module.exports = function(pageTemplate) {
             </select>
           </div>
 
-          <div class="lg:col-span-3">
-            <label for="filter-search" class="block text-xs font-semibold text-mistral-slate mb-1.5">Yer / Bölge Ara</label>
-            <input type="text" id="filter-search" oninput="applyClientSearch()" placeholder="Örn: İzmir, Kahramanmaraş, Crete..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder:text-mistral-stone focus:outline-none focus:border-mistral-orange">
-          </div>
-
           <div class="lg:col-span-2 flex gap-2">
             <button type="button" onclick="focusNearMe()" class="vibe-btn vibe-btn-sm vibe-btn-secondary w-full justify-center cursor-pointer" title="Yalnızca tıkladığınızda tarayıcı konumu istenir ve sunucuya gönderilmez">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/></svg>
@@ -92,21 +96,26 @@ module.exports = function(pageTemplate) {
           </div>
         </div>
 
-        <!-- Hızlı Şehir Odakları + Takip Kaydetme -->
-        <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-mistral-hairline text-xs">
-          <div class="flex flex-wrap items-center gap-1.5">
-            <span class="text-mistral-stone font-medium mr-1">Hızlı Odak:</span>
-            <button type="button" onclick="focusPreset('turkey')" class="quake-preset-btn">Türkiye Geneli</button>
-            <button type="button" onclick="focusPreset('marmara')" class="quake-preset-btn">Marmara / İstanbul</button>
-            <button type="button" onclick="focusPreset('aegean')" class="quake-preset-btn">Ege / İzmir</button>
-            <button type="button" onclick="focusPreset('east')" class="quake-preset-btn">Doğu Anadolu</button>
-            <button type="button" onclick="focusPreset('global')" class="quake-preset-btn">Küresel M 4.5+</button>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
+          <div class="lg:col-span-5">
+            <input type="text" id="filter-search" oninput="applyClientSearch()" placeholder="Şehir / fay / bölge ara (örn: Ankara, İzmir, Ovacık, Marmara...)" class="w-full px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink placeholder:text-mistral-stone focus:outline-none focus:border-mistral-orange">
           </div>
 
-          <button type="button" onclick="saveCurrentWatchRegion()" class="vibe-btn vibe-btn-xs vibe-btn-secondary cursor-pointer">
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <span>Bu Filtreyi Takibe Al</span>
-          </button>
+          <div class="lg:col-span-7 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="text-mistral-stone font-medium mr-1">Hızlı Odak:</span>
+              <button type="button" onclick="focusPreset('turkey')" class="quake-preset-btn">Anıtkabir / Türkiye</button>
+              <button type="button" onclick="focusPreset('marmara')" class="quake-preset-btn">Marmara</button>
+              <button type="button" onclick="focusPreset('aegean')" class="quake-preset-btn">Ege / İzmir</button>
+              <button type="button" onclick="focusPreset('east')" class="quake-preset-btn">Doğu Anadolu</button>
+              <button type="button" onclick="focusPreset('global')" class="quake-preset-btn">Küresel M 4.0+</button>
+            </div>
+
+            <button type="button" onclick="saveCurrentWatchRegion()" class="vibe-btn vibe-btn-xs vibe-btn-secondary cursor-pointer">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>Bu Filtreyi Takibe Al</span>
+            </button>
+          </div>
         </div>
       </section>
 
@@ -145,12 +154,13 @@ module.exports = function(pageTemplate) {
             <div id="deprem-map" aria-label="Canlı Deprem Haritası"></div>
             <div class="mt-3 pt-3 border-t border-mistral-hairline flex flex-wrap items-center justify-between gap-3 text-xs text-mistral-slate">
               <div class="flex flex-wrap items-center gap-3">
-                <span class="inline-flex items-center gap-1.5"><span class="quake-dot quake-dot-low"></span> &lt; 3.0 Hafif</span>
-                <span class="inline-flex items-center gap-1.5"><span class="quake-dot quake-dot-mid"></span> 3.0 – 4.4 Orta</span>
-                <span class="inline-flex items-center gap-1.5"><span class="quake-dot quake-dot-high"></span> 4.5 – 5.9 Güçlü</span>
-                <span class="inline-flex items-center gap-1.5"><span class="quake-dot quake-dot-crit"></span> 6.0+ Şiddetli</span>
+                <span class="inline-flex items-center gap-1.5"><span class="quake-dot quake-dot-ref"></span> Referans (Anıtkabir)</span>
+                <span class="inline-flex items-center gap-1.5"><span class="quake-dot quake-dot-low"></span> &lt; 3.0</span>
+                <span class="inline-flex items-center gap-1.5"><span class="quake-dot quake-dot-mid"></span> 3.0–4.4</span>
+                <span class="inline-flex items-center gap-1.5"><span class="quake-dot quake-dot-high"></span> 4.5–5.9</span>
+                <span class="inline-flex items-center gap-1.5"><span class="quake-dot quake-dot-crit"></span> 6.0+</span>
               </div>
-              <span class="text-[11px] text-mistral-stone">Harita: OpenStreetMap · Veri: USGS GeoJSON</span>
+              <span class="text-[11px] text-mistral-stone">Harita: OpenStreetMap · Veri: Kandilli Rasathanesi &amp; USGS</span>
             </div>
           </div>
         </div>

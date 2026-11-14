@@ -4,10 +4,17 @@
   const APP_ID = 'deprem-radari';
   const WATCH_STORAGE_KEY = 'deprem_watched_regions_v1';
 
+  // Varsayılan referans konum: Anıtkabir / Çankaya / Ankara
+  const ANITKABIR_REF = {
+    lat: 39.925054,
+    lon: 32.836944,
+    name: 'Anıtkabir, Çankaya / Ankara',
+  };
+
   const REGION_PRESETS = {
     turkey: {
-      label: 'Türkiye ve Çevresi',
-      center: [39.0, 35.2],
+      label: 'Türkiye (Anıtkabir Merkezli)',
+      center: [ANITKABIR_REF.lat, ANITKABIR_REF.lon],
       zoom: 6,
       bbox: { minlat: 34.5, maxlat: 43.0, minlon: 25.0, maxlon: 46.0 },
     },
@@ -37,15 +44,15 @@
     },
     global: {
       label: 'Tüm Dünya (Küresel)',
-      center: [25.0, 15.0],
-      zoom: 2,
+      center: [ANITKABIR_REF.lat, ANITKABIR_REF.lon],
+      zoom: 3,
       bbox: null,
     },
   };
 
   let map = null;
   let markerLayer = null;
-  let userLocationLayer = null;
+  let referenceLayer = null;
   let allQuakes = [];
   let filteredQuakes = [];
   let activeNearPoint = null;
@@ -89,6 +96,10 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
+  function getActiveReferencePoint() {
+    return activeNearPoint || ANITKABIR_REF;
+  }
+
   function getMagStyle(mag) {
     if (mag >= 6.0) return { color: '#dc2626', fill: '#ef4444', badge: 'bg-red-50 text-red-700 border border-red-200', label: 'Şiddetli' };
     if (mag >= 4.5) return { color: '#ea580c', fill: '#fa520f', badge: 'bg-orange-50 text-orange-700 border border-orange-200', label: 'Güçlü' };
@@ -116,15 +127,34 @@
     }
   }
 
+  function renderReferenceMarker() {
+    if (!map || !referenceLayer) return;
+    referenceLayer.clearLayers();
+    const ref = getActiveReferencePoint();
+    const isCustomUser = Boolean(activeNearPoint);
+    const label = isCustomUser ? 'Konumunuz (250 km tarama)' : `${ANITKABIR_REF.name} (Varsayılan Konum)`;
+
+    L.circleMarker([ref.lat, ref.lon], {
+      radius: 8,
+      color: '#ffffff',
+      weight: 2.5,
+      fillColor: '#2563eb',
+      fillOpacity: 1,
+    })
+      .bindPopup(`<div class="text-xs font-semibold text-stone-900">${escapeHtml(label)}</div>`)
+      .addTo(referenceLayer);
+  }
+
   function initMap() {
     if (map || typeof L === 'undefined') return;
-    map = L.map('deprem-map', { zoomControl: true }).setView([39.0, 35.2], 6);
+    map = L.map('deprem-map', { zoomControl: true }).setView([ANITKABIR_REF.lat, ANITKABIR_REF.lon], 6);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       attribution: '&copy; OpenStreetMap contributors',
     }).addTo(map);
     markerLayer = L.layerGroup().addTo(map);
-    userLocationLayer = L.layerGroup().addTo(map);
+    referenceLayer = L.layerGroup().addTo(map);
+    renderReferenceMarker();
   }
 
   function buildUsgsQueryUrl(regionKey, minMag, days) {
@@ -134,7 +164,7 @@
       starttime: start,
       minmagnitude: String(minMag),
       orderby: 'time',
-      limit: '250',
+      limit: '200',
     });
 
     if (activeNearPoint) {
@@ -154,9 +184,126 @@
     return 'https://earthquake.usgs.gov/fdsnws/event/1/query?' + params.toString();
   }
 
+  async function fetchUsgsQuakes(regionKey, minMag, days) {
+    const url = buildUsgsQueryUrl(regionKey, minMag, days);
+    const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
+    if (!res.ok) throw new Error(`USGS HTTP ${res.status}`);
+    const geojson = await res.json();
+    const features = Array.isArray(geojson.features) ? geojson.features : [];
+
+    return features
+      .map((f) => {
+        const props = f.properties || {};
+        const coords = (f.geometry && f.geometry.coordinates) || [];
+        const lon = Number(coords[0]);
+        const lat = Number(coords[1]);
+        const depthKm = Number(coords[2]);
+        const mag = Number(props.mag);
+        if (!Number.isFinite(lat) || !Number.isFinite(lon) || !Number.isFinite(mag)) return null;
+        return {
+          id: 'usgs_' + String(f.id || ''),
+          source: 'USGS',
+          mag,
+          place: String(props.place || 'Bilinmeyen Konum'),
+          time: Number(props.time),
+          lat,
+          lon,
+          depthKm: Number.isFinite(depthKm) ? Math.max(0, depthKm) : 0,
+          url: safeUsgsUrl(props.url),
+        };
+      })
+      .filter(Boolean);
+  }
+
+  function parseKandilliTimestamp(item) {
+    if (Number.isFinite(Number(item.created_at)) && Number(item.created_at) > 1000000000) {
+      return Number(item.created_at) * 1000;
+    }
+    if (typeof item.date_time === 'string' && item.date_time.trim()) {
+      const iso = item.date_time.trim().replace(' ', 'T') + '+03:00';
+      const parsed = Date.parse(iso);
+      if (Number.isFinite(parsed)) return parsed;
+    }
+    return Date.now();
+  }
+
+  function matchesFilterBounds(q, regionKey, minMag, days) {
+    if (q.mag < minMag) return false;
+    const cutoff = Date.now() - days * 86400 * 1000;
+    if (Number.isFinite(q.time) && q.time < cutoff) return false;
+
+    if (activeNearPoint) {
+      return haversineKm(activeNearPoint.lat, activeNearPoint.lon, q.lat, q.lon) <= 250;
+    }
+    const preset = REGION_PRESETS[regionKey] || REGION_PRESETS.turkey;
+    if (preset.bbox) {
+      return (
+        q.lat >= preset.bbox.minlat &&
+        q.lat <= preset.bbox.maxlat &&
+        q.lon >= preset.bbox.minlon &&
+        q.lon <= preset.bbox.maxlon
+      );
+    }
+    return true;
+  }
+
+  async function fetchKandilliQuakes(regionKey, minMag, days) {
+    const res = await fetch('https://api.orhanaydogdu.com.tr/deprem/kandilli/live?limit=200', {
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!res.ok) throw new Error(`Kandilli HTTP ${res.status}`);
+    const payload = await res.json();
+    const rows = Array.isArray(payload.result) ? payload.result : [];
+
+    return rows
+      .map((item) => {
+        const coords = (item.geojson && item.geojson.coordinates) || [];
+        const lon = Number(coords[0]);
+        const lat = Number(coords[1]);
+        const mag = Number(item.mag);
+        const depthKm = Number(item.depth);
+        if (!Number.isFinite(lat) || !Number.isFinite(lon) || !Number.isFinite(mag)) return null;
+
+        const title = String(item.title || '').trim() || 'Türkiye';
+        const closest = item.location_properties && item.location_properties.closestCity && item.location_properties.closestCity.name;
+        const place = closest && !title.toLowerCase().includes(String(closest).toLowerCase())
+          ? `${title} (${closest})`
+          : title;
+
+        return {
+          id: 'kandilli_' + String(item.earthquake_id || `${lat}_${lon}_${item.created_at || ''}`),
+          source: 'Kandilli',
+          mag,
+          place,
+          time: parseKandilliTimestamp(item),
+          lat,
+          lon,
+          depthKm: Number.isFinite(depthKm) ? Math.max(0, depthKm) : 0,
+          url: '',
+        };
+      })
+      .filter((q) => q && matchesFilterBounds(q, regionKey, minMag, days));
+  }
+
+  function mergeAndDeduplicate(kandilliList, usgsList) {
+    const merged = [...kandilliList];
+    for (const u of usgsList) {
+      const duplicate = kandilliList.some(
+        (k) =>
+          Math.abs(k.time - u.time) <= 120 * 1000 &&
+          haversineKm(k.lat, k.lon, u.lat, u.lon) <= 35
+      );
+      if (!duplicate) {
+        merged.push(u);
+      }
+    }
+    return merged.sort((a, b) => (b.time || 0) - (a.time || 0));
+  }
+
   async function fetchQuakes() {
+    const sourceMode = (document.getElementById('filter-source') && document.getElementById('filter-source').value) || 'combined';
     const regionKey = document.getElementById('filter-region').value || 'turkey';
-    const minMag = clampNumber(document.getElementById('filter-minmag').value, 0, 9.5, 2.5);
+    const minMag = clampNumber(document.getElementById('filter-minmag').value, 0, 9.5, 1.0);
     const days = clampNumber(document.getElementById('filter-days').value, 1, 30, 7);
 
     const periodEl = document.getElementById('stat-period-label');
@@ -166,43 +313,42 @@
 
     setStatus('Yükleniyor...', false);
 
-    const url = buildUsgsQueryUrl(regionKey, minMag, days);
     try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
-      if (!res.ok) throw new Error(`USGS HTTP ${res.status}`);
-      const geojson = await res.json();
-      const features = Array.isArray(geojson.features) ? geojson.features : [];
+      let kandilliRows = [];
+      let usgsRows = [];
+      const errors = [];
 
-      allQuakes = features
-        .map((f) => {
-          const props = f.properties || {};
-          const coords = (f.geometry && f.geometry.coordinates) || [];
-          const lon = Number(coords[0]);
-          const lat = Number(coords[1]);
-          const depthKm = Number(coords[2]);
-          const mag = Number(props.mag);
-          if (!Number.isFinite(lat) || !Number.isFinite(lon) || !Number.isFinite(mag)) return null;
-          return {
-            id: String(f.id || ''),
-            mag,
-            place: String(props.place || 'Bilinmeyen Konum'),
-            time: Number(props.time),
-            lat,
-            lon,
-            depthKm: Number.isFinite(depthKm) ? Math.max(0, depthKm) : 0,
-            tsunami: Boolean(props.tsunami),
-            url: safeUsgsUrl(props.url),
-          };
-        })
-        .filter(Boolean);
+      if (sourceMode === 'combined') {
+        const [kRes, uRes] = await Promise.allSettled([
+          fetchKandilliQuakes(regionKey, minMag, days),
+          fetchUsgsQuakes(regionKey, minMag, days),
+        ]);
+        if (kRes.status === 'fulfilled') kandilliRows = kRes.value;
+        else errors.push('Kandilli: ' + kRes.reason.message);
+        if (uRes.status === 'fulfilled') usgsRows = uRes.value;
+        else errors.push('USGS: ' + uRes.reason.message);
+
+        if (kRes.status === 'rejected' && uRes.status === 'rejected') {
+          throw new Error(errors.join(' | '));
+        }
+        allQuakes = mergeAndDeduplicate(kandilliRows, usgsRows);
+      } else if (sourceMode === 'kandilli') {
+        kandilliRows = await fetchKandilliQuakes(regionKey, minMag, days);
+        allQuakes = kandilliRows.sort((a, b) => (b.time || 0) - (a.time || 0));
+      } else {
+        usgsRows = await fetchUsgsQuakes(regionKey, minMag, days);
+        allQuakes = usgsRows.sort((a, b) => (b.time || 0) - (a.time || 0));
+      }
 
       if (map && !activeNearPoint) {
         const preset = REGION_PRESETS[regionKey] || REGION_PRESETS.turkey;
         map.setView(preset.center, preset.zoom);
       }
-
+      renderReferenceMarker();
       applyClientSearch();
-      setStatus(`Güncel (${allQuakes.length})`, false);
+
+      const partialWarn = errors.length ? ' (Kısmi)' : '';
+      setStatus(`Güncel (${allQuakes.length})${partialWarn}`, false);
     } catch (err) {
       allQuakes = [];
       applyClientSearch();
@@ -217,7 +363,7 @@
   function applyClientSearch() {
     const q = (document.getElementById('filter-search').value || '').trim().toLowerCase();
     filteredQuakes = q
-      ? allQuakes.filter((item) => item.place.toLowerCase().includes(q))
+      ? allQuakes.filter((item) => item.place.toLowerCase().includes(q) || item.source.toLowerCase().includes(q))
       : [...allQuakes];
 
     renderStats(filteredQuakes);
@@ -253,7 +399,7 @@
     const latest = list[0];
 
     if (maxMagEl) maxMagEl.textContent = `M ${strongest.mag.toFixed(1)}`;
-    if (maxPlaceEl) maxPlaceEl.textContent = strongest.place;
+    if (maxPlaceEl) maxPlaceEl.textContent = `${strongest.place} (${strongest.source})`;
     if (avgDepthEl) avgDepthEl.textContent = `${(depthSum / list.length).toFixed(1)} km`;
     if (latestTimeEl) latestTimeEl.textContent = formatRelativeTime(latest.time);
     if (latestMagEl) latestMagEl.textContent = `M ${latest.mag.toFixed(1)} · ${latest.place}`;
@@ -263,6 +409,8 @@
     if (!map || !markerLayer) return;
     markerLayer.clearLayers();
     markerById.clear();
+
+    const ref = getActiveReferencePoint();
 
     for (const q of list) {
       const style = getMagStyle(q.mag);
@@ -278,15 +426,20 @@
       const localDate = Number.isFinite(q.time)
         ? new Date(q.time).toLocaleString('tr-TR')
         : '--';
+      const distKm = haversineKm(ref.lat, ref.lon, q.lat, q.lon).toFixed(0);
+      const refLabel = activeNearPoint ? 'Konumunuza' : 'Anıtkabir’e';
       const detailLink = q.url
         ? `<div class="mt-2 pt-1.5 border-t border-stone-200"><a href="${escapeHtml(q.url)}" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-orange-600 underline">USGS Raporunu Aç &rarr;</a></div>`
         : '';
 
       marker.bindPopup(
-        `<div class="text-xs space-y-1 min-w-[180px]">
-          <div class="font-bold text-stone-900 text-sm">M ${q.mag.toFixed(1)} — ${escapeHtml(style.label)}</div>
+        `<div class="text-xs space-y-1 min-w-[190px]">
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-bold text-stone-900 text-sm">M ${q.mag.toFixed(1)} — ${escapeHtml(style.label)}</span>
+            <span class="quake-source-badge ${q.source === 'Kandilli' ? 'quake-source-kandilli' : 'quake-source-usgs'}">${escapeHtml(q.source)}</span>
+          </div>
           <div class="text-stone-700 font-medium">${escapeHtml(q.place)}</div>
-          <div class="text-stone-500">Derinlik: ${q.depthKm.toFixed(1)} km</div>
+          <div class="text-stone-500">Derinlik: ${q.depthKm.toFixed(1)} km · ${escapeHtml(refLabel)} ${escapeHtml(distKm)} km</div>
           <div class="text-stone-500">${escapeHtml(localDate)}</div>
           ${detailLink}
         </div>`
@@ -308,22 +461,28 @@
       return;
     }
 
+    const ref = getActiveReferencePoint();
+
     listEl.innerHTML = list
-      .slice(0, 80)
+      .slice(0, 100)
       .map((q) => {
         const style = getMagStyle(q.mag);
-        const distNote = activeNearPoint
-          ? ` · ${haversineKm(activeNearPoint.lat, activeNearPoint.lon, q.lat, q.lon).toFixed(0)} km`
-          : '';
+        const distKm = haversineKm(ref.lat, ref.lon, q.lat, q.lon).toFixed(0);
+        const srcClass = q.source === 'Kandilli' ? 'quake-source-kandilli' : 'quake-source-usgs';
         return `
           <div class="quake-item-card flex items-start gap-3" onclick="window.focusQuakeOnMap('${escapeHtml(q.id)}')">
             <span class="quake-mag-badge ${style.badge} shrink-0">${q.mag.toFixed(1)}</span>
             <div class="min-w-0 flex-1">
-              <div class="text-xs font-semibold text-mistral-ink truncate">${escapeHtml(q.place)}</div>
+              <div class="flex items-center justify-between gap-1.5">
+                <span class="text-xs font-semibold text-mistral-ink truncate">${escapeHtml(q.place)}</span>
+                <span class="quake-source-badge ${srcClass} shrink-0">${escapeHtml(q.source)}</span>
+              </div>
               <div class="text-[11px] text-mistral-slate mt-0.5 flex flex-wrap items-center gap-1.5">
                 <span>${escapeHtml(formatRelativeTime(q.time))}</span>
                 <span>•</span>
-                <span>${q.depthKm.toFixed(1)} km derinlik${escapeHtml(distNote)}</span>
+                <span>${q.depthKm.toFixed(1)} km</span>
+                <span>•</span>
+                <span>${escapeHtml(distKm)} km uzaklık</span>
               </div>
             </div>
           </div>
@@ -342,17 +501,17 @@
 
   function onFilterChange() {
     activeNearPoint = null;
-    if (userLocationLayer) userLocationLayer.clearLayers();
+    renderReferenceMarker();
     fetchQuakes();
   }
 
   function focusPreset(regionKey) {
     activeNearPoint = null;
-    if (userLocationLayer) userLocationLayer.clearLayers();
     const regionSel = document.getElementById('filter-region');
     const minMagSel = document.getElementById('filter-minmag');
     if (regionSel) regionSel.value = regionKey;
     if (minMagSel && regionKey === 'global') minMagSel.value = '4.0';
+    renderReferenceMarker();
     fetchQuakes();
   }
 
@@ -368,19 +527,8 @@
           lat: pos.coords.latitude,
           lon: pos.coords.longitude,
         };
-        if (map && userLocationLayer) {
-          userLocationLayer.clearLayers();
-          L.circleMarker([activeNearPoint.lat, activeNearPoint.lon], {
-            radius: 7,
-            color: '#1d4ed8',
-            weight: 2,
-            fillColor: '#3b82f6',
-            fillOpacity: 0.9,
-          })
-            .bindPopup('<div class="text-xs font-semibold">Konumunuz (250 km tarama)</div>')
-            .addTo(userLocationLayer);
-          map.setView([activeNearPoint.lat, activeNearPoint.lon], 7);
-        }
+        renderReferenceMarker();
+        if (map) map.setView([activeNearPoint.lat, activeNearPoint.lon], 7);
         fetchQuakes();
       },
       () => {
@@ -418,13 +566,15 @@
   }
 
   async function saveCurrentWatchRegion() {
+    const source = (document.getElementById('filter-source') && document.getElementById('filter-source').value) || 'combined';
     const region = document.getElementById('filter-region').value || 'turkey';
-    const minMag = document.getElementById('filter-minmag').value || '2.5';
+    const minMag = document.getElementById('filter-minmag').value || '1.0';
     const days = document.getElementById('filter-days').value || '7';
     const preset = REGION_PRESETS[region] || REGION_PRESETS.turkey;
     const entry = {
-      id: `${region}_${minMag}_${days}`,
+      id: `${source}_${region}_${minMag}_${days}`,
       label: `${preset.label} · M ${minMag}+ (${days}g)`,
+      source,
       region,
       minMag,
       days,
@@ -443,9 +593,13 @@
     const item = watchedRegions.find((r) => r.id === id);
     if (!item) return;
     activeNearPoint = null;
+    if (item.source && document.getElementById('filter-source')) {
+      document.getElementById('filter-source').value = item.source;
+    }
     document.getElementById('filter-region').value = item.region;
     document.getElementById('filter-minmag').value = item.minMag;
     document.getElementById('filter-days').value = item.days;
+    renderReferenceMarker();
     fetchQuakes();
   }
 
