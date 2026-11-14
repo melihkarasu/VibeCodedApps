@@ -119,7 +119,7 @@ function checkSecurityAndPrivacyGuards() {
   }
 
   // Syntax checks on key JS files
-  for (const rel of ['web/template.js', 'web/public/js/vibe-runtime.js', 'scripts/sync-skills.mjs', 'scripts/export-standalone.mjs']) {
+  for (const rel of ['web/template.js', 'web/public/js/vibe-runtime.js', 'scripts/sync-skills.mjs', 'scripts/export-standalone.mjs', 'scripts/publish.mjs']) {
     try {
       execFileSync(process.execPath, ['--check', path.join(MONOREPO_ROOT, rel)], { stdio: 'pipe' });
     } catch (err) {
