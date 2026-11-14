@@ -26,6 +26,7 @@ const APP_SVGS = {
   'hava-kalitesi': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg>',
   'sehir-bisiklet': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg>',
   'deniz-dalga': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>',
+  'deprem-radari': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h3l2.5-7 4 14 3.5-10 2 3H22"/></svg>',
   // Uzay & Bilim
   'molekul-studyosu': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="m14.5 9.5 3-3"/><path d="m6.5 17.5 3-3"/><path d="m9.5 9.5-3-3"/><path d="m14.5 14.5 3 3"/></svg>',
   'iss-takip': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 7 9 3 5 7l4 4"/><path d="m17 11 4 4-4 4-4-4"/><path d="m8 12 4 4 6-6-4-4Z"/><path d="m16 8 3-3"/><path d="M9 21a6 6 0 0 0-6-6"/></svg>',
@@ -193,6 +194,14 @@ module.exports = function(pageTemplate) {
             desc: "Open-Meteo Marine API ile Ege, Akdeniz ve Karadeniz kıyılarında canlı dalga boyu, periyot ve sörf uygunluğu.",
             url: "/deniz-dalga",
             action: "Denizi İncele"
+          },
+          {
+            id: "deprem-radari",
+            name: "Canlı Deprem Haritası & Sismik Radar",
+            icon: getAppSvg("deprem-radari", "cografya-doga"),
+            desc: "USGS canlı sismik veri akışı ve OpenStreetMap haritası ile Türkiye ve dünya genelindeki son depremler.",
+            url: "/deprem-radari",
+            action: "Haritayı Aç"
           }
         ]
       },
@@ -1353,7 +1362,7 @@ module.exports = function(pageTemplate) {
           fetchDeveloperRecommendations();
 
           document.addEventListener('click', function(e) {
-            var cardLink = e.target.closest('a[href^="/app/"], a[href^="/sudoku"], a[href^="/web-security-scanner"], a[href^="/kvkk-"], a[href^="/nobetci-"], a[href^="/ilac-"], a[href^="/kas-"], a[href^="/qr-"], a[href^="/doviz-"], a[href^="/lezzet-"], a[href^="/sozden-"], a[href^="/kultur-"], a[href^="/dizi-"], a[href^="/sanat-"], a[href^="/tatil-"], a[href^="/karbon-"], a[href^="/tarim-"], a[href^="/klasik-"], a[href^="/kuresel-"], a[href^="/oyun-"], a[href^="/sizinti-"], a[href^="/dns-"], a[href^="/github-"], a[href^="/doga-"], a[href^="/molekul-"], a[href^="/iss-"], a[href^="/cografya-"], a[href^="/hava-"], a[href^="/kripto-"], a[href^="/ip-"], a[href^="/gida-"], a[href^="/dunya-"], a[href^="/sehir-"], a[href^="/renk-"], a[href^="/sayilar-"], a[href^="/evcil-"], a[href^="/deniz-"], a[href^="/unesco-"], a[href^="/sesli-"], a[href^="/nobel-"], a[href^="/gitar-"], a[href^="/siir-"], a[href^="/http-"], a[href^="/dso-"], a[href^="/klinik-"]');
+            var cardLink = e.target.closest('a[href^="/app/"], a[href^="/sudoku"], a[href^="/web-security-scanner"], a[href^="/kvkk-"], a[href^="/nobetci-"], a[href^="/ilac-"], a[href^="/kas-"], a[href^="/qr-"], a[href^="/doviz-"], a[href^="/lezzet-"], a[href^="/sozden-"], a[href^="/kultur-"], a[href^="/dizi-"], a[href^="/sanat-"], a[href^="/tatil-"], a[href^="/karbon-"], a[href^="/tarim-"], a[href^="/klasik-"], a[href^="/kuresel-"], a[href^="/oyun-"], a[href^="/sizinti-"], a[href^="/dns-"], a[href^="/github-"], a[href^="/doga-"], a[href^="/molekul-"], a[href^="/iss-"], a[href^="/cografya-"], a[href^="/hava-"], a[href^="/kripto-"], a[href^="/ip-"], a[href^="/gida-"], a[href^="/dunya-"], a[href^="/sehir-"], a[href^="/renk-"], a[href^="/sayilar-"], a[href^="/evcil-"], a[href^="/deniz-"], a[href^="/deprem-"], a[href^="/unesco-"], a[href^="/sesli-"], a[href^="/nobel-"], a[href^="/gitar-"], a[href^="/siir-"], a[href^="/http-"], a[href^="/dso-"], a[href^="/klinik-"]');
             if (cardLink && !cardLink.getAttribute('href').includes('/auth')) {
               var user = getVitrinUser();
               if (!user) {

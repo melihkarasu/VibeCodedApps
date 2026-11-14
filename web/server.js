@@ -74,6 +74,7 @@ const routeMap = [
   { paths: ['/sayilar-atlasi', '/app/sayilar-atlasi'], route: './routes/sayilar' },
   { paths: ['/evcil-rehber', '/app/evcil-rehber'], route: './routes/evcil' },
   { paths: ['/deniz-dalga', '/app/deniz-dalga'], route: './routes/deniz' },
+  { paths: ['/deprem-radari', '/app/deprem-radari'], route: './routes/deprem' },
   { paths: ['/unesco-miras', '/app/unesco-miras'], route: './routes/unesco' },
   { paths: ['/sesli-kitap', '/app/sesli-kitap'], route: './routes/seslikitap' },
   { paths: ['/nobel-arsivi', '/app/nobel-arsivi'], route: './routes/nobel' },

@@ -96,6 +96,14 @@
     "exportable": true
   },
   {
+    "id": "deprem-radari",
+    "name": "Canlı Deprem Haritası & Sismik Radar",
+    "routeFile": "web/routes/deprem.js",
+    "publicDir": "web/public/apps/deprem",
+    "standaloneDir": "deprem-radari",
+    "exportable": true
+  },
+  {
     "id": "molekul-studyosu",
     "name": "3D Molekül Stüdyosu",
     "routeFile": "web/routes/molekul.js",
