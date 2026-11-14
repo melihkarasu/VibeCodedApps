@@ -562,5 +562,41 @@
     "desc": "Pasif HTTP güvenlik başlıkları (CSP, HSTS, X-Frame), DoH DNS, SAST ve aktif zafiyet denetimi.",
     "url": "https://github.com/melihkarasu/web-security-scanner",
     "action": "GitHub Reposunu Aç"
+  },
+  {
+    "id": "gorsel-boyutlandirici",
+    "name": "Görsel Kırpma & Boyutlandırma Stüdyosu",
+    "routeFile": "web/routes/gorsel.js",
+    "publicDir": "web/public/apps/gorsel",
+    "standaloneDir": "gorsel-boyutlandirici",
+    "exportable": true,
+    "categoryId": "web-araclari",
+    "desc": "CropDen API ile 14 sosyal medya platformu ve biyometrik/vesikalık ölçülerde safe-zone rehberli görsel kırpma.",
+    "url": "/gorsel-boyutlandirici",
+    "action": "Görsel Düzenle"
+  },
+  {
+    "id": "dosya-donusturucu",
+    "name": "Evrensel Dosya & Format Dönüştürücü",
+    "routeFile": "web/routes/donusturucu.js",
+    "publicDir": "web/public/apps/donusturucu",
+    "standaloneDir": "dosya-donusturucu",
+    "exportable": true,
+    "categoryId": "web-araclari",
+    "desc": "CleverUtils API ve tarayıcı içi motorla görsel (PNG, WEBP, JPG) ve yapısal veri (JSON, CSV, XML, MD) dönüştürücü.",
+    "url": "/dosya-donusturucu",
+    "action": "Dosya Dönüştür"
+  },
+  {
+    "id": "barkod-studyosu",
+    "name": "Vektörel Barkod & Etiket Stüdyosu",
+    "routeFile": "web/routes/barkod.js",
+    "publicDir": "web/public/apps/barkod",
+    "standaloneDir": "barkod-studyosu",
+    "exportable": true,
+    "categoryId": "web-araclari",
+    "desc": "Orca Scan Barcode API ile Code 128, EAN-13, UPC-A, Data Matrix ve PDF417 formatlarında vektörel SVG barkod üretici.",
+    "url": "/barkod-studyosu",
+    "action": "Barkod Üret"
   }
 ]

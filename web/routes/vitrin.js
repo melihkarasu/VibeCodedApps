@@ -69,7 +69,10 @@ const APP_SVGS = {
   'renk-studyosu': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z"/><path d="m5 2 5 5"/><path d="M2 13h15"/><path d="M22 20a2 2 0 1 1-4 0c0-1.6 1.7-2.4 2-4 .3 1.6 2 2.4 2 4Z"/></svg>',
   'http-status': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>',
   // Web Araçları
-  'qr-studio': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>'
+  'qr-studio': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+  'gorsel-boyutlandirici': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>',
+  'dosya-donusturucu': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="m9 15 2 2 4-4"/></svg>',
+  'barkod-studyosu': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5v14"/><path d="M8 5v14"/><path d="M12 5v14"/><path d="M17 5v14"/><path d="M21 5v14"/></svg>'
 };
 
 const DEFAULT_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>';
@@ -547,6 +550,30 @@ module.exports = function(pageTemplate) {
             desc: "Vektörel, logolu, gradyan renkli ve çok formatlı (URL, Wi-Fi, vCard) profesyonel QR üretici.",
             url: "/qr-studio",
             action: "Stüdyoyu Başlat"
+          },
+          {
+            id: "gorsel-boyutlandirici",
+            name: "Görsel Kırpma & Boyutlandırma Stüdyosu",
+            icon: getAppSvg("gorsel-boyutlandirici", "web-araclari"),
+            desc: "CropDen API ile 14 sosyal medya platformu ve biyometrik/vesikalık ölçülerde safe-zone rehberli görsel kırpma.",
+            url: "/gorsel-boyutlandirici",
+            action: "Görsel Düzenle"
+          },
+          {
+            id: "dosya-donusturucu",
+            name: "Evrensel Dosya & Format Dönüştürücü",
+            icon: getAppSvg("dosya-donusturucu", "web-araclari"),
+            desc: "CleverUtils API ve tarayıcı içi motorla görsel (PNG, WEBP, JPG) ve yapısal veri (JSON, CSV, XML, MD) dönüştürücü.",
+            url: "/dosya-donusturucu",
+            action: "Dosya Dönüştür"
+          },
+          {
+            id: "barkod-studyosu",
+            name: "Vektörel Barkod & Etiket Stüdyosu",
+            icon: getAppSvg("barkod-studyosu", "web-araclari"),
+            desc: "Orca Scan Barcode API ile Code 128, EAN-13, UPC-A, Data Matrix ve PDF417 formatlarında vektörel SVG barkod üretici.",
+            url: "/barkod-studyosu",
+            action: "Barkod Üret"
           }
         ]
       }
