@@ -327,6 +327,35 @@ function exportApp(entry, opts) {
     fs.writeFileSync(path.join(targetDir, 'js/app.js'), transformAppJsForStandalone(rawJs, entry.id), 'utf8');
   }
 
+  const gitignorePath = path.join(targetDir, '.gitignore');
+  if (!fs.existsSync(gitignorePath)) {
+    fs.writeFileSync(gitignorePath, '.DS_Store\nThumbs.db\n*.log\n', 'utf8');
+  }
+
+  const readmePath = path.join(targetDir, 'README.md');
+  if (!fs.existsSync(readmePath)) {
+    const desc = entry.desc || (entry.name + ' — sıfır-backend standalone web uygulaması.');
+    const readme = [
+      '# ' + entry.name + ' (Standalone Edition)',
+      '',
+      desc,
+      '',
+      '- **Canlı Demo (GitHub Pages):** https://melihkarasu.github.io/' + entry.standaloneDir + '/',
+      '- **Ana Proje (Monorepo):** [melihkarasu/VibeCodedApps](https://github.com/melihkarasu/VibeCodedApps)',
+      '',
+      '## Mimari & Gizlilik Özellikleri',
+      '- **Sıfır Backend (Zero-Backend):** Tamamen tarayıcı üzerinde çalışır; kullanıcı verileri VibeRuntime üzerinden yalnızca localStorage içinde saklanır.',
+      '- **KVKK & GDPR Uyumu:** Google Fonts CDN veya 3. taraf takip betiği içermez; tüm fontlar (vendor/fonts/*.woff2) yerel olarak paketlenmiştir.',
+      '',
+      '## Lokal Çalıştırma',
+      '```bash',
+      'npx serve .',
+      '```',
+      '',
+    ].join('\n');
+    fs.writeFileSync(readmePath, readme, 'utf8');
+  }
+
   console.log(`✅ Exported ${entry.id} -> ${targetDir}`);
   return true;
 }

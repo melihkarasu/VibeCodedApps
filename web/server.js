@@ -90,6 +90,30 @@ const routeMap = [
   { paths: ['/lezzet-atolyesi', '/app/lezzet-atolyesi'], route: './routes/lezzet' }
 ];
 
+// scripts/apps-manifest.json içindeki yeni uygulamaları otomatik olarak routeMap'e dahil et
+try {
+  const fs = require('fs');
+  const manifestPath = path.join(__dirname, '..', 'scripts', 'apps-manifest.json');
+  if (fs.existsSync(manifestPath)) {
+    const registeredRoutes = new Set(routeMap.map(r => r.route));
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    manifest.forEach(m => {
+      if (!m.routeFile) return;
+      const relRoute = './' + m.routeFile.replace(/^web\//, '').replace(/\.js$/, '');
+      if (!registeredRoutes.has(relRoute)) {
+        const cleanUrl = (m.url && m.url.startsWith('/')) ? m.url : ('/' + m.id);
+        routeMap.push({
+          paths: [cleanUrl, '/app' + cleanUrl],
+          route: relRoute
+        });
+        registeredRoutes.add(relRoute);
+      }
+    });
+  }
+} catch (err) {
+  console.warn('[Server] Manifest otomatik rota yükleme uyarısı:', err.message);
+}
+
 routeMap.forEach(item => {
   const handler = require(item.route)(pageTemplate);
   if (handler && Array.isArray(handler.stack)) {

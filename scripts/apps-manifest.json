@@ -5,7 +5,11 @@
     "routeFile": "web/routes/eczane.js",
     "publicDir": "web/public/apps/eczane",
     "standaloneDir": "nobetci-eczane",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "saglik",
+    "desc": "Türkiye genelinde 81 il ve tüm ilçelerde güncel nöbetçi eczaneler, canlı konum, en yakın 5 eczane ve tek tıkla arama/yol tarifi.",
+    "url": "/nobetci-eczane",
+    "action": "Eczaneleri Bul"
   },
   {
     "id": "ilac-rehberi",
@@ -13,7 +17,11 @@
     "routeFile": "web/routes/ilac.js",
     "publicDir": "web/public/apps/ilac",
     "standaloneDir": "ilac-rehberi",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "saglik",
+    "desc": "U.S. FDA ve resmi farmakope veri tabanı ile etken maddeler, prospektüs özeti, kullanım uyarıları ve açık bildirilmiş yan etki analitiği.",
+    "url": "/ilac-rehberi",
+    "action": "İlacı İncele"
   },
   {
     "id": "kas-anatomisi",
@@ -21,7 +29,11 @@
     "routeFile": "web/routes/egzersiz.js",
     "publicDir": "web/public/apps/egzersiz",
     "standaloneDir": "kas-anatomisi",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "saglik",
+    "desc": "workout-cool ve Wger verileriyle interaktif vücut kas haritası, hedeflenen egzersizler, doğru form rehberi ve duruş terapisi.",
+    "url": "/kas-anatomisi",
+    "action": "Anatomiyi Keşfet"
   },
   {
     "id": "klinik-arastirma",
@@ -29,7 +41,11 @@
     "routeFile": "web/routes/klinik.js",
     "publicDir": "web/public/apps/klinik",
     "standaloneDir": "klinik-arastirma",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "saglik",
+    "desc": "NIH ClinicalTrials.gov v2 API ile kanser, diyabet ve nörolojideki aktif klinik deneyler, faz aşamaları ve deneysel tedaviler.",
+    "url": "/klinik-arastirma",
+    "action": "Çalışmaları İncele"
   },
   {
     "id": "dso-saglik",
@@ -37,7 +53,11 @@
     "routeFile": "web/routes/dso.js",
     "publicDir": "web/public/apps/dso",
     "standaloneDir": "dso-saglik",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "saglik",
+    "desc": "Dünya Sağlık Örgütü resmi verileriyle Türkiye ve 190+ ülkenin beklenen yaşam süresi, aşılanma ve mortalite göstergeleri.",
+    "url": "/dso-saglik",
+    "action": "Göstergeleri İncele"
   },
   {
     "id": "tarim-hava",
@@ -45,7 +65,11 @@
     "routeFile": "web/routes/tarim.js",
     "publicDir": "web/public/apps/tarim",
     "standaloneDir": "tarim-hava",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "cografya-doga",
+    "desc": "Open-Meteo ile toprak nemi/sıcaklığı derinlikleri, don riski erken uyarı sistemi, evapotranspirasyon ve sulama tavsiyeleri.",
+    "url": "/tarim-hava",
+    "action": "Paneli Başlat"
   },
   {
     "id": "karbon-metre",
@@ -53,7 +77,11 @@
     "routeFile": "web/routes/karbon.js",
     "publicDir": "web/public/apps/karbon",
     "standaloneDir": "karbon-metre",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "cografya-doga",
+    "desc": "Web sitelerinin sayfa yükleme başına CO2 salımı, yeşil hosting doğrulaması ve gömülebilir dinamik eko-rozet.",
+    "url": "/karbon-metre",
+    "action": "Ölçümü Başlat"
   },
   {
     "id": "doga-sesleri",
@@ -61,7 +89,11 @@
     "routeFile": "web/routes/doga.js",
     "publicDir": "web/public/apps/doga",
     "standaloneDir": "doga-sesleri",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "cografya-doga",
+    "desc": "iNaturalist biyoakustik arşivi ile 500.000+ yabani kuş sesi, canlı spektrum ses dalgası ve mini tahmin testi.",
+    "url": "/doga-sesleri",
+    "action": "Sesleri Dinle"
   },
   {
     "id": "cografya-atlasi",
@@ -69,7 +101,11 @@
     "routeFile": "web/routes/atlas.js",
     "publicDir": "web/public/apps/atlas",
     "standaloneDir": "cografya-atlasi",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "cografya-doga",
+    "desc": "REST Countries API ile 250 dünya ülkesinin bayrakları, başkentleri, nüfusu, dilleri ve sınır komşuları.",
+    "url": "/cografya-atlasi",
+    "action": "Atlası İncele"
   },
   {
     "id": "hava-kalitesi",
@@ -77,7 +113,11 @@
     "routeFile": "web/routes/havakalite.js",
     "publicDir": "web/public/apps/havakalite",
     "standaloneDir": "hava-kalitesi",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "cografya-doga",
+    "desc": "Dünya şehirlerinin canlı PM2.5, PM10, NO2 kirlilik seviyeleri, Avrupa AQI endeksi ve sağlık tavsiyeleri.",
+    "url": "/hava-kalitesi",
+    "action": "Havayı Ölç"
   },
   {
     "id": "sehir-bisiklet",
@@ -85,7 +125,11 @@
     "routeFile": "web/routes/bisiklet.js",
     "publicDir": "web/public/apps/bisiklet",
     "standaloneDir": "sehir-bisiklet",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "cografya-doga",
+    "desc": "CityBikes API ile 400+ dünya metropolünde canlı bisiklet durakları, boş bisiklet ve park yuvası haritası.",
+    "url": "/sehir-bisiklet",
+    "action": "Durakları Gör"
   },
   {
     "id": "deniz-dalga",
@@ -93,7 +137,11 @@
     "routeFile": "web/routes/deniz.js",
     "publicDir": "web/public/apps/deniz",
     "standaloneDir": "deniz-dalga",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "cografya-doga",
+    "desc": "Open-Meteo Marine API ile Ege, Akdeniz ve Karadeniz kıyılarında canlı dalga boyu, periyot ve sörf uygunluğu.",
+    "url": "/deniz-dalga",
+    "action": "Denizi İncele"
   },
   {
     "id": "deprem-radari",
@@ -101,7 +149,11 @@
     "routeFile": "web/routes/deprem.js",
     "publicDir": "web/public/apps/deprem",
     "standaloneDir": "deprem-radari",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "cografya-doga",
+    "desc": "USGS canlı sismik veri akışı ve OpenStreetMap haritası ile Türkiye ve dünya genelindeki son depremler.",
+    "url": "/deprem-radari",
+    "action": "Haritayı Aç"
   },
   {
     "id": "molekul-studyosu",
@@ -109,7 +161,11 @@
     "routeFile": "web/routes/molekul.js",
     "publicDir": "web/public/apps/molekul",
     "standaloneDir": "molekul-studyosu",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "uzay-bilim",
+    "desc": "PubChem 3D Conformer ve 3Dmol.js WebGL motoruyla kimyasalların ve ilaçların 3D atomik modellemesi.",
+    "url": "/molekul-studyosu",
+    "action": "Stüdyoyu Başlat"
   },
   {
     "id": "sayilar-atlasi",
@@ -117,7 +173,11 @@
     "routeFile": "web/routes/sayilar.js",
     "publicDir": "web/public/apps/sayilar",
     "standaloneDir": "sayilar-atlasi",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "uzay-bilim",
+    "desc": "Numbers motoru ile sayıların asallık, Fibonacci, bölen analizi, ikili kodları ve tarihteki gizemli gerçekleri.",
+    "url": "/sayilar-atlasi",
+    "action": "Sayıyı Keşfet"
   },
   {
     "id": "sanat-galerisi",
@@ -125,7 +185,11 @@
     "routeFile": "web/routes/sanat.js",
     "publicDir": "web/public/apps/sanat",
     "standaloneDir": "sanat-galerisi",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "sanat-tarih-edebiyat",
+    "desc": "The Met Museum dijital arşivi ile usta ressamlar, derin yakınlaştırma (deep zoom) ve kişisel sanat sergisi.",
+    "url": "/sanat-galerisi",
+    "action": "Galeriyi Gez"
   },
   {
     "id": "klasik-kutuphane",
@@ -133,7 +197,11 @@
     "routeFile": "web/routes/kutuphane.js",
     "publicDir": "web/public/apps/kutuphane",
     "standaloneDir": "klasik-kutuphane",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "sanat-tarih-edebiyat",
+    "desc": "Project Gutenberg ile 70.000+ dünya klasiği, tarayıcı içi e-kitap okuyucu, yer imleri ve kişisel kitaplık.",
+    "url": "/klasik-kutuphane",
+    "action": "Okumaya Başla"
   },
   {
     "id": "tatil-takvimi",
@@ -141,7 +209,11 @@
     "routeFile": "web/routes/tatil.js",
     "publicDir": "web/public/apps/tatil",
     "standaloneDir": "tatil-takvimi",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "sanat-tarih-edebiyat",
+    "desc": "100+ ülkenin resmi tatilleri, eşzamanlı çoklu ülke karşılaştırması, akıllı köprü izin fırsatları ve iCal desteği.",
+    "url": "/tatil-takvimi",
+    "action": "Takvimi Aç"
   },
   {
     "id": "sesli-kitap",
@@ -149,7 +221,11 @@
     "routeFile": "web/routes/seslikitap.js",
     "publicDir": "web/public/apps/seslikitap",
     "standaloneDir": "sesli-kitap",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "sanat-tarih-edebiyat",
+    "desc": "LibriVox açık kamu malı arşivi ile dünya edebiyatı klasiklerinin seslendirilmiş kayıtları ve ses çaları.",
+    "url": "/sesli-kitap",
+    "action": "Kitap Dinle"
   },
   {
     "id": "siir-antolojisi",
@@ -157,7 +233,11 @@
     "routeFile": "web/routes/siir.js",
     "publicDir": "web/public/apps/siir",
     "standaloneDir": "siir-antolojisi",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "sanat-tarih-edebiyat",
+    "desc": "PoetryDB açık arşivi ile Shakespeare, Poe, Dickinson ve usta şairlerin 3.000+ eseri ve tipografik okuyucu.",
+    "url": "/siir-antolojisi",
+    "action": "Şiirleri Oku"
   },
   {
     "id": "kultur-arena",
@@ -165,7 +245,11 @@
     "routeFile": "web/routes/kultur.js",
     "publicDir": "web/public/apps/kultur",
     "standaloneDir": "kultur-arena",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "oyun",
+    "desc": "Solo yarışma, 1v1 canlı düello odaları, başarımlar, XP seviyeleri ve detaylı karşılaşma geçmişi.",
+    "url": "/kultur-arena",
+    "action": "Arenaya Gir"
   },
   {
     "id": "oyun-radar",
@@ -173,7 +257,11 @@
     "routeFile": "web/routes/oyun.js",
     "publicDir": "web/public/apps/oyun",
     "standaloneDir": "oyun-radar",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "oyun",
+    "desc": "CheapShark & GamerPower ile anlık büyük indirimler, %100 ücretsiz kalıcı hediyeler ve istek listesi.",
+    "url": "/oyun-radar",
+    "action": "Fırsatları Yakala"
   },
   {
     "id": "oyun-arsivi",
@@ -181,7 +269,11 @@
     "routeFile": "web/routes/oyunlib.js",
     "publicDir": "web/public/apps/oyunlib",
     "standaloneDir": "oyun-arsivi",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "oyun",
+    "desc": "FreeToGame ve açık oyun veritabanı ile PC ve tarayıcı tabanlı yüzlerce oyun, tür filtreleri ve detaylar.",
+    "url": "/oyun-arsivi",
+    "action": "Oyunları Keşfet"
   },
   {
     "id": "oyun-rekorlari",
@@ -189,7 +281,11 @@
     "routeFile": "web/routes/speedrun.js",
     "publicDir": "web/public/apps/speedrun",
     "standaloneDir": "oyun-rekorlari",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "oyun",
+    "desc": "Speedrun.com açık veritabanı ile popüler video oyunlarının dünya rekoru bitirme süreleri ve liderleri.",
+    "url": "/oyun-rekorlari",
+    "action": "Rekorları Gör"
   },
   {
     "id": "dizi-rehberi",
@@ -197,7 +293,11 @@
     "routeFile": "web/routes/dizi.js",
     "publicDir": "web/public/apps/dizi",
     "standaloneDir": "dizi-rehberi",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "populer-kultur",
+    "desc": "IMDb & TVmaze ile bölüm bazlı sezon takibi, izleme ajandası ve IMDb linkiyle özel yapım ekleme.",
+    "url": "/dizi-rehberi",
+    "action": "Rehberi Başlat"
   },
   {
     "id": "sozden-sarkiya",
@@ -205,7 +305,11 @@
     "routeFile": "web/routes/muzik.js",
     "publicDir": "web/public/apps/muzik",
     "standaloneDir": "sozden-sarkiya",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "populer-kultur",
+    "desc": "LRCLIB & iTunes ile aklınızda kalan sözlerden şarkı tespiti, tam şarkı sözleri ve 30 saniyelik ses önizlemesi.",
+    "url": "/sozden-sarkiya",
+    "action": "Dedektifi Başlat"
   },
   {
     "id": "lezzet-atolyesi",
@@ -213,7 +317,11 @@
     "routeFile": "web/routes/lezzet.js",
     "publicDir": "web/public/apps/lezzet",
     "standaloneDir": "lezzet-atolyesi",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "populer-kultur",
+    "desc": "TheMealDB, Forkify ve TheCocktailDB ile mutfak & miksoloji barı, malzeme arama ve tarif defteri.",
+    "url": "/lezzet-atolyesi",
+    "action": "Atölyeyi Başlat"
   },
   {
     "id": "gida-alerji",
@@ -221,7 +329,11 @@
     "routeFile": "web/routes/gida.js",
     "publicDir": "web/public/apps/gida",
     "standaloneDir": "gida-alerji",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "populer-kultur",
+    "desc": "Open Food Facts ile barkod tarama, Nutri-Score, besin değerleri ve kişisel alerji uyarısı.",
+    "url": "/gida-alerji",
+    "action": "Ürünü İncele"
   },
   {
     "id": "dunya-radyo",
@@ -229,7 +341,11 @@
     "routeFile": "web/routes/radyo.js",
     "publicDir": "web/public/apps/radyo",
     "standaloneDir": "dunya-radyo",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "populer-kultur",
+    "desc": "Radio Browser API ile 30.000+ küresel canlı radyo yayını, ülke ve müzik türü filtreleri ve Web Audio çaları.",
+    "url": "/dunya-radyo",
+    "action": "Radyoyu Dinle"
   },
   {
     "id": "evcil-rehber",
@@ -237,7 +353,11 @@
     "routeFile": "web/routes/evcil.js",
     "publicDir": "web/public/apps/evcil",
     "standaloneDir": "evcil-rehber",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "populer-kultur",
+    "desc": "TheCatAPI & Dog CEO ile 150+ kedi ve köpek ırkı, mizaç analizi, yaşam süresi ve çocuk dostluğu rehberi.",
+    "url": "/evcil-rehber",
+    "action": "Irkları Keşfet"
   },
   {
     "id": "gitar-akor",
@@ -245,7 +365,11 @@
     "routeFile": "web/routes/akor.js",
     "publicDir": "web/public/apps/akor",
     "standaloneDir": "gitar-akor",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "populer-kultur",
+    "desc": "Gitar akor şemaları, parmak basış rehberi, canlı transpoze (ton değiştirici) ve otomatik sayfa kaydırma.",
+    "url": "/gitar-akor",
+    "action": "Stüdyoyu Başlat"
   },
   {
     "id": "doviz-cevirici",
@@ -253,7 +377,11 @@
     "routeFile": "web/routes/doviz.js",
     "publicDir": "web/public/apps/doviz",
     "standaloneDir": "doviz-cevirici",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "finans-piyasa",
+    "desc": "Frankfurter & ECB resmi kurları ile 30+ para birimi, anlık çapraz kur çevirisi, Chart.js trend grafikleri ve getiri analizi.",
+    "url": "/doviz-cevirici",
+    "action": "Çeviriciyi Başlat"
   },
   {
     "id": "kuresel-gostergeler",
@@ -261,7 +389,11 @@
     "routeFile": "web/routes/refah.js",
     "publicDir": "web/public/apps/refah",
     "standaloneDir": "kuresel-gostergeler",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "finans-piyasa",
+    "desc": "World Bank resmi verileriyle son 30 yıllık GSYİH, ömür, enflasyon, enerji ve refah endeksi analizi.",
+    "url": "/kuresel-gostergeler",
+    "action": "Göstergeleri İncele"
   },
   {
     "id": "kripto-trend",
@@ -269,7 +401,11 @@
     "routeFile": "web/routes/kripto.js",
     "publicDir": "web/public/apps/kripto",
     "standaloneDir": "kripto-trend",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "finans-piyasa",
+    "desc": "CoinGecko API ile anlık kripto para fiyatları, 24 saatlik değişimler, trend tokenlar ve dönüştürücü.",
+    "url": "/kripto-trend",
+    "action": "Piyasayı İzle"
   },
   {
     "id": "dns-kontrol",
@@ -277,7 +413,11 @@
     "routeFile": "web/routes/dns.js",
     "publicDir": "web/public/apps/dns",
     "standaloneDir": "dns-kontrol",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "gelistirici-araclari",
+    "desc": "Cloudflare & Google DoH ile anlık A, MX, TXT, NS kayıtları, küresel yayılım, SPF/DMARC ve gecikme testi.",
+    "url": "/dns-kontrol",
+    "action": "Kayıtları Çözümle"
   },
   {
     "id": "sizinti-kontrol",
@@ -285,7 +425,11 @@
     "routeFile": "web/routes/sizinti.js",
     "publicDir": "web/public/apps/sizinti",
     "standaloneDir": "sizinti-kontrol",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "gelistirici-araclari",
+    "desc": "HaveIBeenPwned k-Anonymity (SHA-1) protokolü ile sıfır bilgi garantili şifre sızıntı denetimi ve entropi analizi.",
+    "url": "/sizinti-kontrol",
+    "action": "Güvenliği Test Et"
   },
   {
     "id": "ip-konum",
@@ -293,7 +437,11 @@
     "routeFile": "web/routes/ipgeo.js",
     "publicDir": "web/public/apps/ipgeo",
     "standaloneDir": "ip-konum",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "gelistirici-araclari",
+    "desc": "ip-api ve SSRF korumalı altyapıyla IP lokasyonu, İnternet Servis Sağlayıcı (ISP), ASN ve harita koordinatları.",
+    "url": "/ip-konum",
+    "action": "Konumu Bul"
   },
   {
     "id": "renk-studyosu",
@@ -301,7 +449,11 @@
     "routeFile": "web/routes/renk.js",
     "publicDir": "web/public/apps/renk",
     "standaloneDir": "renk-studyosu",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "gelistirici-araclari",
+    "desc": "The Color API ile analog, komplementer renk şemaları, WCAG erişilebilirlik kontrast analizi ve CSS dışa aktarımı.",
+    "url": "/renk-studyosu",
+    "action": "Palet Üret"
   },
   {
     "id": "http-status",
@@ -309,7 +461,11 @@
     "routeFile": "web/routes/httpstatus.js",
     "publicDir": "web/public/apps/httpstatus",
     "standaloneDir": "http-status",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "gelistirici-araclari",
+    "desc": "1xx-5xx HTTP durum kodları referansı, çözüm rehberi, cURL örnekleri ve canlı donanım/GPU parmak izi analizi.",
+    "url": "/http-status",
+    "action": "Teşhisi Aç"
   },
   {
     "id": "qr-studio",
@@ -317,7 +473,11 @@
     "routeFile": "web/routes/qr.js",
     "publicDir": "web/public/apps/qr",
     "standaloneDir": "qr-studio",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "web-araclari",
+    "desc": "Vektörel, logolu, gradyan renkli ve çok formatlı (URL, Wi-Fi, vCard) profesyonel QR üretici.",
+    "url": "/qr-studio",
+    "action": "Stüdyoyu Başlat"
   },
   {
     "id": "github-profil",
@@ -325,7 +485,11 @@
     "routeFile": "web/routes/github.js",
     "publicDir": "web/public/apps/github",
     "standaloneDir": "github-profil",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "gelistirici-araclari",
+    "desc": "Repo yıldızları, dil dağılımı, geliştirici kıdemi ve profillere gömülebilir dinamik SVG kartı üretimi.",
+    "url": "/github-analitik",
+    "action": "Profili İncele"
   },
   {
     "id": "iss-radar",
@@ -333,7 +497,11 @@
     "routeFile": "web/routes/iss.js",
     "publicDir": "web/public/apps/iss",
     "standaloneDir": "iss-radar",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "uzay-bilim",
+    "desc": "Uluslararası Uzay İstasyonu'nun (ISS) anlık enlem, boylam, 27.600 km/s yörünge hızı ve canlı haritası.",
+    "url": "/iss-takip",
+    "action": "İstasyonu Takip Et"
   },
   {
     "id": "nobel-arsivi",
@@ -341,7 +509,11 @@
     "routeFile": "web/routes/nobel.js",
     "publicDir": "web/public/apps/nobel",
     "standaloneDir": "nobel-arsivi",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "uzay-bilim",
+    "desc": "Nobel Vakfı resmi API'si ile 1901'den günümüze bilim insanları, çığır açan keşifler ve edebiyat ödülleri.",
+    "url": "/nobel-arsivi",
+    "action": "Arşivi İncele"
   },
   {
     "id": "unesco-atlas",
@@ -349,7 +521,11 @@
     "routeFile": "web/routes/unesco.js",
     "publicDir": "web/public/apps/unesco",
     "standaloneDir": "unesco-atlas",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "sanat-tarih-edebiyat",
+    "desc": "Göbeklitepe'den Machu Picchu'ya dünya mirası alanları, fotoğrafları, kabul yılları ve harita konumları.",
+    "url": "/unesco-miras",
+    "action": "Mirasları Keşfet"
   },
   {
     "id": "sudoku-arena",
@@ -357,7 +533,11 @@
     "routeFile": "web/routes/sudoku.js",
     "publicDir": "web/public/apps/sudoku",
     "standaloneDir": "sudoku-arena",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "oyun",
+    "desc": "Deterministik tohum motoru, Günün Sudokusu ortak yarışması, süreli liderlik tablosu ve not modu.",
+    "url": "/sudoku",
+    "action": "Bulmacayı Çöz"
   },
   {
     "id": "kvkk-gdpr-scanner",
@@ -365,7 +545,11 @@
     "routeFile": "web/routes/kvkk-gdpr-scanner.js",
     "publicDir": "web/public/apps/kvkk-gdpr-scanner",
     "standaloneDir": "kvkk-gdpr-scanner",
-    "exportable": true
+    "exportable": true,
+    "categoryId": "gelistirici-araclari",
+    "desc": "Proje klasörü, GitHub repo, SQL/form kodu ve canlı URL üzerinde 2026 ceza matrisi ve Gemini / Vertex AI destekli KVKK & GDPR ihlal tarayıcısı.",
+    "url": "/kvkk-gdpr-scanner",
+    "action": "Tarayıcıyı Başlat"
   },
   {
     "id": "web-security-scanner",
@@ -373,6 +557,10 @@
     "routeFile": "web/routes/web-security-scanner.js",
     "publicDir": "web/public/apps/web-security-scanner",
     "standaloneDir": "web-security-scanner",
-    "exportable": false
+    "exportable": false,
+    "categoryId": "gelistirici-araclari",
+    "desc": "Pasif HTTP güvenlik başlıkları (CSP, HSTS, X-Frame), DoH DNS, SAST ve aktif zafiyet denetimi.",
+    "url": "https://github.com/melihkarasu/web-security-scanner",
+    "action": "GitHub Reposunu Aç"
   }
 ]

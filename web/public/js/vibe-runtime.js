@@ -1,5 +1,5 @@
 /**
- * VibeRuntime — Monorepo & Standalone Ortam Adaptörü
+ * VibeRuntime — Monorepo & Standalone Ortam Adaptörü (v1.2.0)
  *
  * Tek kaynaklı (Single Source of Truth) mikro uygulamaların hem VibeCodedApps monoreposunda
  * (Supabase OAuth + PostgreSQL /api/user-data) hem de tamamen bağımsız GitHub Pages / lokal
@@ -21,9 +21,89 @@
 
   var isStandalone = detectStandalone();
 
+  // Standalone & Monorepo ortak <wa-icon> Custom Element desteği
+  try {
+    if (typeof customElements !== 'undefined' && !customElements.get('wa-icon')) {
+      customElements.define('wa-icon', class extends HTMLElement {
+        connectedCallback() {
+          var name = this.getAttribute('name');
+          this.style.display = 'inline-flex';
+          this.style.alignItems = 'center';
+          this.style.justifyContent = 'center';
+          this.style.lineHeight = '1';
+          if (!this.innerHTML.trim() && name && /^[a-z0-9-]+$/i.test(name)) {
+            this.innerHTML = '<i class="fa-solid fa-' + name + '"></i>';
+          }
+        }
+      });
+    }
+  } catch (_) {}
+
+  // Global Toast & Clipboard yardımcıları (Standalone modda core.js yüklü olmadığında devreye girer)
+  function showToastFallback(msg, duration) {
+    var ms = typeof duration === 'number' ? duration : 3200;
+    if (typeof document === 'undefined') return;
+    var toast = document.getElementById('global-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'global-toast';
+      toast.className = 'fixed bottom-6 right-6 py-2.5 px-4 rounded-xl bg-mistral-orange text-white font-bold text-xs shadow-lg transition-all duration-300 z-50 opacity-0 pointer-events-none translate-y-2';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = String(msg == null ? '' : msg);
+    toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
+    toast.classList.add('opacity-100', 'translate-y-0');
+
+    if (global.__vibeToastTimer) clearTimeout(global.__vibeToastTimer);
+    global.__vibeToastTimer = setTimeout(function () {
+      toast.classList.remove('opacity-100', 'translate-y-0');
+      toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-2');
+    }, ms);
+  }
+
+  function fallbackExecCopy(text, successMsg) {
+    if (typeof document === 'undefined') return;
+    var ta = document.createElement('textarea');
+    ta.value = String(text == null ? '' : text);
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      if (typeof global.showToast === 'function') global.showToast(successMsg || 'Panoya kopyalandı!');
+    } catch (_) {
+      if (typeof global.showToast === 'function') global.showToast('Kopyalama başarısız oldu.');
+    }
+    document.body.removeChild(ta);
+  }
+
+  function safeCopyFallback(text, successMsg) {
+    var msg = successMsg || 'Panoya kopyalandı!';
+    if (typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(String(text == null ? '' : text)).then(function () {
+        if (typeof global.showToast === 'function') global.showToast(msg);
+      }).catch(function () {
+        fallbackExecCopy(text, msg);
+      });
+    } else {
+      fallbackExecCopy(text, msg);
+    }
+  }
+
+  if (typeof global.showToast !== 'function') {
+    global.showToast = showToastFallback;
+  }
+  if (typeof global.copyToClipboard !== 'function') {
+    global.copyToClipboard = safeCopyFallback;
+  }
+  if (typeof global.safeCopyToClipboard !== 'function') {
+    global.safeCopyToClipboard = safeCopyFallback;
+  }
+
   function isLoggedIn() {
     if (isStandalone) return false;
-    if (typeof global.isLoggedIn === 'function') {
+    if (typeof global.isLoggedIn === 'function' && global.isLoggedIn !== isLoggedIn) {
       try { return Boolean(global.isLoggedIn()); } catch (_) {}
     }
     try { return Boolean(global.localStorage && global.localStorage.getItem('vibe_token')); } catch (_) {}
@@ -112,13 +192,15 @@
   };
 
   global.VibeRuntime = {
-    version: '1.1.0',
+    version: '1.2.0',
     mode: isStandalone ? 'standalone' : 'monorepo',
     isStandalone: isStandalone,
     isMonorepo: !isStandalone,
     isLoggedIn: isLoggedIn,
     getUser: getUser,
     getAuthHeader: getAuthHeader,
+    showToast: function (m, d) { return global.showToast(m, d); },
+    copyToClipboard: function (t, m) { return global.safeCopyToClipboard(t, m); },
     storage: storage
   };
 })(typeof window !== 'undefined' ? window : globalThis);
