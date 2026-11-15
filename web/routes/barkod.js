@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = [
-      '<link rel="stylesheet" href="/static/apps/barkod/app.css?v=20261115a" />',
-      '<script src="/static/apps/barkod/app.js?v=20261115a" defer></script>'
+      '<link rel="stylesheet" href="/static/apps/barkod/app.css?v=20261115b" />',
+      '<script src="/static/apps/barkod/app.js?v=20261115b" defer></script>'
     ].join('\n');
 
     const content = [

@@ -5,6 +5,7 @@
   const STORAGE_KEY = 'barkod_saved_items_v1';
   let savedBarcodes = [];
   let lastSvgText = '';
+  let fetchSeq = 0;
 
   const SAMPLE_BY_TYPE = {
     code128: 'VIBE-2026-TR',
@@ -34,6 +35,43 @@
     return 'https://barcode.orcascan.com/?' + params.toString();
   }
 
+  /**
+   * Orca Scan'in sunucu taraflı OCR-B fontu Latin-1 dışındaki Türkçe karakterleri (ç, ş, ğ, ı, Ç, Ş, Ğ, İ) düşürür.
+   * Bu nedenle ham barkod çubukları metinsiz çekilir ve altına tam UTF-8 / Türkçe destekli yerel SVG <text> katmanı eklenir.
+   */
+  function injectUnicodeLabelIntoSvg(rawSvg, labelText) {
+    const cleanLabel = String(labelText || '').trim();
+    if (!cleanLabel) return rawSvg;
+
+    const wMatch = rawSvg.match(/width="(\d+(?:\.\d+)?)"/);
+    const hMatch = rawSvg.match(/height="(\d+(?:\.\d+)?)"/);
+    const origW = wMatch ? Number(wMatch[1]) : 1054;
+    const origH = hMatch ? Number(hMatch[1]) : 484;
+    const extraH = 96;
+    const newH = origH + extraH;
+    const fontSize = Math.max(22, Math.min(44, Math.round(origW / Math.max(16, cleanLabel.length * 0.92))));
+    const textY = origH + 48;
+
+    let updated = rawSvg
+      .replace(/width="\d+(?:\.\d+)?"/, 'width="' + origW + '"')
+      .replace(/height="\d+(?:\.\d+)?"/, 'height="' + newH + '"')
+      .replace(/viewBox="0 0 \d+(?:\.\d+)? \d+(?:\.\d+)?"/, 'viewBox="0 0 ' + origW + ' ' + newH + '"')
+      .replace(
+        /(<svg id="__background"[^>]*height=")(\d+(?:\.\d+)?)("[^>]*>\s*<rect[^>]*height=")(\d+(?:\.\d+)?)(")/,
+        '$1' + newH + '$3' + newH + '$5'
+      );
+
+    const textNode =
+      '<text x="' + (origW / 2).toFixed(1) + '" y="' + textY + '" ' +
+      'text-anchor="middle" fill="#000000" ' +
+      'font-family="\'JetBrains Mono\', \'Inter\', system-ui, -apple-system, sans-serif" ' +
+      'font-size="' + fontSize + '" font-weight="700" letter-spacing="1.5">' +
+      escapeHtml(cleanLabel) +
+      '</text></svg>';
+
+    return updated.replace(/<\/svg>\s*$/, textNode);
+  }
+
   function onBarcodeTypeChange() {
     const t = document.getElementById('barcode-type').value || 'code128';
     document.getElementById('barcode-data').value = SAMPLE_BY_TYPE[t] || 'VIBE2026';
@@ -48,16 +86,23 @@
     const imgEl = document.getElementById('barcode-preview-img');
     if (!data) return;
 
-    const url = buildOrcaUrl(type, data, text, 'svg');
-    if (imgEl) imgEl.src = url;
+    const seq = ++fetchSeq;
+    // Barkod çubuklarını metinsiz çekip Türkçe karakter destekli vektörel <text> katmanını yerelde ekle
+    const barsOnlyUrl = buildOrcaUrl(type, data, '', 'svg');
     if (noteEl) noteEl.textContent = 'Orca Scan API · ' + type.toUpperCase() + ' · ' + data;
 
     try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
-      if (res.ok) {
-        lastSvgText = await res.text();
+      const res = await fetch(barsOnlyUrl, { signal: AbortSignal.timeout(8000) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const rawSvg = await res.text();
+      if (seq !== fetchSeq) return;
+      lastSvgText = injectUnicodeLabelIntoSvg(rawSvg, text || data);
+      if (imgEl) {
+        imgEl.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(lastSvgText);
       }
-    } catch (_) {}
+    } catch (_) {
+      if (imgEl) imgEl.src = buildOrcaUrl(type, data, text, 'svg');
+    }
   }
 
   function downloadBarcodeSvg() {
