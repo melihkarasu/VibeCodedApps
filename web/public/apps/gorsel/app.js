@@ -94,13 +94,13 @@
               width: Number(s.width) || 1080,
               height: Number(s.height) || 1080,
               ratio: String(s.ratio || ''),
-              note: { en: String((s.note && s.note.en) || 'CropDen doğrulanmış platform ölçüsü.') },
+              note: { en: String((s.note && s.note.en) || 'Standart platform ölçüsü.') },
               safeZone: s.safeZone || null,
             })),
           }));
         const passportGroup = FALLBACK_GROUPS.find((g) => g.id === 'passport');
         catalogGroups = passportGroup ? [...mapped, passportGroup] : mapped;
-        setStatus('CropDen Canlı (' + catalogGroups.length + ' grup)', false);
+        setStatus('Şablonlar Güncel (' + catalogGroups.length + ' grup)', false);
       }
     } catch (_) {
       setStatus('Yerleşik Şablonlar Aktif', false);
@@ -174,7 +174,7 @@
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 68px Inter, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('MK STUDIO · CROPDEN', 800, 540);
+    ctx.fillText('MK STUDIO · GÖRSEL STÜDYOSU', 800, 540);
     ctx.font = '500 36px Inter, sans-serif';
     ctx.fillText('Güvenli Alan (Safe-Zone) Test Görseli', 800, 615);
     const img = new Image();

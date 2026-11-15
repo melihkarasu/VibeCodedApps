@@ -555,7 +555,7 @@ module.exports = function(pageTemplate) {
             id: "gorsel-boyutlandirici",
             name: "Görsel Kırpma & Boyutlandırma Stüdyosu",
             icon: getAppSvg("gorsel-boyutlandirici", "web-araclari"),
-            desc: "CropDen API ile 14 sosyal medya platformu ve biyometrik/vesikalık ölçülerde safe-zone rehberli görsel kırpma.",
+            desc: "14 sosyal medya platformu ve biyometrik/vesikalık fotoğraf ölçülerinde safe-zone rehberli görsel kırpma ve dönüştürme.",
             url: "/gorsel-boyutlandirici",
             action: "Görsel Düzenle"
           },

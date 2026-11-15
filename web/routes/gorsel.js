@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = [
-      '<link rel="stylesheet" href="/static/apps/gorsel/app.css?v=20261115a" />',
-      '<script src="/static/apps/gorsel/app.js?v=20261115a" defer></script>'
+      '<link rel="stylesheet" href="/static/apps/gorsel/app.css?v=20261115b" />',
+      '<script src="/static/apps/gorsel/app.js?v=20261115b" defer></script>'
     ].join('\n');
 
     const content = [
@@ -22,12 +22,12 @@ module.exports = function(pageTemplate) {
       '      </span>',
       '      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">Görsel Kırpma &amp; Boyutlandırma Stüdyosu</h1>',
       '    </div>',
-      '    <p class="text-mistral-slate text-sm mt-0.5 font-normal">CropDen API standartlarıyla 14 sosyal medya platformu ve biyometrik/vesikalık ölçülerde güvenli alan (safe-zone) rehberli görsel kırpma ve dönüştürme.</p>',
+      '    <p class="text-mistral-slate text-sm mt-0.5 font-normal">14 sosyal medya platformu ve biyometrik/vesikalık fotoğraf ölçülerinde güvenli alan (safe-zone) rehberli görsel kırpma ve dönüştürme.</p>',
       '  </div>',
       '  <div class="flex flex-wrap items-center gap-2 shrink-0">',
       '    <span id="cropden-status-badge" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-slate">',
       '      <span class="w-2 h-2 rounded-full bg-emerald-500"></span>',
-      '      <span id="cropden-status-text">CropDen API Hazır</span>',
+      '      <span id="cropden-status-text">Şablonlar Hazır</span>',
       '    </span>',
       '  </div>',
       '</div>',
@@ -49,7 +49,7 @@ module.exports = function(pageTemplate) {
 
       '    <section class="vibe-panel-card p-5 space-y-3">',
       '      <div class="flex items-center justify-between">',
-      '        <h2 class="text-sm font-bold uppercase tracking-wider text-mistral-slate">2. Platform &amp; Ölçü (CropDen API)</h2>',
+      '        <h2 class="text-sm font-bold uppercase tracking-wider text-mistral-slate">2. Platform &amp; Ölçü Şablonu</h2>',
       '        <button type="button" onclick="saveCurrentPreset()" class="vibe-btn vibe-btn-xs vibe-btn-secondary cursor-pointer">',
       '          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
       '          <span>Ölçüyü Kaydet</span>',
