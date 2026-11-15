@@ -106,6 +106,60 @@ function checkSecurityAndPrivacyGuards() {
     pass('web/public/js/vibe-runtime.js tamamen bağımsız (sıfır dış origin zorunluluğu).');
   }
 
+
+  // DOM XSS Sink Guard & Modern Web Guidance Core Checks
+  const corePath = path.join(MONOREPO_ROOT, 'web/public/js/core.js');
+  const coreSrc = fs.readFileSync(corePath, 'utf8');
+  if (!coreSrc.includes('__VIBE_DOM_SINK_GUARD__') || !coreSrc.includes('window.vibeSetHTML')) {
+    fail('web/public/js/core.js içinde DOM XSS Sink Guard (__VIBE_DOM_SINK_GUARD__) veya window.vibeSetHTML eksik.');
+  } else {
+    pass('web/public/js/core.js DOM XSS Sink Guard ve Sanitizer API (vibeSetHTML) aktif.');
+  }
+
+  if (!runtimeSrc.includes('__VIBE_DOM_SINK_GUARD__') || !runtimeSrc.includes('global.vibeSetHTML')) {
+    fail('web/public/js/vibe-runtime.js içinde DOM XSS Sink Guard (__VIBE_DOM_SINK_GUARD__) veya global.vibeSetHTML eksik.');
+  } else {
+    pass('web/public/js/vibe-runtime.js DOM XSS Sink Guard ve Sanitizer API (vibeSetHTML) aktif.');
+  }
+
+  const themePath = path.join(MONOREPO_ROOT, 'web/public/css/mistral-theme.css');
+  const themeSrc = fs.readFileSync(themePath, 'utf8');
+  if (!themeSrc.includes('@view-transition') || !themeSrc.includes('@starting-style') || !themeSrc.includes('field-sizing: content')) {
+    fail('web/public/css/mistral-theme.css içinde Modern Web Guidance (View Transitions, @starting-style, field-sizing) kuralları eksik.');
+  } else {
+    pass('web/public/css/mistral-theme.css Modern Web Guidance standartları doğrulandı.');
+  }
+
+  // Static XSS pattern check across routes and apps (block document.write, eval, javascript: URLs)
+  const dangerousPatterns = [
+    { re: /\bdocument\.write\s*\(/, label: 'document.write()' },
+    { re: /\beval\s*\(/, label: 'eval()' }
+  ];
+  let dangerousFound = 0;
+  for (const dirRel of ['web/routes', 'web/public/apps']) {
+    const absDir = path.join(MONOREPO_ROOT, dirRel);
+    const stack = [absDir];
+    while (stack.length > 0) {
+      const cur = stack.pop();
+      for (const ent of fs.readdirSync(cur, { withFileTypes: true })) {
+        const fp = path.join(cur, ent.name);
+        if (ent.isDirectory()) stack.push(fp);
+        else if (ent.name.endsWith('.js')) {
+          const code = fs.readFileSync(fp, 'utf8');
+          for (const dp of dangerousPatterns) {
+            if (dp.re.test(code)) {
+              fail(`Güvensiz JS kalıbı (${dp.label}) tespit edildi: ${path.relative(MONOREPO_ROOT, fp)}`);
+              dangerousFound += 1;
+            }
+          }
+        }
+      }
+    }
+  }
+  if (dangerousFound === 0) {
+    pass('Tüm route ve mikro-uygulama JS dosyaları statik eval/document.write taramasını geçti.');
+  }
+
   const hookPath = path.join(MONOREPO_ROOT, '.githooks/pre-commit');
   if (!fs.existsSync(hookPath)) {
     fail('.githooks/pre-commit bulunamadı.');
@@ -119,7 +173,7 @@ function checkSecurityAndPrivacyGuards() {
   }
 
   // Syntax checks on key JS files
-  for (const rel of ['web/template.js', 'web/public/js/vibe-runtime.js', 'scripts/sync-skills.mjs', 'scripts/export-standalone.mjs', 'scripts/publish.mjs']) {
+  for (const rel of ['web/template.js', 'web/public/js/core.js', 'web/public/js/vibe-runtime.js', 'scripts/sync-skills.mjs', 'scripts/export-standalone.mjs', 'scripts/publish.mjs']) {
     try {
       execFileSync(process.execPath, ['--check', path.join(MONOREPO_ROOT, rel)], { stdio: 'pipe' });
     } catch (err) {

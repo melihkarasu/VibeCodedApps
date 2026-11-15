@@ -499,27 +499,53 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 7. Modern Web Guidance Phase 3 Çekirdek Yardımcıları
-// 7.1 Güvenli HTML Render (Sanitizer API setHTML + Fallback)
-window.vibeSetHTML = function(el, htmlString) {
-  if (!el) return;
+// 7.1 Güvenli HTML Escape & Render (Sanitizer API setHTML + Template Fallback)
+window.vibeEscapeHTML = function(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+};
+
+function _vibeSanitizeFragment(htmlString, options = {}) {
   const raw = String(htmlString ?? '');
-  if (typeof el.setHTML === 'function') {
-    el.setHTML(raw);
-    return;
-  }
   const tpl = document.createElement('template');
   tpl.innerHTML = raw;
   tpl.content.querySelectorAll('script, iframe, object, embed').forEach((n) => n.remove());
+  const allowUIHandlers = options.allowUIHandlers === true;
+  const safeHandlerPattern = /^[a-zA-Z0-9_$.]+\([^<>]*\);?$/;
   tpl.content.querySelectorAll('*').forEach((node) => {
     for (const attr of Array.from(node.attributes)) {
       const name = attr.name.toLowerCase();
-      const val = (attr.value || '').trim().toLowerCase();
-      if (name.startsWith('on') || ((name === 'href' || name === 'src' || name === 'xlink:href') && val.startsWith('javascript:'))) {
+      const val = (attr.value || '').trim();
+      const valLower = val.toLowerCase();
+      if ((name === 'href' || name === 'src' || name === 'xlink:href' || name === 'action' || name === 'formaction') && (valLower.startsWith('javascript:') || valLower.startsWith('data:text/html'))) {
         node.removeAttribute(attr.name);
+      } else if (name.startsWith('on')) {
+        if (!allowUIHandlers || !safeHandlerPattern.test(val) || /alert\s*\(|eval\s*\(|Function\s*\(|document\.cookie|fetch\s*\(/i.test(val)) {
+          node.removeAttribute(attr.name);
+        }
       }
     }
   });
-  el.replaceChildren(tpl.content);
+  return tpl.content;
+}
+
+window.vibeSetHTML = function(el, htmlString, options = {}) {
+  if (!el) return;
+  const raw = String(htmlString ?? '');
+  if (!options.allowUIHandlers && typeof el.setHTML === 'function') {
+    el.setHTML(raw);
+    return;
+  }
+  el.replaceChildren(_vibeSanitizeFragment(raw, options));
+};
+
+window.vibeAppendHTML = function(el, htmlString, options = {}) {
+  if (!el) return;
+  el.appendChild(_vibeSanitizeFragment(htmlString, options));
 };
 
 // 7.2 Same-Document View Transition Yardımcısı (Reduced Motion Duyarlı)
@@ -565,3 +591,61 @@ window.closeVibeDialog = function(dialogOrId, returnValue) {
     dlg.removeAttribute('open');
   }
 };
+
+  // -------------------------------------------------------------
+  // 4.5. Runtime DOM XSS Sink Guard (Element.prototype.innerHTML & Trusted Types)
+  // -------------------------------------------------------------
+  (function installDomXssSinkGuard() {
+    if (window.__VIBE_DOM_SINK_GUARD__) return;
+    window.__VIBE_DOM_SINK_GUARD__ = true;
+    try {
+      var proto = typeof Element !== 'undefined' ? Element.prototype : null;
+      var desc = proto ? Object.getOwnPropertyDescriptor(proto, 'innerHTML') : null;
+      if (desc && typeof desc.set === 'function' && typeof desc.get === 'function') {
+        var nativeSet = desc.set;
+        var nativeGet = desc.get;
+        window.vibeSanitizeHTML = function (htmlString) {
+          var raw = String(htmlString == null ? '' : htmlString);
+          if (!raw || raw.indexOf('<') === -1) return raw;
+          if (!/<\s*(?:script|iframe|object|embed)\b|on[a-z]+\s*=|javascript\s*:|data\s*:\s*text\/html/i.test(raw)) {
+            return raw;
+          }
+          var tpl = document.createElement('template');
+          nativeSet.call(tpl, raw);
+          tpl.content.querySelectorAll('script, iframe, object, embed').forEach(function (n) { n.remove(); });
+          var safeHandler = /^[a-zA-Z0-9_$.]+\([^<>]*\);?$/;
+          tpl.content.querySelectorAll('*').forEach(function (node) {
+            var attrs = Array.prototype.slice.call(node.attributes || []);
+            for (var i = 0; i < attrs.length; i += 1) {
+              var name = attrs[i].name.toLowerCase();
+              var val = (attrs[i].value || '').trim();
+              var valLower = val.toLowerCase();
+              if ((name === 'href' || name === 'src' || name === 'xlink:href' || name === 'action' || name === 'formaction') && (valLower.indexOf('javascript:') === 0 || valLower.indexOf('data:text/html') === 0)) {
+                node.removeAttribute(attrs[i].name);
+              } else if (name.indexOf('on') === 0) {
+                if (!safeHandler.test(val) || /alert\s*\(|eval\s*\(|Function\s*\(|document\.cookie|fetch\s*\(|XMLHttpRequest/i.test(val)) {
+                  node.removeAttribute(attrs[i].name);
+                }
+              }
+            }
+          });
+          return nativeGet.call(tpl);
+        };
+        Object.defineProperty(proto, 'innerHTML', {
+          configurable: true,
+          enumerable: desc.enumerable,
+          get: function () {
+            return nativeGet.call(this);
+          },
+          set: function (val) {
+            if (this && this.tagName === 'TEMPLATE') {
+              nativeSet.call(this, val);
+              return;
+            }
+            nativeSet.call(this, window.vibeSanitizeHTML(val));
+          }
+        });
+      }
+    } catch (_) {}
+  })();
+
