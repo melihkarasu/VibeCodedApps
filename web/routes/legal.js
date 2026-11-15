@@ -53,7 +53,7 @@ module.exports = function registerLegalRoutes(app, pageTemplate) {
           <h2 class="text-lg sm:text-xl font-bold font-editorial text-mistral-ink">2. Rıza Aranmaksızın Yasal Sebeplerle İşlenen Veriler (Bilgilendirme Kapsamı)</h2>
           <p class="text-xs sm:text-sm text-mistral-slate">Aşağıdaki veri kategorileri Platform'un güvenli ve işlevsel biçimde çalışması için kanuni istisnalar kapsamında işlenmektedir:</p>
           <div class="overflow-x-auto border border-mistral-beige-deep rounded-xl">
-            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <table class="w-full min-w-[640px] text-left border-collapse text-xs sm:text-sm vibe-responsive-table">
               <thead>
                 <tr class="bg-mistral-cream border-b border-mistral-beige-deep text-mistral-ink font-semibold">
                   <th class="p-3.5">Süreç / Veri Kategorisi</th>
@@ -90,7 +90,7 @@ module.exports = function registerLegalRoutes(app, pageTemplate) {
           <h2 class="text-lg sm:text-xl font-bold font-editorial text-mistral-ink">3. Açık Rızanıza Tabi Olarak İşlenen Veriler (Varsayılan Kapalı / Opt-In)</h2>
           <p class="text-xs sm:text-sm text-mistral-slate">Aşağıdaki süreçler sayfa ilk açıldığında <strong>varsayılan olarak kapalıdır</strong>; yalnızca Çerez Tercih Paneli veya tarayıcı izin penceresi üzerinden açık onay vermeniz halinde devreye girer ve dilediğiniz an geri çekilebilir:</p>
           <div class="overflow-x-auto border border-mistral-beige-deep rounded-xl">
-            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <table class="w-full min-w-[640px] text-left border-collapse text-xs sm:text-sm vibe-responsive-table">
               <thead>
                 <tr class="bg-mistral-cream border-b border-mistral-beige-deep text-mistral-ink font-semibold">
                   <th class="p-3.5">Süreç / Veri Kategorisi</th>
@@ -279,7 +279,7 @@ module.exports = function registerLegalRoutes(app, pageTemplate) {
             <p class="text-xs sm:text-sm text-mistral-slate mt-1">Platform'un temel işlevlerini yerine getirebilmesi, SSO oturumunuzun korunması ve çerez tercihlerinizin hatırlanması için KVKK m.5/2-c ve m.5/2-f kapsamında kullanılır:</p>
           </div>
           <div class="overflow-x-auto border border-mistral-beige-deep rounded-xl">
-            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <table class="w-full min-w-[640px] text-left border-collapse text-xs sm:text-sm vibe-responsive-table">
               <thead>
                 <tr class="bg-mistral-cream border-b border-mistral-beige-deep text-mistral-ink font-semibold">
                   <th class="p-3.5">Ad / Anahtar</th>
@@ -329,7 +329,7 @@ module.exports = function registerLegalRoutes(app, pageTemplate) {
             <p class="text-xs sm:text-sm text-mistral-slate mt-1">Yalnızca açık rıza vermeniz halinde yüklenir; rıza verilmediğinde ilgili dış betikler tarayıcınıza çağrılmaz:</p>
           </div>
           <div class="overflow-x-auto border border-mistral-beige-deep rounded-xl">
-            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <table class="w-full min-w-[640px] text-left border-collapse text-xs sm:text-sm vibe-responsive-table">
               <thead>
                 <tr class="bg-mistral-cream border-b border-mistral-beige-deep text-mistral-ink font-semibold">
                   <th class="p-3.5">Çerez Adı</th>
