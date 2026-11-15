@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = [
-      '<link rel="stylesheet" href="/static/apps/barkod/app.css?v=20261115b" />',
-      '<script src="/static/apps/barkod/app.js?v=20261115b" defer></script>'
+      '<link rel="stylesheet" href="/static/apps/barkod/app.css?v=20261115c" />',
+      '<script src="/static/apps/barkod/app.js?v=20261115c" defer></script>'
     ].join('\n');
 
     const content = [
@@ -22,7 +22,7 @@ module.exports = function(pageTemplate) {
       '      </span>',
       '      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">Vektörel Barkod &amp; Etiket Stüdyosu</h1>',
       '    </div>',
-      '    <p class="text-mistral-slate text-sm mt-0.5 font-normal">Orca Scan Barcode API ile Code 128, EAN-13, UPC-A, Data Matrix ve PDF417 formatlarında vektörel SVG ve PNG barkod üretici.</p>',
+      '    <p class="text-mistral-slate text-sm mt-0.5 font-normal">Code 128, EAN-13, UPC-A, Code 39, Data Matrix ve PDF417 formatlarında tam Türkçe karakter destekli vektörel SVG barkod ve ürün etiketi üretici.</p>',
       '  </div>',
       '</div>',
 
@@ -68,18 +68,19 @@ module.exports = function(pageTemplate) {
 
       '  <div class="lg:col-span-7 space-y-5">',
       '    <section class="vibe-panel-card p-6 space-y-4">',
-      '      <div class="flex items-center justify-between border-b border-mistral-hairline pb-3">',
-      '        <div>',
-      '          <h2 class="text-base font-bold font-editorial text-mistral-ink">Canlı Vektörel Barkod Önizlemesi</h2>',
-      '          <p id="barcode-status-note" class="text-xs text-mistral-slate">Orca Scan SVG Motoru</p>',
-      '        </div>',
-      '        <div class="flex gap-2">',
-      '          <button type="button" onclick="downloadBarcodeSvg()" class="vibe-btn vibe-btn-xs vibe-btn-primary cursor-pointer">SVG İndir</button>',
-      '          <button type="button" onclick="copyBarcodeUrl()" class="vibe-btn vibe-btn-xs vibe-btn-secondary cursor-pointer">API Linkini Kopyala</button>',
-      '        </div>',
+      '      <div class="border-b border-mistral-hairline pb-3 space-y-1">',
+      '        <h2 class="text-base sm:text-lg font-bold font-editorial text-mistral-ink whitespace-nowrap overflow-hidden text-ellipsis">Canlı Vektörel Barkod Önizlemesi</h2>',
+      '        <div id="barcode-standard-label" class="text-xs font-semibold text-mistral-slate">Standart: CODE128</div>',
+      '        <div id="barcode-value-label" class="text-xs font-mono font-bold text-mistral-orange break-all">VIBE-2026-TR</div>',
       '      </div>',
       '      <div id="barcode-preview-box" class="flex flex-col items-center justify-center p-8 rounded-2xl bg-white border border-mistral-hairline min-h-[260px]">',
-      '        <img id="barcode-preview-img" alt="Barkod Önizlemesi" class="max-w-full max-h-[180px] object-contain" />',
+      '        <img id="barcode-preview-img" alt="Barkod Önizlemesi" class="max-w-full max-h-[190px] object-contain" />',
+      '      </div>',
+      '      <div class="pt-1 flex justify-center">',
+      '        <button type="button" onclick="downloadBarcodeSvg()" class="vibe-btn vibe-btn-sm vibe-btn-primary w-full sm:w-auto px-6 justify-center cursor-pointer">',
+      '          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+      '          <span>SVG İndir</span>',
+      '        </button>',
       '      </div>',
       '    </section>',
       '  </div>',

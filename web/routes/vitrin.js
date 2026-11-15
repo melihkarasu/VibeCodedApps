@@ -571,7 +571,7 @@ module.exports = function(pageTemplate) {
             id: "barkod-studyosu",
             name: "Vektörel Barkod & Etiket Stüdyosu",
             icon: getAppSvg("barkod-studyosu", "web-araclari"),
-            desc: "Orca Scan Barcode API ile Code 128, EAN-13, UPC-A, Data Matrix ve PDF417 formatlarında vektörel SVG barkod üretici.",
+            desc: "Code 128, EAN-13, UPC-A, Code 39, Data Matrix ve PDF417 formatlarında tam Türkçe karakter destekli vektörel SVG barkod üretici.",
             url: "/barkod-studyosu",
             action: "Barkod Üret"
           }

@@ -16,6 +16,15 @@
     pdf417: 'VIBE CODED APPS BARCODE STUDIO',
   };
 
+  const TYPE_LABELS = {
+    code128: 'Code 128 (Lojistik & Seri No Standardı)',
+    ean13: 'EAN-13 (Perakende Ürün Barkodu)',
+    upca: 'UPC-A (Ürün Kodu)',
+    code39: 'Code 39 (Endüstriyel Envanter)',
+    datamatrix: 'Data Matrix (2D Kare Kodu)',
+    pdf417: 'PDF417 (2D Kimlik & Kart Kodu)',
+  };
+
   function escapeHtml(str) {
     return String(str == null ? '' : str)
       .replace(/&/g, '&amp;')
@@ -25,7 +34,7 @@
       .replace(/'/g, '&#39;');
   }
 
-  function buildOrcaUrl(type, data, text, fmt) {
+  function buildBarcodeServiceUrl(type, data, text, fmt) {
     const params = new URLSearchParams({
       type: type || 'code128',
       data: data || 'VIBE2026',
@@ -35,10 +44,6 @@
     return 'https://barcode.orcascan.com/?' + params.toString();
   }
 
-  /**
-   * Orca Scan'in sunucu taraflı OCR-B fontu Latin-1 dışındaki Türkçe karakterleri (ç, ş, ğ, ı, Ç, Ş, Ğ, İ) düşürür.
-   * Bu nedenle ham barkod çubukları metinsiz çekilir ve altına tam UTF-8 / Türkçe destekli yerel SVG <text> katmanı eklenir.
-   */
   function injectUnicodeLabelIntoSvg(rawSvg, labelText) {
     const cleanLabel = String(labelText || '').trim();
     if (!cleanLabel) return rawSvg;
@@ -82,14 +87,15 @@
     const type = document.getElementById('barcode-type').value || 'code128';
     const data = (document.getElementById('barcode-data').value || '').trim();
     const text = (document.getElementById('barcode-text').value || '').trim();
-    const noteEl = document.getElementById('barcode-status-note');
+    const stdEl = document.getElementById('barcode-standard-label');
+    const valEl = document.getElementById('barcode-value-label');
     const imgEl = document.getElementById('barcode-preview-img');
     if (!data) return;
 
     const seq = ++fetchSeq;
-    // Barkod çubuklarını metinsiz çekip Türkçe karakter destekli vektörel <text> katmanını yerelde ekle
-    const barsOnlyUrl = buildOrcaUrl(type, data, '', 'svg');
-    if (noteEl) noteEl.textContent = 'Orca Scan API · ' + type.toUpperCase() + ' · ' + data;
+    const barsOnlyUrl = buildBarcodeServiceUrl(type, data, '', 'svg');
+    if (stdEl) stdEl.textContent = 'Barkod Standardı: ' + (TYPE_LABELS[type] || type.toUpperCase());
+    if (valEl) valEl.textContent = (text ? (data + ' · ' + text) : data);
 
     try {
       const res = await fetch(barsOnlyUrl, { signal: AbortSignal.timeout(8000) });
@@ -101,7 +107,7 @@
         imgEl.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(lastSvgText);
       }
     } catch (_) {
-      if (imgEl) imgEl.src = buildOrcaUrl(type, data, text, 'svg');
+      if (imgEl) imgEl.src = buildBarcodeServiceUrl(type, data, text, 'svg');
     }
   }
 
@@ -109,7 +115,7 @@
     const type = document.getElementById('barcode-type').value || 'code128';
     const data = (document.getElementById('barcode-data').value || 'barkod').trim();
     if (!lastSvgText) {
-      window.open(buildOrcaUrl(type, data, '', 'svg'), '_blank', 'noopener,noreferrer');
+      window.open(buildBarcodeServiceUrl(type, data, '', 'svg'), '_blank', 'noopener,noreferrer');
       return;
     }
     const blob = new Blob([lastSvgText], { type: 'image/svg+xml;charset=utf-8' });
@@ -122,14 +128,6 @@
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 2000);
     if (window.showToast) window.showToast('Vektörel SVG barkod indirildi.');
-  }
-
-  function copyBarcodeUrl() {
-    const type = document.getElementById('barcode-type').value || 'code128';
-    const data = (document.getElementById('barcode-data').value || '').trim();
-    const text = (document.getElementById('barcode-text').value || '').trim();
-    const url = buildOrcaUrl(type, data, text, 'svg');
-    if (window.safeCopyToClipboard) window.safeCopyToClipboard(url, 'Barkod SVG adresi kopyalandı!');
   }
 
   async function loadSavedBarcodes() {
@@ -187,7 +185,6 @@
   window.onBarcodeTypeChange = onBarcodeTypeChange;
   window.generateBarcode = generateBarcode;
   window.downloadBarcodeSvg = downloadBarcodeSvg;
-  window.copyBarcodeUrl = copyBarcodeUrl;
   window.saveCurrentBarcode = saveCurrentBarcode;
   window.applySavedBarcode = applySavedBarcode;
   window.clearSavedBarcodes = clearSavedBarcodes;
