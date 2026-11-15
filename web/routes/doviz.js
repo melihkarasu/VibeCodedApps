@@ -231,13 +231,13 @@ module.exports = function(pageTemplate) {
             </p>
 
             <div class="overflow-x-auto max-h-[380px] overflow-y-auto pr-1">
-              <table class="w-full text-left text-xs">
+              <table class="w-full text-left text-xs vibe-responsive-table">
                 <thead>
                   <tr class="border-b border-mistral-hairline text-mistral-slate">
-                    <th class="pb-2 font-medium">Döviz</th>
-                    <th class="pb-2 font-medium text-right" id="th-col-1">Döviz Alış</th>
-                    <th class="pb-2 font-medium text-right" id="th-col-2">Döviz Satış</th>
-                    <th class="pb-2 font-medium text-right" id="th-col-3">Efektif Satış</th>
+                    <th scope="col" class="pb-2 font-medium">Döviz</th>
+                    <th scope="col" class="pb-2 font-medium text-right" id="th-col-1">Döviz Alış</th>
+                    <th scope="col" class="pb-2 font-medium text-right" id="th-col-2">Döviz Satış</th>
+                    <th scope="col" class="pb-2 font-medium text-right" id="th-col-3">Efektif Satış</th>
                   </tr>
                 </thead>
                 <tbody id="multi-rates-tbody" class="divide-y divide-slate-700/50">

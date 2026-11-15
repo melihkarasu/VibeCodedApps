@@ -140,7 +140,7 @@ module.exports = function(pageTemplate) {
           <div id="pane-text" class="tab-pane hidden space-y-3">
             <div>
               <label class="block text-xs font-medium text-mistral-slate mb-1">Serbest Metin / Not</label>
-              <textarea id="input-text" rows="3" placeholder="QR koda dönüştürmek istediğiniz herhangi bir metni buraya yazın..." oninput="updateQR()" class="w-full px-4 py-2.5 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink"></textarea>
+              <textarea id="input-text" rows="3" placeholder="QR koda dönüştürmek istediğiniz herhangi bir metni buraya yazın..." oninput="updateQR()" class="w-full px-4 py-2.5 rounded-xl bg-white border border-mistral-hairline text-sm text-mistral-ink vibe-autogrow"></textarea>
             </div>
           </div>
 
@@ -156,7 +156,7 @@ module.exports = function(pageTemplate) {
             </div>
             <div>
               <label class="block text-xs font-medium text-mistral-slate mb-1">Mesaj Gövdesi</label>
-              <textarea id="mail-body" rows="2" placeholder="E-posta içeriği..." oninput="updateQR()" class="w-full px-4 py-2 rounded-xl bg-white border border-mistral-hairline text-sm"></textarea>
+              <textarea id="mail-body" rows="2" placeholder="E-posta içeriği..." oninput="updateQR()" class="w-full px-4 py-2 rounded-xl bg-white border border-mistral-hairline text-sm vibe-autogrow"></textarea>
             </div>
           </div>
 

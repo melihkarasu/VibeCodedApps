@@ -713,7 +713,7 @@ module.exports = function(pageTemplate) {
           <div id="acc-body-${c.id}" class="accordion-content px-4 sm:px-6 pb-5 sm:pb-6 pt-4 border-t border-stone-200/70 bg-[#F8FAFC] block">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
               ${c.apps.map(app => `
-                <div data-app-id="${app.id}" data-search="${(app.name + ' ' + app.desc + ' ' + c.title).toLowerCase().replace(/"/g, '')}" class="vibe-app-card group">
+                <article data-app-id="${app.id}" data-search="${(app.name + ' ' + app.desc + ' ' + c.title).toLowerCase().replace(/"/g, '')}" style="view-transition-name: card-${app.id}; view-transition-class: vibe-vt-card;" class="vibe-app-card vibe-cq-container group">
                   <div>
                     <!-- Üst Satır: Vektörel İkon + İsim + Favori Butonu -->
                     <div class="flex items-start justify-between gap-3 mb-3">
@@ -744,7 +744,7 @@ module.exports = function(pageTemplate) {
                     <span>${app.action}</span>
                     ${arrowRightSvg}
                   </a>
-                </div>
+                </article>
               `).join('')}
             </div>
           </div>
@@ -961,7 +961,7 @@ module.exports = function(pageTemplate) {
       </div>
 
       <!-- Vitrin Auth Required Modal -->
-      <div id="vitrin-auth-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4" style="display: none;">
+      <dialog id="vitrin-auth-modal" closedby="any" class="vibe-dialog m-auto bg-transparent p-4 max-w-md w-full border-0 outline-none">
         <div class="bg-white max-w-md w-full rounded-2xl border border-mistral-hairline p-6 sm:p-8 shadow-2xl text-center">
           <div class="w-14 h-14 rounded-2xl bg-orange-50 border border-orange-200 text-mistral-orange flex items-center justify-center mb-4 mx-auto shadow-xs">
             <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -1300,7 +1300,7 @@ module.exports = function(pageTemplate) {
             grid.innerHTML = favs.map(id => {
               const app = APPS_DATA[id];
               if (!app) return '';
-              return '<div class="vibe-app-card group">' +
+              return '<article class="vibe-app-card vibe-cq-container group">' +
                 '<div>' +
                   '<div class="flex items-start justify-between gap-3 mb-3">' +
                     '<div class="flex items-center gap-3 min-w-0">' +
@@ -1315,7 +1315,7 @@ module.exports = function(pageTemplate) {
                   '<span>' + app.action + '</span>' +
                   ARROW_RIGHT_SVG +
                 '</a>' +
-              '</div>';
+              '</article>';
             }).join('');
           }
         }
@@ -1415,15 +1415,19 @@ module.exports = function(pageTemplate) {
           if (gh) gh.href = '/auth/v1/authorize?provider=github&redirect_to=' + encodedTarget;
           if (gg) gg.href = '/auth/v1/authorize?provider=google&redirect_to=' + encodedTarget;
 
-          if (modal) {
-            modal.style.display = 'flex';
+          if (window.openVibeDialog) {
+            window.openVibeDialog(modal);
+          } else if (modal && typeof modal.showModal === 'function') {
+            modal.showModal();
           }
         }
 
         function closeVitrinAuthModal() {
           var modal = document.getElementById('vitrin-auth-modal');
-          if (modal) {
-            modal.style.display = 'none';
+          if (window.closeVibeDialog) {
+            window.closeVibeDialog(modal);
+          } else if (modal && typeof modal.close === 'function') {
+            modal.close();
           }
         }
 

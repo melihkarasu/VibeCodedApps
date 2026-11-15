@@ -4,6 +4,10 @@
 ============================================================= */
 
 :root {
+  color-scheme: light;
+  interpolate-size: allow-keywords;
+  --vibe-orange-oklch: oklch(64.5% 0.215 36.8);
+  --vibe-amber-oklch: oklch(76.9% 0.188 70.08);
   --vibe-ink: #0F172A;
   --vibe-ink-deep: #1F1F1F;
   --vibe-slate: #475569;
@@ -686,4 +690,197 @@ ins.adsbygoogle[data-ad-status="unfilled"] {
   border: none !important;
   overflow: hidden !important;
   pointer-events: none !important;
+}
+
+/* =============================================================
+   9. MODERN WEB GUIDANCE — PHASE 3 CORE ENHANCEMENTS
+   View Transitions • Top-Layer Dialog/Popover • Intrinsic Sizing
+   Component Light/Dark Isolation • User-Invalid & Field-Sizing
+============================================================= */
+
+/* 9.1 Cross-Document & Same-Document View Transitions */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 220ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 9.2 Component-Specific Light/Dark Theme Isolation (Terminal / Code Blocks) */
+.vibe-dark-surface,
+pre.vibe-code-dark,
+.terminal-output {
+  color-scheme: dark;
+  background-color: light-dark(#FFFDF9, #0F172A);
+  color: light-dark(#0F172A, #F8FAFC);
+  border: 1px solid light-dark(#E2E8F0, #334155);
+}
+
+/* 9.3 Top-Layer Native <dialog> & [popover] Entry/Exit Animations */
+dialog.vibe-dialog,
+[popover].vibe-popover,
+#global-toast[popover] {
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+  transition:
+    opacity 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    overlay 0.24s allow-discrete,
+    display 0.24s allow-discrete;
+  transition-behavior: allow-discrete;
+}
+
+dialog.vibe-dialog:open,
+dialog.vibe-dialog[open],
+[popover].vibe-popover:popover-open,
+#global-toast[popover]:popover-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@starting-style {
+  dialog.vibe-dialog:open,
+  dialog.vibe-dialog[open],
+  [popover].vibe-popover:popover-open,
+  #global-toast[popover]:popover-open {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
+dialog.vibe-dialog::backdrop {
+  background-color: rgb(15 23 42 / 0%);
+  backdrop-filter: blur(0px);
+  transition:
+    background-color 0.24s ease,
+    backdrop-filter 0.24s ease,
+    overlay 0.24s allow-discrete,
+    display 0.24s allow-discrete;
+  transition-behavior: allow-discrete;
+}
+
+dialog.vibe-dialog:open::backdrop,
+dialog.vibe-dialog[open]::backdrop {
+  background-color: rgb(15 23 42 / 45%);
+  backdrop-filter: blur(4px);
+}
+
+@starting-style {
+  dialog.vibe-dialog:open::backdrop,
+  dialog.vibe-dialog[open]::backdrop {
+    background-color: rgb(15 23 42 / 0%);
+    backdrop-filter: blur(0px);
+  }
+}
+
+/* Prevent underlying page scroll when modal dialog is open */
+html:has(dialog:modal) {
+  overflow: clip;
+}
+
+/* 9.4 Intrinsic Size Animations for <details> Accordions */
+details {
+  overflow: clip;
+}
+
+details::details-content {
+  block-size: 0;
+  opacity: 0;
+  transition:
+    block-size 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.22s ease,
+    content-visibility 0.28s allow-discrete;
+  transition-behavior: allow-discrete;
+}
+
+details[open]::details-content {
+  block-size: auto;
+  opacity: 1;
+}
+
+/* 9.5 Auto-Growing Form Controls & Post-Interaction Validation */
+textarea.vibe-autogrow,
+input.vibe-autogrow,
+select.vibe-autogrow,
+textarea:not([rows]) {
+  field-sizing: content;
+  min-inline-size: 8rem;
+  max-inline-size: 100%;
+}
+
+textarea.vibe-autogrow,
+textarea:not([rows]) {
+  min-block-size: 3.25rem;
+  max-block-size: 24rem;
+}
+
+input:user-invalid,
+select:user-invalid,
+textarea:user-invalid {
+  border-color: var(--vibe-danger, #E11D48) !important;
+  box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.14) !important;
+}
+
+input:user-valid:not(:placeholder-shown),
+select:user-valid,
+textarea:user-valid:not(:placeholder-shown) {
+  border-color: var(--vibe-success, #059669);
+}
+
+.vibe-field-error {
+  display: none;
+  color: var(--vibe-danger, #E11D48);
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+:has(> :user-invalid) > .vibe-field-error,
+:user-invalid + .vibe-field-error {
+  display: block;
+}
+
+/* 9.6 Container Query Card Primitives */
+.vibe-cq-container {
+  container-type: inline-size;
+}
+
+/* =============================================================
+   10. MODERN WEB GUIDANCE — PHASE 4 VITRIN & MICRO-APP STANDARDS
+   Content-Visibility • Group View Transitions • Responsive Tables
+============================================================= */
+
+/* 10.1 Offscreen Category Rendering Optimization */
+.vibe-accordion-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 340px;
+}
+
+/* 10.2 Group Element View Transitions for App Cards */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(.vibe-vt-card) {
+    animation-duration: 240ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+/* 10.3 Sticky & Responsive Data Tables */
+.vibe-responsive-table-wrap {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 0.75rem;
+}
+
+table.vibe-responsive-table thead th,
+.overflow-x-auto table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--vibe-surface, #FFFFFF);
 }

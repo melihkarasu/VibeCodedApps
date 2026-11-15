@@ -51,14 +51,14 @@ module.exports = function(pageTemplate) {
             </div>
 
             <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs">
+              <table class="w-full text-left text-xs vibe-responsive-table">
                 <thead>
                   <tr class="text-mistral-stone border-b border-mistral-hairline">
-                    <th class="pb-2.5 font-medium"># Varlık</th>
-                    <th class="pb-2.5 font-medium text-right">Fiyat (USD)</th>
-                    <th class="pb-2.5 font-medium text-right">24s Değişim</th>
-                    <th class="pb-2.5 font-medium text-right hidden sm:table-cell">24s En Yüksek</th>
-                    <th class="pb-2.5 font-medium text-right">Piyasa Değeri</th>
+                    <th scope="col" class="pb-2.5 font-medium"># Varlık</th>
+                    <th scope="col" class="pb-2.5 font-medium text-right">Fiyat (USD)</th>
+                    <th scope="col" class="pb-2.5 font-medium text-right">24s Değişim</th>
+                    <th scope="col" class="pb-2.5 font-medium text-right hidden sm:table-cell">24s En Yüksek</th>
+                    <th scope="col" class="pb-2.5 font-medium text-right">Piyasa Değeri</th>
                   </tr>
                 </thead>
                 <tbody id="market-tbody" class="divide-y divide-mistral-hairline-soft font-medium">

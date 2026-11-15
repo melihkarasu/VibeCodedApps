@@ -207,11 +207,11 @@ module.exports = function(pageTemplate) {
             <div class="space-y-3">
               <div>
                 <label class="block text-[11px] text-mistral-slate uppercase font-mono mb-1">HTML Gömme Kodu (Siteler için):</label>
-                <textarea id="badge-snippet-html" rows="2" readonly class="w-full p-2.5 rounded-xl bg-mistral-canvas border border-mistral-hairline text-xs font-mono text-lime-400 focus:outline-none"></textarea>
+                <textarea id="badge-snippet-html" rows="2" readonly class="w-full p-2.5 rounded-xl bg-mistral-canvas border border-mistral-hairline text-xs font-mono text-lime-400 focus:outline-none vibe-autogrow"></textarea>
               </div>
               <div>
                 <label class="block text-[11px] text-mistral-slate uppercase font-mono mb-1">Markdown Kodu (GitHub README için):</label>
-                <textarea id="badge-snippet-md" rows="2" readonly class="w-full p-2.5 rounded-xl bg-mistral-canvas border border-mistral-hairline text-xs font-mono text-mistral-slate focus:outline-none"></textarea>
+                <textarea id="badge-snippet-md" rows="2" readonly class="w-full p-2.5 rounded-xl bg-mistral-canvas border border-mistral-hairline text-xs font-mono text-mistral-slate focus:outline-none vibe-autogrow"></textarea>
               </div>
             </div>
           </div>

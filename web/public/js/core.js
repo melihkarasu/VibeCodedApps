@@ -9,16 +9,27 @@ window.showToast = function(msg, duration = 3500) {
   if (!toast) {
     toast = document.createElement('div');
     toast.id = 'global-toast';
-    toast.className = 'fixed bottom-6 right-6 py-2.5 px-4 rounded-xl bg-mistral-orange text-white font-bold text-xs shadow-2xl transition-all duration-300 z-50 transform translate-y-0 opacity-100 flex items-center gap-2 border border-mistral-orange-deep';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
+    if (typeof HTMLElement !== 'undefined' && 'popover' in HTMLElement.prototype) {
+      toast.setAttribute('popover', 'manual');
+    }
+    toast.className = 'vibe-popover fixed bottom-6 right-6 m-0 py-2.5 px-4 rounded-xl bg-mistral-orange text-white font-bold text-xs shadow-2xl transition-all duration-300 z-50 transform translate-y-0 opacity-100 flex items-center gap-2 border border-mistral-orange-deep';
     document.body.appendChild(toast);
   }
-
-  toast.innerHTML = '<span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span> <span>' + msg + '</span>';
-  toast.classList.remove('hidden');
+  toast.innerHTML = '<span><svg class="w-4 h-4 inline-block shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span> <span id="global-toast-msg"></span>';
+  const msgEl = toast.querySelector('#global-toast-msg');
+  if (msgEl) msgEl.textContent = String(msg ?? '');
   toast.style.display = 'flex';
-
+  toast.classList.remove('hidden');
+  if (typeof toast.showPopover === 'function') {
+    try { toast.showPopover(); } catch (e) {}
+  }
   if (window._toastTimeout) clearTimeout(window._toastTimeout);
   window._toastTimeout = setTimeout(() => {
+    if (typeof toast.hidePopover === 'function') {
+      try { toast.hidePopover(); } catch (e) {}
+    }
     toast.style.display = 'none';
     toast.classList.add('hidden');
   }, duration);
@@ -486,3 +497,71 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   } catch(e) {}
 });
+
+// 7. Modern Web Guidance Phase 3 Çekirdek Yardımcıları
+// 7.1 Güvenli HTML Render (Sanitizer API setHTML + Fallback)
+window.vibeSetHTML = function(el, htmlString) {
+  if (!el) return;
+  const raw = String(htmlString ?? '');
+  if (typeof el.setHTML === 'function') {
+    el.setHTML(raw);
+    return;
+  }
+  const tpl = document.createElement('template');
+  tpl.innerHTML = raw;
+  tpl.content.querySelectorAll('script, iframe, object, embed').forEach((n) => n.remove());
+  tpl.content.querySelectorAll('*').forEach((node) => {
+    for (const attr of Array.from(node.attributes)) {
+      const name = attr.name.toLowerCase();
+      const val = (attr.value || '').trim().toLowerCase();
+      if (name.startsWith('on') || ((name === 'href' || name === 'src' || name === 'xlink:href') && val.startsWith('javascript:'))) {
+        node.removeAttribute(attr.name);
+      }
+    }
+  });
+  el.replaceChildren(tpl.content);
+};
+
+// 7.2 Same-Document View Transition Yardımcısı (Reduced Motion Duyarlı)
+window.withViewTransition = function(updateCallback) {
+  if (typeof updateCallback !== 'function') return Promise.resolve();
+  const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReduced && typeof document.startViewTransition === 'function') {
+    return document.startViewTransition(updateCallback).finished;
+  }
+  updateCallback();
+  return Promise.resolve();
+};
+
+// 7.3 Native <dialog> Yöneticisi (closedby="any" + Light-Dismiss Fallback)
+window.openVibeDialog = function(dialogOrId, options = {}) {
+  const dlg = typeof dialogOrId === 'string' ? document.getElementById(dialogOrId) : dialogOrId;
+  if (!dlg) return null;
+  dlg.classList.add('vibe-dialog');
+  const closedByMode = options.closedBy || 'any';
+  if (!dlg.hasAttribute('closedby')) {
+    dlg.setAttribute('closedby', closedByMode);
+  }
+  if (closedByMode === 'any' && !dlg._vibeLightDismissBound && !('closedBy' in HTMLDialogElement.prototype)) {
+    dlg._vibeLightDismissBound = true;
+    dlg.addEventListener('click', (e) => {
+      if (e.target === dlg) dlg.close('backdrop');
+    });
+  }
+  if (typeof dlg.showModal === 'function' && !dlg.open) {
+    dlg.showModal();
+  } else {
+    dlg.setAttribute('open', '');
+  }
+  return dlg;
+};
+
+window.closeVibeDialog = function(dialogOrId, returnValue) {
+  const dlg = typeof dialogOrId === 'string' ? document.getElementById(dialogOrId) : dialogOrId;
+  if (!dlg) return;
+  if (typeof dlg.close === 'function' && dlg.open) {
+    dlg.close(returnValue);
+  } else {
+    dlg.removeAttribute('open');
+  }
+};

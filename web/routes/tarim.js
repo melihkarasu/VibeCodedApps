@@ -274,13 +274,13 @@ module.exports = function(pageTemplate) {
           </p>
 
           <div class="overflow-x-auto max-h-[290px] overflow-y-auto pr-1">
-            <table class="w-full text-left text-xs">
+            <table class="w-full text-left text-xs vibe-responsive-table">
               <thead>
                 <tr class="border-b border-mistral-hairline text-mistral-slate">
-                  <th class="pb-2">Tarih</th>
-                  <th class="pb-2 text-center">Gündüz/Gece</th>
-                  <th class="pb-2 text-right">Buharlaşma</th>
-                  <th class="pb-2 text-right">Yağış</th>
+                  <th scope="col" class="pb-2">Tarih</th>
+                  <th scope="col" class="pb-2 text-center">Gündüz/Gece</th>
+                  <th scope="col" class="pb-2 text-right">Buharlaşma</th>
+                  <th scope="col" class="pb-2 text-right">Yağış</th>
                 </tr>
               </thead>
               <tbody id="daily-agro-tbody" class="divide-y divide-slate-700/60 font-mono">

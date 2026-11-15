@@ -124,10 +124,10 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="overflow-x-auto max-h-[350px] overflow-y-auto pr-1">
-          <table class="w-full text-left text-xs font-mono">
+          <table class="w-full text-left text-xs font-mono vibe-responsive-table">
             <thead>
               <tr class="border-b border-mistral-hairline text-mistral-slate" id="table-header-row">
-                <th class="pb-2.5">Yıl</th>
+                <th scope="col" class="pb-2.5">Yıl</th>
                 <!-- Dinamik ülke başlıkları -->
               </tr>
             </thead>

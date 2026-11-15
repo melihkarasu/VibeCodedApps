@@ -74,7 +74,7 @@ const pageTemplate = (title, content, extraHead = '') => `
   <!-- Precompiled Tailwind CSS (Zero Runtime / No CDN Delay) -->
   <link rel="stylesheet" href="/static/css/tailwind.min.css">
   <!-- Global Mistral AI Theme (Cache Destekli Statik CSS) -->
-  <link rel="stylesheet" href="/static/css/mistral-theme.css?v=20261021c">
+  <link rel="stylesheet" href="/static/css/mistral-theme.css?v=20261115a">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <!-- Favicon: Premium Siyah Zemin Üzerinde Geometrik MK Monogramı -->
@@ -320,7 +320,7 @@ const pageTemplate = (title, content, extraHead = '') => `
     (function() {
       try {
         var p = window.location.pathname;
-        var cleanPath = p.replace(/\/+$/, '') || '/'; var isPublic = ['/', '/auth', '/app/auth', '/app', '/admin', '/app/admin', '/aydinlatma-metni', '/app/aydinlatma-metni', '/gizlilik-politikasi', '/app/gizlilik-politikasi', '/cerez-politikasi', '/app/cerez-politikasi', '/kullanim-kosullari', '/app/kullanim-kosullari'].indexOf(cleanPath) !== -1;
+        var cleanPath = p.replace(/\\/+$/, '') || '/'; var isPublic = ['/', '/auth', '/app/auth', '/app', '/admin', '/app/admin', '/aydinlatma-metni', '/app/aydinlatma-metni', '/gizlilik-politikasi', '/app/gizlilik-politikasi', '/cerez-politikasi', '/app/cerez-politikasi', '/kullanim-kosullari', '/app/kullanim-kosullari'].indexOf(cleanPath) !== -1;
         if (!isPublic) {
           var user = localStorage.getItem('vibe_user');
           if (!user) {
@@ -341,7 +341,7 @@ const pageTemplate = (title, content, extraHead = '') => `
 
   <!-- Global Core Utilities & SSO Authentication (Cache Destekli Statik JS) -->
   <script data-cfasync="false" src="/static/js/vibe-runtime.js?v=20261113a"></script>
-  <script data-cfasync="false" src="/static/js/core.js?v=20261016b"></script>
+  <script data-cfasync="false" src="/static/js/core.js?v=20261115a"></script>
   <!-- AdSense Sadece Yanlar (Side Rail) Koruması: DOM'dan silmeden (no_div hatası üretmeden) alt/üst/içerik reklamlarını gizler -->
   <script data-cfasync="false">
     (function() {

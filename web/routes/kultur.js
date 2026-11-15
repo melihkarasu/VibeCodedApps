@@ -366,14 +366,14 @@ module.exports = function(pageTemplate) {
         </div>
 
         <div class="overflow-x-auto rounded-2xl bg-white border border-mistral-hairline p-4">
-          <table class="w-full text-left text-xs">
+          <table class="w-full text-left text-xs vibe-responsive-table">
             <thead>
               <tr class="border-b border-mistral-hairline text-mistral-slate">
-                <th class="pb-3 pl-2">Sıra</th>
-                <th class="pb-3">Yarışmacı</th>
-                <th class="pb-3 text-center">Seviye</th>
-                <th class="pb-3 text-right">Oyun</th>
-                <th class="pb-3 text-right pr-2">Toplam XP</th>
+                <th scope="col" class="pb-3 pl-2">Sıra</th>
+                <th scope="col" class="pb-3">Yarışmacı</th>
+                <th scope="col" class="pb-3 text-center">Seviye</th>
+                <th scope="col" class="pb-3 text-right">Oyun</th>
+                <th scope="col" class="pb-3 text-right pr-2">Toplam XP</th>
               </tr>
             </thead>
             <tbody id="leaderboard-tbody" class="divide-y divide-slate-700/60">

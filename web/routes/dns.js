@@ -123,14 +123,14 @@ module.exports = function(pageTemplate) {
           </div>
 
           <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs font-mono">
+            <table class="w-full text-left text-xs font-mono vibe-responsive-table">
               <thead>
                 <tr class="border-b border-mistral-hairline text-mistral-slate">
-                  <th class="pb-2.5 pl-2 font-semibold">Tür</th>
-                  <th class="pb-2.5 font-semibold">Alan Adı (Host)</th>
-                  <th class="pb-2.5 font-semibold">TTL</th>
-                  <th class="pb-2.5 font-semibold">Çözümlenen Değer / Hedef (Data)</th>
-                  <th class="pb-2.5 text-right pr-2">İşlem</th>
+                  <th scope="col" class="pb-2.5 pl-2 font-semibold">Tür</th>
+                  <th scope="col" class="pb-2.5 font-semibold">Alan Adı (Host)</th>
+                  <th scope="col" class="pb-2.5 font-semibold">TTL</th>
+                  <th scope="col" class="pb-2.5 font-semibold">Çözümlenen Değer / Hedef (Data)</th>
+                  <th scope="col" class="pb-2.5 text-right pr-2">İşlem</th>
                 </tr>
               </thead>
               <tbody id="dns-records-tbody" class="divide-y divide-mistral-hairline">

@@ -176,7 +176,7 @@ module.exports = function(pageTemplate) {
                   <label class="text-[11px] text-mistral-slate uppercase font-mono font-bold">Markdown Kodu (GitHub README):</label>
                   <button onclick="copySnippet('md')" class="text-xs text-purple-400 hover:underline">Kopyala</button>
                 </div>
-                <textarea id="snippet-md" rows="2" readonly class="w-full p-2.5 rounded-xl bg-white border border-mistral-hairline text-xs font-mono text-purple-300 focus:outline-none"></textarea>
+                <textarea id="snippet-md" rows="2" readonly class="w-full p-2.5 rounded-xl bg-white border border-mistral-hairline text-xs font-mono text-purple-300 focus:outline-none vibe-autogrow"></textarea>
               </div>
 
               <div>
@@ -184,7 +184,7 @@ module.exports = function(pageTemplate) {
                   <label class="text-[11px] text-mistral-slate uppercase font-mono font-bold">HTML Gömme Kodu (Web Siteleri İçin):</label>
                   <button onclick="copySnippet('html')" class="text-xs text-purple-400 hover:underline">Kopyala</button>
                 </div>
-                <textarea id="snippet-html" rows="2" readonly class="w-full p-2.5 rounded-xl bg-white border border-mistral-hairline text-xs font-mono text-mistral-slate focus:outline-none"></textarea>
+                <textarea id="snippet-html" rows="2" readonly class="w-full p-2.5 rounded-xl bg-white border border-mistral-hairline text-xs font-mono text-mistral-slate focus:outline-none vibe-autogrow"></textarea>
               </div>
             </div>
           </div>

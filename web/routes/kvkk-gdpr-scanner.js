@@ -440,7 +440,7 @@ module.exports = function(pageTemplate) {
             </div>
           </div>
           <textarea id="code-paste-input" rows="10" placeholder="Denetlemek istediğiniz SQL şemasını, React/Next.js bileşenini, HTML sayfasını veya backend kodunu buraya yapıştırın..."
-            class="w-full p-3.5 text-xs font-mono rounded-lg border border-mistral-border bg-white text-mistral-text focus:outline-none focus:border-mistral-orange"></textarea>
+            class="w-full p-3.5 text-xs font-mono rounded-lg border border-mistral-border bg-white text-mistral-text focus:outline-none focus:border-mistral-orange vibe-autogrow"></textarea>
           <div class="flex justify-end gap-2">
             <button type="button" onclick="scanPastedCode()" class="kvkk-btn kvkk-btn-primary">
               🔍 Kodu KVKK &amp; GDPR Kurallarıyla Denetle
@@ -533,14 +533,14 @@ module.exports = function(pageTemplate) {
           </div>
 
           <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse text-xs">
+            <table class="w-full text-left border-collapse text-xs vibe-responsive-table">
               <thead>
                 <tr class="border-b border-mistral-hairline text-mistral-muted font-mono text-[11px]">
-                  <th class="py-2 pr-3">Denetim Alanı</th>
-                  <th class="py-2 px-3">Mevzuat Dayanağı</th>
-                  <th class="py-2 px-3">Durum</th>
-                  <th class="py-2 px-3">2026 Ceza Karşılığı</th>
-                  <th class="py-2 pl-3">Özet Bulgu</th>
+                  <th scope="col" class="py-2 pr-3">Denetim Alanı</th>
+                  <th scope="col" class="py-2 px-3">Mevzuat Dayanağı</th>
+                  <th scope="col" class="py-2 px-3">Durum</th>
+                  <th scope="col" class="py-2 px-3">2026 Ceza Karşılığı</th>
+                  <th scope="col" class="py-2 pl-3">Özet Bulgu</th>
                 </tr>
               </thead>
               <tbody id="domain-matrix-tbody" class="divide-y divide-mistral-hairline"></tbody>
@@ -679,7 +679,7 @@ module.exports = function(pageTemplate) {
             <input type="password" id="ai-api-key" placeholder="AIzaSy..."
               class="w-full px-3 py-2 font-mono rounded-lg border border-mistral-border bg-white text-mistral-text">
             <textarea id="ai-service-account-json" rows="4" placeholder='{"type": "service_account", "project_id": "...", "private_key": "-----BEGIN PRIVATE KEY-----...", "client_email": "..."}'
-              class="hidden w-full px-3 py-2 font-mono text-[11px] rounded-lg border border-mistral-border bg-white text-mistral-text"></textarea>
+              class="hidden w-full px-3 py-2 font-mono text-[11px] rounded-lg border border-mistral-border bg-white text-mistral-text vibe-autogrow"></textarea>
           </div>
 
           <div class="flex items-center justify-between pt-1">

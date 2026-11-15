@@ -211,7 +211,7 @@ module.exports = function(pageTemplate) {
               id="manual-headers-input" 
               rows="8" 
               placeholder="HTTP/2 200&#10;date: Wed, 09 Oct 2026 12:00:00 GMT&#10;content-type: text/html&#10;content-security-policy: default-src'self';&#10;strict-transport-security: max-age=31536000; includeSubDomains; preload&#10;x-frame-options: SAMEORIGIN&#10;x-content-type-options: nosniff"
-              class="w-full p-4 bg-stone-50 border border-stone-200 rounded-xl text-xs font-mono text-mistral-ink placeholder-stone-400 transition-all"
+              class="w-full p-4 bg-stone-50 border border-stone-200 rounded-xl text-xs font-mono text-mistral-ink placeholder-stone-400 transition-all vibe-autogrow"
             ></textarea>
           </div>
 
