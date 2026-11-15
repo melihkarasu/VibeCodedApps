@@ -1,5 +1,25 @@
 // Common page template for VibeCodedApps - Mistral AI Design System (DESIGN.md)
 // Modüler Mimari: Global stiller /static/css/mistral-theme.css ve ortak JS /static/js/core.js dosyalarına ayrıştırılmıştır.
+const fs = require('fs');
+const path = require('path');
+
+function getDynamicAppCount() {
+  try {
+    const vitrinPath = path.join(__dirname, 'routes', 'vitrin.js');
+    if (fs.existsSync(vitrinPath)) {
+      const vsrc = fs.readFileSync(vitrinPath, 'utf8');
+      const matches = vsrc.match(/\bid:\s*"[a-z0-9-]+",\s*\n\s*name:/g);
+      if (matches && matches.length > 0) return matches.length;
+    }
+    const mPath = path.join(__dirname, 'apps-manifest.json');
+    if (fs.existsSync(mPath)) {
+      const arr = JSON.parse(fs.readFileSync(mPath, 'utf8'));
+      if (Array.isArray(arr) && arr.length > 0) return arr.length;
+    }
+  } catch (_) {}
+  return 50;
+}
+
 const pageTemplate = (title, content, extraHead = '') => `
 <!DOCTYPE html>
 <html lang="tr">
@@ -245,7 +265,7 @@ const pageTemplate = (title, content, extraHead = '') => `
           <span class="font-bold text-mistral-ink tracking-tight">VIBE CODED APPS</span>
         </a>
         <span class="text-stone-400">•</span>
-        <span class="text-xs text-stone-600">45 Açık Kaynak Mikro Uygulama</span>
+        <span class="text-xs text-stone-600"><span id="footer-dynamic-app-count">${getDynamicAppCount()}</span> Açık Kaynak Mikro Uygulama</span>
       </div>
       <div class="flex items-center gap-3">
         <a href="https://github.com/melihkarasu/VibeCodedApps" target="_blank" rel="noopener" class="vibe-btn vibe-btn-xs vibe-btn-secondary">

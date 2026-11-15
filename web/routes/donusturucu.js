@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = [
-      '<link rel="stylesheet" href="/static/apps/donusturucu/app.css?v=20261115a" />',
-      '<script src="/static/apps/donusturucu/app.js?v=20261115a" defer></script>'
+      '<link rel="stylesheet" href="/static/apps/donusturucu/app.css?v=20261115b" />',
+      '<script src="/static/apps/donusturucu/app.js?v=20261115b" defer></script>'
     ].join('\n');
 
     const content = [
@@ -22,12 +22,12 @@ module.exports = function(pageTemplate) {
       '      </span>',
       '      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">Evrensel Dosya &amp; Format Dönüştürücü</h1>',
       '    </div>',
-      '    <p class="text-mistral-slate text-sm mt-0.5 font-normal">CleverUtils API entegrasyonu ve tarayıcı içi dönüştürme motoruyla görsel (PNG, WEBP, JPG) ve yapısal veri (JSON, CSV, XML, Markdown) format dönüşümü.</p>',
+      '    <p class="text-mistral-slate text-sm mt-0.5 font-normal">Görsel (PNG, WEBP, JPG) ve yapısal veri (JSON, CSV, XML, Markdown) dosyaları için hızlı, güvenli ve çok formatlı dönüştürme stüdyosu.</p>',
       '  </div>',
       '  <div class="flex flex-wrap items-center gap-2 shrink-0">',
       '    <span id="clever-status-badge" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-slate">',
       '      <span class="w-2 h-2 rounded-full bg-emerald-500"></span>',
-      '      <span id="clever-status-text">CleverUtils API Bağlı</span>',
+      '      <span id="clever-status-text">Servis Bağlı</span>',
       '    </span>',
       '  </div>',
       '</div>',
@@ -107,7 +107,7 @@ module.exports = function(pageTemplate) {
 
       '  <div class="lg:col-span-4 space-y-5">',
       '    <section class="vibe-panel-card p-5 space-y-3">',
-      '      <h2 class="text-sm font-bold font-editorial text-mistral-ink">CleverUtils API Servis Durumu</h2>',
+      '      <h2 class="text-sm font-bold font-editorial text-mistral-ink">Dönüştürme Servis Durumu</h2>',
       '      <div class="grid grid-cols-2 gap-2.5 text-xs">',
       '        <div class="p-3 rounded-xl bg-mistral-cream-light border border-mistral-hairline">',
       '          <div class="text-mistral-slate">Saatlik Kota</div>',
@@ -118,7 +118,7 @@ module.exports = function(pageTemplate) {
       '          <div id="clever-quota-day" class="font-mono font-bold text-mistral-orange mt-0.5">--</div>',
       '        </div>',
       '      </div>',
-      '      <p id="clever-engine-info" class="text-[11px] text-mistral-stone leading-relaxed">CleverUtils API motorları kontrol ediliyor...</p>',
+      '      <p id="clever-engine-info" class="text-[11px] text-mistral-stone leading-relaxed">Dönüştürme motorları ve kota durumu kontrol ediliyor...</p>',
       '    </section>',
 
       '    <section class="vibe-panel-card p-5 space-y-3">',

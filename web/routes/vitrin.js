@@ -563,7 +563,7 @@ module.exports = function(pageTemplate) {
             id: "dosya-donusturucu",
             name: "Evrensel Dosya & Format Dönüştürücü",
             icon: getAppSvg("dosya-donusturucu", "web-araclari"),
-            desc: "CleverUtils API ve tarayıcı içi motorla görsel (PNG, WEBP, JPG) ve yapısal veri (JSON, CSV, XML, MD) dönüştürücü.",
+            desc: "Görsel (PNG, WEBP, JPG) ve yapısal veri (JSON, CSV, XML, Markdown) dosyaları için çok formatlı dönüştürücü.",
             url: "/dosya-donusturucu",
             action: "Dosya Dönüştür"
           },

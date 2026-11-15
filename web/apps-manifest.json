@@ -583,7 +583,7 @@
     "standaloneDir": "dosya-donusturucu",
     "exportable": true,
     "categoryId": "web-araclari",
-    "desc": "CleverUtils API ve tarayıcı içi motorla görsel (PNG, WEBP, JPG) ve yapısal veri (JSON, CSV, XML, MD) dönüştürücü.",
+    "desc": "Görsel (PNG, WEBP, JPG) ve yapısal veri (JSON, CSV, XML, Markdown) dosyaları için çok formatlı dönüştürücü.",
     "url": "/dosya-donusturucu",
     "action": "Dosya Dönüştür"
   },
