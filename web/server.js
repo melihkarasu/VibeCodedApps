@@ -90,7 +90,8 @@ const routeMap = [
   { paths: ['/lezzet-atolyesi', '/app/lezzet-atolyesi'], route: './routes/lezzet' },
   { paths: ['/gorsel-boyutlandirici', '/app/gorsel-boyutlandirici'], route: './routes/gorsel' },
   { paths: ['/dosya-donusturucu', '/app/dosya-donusturucu'], route: './routes/donusturucu' },
-  { paths: ['/barkod-studyosu', '/app/barkod-studyosu'], route: './routes/barkod' }
+  { paths: ['/barkod-studyosu', '/app/barkod-studyosu'], route: './routes/barkod' },
+  { paths: ['/akademik-radar', '/app/akademik-radar'], route: './routes/akademik' }
 ];
 
 // scripts/apps-manifest.json içindeki yeni uygulamaları otomatik olarak routeMap'e dahil et

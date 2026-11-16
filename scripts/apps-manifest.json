@@ -598,5 +598,17 @@
     "desc": "Code 128, EAN-13, UPC-A, Code 39, Data Matrix ve PDF417 formatlarında tam Türkçe karakter destekli vektörel SVG barkod üretici.",
     "url": "/barkod-studyosu",
     "action": "Barkod Üret"
+  },
+  {
+    "id": "akademik-radar",
+    "name": "Akademik Makale & Atıf Ağı Kaşifi",
+    "routeFile": "web/routes/akademik.js",
+    "publicDir": "web/public/apps/akademik",
+    "standaloneDir": "akademik-radar",
+    "exportable": true,
+    "categoryId": "akademik",
+    "desc": "OpenAlex ve Crossref üzerinden 250M+ bilimsel yayını konu, yazar, kurum veya DOI ile tarayın; açık erişim PDF, yıllara göre atıf grafiği ve tek tıkla APA/IEEE/MLA/BibTeX kaynakça üretin.",
+    "url": "/akademik-radar",
+    "action": "Makale Ara"
   }
 ]
