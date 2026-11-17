@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/akademik/app.css?v=20261117b" />
-      <script src="/static/apps/akademik/app.js?v=20261117b" defer></script>
+      <link rel="stylesheet" href="/static/apps/akademik/app.css?v=20261117c" />
+      <script src="/static/apps/akademik/app.js?v=20261117c" defer></script>
     `;
 
     const content = `
@@ -208,6 +208,13 @@ module.exports = function(pageTemplate) {
             <tbody id="akademik-table-body">
             </tbody>
           </table>
+          <div id="akademik-main-pagination" class="akademik-pagination-bar">
+            <div id="main-page-info" class="font-mono text-xs">Sayfa 1</div>
+            <div class="akademik-page-controls">
+              <button type="button" id="main-prev-btn" class="akademik-page-btn" disabled>Önceki Sayfa</button>
+              <button type="button" id="main-next-btn" class="akademik-page-btn" disabled>Sonraki Sayfa</button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -254,9 +261,26 @@ module.exports = function(pageTemplate) {
           </div>
 
           <div>
-            <div class="flex items-center justify-between gap-2 mb-2">
-              <span class="text-xs font-semibold uppercase tracking-wider text-mistral-stone">Bu Makaleye Atıf Yapan Yayınlar (OpenAlex Citing Works)</span>
-              <span id="dialog-citing-works-count" class="text-xs font-mono font-semibold text-mistral-orange"></span>
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-mistral-stone block">Bu Makaleye Atıf Yapan Yayınlar (OpenAlex Citing Works)</span>
+                <span id="dialog-citing-works-count" class="text-xs font-mono font-semibold text-mistral-orange"></span>
+              </div>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <select id="citing-per-page" class="akademik-page-btn font-mono" title="Sayfa başına kayıt sayısı">
+                  <option value="25">25 / sayfa</option>
+                  <option value="50">50 / sayfa</option>
+                  <option value="100">100 / sayfa</option>
+                </select>
+                <button type="button" id="citing-export-csv-btn" class="akademik-export-btn">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  <span id="citing-export-csv-label">Tüm Atıf Listesini İndir (CSV)</span>
+                </button>
+                <button type="button" id="citing-export-bib-btn" class="akademik-export-btn">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  <span id="citing-export-bib-label">Tümünü İndir (.bib)</span>
+                </button>
+              </div>
             </div>
             <div class="akademik-subtable-wrap">
               <table class="akademik-subtable">
@@ -272,6 +296,13 @@ module.exports = function(pageTemplate) {
                 <tbody id="dialog-citing-works-tbody">
                 </tbody>
               </table>
+              <div class="akademik-pagination-bar">
+                <div id="citing-page-info" class="font-mono text-xs">Sayfa 1</div>
+                <div class="akademik-page-controls">
+                  <button type="button" id="citing-prev-btn" class="akademik-page-btn" disabled>Önceki</button>
+                  <button type="button" id="citing-next-btn" class="akademik-page-btn" disabled>Sonraki</button>
+                </div>
+              </div>
             </div>
           </div>
 

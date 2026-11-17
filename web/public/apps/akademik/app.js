@@ -115,6 +115,12 @@
   var currentWorks = [];
   var activeWork = null;
   var activeCitationFormat = 'apa';
+  var mainPage = 1;
+  var mainPerPage = 25;
+  var mainTotalCount = 0;
+  var citingPage = 1;
+  var citingPerPage = 25;
+  var citingTotalCount = 0;
 
   function reconstructAbstract(invertedIndex) {
     if (!invertedIndex || typeof invertedIndex !== 'object') return '';
@@ -383,9 +389,10 @@
     }
 
     if (citingTbody) {
-      setHTML(citingTbody, '<tr><td colspan="5" class="text-center py-4 text-mistral-stone">Atıf yapan yayınlar OpenAlex üzerinden yükleniyor...</td></tr>');
-      if (citingCountEl) citingCountEl.textContent = '';
-      loadCitingWorksForDialog(w, citingTbody, citingCountEl);
+      citingPage = 1;
+      var perPageSel = document.getElementById('citing-per-page');
+      citingPerPage = parseInt((perPageSel && perPageSel.value) || '25', 10) || 25;
+      loadCitingWorksForDialog(w, citingPage, citingPerPage);
     }
 
     if (citeOut) citeOut.textContent = formatCitation(w, activeCitationFormat);
@@ -404,28 +411,68 @@
   }
 
 
-  async function loadCitingWorksForDialog(w, tbody, countEl) {
+  function updateMainPagination() {
+    var infoEl = document.getElementById('main-page-info');
+    var prevBtn = document.getElementById('main-prev-btn');
+    var nextBtn = document.getElementById('main-next-btn');
+    var totalPages = Math.max(1, Math.ceil((mainTotalCount || currentWorks.length || 1) / mainPerPage));
+    if (infoEl) {
+      infoEl.textContent = 'Sayfa ' + mainPage + ' / ' + totalPages.toLocaleString('tr-TR') + ' (Toplam ' + Number(mainTotalCount || currentWorks.length).toLocaleString('tr-TR') + ' yayın)';
+    }
+    if (prevBtn) prevBtn.disabled = mainPage <= 1;
+    if (nextBtn) nextBtn.disabled = mainPage >= totalPages || currentWorks.length < mainPerPage;
+  }
+
+  function updateCitingPagination(shownLen) {
+    var infoEl = document.getElementById('citing-page-info');
+    var prevBtn = document.getElementById('citing-prev-btn');
+    var nextBtn = document.getElementById('citing-next-btn');
+    var totalPages = Math.max(1, Math.ceil((citingTotalCount || shownLen || 1) / citingPerPage));
+    if (infoEl) {
+      infoEl.textContent = 'Sayfa ' + citingPage + ' / ' + totalPages.toLocaleString('tr-TR') + ' (Toplam ' + Number(citingTotalCount || shownLen).toLocaleString('tr-TR') + ' atıf yapan yayın)';
+    }
+    if (prevBtn) prevBtn.disabled = citingPage <= 1;
+    if (nextBtn) nextBtn.disabled = citingPage >= totalPages || shownLen < citingPerPage;
+  }
+
+  async function loadCitingWorksForDialog(w, page, perPage) {
+    var tbody = document.getElementById('dialog-citing-works-tbody');
+    var countEl = document.getElementById('dialog-citing-works-count');
+    if (!tbody) return;
+
+    var p = Math.max(1, parseInt(page, 10) || 1);
+    var pp = Math.max(10, Math.min(200, parseInt(perPage, 10) || 25));
+    citingPage = p;
+    citingPerPage = pp;
+
+    setHTML(tbody, '<tr><td colspan="5" class="text-center py-4 text-mistral-stone">Atıf yapan yayınlar yükleniyor (Sayfa ' + p + ')...</td></tr>');
+
     var workId = String((w && w.id) || '').replace(/^https?:\/\/openalex\.org\//i, '').trim();
     if (!/^W\d+$/i.test(workId)) {
       setHTML(tbody, '<tr><td colspan="5" class="text-center py-4 text-mistral-stone">Bu kayıt için OpenAlex Tekil Yayın Kimliği (Work ID) bulunmadığından atıf listesi sorgulanamadı.</td></tr>');
       return;
     }
     try {
-      var url = 'https://api.openalex.org/works?filter=cites:' + encodeURIComponent(workId) + '&sort=cited_by_count:desc&per-page=10';
+      var url = 'https://api.openalex.org/works?filter=cites:' + encodeURIComponent(workId) + '&sort=cited_by_count:desc&per-page=' + pp + '&page=' + p;
       var resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       var data = await resp.json();
       var list = Array.isArray(data.results) ? data.results.map(normalizeOpenAlexWork) : [];
-      var totalCiting = (data.meta && data.meta.count) || list.length;
-      if (countEl) countEl.textContent = 'Toplam ' + Number(totalCiting).toLocaleString('tr-TR') + ' atıf yapan yayından ilk ' + list.length + ' kayıt';
+      citingTotalCount = (data.meta && data.meta.count) || list.length;
+      if (countEl) {
+        countEl.textContent = 'Toplam ' + Number(citingTotalCount).toLocaleString('tr-TR') + ' atıf yapan yayın — Sayfa ' + p + ' (' + list.length + ' kayıt gösteriliyor)';
+      }
       renderCitingWorksRows(list, tbody);
+      updateCitingPagination(list.length);
     } catch (_) {
       try {
-        var r2 = await fetch('/api/akademik/citations?workId=' + encodeURIComponent(workId));
+        var r2 = await fetch('/api/akademik/citations?workId=' + encodeURIComponent(workId) + '&page=' + p + '&perPage=' + pp);
         var d2 = await r2.json();
         var list2 = d2.results || [];
-        if (countEl) countEl.textContent = list2.length + ' kayıt listelendi';
+        citingTotalCount = (d2.meta && d2.meta.count) || list2.length;
+        if (countEl) countEl.textContent = 'Toplam ' + Number(citingTotalCount).toLocaleString('tr-TR') + ' kayıt — Sayfa ' + p;
         renderCitingWorksRows(list2, tbody);
+        updateCitingPagination(list2.length);
       } catch (_e2) {
         setHTML(tbody, '<tr><td colspan="5" class="text-center py-4 text-mistral-stone">Atıf yapan yayın listesi şu an alınamadı.</td></tr>');
       }
@@ -456,11 +503,109 @@
     setHTML(tbody, html);
   }
 
+  async function exportAllCitingWorks(format) {
+    if (!activeWork) return;
+    var workId = String(activeWork.id || '').replace(/^https?:\/\/openalex\.org\//i, '').trim();
+    if (!/^W\d+$/i.test(workId)) {
+      notify('Bu yayın için OpenAlex Work ID bulunamadı.');
+      return;
+    }
+
+    var csvBtn = document.getElementById('citing-export-csv-btn');
+    var bibBtn = document.getElementById('citing-export-bib-btn');
+    var csvLbl = document.getElementById('citing-export-csv-label');
+    var bibLbl = document.getElementById('citing-export-bib-label');
+
+    if (csvBtn) csvBtn.disabled = true;
+    if (bibBtn) bibBtn.disabled = true;
+
+    var allCiting = [];
+    var cursor = '*';
+    var maxRecords = 1000; // Tarayıcı belleğini korumak için tek seferde en fazla 1.000 atıf kaydı (5x200 cursor sayfası)
+
+    try {
+      while (cursor && allCiting.length < maxRecords) {
+        var lblText = 'İndiriliyor (' + allCiting.length + (citingTotalCount ? '/' + Math.min(citingTotalCount, maxRecords) : '') + ')...';
+        if (format === 'csv' && csvLbl) csvLbl.textContent = lblText;
+        if (format === 'bib' && bibLbl) bibLbl.textContent = lblText;
+
+        var url = 'https://api.openalex.org/works?filter=cites:' + encodeURIComponent(workId) + '&sort=cited_by_count:desc&per-page=200&cursor=' + encodeURIComponent(cursor);
+        var resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        if (!resp.ok) break;
+        var data = await resp.json();
+        var batch = Array.isArray(data.results) ? data.results.map(normalizeOpenAlexWork) : [];
+        if (!batch.length) break;
+        allCiting = allCiting.concat(batch);
+        cursor = (data.meta && data.meta.next_cursor) || null;
+        if (batch.length < 200) break;
+      }
+
+      if (!allCiting.length) {
+        notify('İndirilecek atıf kaydı bulunamadı.');
+        return;
+      }
+
+      if (format === 'bib') {
+        var bibContent = allCiting.map(function (cw) { return formatCitation(cw, 'bibtex'); }).join('\n\n');
+        var bibBlob = new Blob([bibContent], { type: 'application/x-bibtex;charset=utf-8' });
+        var bibUrl = URL.createObjectURL(bibBlob);
+        var aBib = document.createElement('a');
+        aBib.href = bibUrl;
+        aBib.download = workId + '-citing-works-' + allCiting.length + '.bib';
+        document.body.appendChild(aBib);
+        aBib.click();
+        document.body.removeChild(aBib);
+        URL.revokeObjectURL(bibUrl);
+        notify(allCiting.length + ' atıf yapan yayın BibTeX (.bib) olarak indirildi.');
+      } else {
+        var csvEscape = function (v) {
+          var s = String(v == null ? '' : v).replace(/"/g, '""');
+          return '"' + s + '"';
+        };
+        var headers = ['Yıl', 'Başlık', 'Yazarlar', 'Kurumlar', 'Dergi/Konferans', 'Atıf Sayısı', 'Açık Erişim', 'DOI', 'URL'];
+        var rows = [headers.map(csvEscape).join(',')];
+        for (var i = 0; i < allCiting.length; i++) {
+          var r = allCiting[i];
+          rows.push([
+            r.publication_year || '',
+            r.title || '',
+            (r.authors || []).join('; '),
+            (r.institutions || []).join('; '),
+            r.venue || '',
+            r.cited_by_count || 0,
+            r.is_oa ? 'Evet' : 'Hayır',
+            r.doi || '',
+            r.oa_url || (r.doi ? 'https://doi.org/' + r.doi : '')
+          ].map(csvEscape).join(','));
+        }
+        var csvContent = '\uFEFF' + rows.join('\r\n');
+        var csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+        var csvUrl = URL.createObjectURL(csvBlob);
+        var aCsv = document.createElement('a');
+        aCsv.href = csvUrl;
+        aCsv.download = workId + '-atif-listesi-' + allCiting.length + '.csv';
+        document.body.appendChild(aCsv);
+        aCsv.click();
+        document.body.removeChild(aCsv);
+        URL.revokeObjectURL(csvUrl);
+        notify(allCiting.length + ' atıf yapan yayın CSV olarak indirildi.');
+      }
+    } catch (_e) {
+      notify('Toplu indirme sırasında ağ hatası oluştu.');
+    } finally {
+      if (csvBtn) csvBtn.disabled = false;
+      if (bibBtn) bibBtn.disabled = false;
+      if (csvLbl) csvLbl.textContent = 'Tüm Atıf Listesini İndir (CSV)';
+      if (bibLbl) bibLbl.textContent = 'Tümünü İndir (.bib)';
+    }
+  }
+
   function cleanFilterToken(str) {
     return String(str || '').replace(/[,:|]/g, ' ').trim();
   }
 
-  async function searchWorks() {
+  async function searchWorks(targetPage) {
+    mainPage = (typeof targetPage === 'number' && targetPage >= 1) ? targetPage : 1;
     var fTitle = document.getElementById('field-title');
     var fAuthor = document.getElementById('field-author');
     var fInst = document.getElementById('field-institution');
@@ -508,7 +653,7 @@
       if (yearFrom >= 1900 && yearFrom <= 2030) filters.push('from_publication_date:' + yearFrom + '-01-01');
       if (yearTo >= 1900 && yearTo <= 2030) filters.push('to_publication_date:' + yearTo + '-12-31');
 
-      var queryParts = ['per-page=25'];
+      var queryParts = ['per-page=' + mainPerPage, 'page=' + mainPage];
       if (venue) {
         queryParts.push('search=' + encodeURIComponent(venue));
       }
@@ -535,8 +680,10 @@
 
       var totalCount = (data.meta && data.meta.count) || works.length;
       currentWorks = works;
+      mainTotalCount = totalCount;
       updateSummaryStats(works, totalCount);
       renderTable(works);
+      updateMainPagination();
       if (badgeEl) badgeEl.textContent = 'OpenAlex + Crossref Canlı';
       if (statsBar) {
         statsBar.textContent = 'Toplam ' + Number(totalCount).toLocaleString('tr-TR') + ' eşleşmeden ' + works.length + ' yayın tabloda listeleniyor.';
@@ -552,13 +699,17 @@
           yearFrom: String(yearFrom || ''),
           yearTo: String(yearTo || ''),
           sort: sort,
-          oa: oaOnly ? '1' : '0'
+          oa: oaOnly ? '1' : '0',
+          page: String(mainPage),
+          perPage: String(mainPerPage)
         });
         var apiResp = await fetch('/api/akademik/works?' + qs.toString());
         var apiData = await apiResp.json();
         currentWorks = apiData.results || FALLBACK_WORKS;
-        updateSummaryStats(currentWorks, (apiData.meta && apiData.meta.count) || currentWorks.length);
+        mainTotalCount = (apiData.meta && apiData.meta.count) || currentWorks.length;
+        updateSummaryStats(currentWorks, mainTotalCount);
         renderTable(currentWorks);
+        updateMainPagination();
         if (statsBar) statsBar.textContent = 'Akademik arşiv sonuçları tabloya aktarıldı (' + currentWorks.length + ' yayın).';
       } catch (_err2) {
         currentWorks = FALLBACK_WORKS;
@@ -597,6 +748,48 @@
         e.preventDefault();
         searchWorks();
       });
+    }
+
+    var mainPrevBtn = document.getElementById('main-prev-btn');
+    var mainNextBtn = document.getElementById('main-next-btn');
+    if (mainPrevBtn) {
+      mainPrevBtn.addEventListener('click', function () {
+        if (mainPage > 1) searchWorks(mainPage - 1);
+      });
+    }
+    if (mainNextBtn) {
+      mainNextBtn.addEventListener('click', function () {
+        searchWorks(mainPage + 1);
+      });
+    }
+
+    var citingPrevBtn = document.getElementById('citing-prev-btn');
+    var citingNextBtn = document.getElementById('citing-next-btn');
+    var citingPerPageSel = document.getElementById('citing-per-page');
+    if (citingPrevBtn) {
+      citingPrevBtn.addEventListener('click', function () {
+        if (activeWork && citingPage > 1) loadCitingWorksForDialog(activeWork, citingPage - 1, citingPerPage);
+      });
+    }
+    if (citingNextBtn) {
+      citingNextBtn.addEventListener('click', function () {
+        if (activeWork) loadCitingWorksForDialog(activeWork, citingPage + 1, citingPerPage);
+      });
+    }
+    if (citingPerPageSel) {
+      citingPerPageSel.addEventListener('change', function () {
+        citingPerPage = parseInt(citingPerPageSel.value || '25', 10) || 25;
+        if (activeWork) loadCitingWorksForDialog(activeWork, 1, citingPerPage);
+      });
+    }
+
+    var exportCsvBtn = document.getElementById('citing-export-csv-btn');
+    var exportBibBtn = document.getElementById('citing-export-bib-btn');
+    if (exportCsvBtn) {
+      exportCsvBtn.addEventListener('click', function () { exportAllCitingWorks('csv'); });
+    }
+    if (exportBibBtn) {
+      exportBibBtn.addEventListener('click', function () { exportAllCitingWorks('bib'); });
     }
 
     var resetBtn = document.getElementById('akademik-reset-btn');
