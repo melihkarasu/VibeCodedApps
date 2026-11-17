@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/akademik/app.css?v=20261117c" />
-      <script src="/static/apps/akademik/app.js?v=20261117c" defer></script>
+      <link rel="stylesheet" href="/static/apps/akademik/app.css?v=20261117d" />
+      <script src="/static/apps/akademik/app.js?v=20261117d" defer></script>
     `;
 
     const content = `
@@ -96,6 +96,22 @@ module.exports = function(pageTemplate) {
                 <span>Bitiş Yılı</span>
               </label>
               <input id="field-year-to" type="number" min="1900" max="2030" placeholder="Örn: 2026" class="akademik-input font-mono" />
+            </div>
+
+            <div>
+              <label for="field-index-filter" class="akademik-label">
+                <svg width="14" height="14" class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                <span>İndeks & Dergi Niteliği</span>
+              </label>
+              <select id="field-index-filter" class="akademik-input">
+                <option value="all">Tüm İndeksler</option>
+                <option value="journal_core">Çekirdek Hakemli Dergi (Core / Scopus-WoS)</option>
+                <option value="core">Tüm Çekirdek Yayınlar (CWTS Core)</option>
+                <option value="crossref">Crossref (DOI Kayıtlı)</option>
+                <option value="pubmed">PubMed / MEDLINE</option>
+                <option value="doaj">DOAJ (Açık Erişim Dergi)</option>
+                <option value="arxiv">arXiv (Ön Baskı / Preprint)</option>
+              </select>
             </div>
 
             <div>
@@ -200,7 +216,7 @@ module.exports = function(pageTemplate) {
                 <th style="width: 90px;">Yıl & Tür</th>
                 <th style="width: 34%;">Makale Başlığı & Alanlar</th>
                 <th style="width: 24%;">Yazarlar & Kurum</th>
-                <th style="width: 16%;">Dergi / Konferans</th>
+                <th style="width: 18%;">Dergi & İndeks Kaynağı</th>
                 <th style="width: 100px;">Atıf Sayısı</th>
                 <th style="width: 150px;">Erişim & İşlem</th>
               </tr>
@@ -267,6 +283,15 @@ module.exports = function(pageTemplate) {
                 <span id="dialog-citing-works-count" class="text-xs font-mono font-semibold text-mistral-orange"></span>
               </div>
               <div class="flex flex-wrap items-center gap-1.5">
+                <select id="citing-index-filter" class="akademik-page-btn" title="Atıf yapan yayınları indeks ve dergi niteliğine göre filtrele">
+                  <option value="all">Tüm İndeksler</option>
+                  <option value="journal_core">Çekirdek Hakemli Dergiler (Core / Scopus-WoS)</option>
+                  <option value="core">CWTS Core Yayınlar</option>
+                  <option value="crossref">Crossref (DOI)</option>
+                  <option value="pubmed">PubMed</option>
+                  <option value="doaj">DOAJ</option>
+                  <option value="arxiv">arXiv (Ön Baskı)</option>
+                </select>
                 <select id="citing-per-page" class="akademik-page-btn font-mono" title="Sayfa başına kayıt sayısı">
                   <option value="25">25 / sayfa</option>
                   <option value="50">50 / sayfa</option>
@@ -289,7 +314,7 @@ module.exports = function(pageTemplate) {
                     <th style="width: 65px;">Yıl</th>
                     <th>Atıf Yapan Yayın Başlığı & DOI</th>
                     <th>Yazarlar & Kurum</th>
-                    <th>Dergi / Yayın Yeri</th>
+                    <th>Dergi & İndeks Kaynağı</th>
                     <th style="width: 85px;">Atıf</th>
                   </tr>
                 </thead>

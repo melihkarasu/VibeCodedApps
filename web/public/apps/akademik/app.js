@@ -166,6 +166,12 @@
       venue: src.display_name || 'Belirtilmemiş Yayın Yeri',
       publisher: src.host_organization_name || 'OpenAlex Dizin Kaydı',
       type: w.type || 'article',
+      source_type: src.type || 'journal',
+      issn: src.issn_l || (Array.isArray(src.issn) && src.issn[0]) || '',
+      is_core: Boolean(src.is_core),
+      is_in_doaj: Boolean(src.is_in_doaj),
+      indexed_in: Array.isArray(w.indexed_in) ? w.indexed_in : [],
+      pmid: (w.ids && w.ids.pmid) ? String(w.ids.pmid).replace(/^https?:\/\/pubmed\.ncbi\.nlm\.nih\.gov\//i, '').replace(/\/$/, '') : '',
       authors: authors,
       institutions: Object.keys(instMap).slice(0, 5),
       concepts: (w.concepts || w.topics || []).slice(0, 5).map(function (c) { return c.display_name; }).filter(Boolean),
@@ -174,6 +180,55 @@
         return { year: c.year, cited_by_count: c.cited_by_count };
       })
     };
+  }
+
+  function resolveIndexFilterClause(indexFilter) {
+    switch (String(indexFilter || '').trim()) {
+      case 'journal_core':
+        return 'primary_location.source.is_core:true,primary_location.source.type:journal';
+      case 'core':
+        return 'primary_location.source.is_core:true';
+      case 'crossref':
+        return 'indexed_in:crossref';
+      case 'pubmed':
+        return 'indexed_in:pubmed';
+      case 'doaj':
+        return 'primary_location.source.is_in_doaj:true';
+      case 'arxiv':
+        return 'indexed_in:arxiv';
+      default:
+        return '';
+    }
+  }
+
+  function renderIndexBadges(w) {
+    if (!w) return '';
+    var badges = [];
+    var idxList = Array.isArray(w.indexed_in) ? w.indexed_in : [];
+    if (w.is_core) {
+      badges.push('<span class="akademik-idx-badge akademik-idx-badge--core" title="CWTS Leiden Core Journal (Scopus / Web of Science Eşdeğeri Çekirdek Hakemli Dergi)">CORE DERGİ</span>');
+    }
+    if (idxList.indexOf('crossref') !== -1 || w.doi) {
+      badges.push('<span class="akademik-idx-badge akademik-idx-badge--crossref" title="Crossref Resmi DOI Kaydı">CROSSREF</span>');
+    }
+    if (idxList.indexOf('pubmed') !== -1 || w.pmid) {
+      if (w.pmid) {
+        badges.push('<a href="https://pubmed.ncbi.nlm.nih.gov/' + esc(w.pmid) + '/" target="_blank" rel="noopener noreferrer" class="akademik-idx-badge akademik-idx-badge--pubmed" title="PubMed / MEDLINE Kaydını Aç (PMID: ' + esc(w.pmid) + ')">PUBMED</a>');
+      } else {
+        badges.push('<span class="akademik-idx-badge akademik-idx-badge--pubmed" title="PubMed / MEDLINE İndeksli">PUBMED</span>');
+      }
+    }
+    if (w.is_in_doaj || idxList.indexOf('doaj') !== -1) {
+      badges.push('<span class="akademik-idx-badge akademik-idx-badge--doaj" title="DOAJ (Directory of Open Access Journals) Hakemli Açık Erişim Dergi">DOAJ</span>');
+    }
+    if (idxList.indexOf('arxiv') !== -1 || /arxiv/i.test(w.venue || '') || /arxiv/i.test(w.doi || '')) {
+      badges.push('<span class="akademik-idx-badge akademik-idx-badge--arxiv" title="arXiv Ön Baskı (Preprint) Arşivi">ARXIV</span>');
+    }
+    if (w.issn) {
+      badges.push('<span class="akademik-idx-badge akademik-idx-badge--issn" title="Uluslararası Standart Süreli Yayın Numarası (ISSN)">ISSN: ' + esc(w.issn) + '</span>');
+    }
+    if (!badges.length) return '';
+    return '<div class="akademik-idx-wrap">' + badges.join('') + '</div>';
   }
 
   function formatCitation(w, fmt) {
@@ -298,6 +353,7 @@
         '  <td>',
         '    <div class="akademik-venue-name">' + esc(w.venue) + '</div>',
         w.publisher ? '    <div class="akademik-publisher-sub">' + esc(w.publisher) + '</div>' : '',
+        '    ' + renderIndexBadges(w),
         '  </td>',
         '  <td>',
         '    <span class="akademik-cite-badge">',
@@ -453,7 +509,11 @@
       return;
     }
     try {
-      var url = 'https://api.openalex.org/works?filter=cites:' + encodeURIComponent(workId) + '&sort=cited_by_count:desc&per-page=' + pp + '&page=' + p;
+      var cIdxSel = document.getElementById('citing-index-filter');
+      var cIdxVal = (cIdxSel && cIdxSel.value) || 'all';
+      var cIdxClause = resolveIndexFilterClause(cIdxVal);
+      var citeFilterStr = 'cites:' + workId + (cIdxClause ? ',' + cIdxClause : '');
+      var url = 'https://api.openalex.org/works?filter=' + encodeURIComponent(citeFilterStr) + '&sort=cited_by_count:desc&per-page=' + pp + '&page=' + p;
       var resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
       if (!resp.ok) throw new Error('HTTP ' + resp.status);
       var data = await resp.json();
@@ -466,7 +526,9 @@
       updateCitingPagination(list.length);
     } catch (_) {
       try {
-        var r2 = await fetch('/api/akademik/citations?workId=' + encodeURIComponent(workId) + '&page=' + p + '&perPage=' + pp);
+        var cIdxSel2 = document.getElementById('citing-index-filter');
+        var cIdxVal2 = (cIdxSel2 && cIdxSel2.value) || 'all';
+        var r2 = await fetch('/api/akademik/citations?workId=' + encodeURIComponent(workId) + '&page=' + p + '&perPage=' + pp + '&indexFilter=' + encodeURIComponent(cIdxVal2));
         var d2 = await r2.json();
         var list2 = d2.results || [];
         citingTotalCount = (d2.meta && d2.meta.count) || list2.length;
@@ -495,7 +557,7 @@
         '  <td><span class="akademik-year-badge">' + esc(cw.publication_year || '—') + '</span></td>',
         '  <td><div class="font-bold text-mistral-ink">' + esc(cw.title) + '</div>' + doiLink + '</td>',
         '  <td><div class="font-semibold text-mistral-ink">' + esc(auths) + '</div>' + (inst ? '<div class="text-mistral-slate text-[11px] mt-0.5">' + esc(inst) + '</div>' : '') + '</td>',
-        '  <td>' + esc(cw.venue || '—') + '</td>',
+        '  <td><div class="font-semibold text-mistral-ink">' + esc(cw.venue || '—') + '</div>' + renderIndexBadges(cw) + '</td>',
         '  <td><span class="akademik-cite-badge">' + SVG_CHART + '<span>' + Number(cw.cited_by_count || 0).toLocaleString('tr-TR') + '</span></span></td>',
         '</tr>'
       ].join('');
@@ -529,7 +591,10 @@
         if (format === 'csv' && csvLbl) csvLbl.textContent = lblText;
         if (format === 'bib' && bibLbl) bibLbl.textContent = lblText;
 
-        var url = 'https://api.openalex.org/works?filter=cites:' + encodeURIComponent(workId) + '&sort=cited_by_count:desc&per-page=200&cursor=' + encodeURIComponent(cursor);
+        var expIdxSel = document.getElementById('citing-index-filter');
+        var expIdxClause = resolveIndexFilterClause((expIdxSel && expIdxSel.value) || 'all');
+        var expFilterStr = 'cites:' + workId + (expIdxClause ? ',' + expIdxClause : '');
+        var url = 'https://api.openalex.org/works?filter=' + encodeURIComponent(expFilterStr) + '&sort=cited_by_count:desc&per-page=200&cursor=' + encodeURIComponent(cursor);
         var resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
         if (!resp.ok) break;
         var data = await resp.json();
@@ -562,7 +627,7 @@
           var s = String(v == null ? '' : v).replace(/"/g, '""');
           return '"' + s + '"';
         };
-        var headers = ['Yıl', 'Başlık', 'Yazarlar', 'Kurumlar', 'Dergi/Konferans', 'Atıf Sayısı', 'Açık Erişim', 'DOI', 'URL'];
+        var headers = ['Yıl', 'Başlık', 'Yazarlar', 'Kurumlar', 'Dergi/Konferans', 'İndeks Kaynakları', 'Çekirdek Dergi (Core)', 'ISSN', 'Atıf Sayısı', 'Açık Erişim', 'DOI', 'PubMed ID', 'URL'];
         var rows = [headers.map(csvEscape).join(',')];
         for (var i = 0; i < allCiting.length; i++) {
           var r = allCiting[i];
@@ -572,9 +637,13 @@
             (r.authors || []).join('; '),
             (r.institutions || []).join('; '),
             r.venue || '',
+            (r.indexed_in || []).join('; ').toUpperCase(),
+            r.is_core ? 'Evet (Core)' : 'Hayır',
+            r.issn || '',
             r.cited_by_count || 0,
             r.is_oa ? 'Evet' : 'Hayır',
             r.doi || '',
+            r.pmid || '',
             r.oa_url || (r.doi ? 'https://doi.org/' + r.doi : '')
           ].map(csvEscape).join(','));
         }
@@ -615,6 +684,7 @@
     var fYearTo = document.getElementById('field-year-to');
     var fSort = document.getElementById('field-sort');
     var fOa = document.getElementById('field-oa');
+    var fIdx = document.getElementById('field-index-filter');
 
     var statsBar = document.getElementById('akademik-stats-bar');
     var badgeEl = document.getElementById('akademik-source-badge');
@@ -631,8 +701,9 @@
     var yearTo = parseInt((fYearTo && fYearTo.value) || '0', 10) || 0;
     var sort = (fSort && fSort.value) || 'cited_by_count:desc';
     var oaOnly = (fOa && fOa.value) === 'oa';
+    var indexFilter = (fIdx && fIdx.value) || 'all';
 
-    if (!title && !author && !institution && !venue && !doi && !yearFrom && !yearTo) {
+    if (!title && !author && !institution && !venue && !doi && !yearFrom && !yearTo && indexFilter === 'all') {
       notify('Lütfen arama yapmak için en az bir alanı (Başlık, Yazar, Kurum, Dergi veya DOI) doldurun.');
       if (fTitle) fTitle.focus();
       return;
@@ -650,6 +721,8 @@
       if (institution) filters.push('raw_affiliation_strings.search:' + institution);
       if (doi) filters.push('doi:https://doi.org/' + doi);
       if (oaOnly) filters.push('is_oa:true');
+      var idxClause = resolveIndexFilterClause(indexFilter);
+      if (idxClause) filters.push(idxClause);
       if (yearFrom >= 1900 && yearFrom <= 2030) filters.push('from_publication_date:' + yearFrom + '-01-01');
       if (yearTo >= 1900 && yearTo <= 2030) filters.push('to_publication_date:' + yearTo + '-12-31');
 
@@ -700,6 +773,7 @@
           yearTo: String(yearTo || ''),
           sort: sort,
           oa: oaOnly ? '1' : '0',
+          indexFilter: indexFilter,
           page: String(mainPage),
           perPage: String(mainPerPage)
         });
@@ -729,6 +803,8 @@
     if (fSort) fSort.value = 'cited_by_count:desc';
     var fOa = document.getElementById('field-oa');
     if (fOa) fOa.value = 'all';
+    var fIdx = document.getElementById('field-index-filter');
+    if (fIdx) fIdx.value = 'all';
 
     var initial = document.getElementById('akademik-initial-state');
     var resultsSection = document.getElementById('akademik-results-section');
@@ -774,6 +850,12 @@
     if (citingNextBtn) {
       citingNextBtn.addEventListener('click', function () {
         if (activeWork) loadCitingWorksForDialog(activeWork, citingPage + 1, citingPerPage);
+      });
+    }
+    var citingIdxSel = document.getElementById('citing-index-filter');
+    if (citingIdxSel) {
+      citingIdxSel.addEventListener('change', function () {
+        if (activeWork) loadCitingWorksForDialog(activeWork, 1, citingPerPage);
       });
     }
     if (citingPerPageSel) {
