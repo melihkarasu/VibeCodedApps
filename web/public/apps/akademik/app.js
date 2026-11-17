@@ -24,6 +24,22 @@
     if (typeof window.showToast === 'function') window.showToast(msg);
   };
 
+  var SVG_UNLOCK = '<svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>';
+  var SVG_LOCK = '<svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+  var SVG_BUILDING = '<svg class="w-3.5 h-3.5 shrink-0 text-mistral-stone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>';
+  var SVG_CHART = '<svg class="w-3.5 h-3.5 shrink-0 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>';
+  var SVG_EXT = '<svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>';
+
+  var TYPE_LABELS = {
+    'article': 'Makale',
+    'review': 'Derleme',
+    'preprint': 'Ön Baskı',
+    'book-chapter': 'Kitap Bölümü',
+    'book': 'Kitap',
+    'dataset': 'Veri Seti',
+    'dissertation': 'Tez'
+  };
+
   var FALLBACK_WORKS = [
     {
       id: 'W2741809807',
@@ -141,8 +157,8 @@
       cited_by_count: Number(w.cited_by_count || 0),
       is_oa: Boolean(oa.is_oa),
       oa_url: oa.oa_url || loc.pdf_url || loc.landing_page_url || (doiRaw ? 'https://doi.org/' + doiRaw : ''),
-      venue: src.display_name || 'Akademik Dergi / Konferans',
-      publisher: src.host_organization_name || 'OpenAlex',
+      venue: src.display_name || 'Belirtilmemiş Yayın Yeri',
+      publisher: src.host_organization_name || 'OpenAlex Dizin Kaydı',
       type: w.type || 'article',
       authors: authors,
       institutions: Object.keys(instMap).slice(0, 5),
@@ -181,16 +197,18 @@
         '}'
       ].filter(Boolean).join('\n');
     }
-    // Default APA 7
     var apaAuthors = authors.slice(0, 6).join(', ') + (authors.length > 6 ? ' ... ' + authors[authors.length - 1] : '');
     return apaAuthors + ' (' + year + '). ' + title + '. ' + venue + '.' + (doiPart ? ' ' + doiPart : '');
   }
 
   function updateSummaryStats(works, totalCount) {
+    var metricsSection = document.getElementById('akademik-metrics-section');
     var totalEl = document.getElementById('stat-total-works');
     var citEl = document.getElementById('stat-total-citations');
     var oaEl = document.getElementById('stat-oa-ratio');
     var yearEl = document.getElementById('stat-median-year');
+
+    if (metricsSection) metricsSection.classList.remove('hidden');
 
     if (!works || !works.length) {
       if (totalEl) totalEl.textContent = '0';
@@ -218,58 +236,83 @@
     if (yearEl) yearEl.textContent = String(medianYear);
   }
 
-  function renderGrid(works) {
-    var grid = document.getElementById('akademik-grid');
+  function renderTable(works) {
+    var resultsSection = document.getElementById('akademik-results-section');
+    var tbody = document.getElementById('akademik-table-body');
     var loading = document.getElementById('akademik-loading');
+    var initial = document.getElementById('akademik-initial-state');
+
     if (loading) loading.classList.add('hidden');
-    if (!grid) return;
-    grid.classList.remove('hidden');
+    if (initial) initial.classList.add('hidden');
+    if (!resultsSection || !tbody) return;
+    resultsSection.classList.remove('hidden');
 
     if (!works || !works.length) {
-      setHTML(grid, '<div class="col-span-full bg-white rounded-2xl border border-mistral-border p-10 text-center text-mistral-slate text-sm">Arama kriterlerinize uygun akademik yayın bulunamadı.</div>');
+      setHTML(tbody, '<tr><td colspan="6" class="text-center py-10 text-mistral-slate text-sm">Girilen arama kriterleriyle eşleşen bilimsel yayın bulunamadı.</td></tr>');
       return;
     }
 
-    var cardsHtml = works.map(function (w, idx) {
+    var rowsHtml = works.map(function (w, idx) {
+      var typeLabel = TYPE_LABELS[w.type] || w.type || 'Makale';
       var oaBadge = w.is_oa
-        ? '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">🔓 Açık Erişim PDF</span>'
-        : '<span class="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-stone-100 text-mistral-stone">Kapalı Erişim</span>';
-      var authorsText = (w.authors && w.authors.length) ? w.authors.slice(0, 4).join(', ') + (w.authors.length > 4 ? ' +' + (w.authors.length - 4) : '') : 'Yazar bilgisi yok';
-      var instText = (w.institutions && w.institutions.length) ? w.institutions.slice(0, 2).join(' • ') : w.publisher || '';
+        ? '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">' + SVG_UNLOCK + '<span>Açık Erişim PDF</span></span>'
+        : '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-stone-100 text-mistral-stone border border-stone-200">' + SVG_LOCK + '<span>Kapalı Erişim</span></span>';
+
+      var authorsText = (w.authors && w.authors.length)
+        ? w.authors.slice(0, 3).join(', ') + (w.authors.length > 3 ? ' (+' + (w.authors.length - 3) + ')' : '')
+        : 'Yazar bilgisi belirtilmemiş';
+
+      var instText = (w.institutions && w.institutions.length)
+        ? w.institutions.slice(0, 2).join(' • ')
+        : '';
+
       var conceptsHtml = (w.concepts || []).slice(0, 4).map(function (c) {
-        return '<span class="px-2 py-0.5 rounded-md bg-stone-100 text-mistral-slate text-[11px] font-medium">' + esc(c) + '</span>';
+        return '<span class="px-2 py-0.5 rounded bg-stone-100 text-mistral-slate text-[11px] font-medium">' + esc(c) + '</span>';
       }).join('');
-      var abstractPreview = w.abstract
-        ? esc(w.abstract.slice(0, 200)) + (w.abstract.length > 200 ? '…' : '')
-        : 'Bu yayın için OpenAlex/Crossref dizininde açık özet metni bulunmuyor; tam metin ve kaynakça detayları için inceleyin.';
+
+      var doiHtml = w.doi
+        ? '<a href="https://doi.org/' + esc(w.doi) + '" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[11px] font-mono text-mistral-orange hover:underline mt-1"><span>DOI: ' + esc(w.doi) + '</span>' + SVG_EXT + '</a>'
+        : '';
 
       return [
-        '<article class="bg-white rounded-2xl border border-mistral-border p-5 shadow-xs hover:border-amber-500/50 transition flex flex-col justify-between gap-4">',
-        '  <div>',
-        '    <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">',
-        '      <div class="flex flex-wrap items-center gap-1.5">',
-        '        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/10 text-amber-700 border border-amber-500/20">' + esc(w.publication_year || '—') + '</span>',
-        '        ' + oaBadge,
+        '<tr class="group">',
+        '  <td class="whitespace-nowrap">',
+        '    <div class="font-mono font-bold text-sm text-mistral-ink">' + esc(w.publication_year || '—') + '</div>',
+        '    <div class="text-[11px] text-mistral-stone font-medium mt-0.5">' + esc(typeLabel) + '</div>',
+        '  </td>',
+        '  <td>',
+        '    <div class="font-bold text-mistral-ink leading-snug">' + esc(w.title) + '</div>',
+        doiHtml ? '    <div>' + doiHtml + '</div>' : '',
+        conceptsHtml ? '    <div class="flex flex-wrap gap-1 mt-2">' + conceptsHtml + '</div>' : '',
+        '  </td>',
+        '  <td>',
+        '    <div class="text-xs font-semibold text-mistral-ink leading-snug">' + esc(authorsText) + '</div>',
+        instText ? '    <div class="inline-flex items-start gap-1 text-[11px] text-mistral-slate mt-1.5">' + SVG_BUILDING + '<span>' + esc(instText) + '</span></div>' : '',
+        '  </td>',
+        '  <td>',
+        '    <div class="text-xs font-semibold text-mistral-ink leading-snug">' + esc(w.venue) + '</div>',
+        w.publisher ? '    <div class="text-[11px] text-mistral-stone mt-0.5">' + esc(w.publisher) + '</div>' : '',
+        '  </td>',
+        '  <td class="whitespace-nowrap">',
+        '    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-orange-50 border border-orange-200 text-mistral-ink font-mono text-xs font-bold">',
+        '      ' + SVG_CHART,
+        '      <span>' + Number(w.cited_by_count || 0).toLocaleString('tr-TR') + '</span>',
+        '    </span>',
+        '  </td>',
+        '  <td class="whitespace-nowrap">',
+        '    <div class="flex flex-col items-start gap-2">',
+        '      ' + oaBadge,
+        '      <div class="flex items-center gap-2">',
+        '        <button type="button" data-open-work="' + idx + '" class="px-3 py-1.5 rounded-lg bg-mistral-ink hover:bg-mistral-orange text-white text-xs font-semibold transition cursor-pointer">İncele & Kaynakça</button>',
+        w.oa_url ? '        <a href="' + esc(w.oa_url) + '" target="_blank" rel="noopener noreferrer" title="Kaynağı / PDF Aç" class="p-1.5 rounded-lg border border-mistral-hairline text-mistral-slate hover:text-mistral-ink hover:bg-stone-100 transition">' + SVG_EXT + '</a>' : '',
         '      </div>',
-        '      <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-stone-100 text-mistral-ink text-xs font-bold" title="Toplam Atıf Sayısı">',
-        '        📚 ' + Number(w.cited_by_count || 0).toLocaleString('tr-TR') + ' atıf',
-        '      </span>',
         '    </div>',
-        '    <h3 class="text-base font-bold text-mistral-ink leading-snug mb-1.5">' + esc(w.title) + '</h3>',
-        '    <p class="text-xs font-medium text-mistral-slate mb-1">' + esc(authorsText) + '</p>',
-        instText ? '    <p class="text-[11px] text-mistral-stone mb-2.5">🏛️ ' + esc(instText) + ' • <span class="font-medium">' + esc(w.venue) + '</span></p>' : '',
-        '    <p class="text-xs text-mistral-slate leading-relaxed mb-3 line-clamp-3">' + abstractPreview + '</p>',
-        conceptsHtml ? '    <div class="flex flex-wrap gap-1.5 mb-2">' + conceptsHtml + '</div>' : '',
-        '  </div>',
-        '  <div class="pt-3 border-t border-stone-100 flex items-center justify-between gap-2">',
-        '    <button type="button" data-open-work="' + idx + '" class="px-3.5 py-1.5 rounded-xl bg-mistral-ink hover:bg-amber-600 text-white text-xs font-semibold transition cursor-pointer">Atıf Ağı & Kaynakça (APA/BibTeX)</button>',
-        w.oa_url ? '    <a href="' + esc(w.oa_url) + '" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-emerald-700 hover:underline">PDF / Kaynak ↗</a>' : '',
-        '  </div>',
-        '</article>'
+        '  </td>',
+        '</tr>'
       ].join('\n');
     }).join('\n');
 
-    setHTML(grid, cardsHtml);
+    setHTML(tbody, rowsHtml);
   }
 
   function openWorkDialog(idx) {
@@ -297,8 +340,8 @@
     if (badgesEl) {
       setHTML(
         badgesEl,
-        '<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-700">' + esc(w.publication_year || '—') + '</span>' +
-        '<span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-stone-100 text-mistral-ink">📚 ' + Number(w.cited_by_count || 0).toLocaleString('tr-TR') + ' Atıf</span>' +
+        '<span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-orange-50 border border-orange-200 text-mistral-orange">' + esc(w.publication_year || '—') + '</span>' +
+        '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-stone-100 text-mistral-ink">' + SVG_CHART + '<span>' + Number(w.cited_by_count || 0).toLocaleString('tr-TR') + ' Atıf</span></span>' +
         (w.doi ? '<span class="px-2.5 py-0.5 rounded-full text-xs font-mono bg-stone-100 text-mistral-slate">DOI: ' + esc(w.doi) + '</span>' : '')
       );
     }
@@ -313,9 +356,9 @@
           var hPct = Math.max(12, Math.round(((c.cited_by_count || 0) / maxC) * 72));
           return [
             '<div class="flex flex-col items-center justify-end gap-1">',
-            '  <span class="text-[10px] font-bold text-mistral-ink">' + Number(c.cited_by_count || 0).toLocaleString('tr-TR') + '</span>',
-            '  <div class="w-full max-w-[32px] rounded-t-md bg-amber-500/80" style="height:' + hPct + 'px"></div>',
-            '  <span class="text-[10px] font-medium text-mistral-stone">' + esc(c.year) + '</span>',
+            '  <span class="text-[10px] font-mono font-bold text-mistral-ink">' + Number(c.cited_by_count || 0).toLocaleString('tr-TR') + '</span>',
+            '  <div class="w-full max-w-[32px] rounded-t-md bg-mistral-orange" style="height:' + hPct + 'px"></div>',
+            '  <span class="text-[10px] font-mono font-medium text-mistral-stone">' + esc(c.year) + '</span>',
             '</div>'
           ].join('');
         }).join('');
@@ -338,59 +381,138 @@
     }
   }
 
+  function cleanFilterToken(str) {
+    return String(str || '').replace(/[,:|]/g, ' ').trim();
+  }
+
   async function searchWorks() {
-    var qInput = document.getElementById('akademik-query');
-    var sortSel = document.getElementById('akademik-sort');
-    var yearSel = document.getElementById('akademik-year');
-    var oaCheck = document.getElementById('akademik-oa-only');
+    var fTitle = document.getElementById('field-title');
+    var fAuthor = document.getElementById('field-author');
+    var fInst = document.getElementById('field-institution');
+    var fVenue = document.getElementById('field-venue');
+    var fDoi = document.getElementById('field-doi');
+    var fYearFrom = document.getElementById('field-year-from');
+    var fYearTo = document.getElementById('field-year-to');
+    var fSort = document.getElementById('field-sort');
+    var fOa = document.getElementById('field-oa');
+
     var statsBar = document.getElementById('akademik-stats-bar');
+    var badgeEl = document.getElementById('akademik-source-badge');
     var loading = document.getElementById('akademik-loading');
-    var grid = document.getElementById('akademik-grid');
+    var initial = document.getElementById('akademik-initial-state');
+    var resultsSection = document.getElementById('akademik-results-section');
 
-    var q = (qInput && qInput.value ? qInput.value.trim() : '') || 'Large Language Models Transformer';
-    var sort = (sortSel && sortSel.value) || 'cited_by_count:desc';
-    var yearFrom = parseInt(yearSel && yearSel.value ? yearSel.value : '0', 10) || 0;
-    var oaOnly = Boolean(oaCheck && oaCheck.checked);
+    var title = cleanFilterToken(fTitle && fTitle.value);
+    var author = cleanFilterToken(fAuthor && fAuthor.value);
+    var institution = cleanFilterToken(fInst && fInst.value);
+    var venue = cleanFilterToken(fVenue && fVenue.value);
+    var doi = String((fDoi && fDoi.value) || '').trim().replace(/^https?:\/\/doi\.org\//i, '');
+    var yearFrom = parseInt((fYearFrom && fYearFrom.value) || '0', 10) || 0;
+    var yearTo = parseInt((fYearTo && fYearTo.value) || '0', 10) || 0;
+    var sort = (fSort && fSort.value) || 'cited_by_count:desc';
+    var oaOnly = (fOa && fOa.value) === 'oa';
 
+    if (!title && !author && !institution && !venue && !doi && !yearFrom && !yearTo) {
+      notify('Lütfen arama yapmak için en az bir alanı (Başlık, Yazar, Kurum, Dergi veya DOI) doldurun.');
+      if (fTitle) fTitle.focus();
+      return;
+    }
+
+    if (initial) initial.classList.add('hidden');
+    if (resultsSection) resultsSection.classList.add('hidden');
     if (loading) loading.classList.remove('hidden');
-    if (grid) grid.classList.add('hidden');
-    if (statsBar) statsBar.textContent = '"' + q + '" için OpenAlex & Crossref taranıyor...';
+    if (statsBar) statsBar.textContent = 'OpenAlex & Crossref veritabanı sorgulanıyor...';
 
     try {
-      // 1) Doğrudan CORS-açık OpenAlex API çağrısı (hem monorepo hem GitHub Pages standalone uyumlu)
       var filters = [];
+      if (title) filters.push('title_and_abstract.search:' + title);
+      if (author) filters.push('raw_author_name.search:' + author);
+      if (institution) filters.push('raw_affiliation_strings.search:' + institution);
+      if (doi) filters.push('doi:https://doi.org/' + doi);
       if (oaOnly) filters.push('is_oa:true');
-      if (yearFrom >= 1900) filters.push('from_publication_date:' + yearFrom + '-01-01');
-      var filterStr = filters.length ? '&filter=' + encodeURIComponent(filters.join(',')) : '';
-      var oaUrl = 'https://api.openalex.org/works?search=' + encodeURIComponent(q) + '&sort=' + encodeURIComponent(sort) + '&per-page=18' + filterStr;
+      if (yearFrom >= 1900 && yearFrom <= 2030) filters.push('from_publication_date:' + yearFrom + '-01-01');
+      if (yearTo >= 1900 && yearTo <= 2030) filters.push('to_publication_date:' + yearTo + '-12-31');
 
+      var queryParts = ['per-page=25'];
+      if (venue) {
+        queryParts.push('search=' + encodeURIComponent(venue));
+      }
+      if (filters.length) {
+        queryParts.push('filter=' + encodeURIComponent(filters.join(',')));
+      }
+      if (sort !== 'relevance_score:desc' || venue) {
+        queryParts.push('sort=' + encodeURIComponent(sort));
+      }
+
+      var oaUrl = 'https://api.openalex.org/works?' + queryParts.join('&');
       var resp = await fetch(oaUrl, { headers: { 'Accept': 'application/json' } });
       if (!resp.ok) throw new Error('OpenAlex HTTP ' + resp.status);
       var data = await resp.json();
       var works = Array.isArray(data.results) ? data.results.map(normalizeOpenAlexWork) : [];
-      var totalCount = (data.meta && data.meta.count) || works.length;
 
+      if (venue) {
+        var vLow = venue.toLowerCase();
+        var vFiltered = works.filter(function (w) {
+          return (w.venue || '').toLowerCase().includes(vLow) || (w.publisher || '').toLowerCase().includes(vLow);
+        });
+        if (vFiltered.length) works = vFiltered;
+      }
+
+      var totalCount = (data.meta && data.meta.count) || works.length;
       currentWorks = works;
       updateSummaryStats(works, totalCount);
-      renderGrid(works);
+      renderTable(works);
+      if (badgeEl) badgeEl.textContent = 'OpenAlex + Crossref Canlı';
       if (statsBar) {
-        statsBar.textContent = 'Toplam ' + Number(totalCount).toLocaleString('tr-TR') + ' yayından ilk ' + works.length + ' sonuç gösteriliyor (OpenAlex Canlı)';
+        statsBar.textContent = 'Toplam ' + Number(totalCount).toLocaleString('tr-TR') + ' eşleşmeden ' + works.length + ' yayın tabloda listeleniyor.';
       }
     } catch (_) {
       try {
-        var apiResp = await fetch('/api/akademik/works?q=' + encodeURIComponent(q) + '&sort=' + encodeURIComponent(sort) + '&yearFrom=' + yearFrom + '&oa=' + (oaOnly ? '1' : '0'));
+        var qs = new URLSearchParams({
+          title: title,
+          author: author,
+          institution: institution,
+          venue: venue,
+          doi: doi,
+          yearFrom: String(yearFrom || ''),
+          yearTo: String(yearTo || ''),
+          sort: sort,
+          oa: oaOnly ? '1' : '0'
+        });
+        var apiResp = await fetch('/api/akademik/works?' + qs.toString());
         var apiData = await apiResp.json();
         currentWorks = apiData.results || FALLBACK_WORKS;
         updateSummaryStats(currentWorks, (apiData.meta && apiData.meta.count) || currentWorks.length);
-        renderGrid(currentWorks);
-        if (statsBar) statsBar.textContent = 'Akademik arşiv sonuçları listelendi (' + currentWorks.length + ' yayın)';
+        renderTable(currentWorks);
+        if (statsBar) statsBar.textContent = 'Akademik arşiv sonuçları tabloya aktarıldı (' + currentWorks.length + ' yayın).';
       } catch (_err2) {
         currentWorks = FALLBACK_WORKS;
         updateSummaryStats(currentWorks, currentWorks.length);
-        renderGrid(currentWorks);
-        if (statsBar) statsBar.textContent = 'Çevrimdışı örnek veri seti gösteriliyor (' + currentWorks.length + ' yayın)';
+        renderTable(currentWorks);
+        if (statsBar) statsBar.textContent = 'Çevrimdışı örnek veri seti gösteriliyor (' + currentWorks.length + ' yayın).';
       }
     }
+  }
+
+  function resetForm() {
+    ['field-title', 'field-author', 'field-institution', 'field-venue', 'field-doi', 'field-year-from', 'field-year-to'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    var fSort = document.getElementById('field-sort');
+    if (fSort) fSort.value = 'cited_by_count:desc';
+    var fOa = document.getElementById('field-oa');
+    if (fOa) fOa.value = 'all';
+
+    var initial = document.getElementById('akademik-initial-state');
+    var resultsSection = document.getElementById('akademik-results-section');
+    var metricsSection = document.getElementById('akademik-metrics-section');
+    var statsBar = document.getElementById('akademik-stats-bar');
+
+    if (resultsSection) resultsSection.classList.add('hidden');
+    if (metricsSection) metricsSection.classList.add('hidden');
+    if (initial) initial.classList.remove('hidden');
+    if (statsBar) statsBar.textContent = 'Sorgulama için yukarıdaki alanlardan en az birini doldurun.';
   }
 
   function init() {
@@ -402,28 +524,27 @@
       });
     }
 
-    var oaCheck = document.getElementById('akademik-oa-only');
-    if (oaCheck) oaCheck.addEventListener('change', searchWorks);
+    var resetBtn = document.getElementById('akademik-reset-btn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', resetForm);
+    }
 
-    var sortSel = document.getElementById('akademik-sort');
-    if (sortSel) sortSel.addEventListener('change', searchWorks);
-
-    var yearSel = document.getElementById('akademik-year');
-    if (yearSel) yearSel.addEventListener('change', searchWorks);
-
-    document.querySelectorAll('.akademik-topic-chip').forEach(function (btn) {
+    document.querySelectorAll('.akademik-preset-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var qInput = document.getElementById('akademik-query');
-        if (qInput) {
-          qInput.value = btn.getAttribute('data-quick-query') || '';
-          searchWorks();
-        }
+        resetForm();
+        var t = btn.getAttribute('data-preset-title') || '';
+        var a = btn.getAttribute('data-preset-author') || '';
+        var d = btn.getAttribute('data-preset-doi') || '';
+        if (t && document.getElementById('field-title')) document.getElementById('field-title').value = t;
+        if (a && document.getElementById('field-author')) document.getElementById('field-author').value = a;
+        if (d && document.getElementById('field-doi')) document.getElementById('field-doi').value = d;
+        searchWorks();
       });
     });
 
-    var grid = document.getElementById('akademik-grid');
-    if (grid) {
-      grid.addEventListener('click', function (e) {
+    var tbody = document.getElementById('akademik-table-body');
+    if (tbody) {
+      tbody.addEventListener('click', function (e) {
         var btn = e.target.closest('[data-open-work]');
         if (btn) {
           var idx = parseInt(btn.getAttribute('data-open-work'), 10);
@@ -461,7 +582,7 @@
         var citeOut = document.getElementById('dialog-citation-output');
         if (citeOut && citeOut.textContent) {
           navigator.clipboard.writeText(citeOut.textContent).then(function () {
-            notify('Kaynakça panoya kopyalandı!');
+            notify('Kaynakça panoya kopyalandı.');
           });
         }
       });
@@ -484,8 +605,7 @@
         notify('BibTeX (.bib) dosyası indirildi.');
       });
     }
-
-    searchWorks();
+    // Sayfa yüklenirken otomatik API isteği ATILMAZ.
   }
 
   if (document.readyState === 'loading') {

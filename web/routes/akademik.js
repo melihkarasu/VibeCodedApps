@@ -1,140 +1,225 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <script src="/static/apps/akademik/app.js?v=20261116a" defer></script>
+      <link rel="stylesheet" href="/static/apps/akademik/app.css?v=20261117a" />
+      <script src="/static/apps/akademik/app.js?v=20261117a" defer></script>
     `;
 
     const content = `
       <!-- Üst Başlık & Navigasyon -->
-      <div class="vibe-page-header mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="vibe-page-header mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-xs inline-flex items-center gap-1 font-medium">
-              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Vitrine Dön
+            <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-xs inline-flex items-center gap-1 font-semibold">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+              <span>Vitrine Dön</span>
             </a>
-            <span class="text-stone-300 text-xs">•</span>
-            <span class="text-xs text-mistral-stone uppercase tracking-wider font-semibold">Akademik & Bilimsel Araştırma</span>
+            <span class="text-mistral-hairline">|</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-orange-50 border border-orange-200 text-mistral-orange text-[11px] font-mono font-bold">Akademik</span>
           </div>
-          <h1 class="text-2xl sm:text-3xl font-bold text-mistral-ink tracking-tight mt-1 flex items-center gap-2.5">
-            <span class="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 flex items-center justify-center shrink-0">
-              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          <div class="flex items-center gap-3.5 mt-2">
+            <span class="vibe-header-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
             </span>
-            <span>Akademik Makale & Atıf Ağı Kaşifi</span>
-          </h1>
-          <p class="text-mistral-slate text-sm mt-1">OpenAlex ve Crossref üzerinden 250M+ bilimsel yayını konu, yazar, kurum veya DOI ile tarayın; açık erişim PDF ve APA/IEEE/MLA/BibTeX kaynakça üretin.</p>
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">Akademik Makale & Atıf Ağı Kaşifi</h1>
+          </div>
+          <p class="text-mistral-slate text-sm mt-0.5 font-normal">
+            OpenAlex ve Crossref açık akademik dizini üzerinden 250 milyondan fazla bilimsel yayını başlık, yazar, kurum, dergi veya DOI bazında sorgulayın; kaynakça ve atıf metriklerini tablo halinde inceleyin.
+          </p>
         </div>
 
-        <div class="flex items-center gap-2 self-start md:self-auto">
-          <span id="akademik-source-badge" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 text-xs font-semibold">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            OpenAlex + Crossref Canlı
-          </span>
+        <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs self-start md:self-auto shrink-0">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span id="akademik-source-badge" class="font-semibold">OpenAlex & Crossref Hazır</span>
         </div>
       </div>
 
-      <!-- Hızlı Konu Etiketleri -->
-      <div class="mb-4 flex flex-wrap items-center gap-2">
-        <span class="text-xs font-semibold text-mistral-stone uppercase tracking-wider mr-1">Popüler Araştırma Alanları:</span>
-        <button type="button" data-quick-query="Large Language Models Transformer" class="akademik-topic-chip px-3 py-1 rounded-full text-xs font-medium bg-white border border-mistral-border text-mistral-ink hover:border-amber-500 hover:text-amber-600 transition">🧠 Büyük Dil Modelleri (LLM)</button>
-        <button type="button" data-quick-query="CRISPR Gene Editing" class="akademik-topic-chip px-3 py-1 rounded-full text-xs font-medium bg-white border border-mistral-border text-mistral-ink hover:border-amber-500 hover:text-amber-600 transition">🧬 CRISPR & Gen Düzenleme</button>
-        <button type="button" data-quick-query="Quantum Error Correction" class="akademik-topic-chip px-3 py-1 rounded-full text-xs font-medium bg-white border border-mistral-border text-mistral-ink hover:border-amber-500 hover:text-amber-600 transition">⚛️ Kuantum Hesaplama</button>
-        <button type="button" data-quick-query="Solid State Battery" class="akademik-topic-chip px-3 py-1 rounded-full text-xs font-medium bg-white border border-mistral-border text-mistral-ink hover:border-amber-500 hover:text-amber-600 transition">🔋 Katı Hal Bataryaları</button>
-        <button type="button" data-quick-query="Climate Change Mitigation" class="akademik-topic-chip px-3 py-1 rounded-full text-xs font-medium bg-white border border-mistral-border text-mistral-ink hover:border-amber-500 hover:text-amber-600 transition">🌍 İklim & Karbon Yakalama</button>
-        <button type="button" data-quick-query="Zero Trust Cybersecurity" class="akademik-topic-chip px-3 py-1 rounded-full text-xs font-medium bg-white border border-mistral-border text-mistral-ink hover:border-amber-500 hover:text-amber-600 transition">🛡️ Zero-Trust Siber Güvenlik</button>
-      </div>
+      <!-- Çok Alanlı Tam Genişlikli Akademik Arama & Filtre Paneli -->
+      <section class="w-full p-5 sm:p-6 rounded-2xl bg-white border border-mistral-hairline shadow-sm mb-6">
+        <form id="akademik-search-form" class="space-y-4">
+          <!-- 1. Satır: Veri Türlerine Göre Ayrı Metin Kutuları -->
+          <div class="akademik-form-row-top">
+            <div>
+              <label for="field-title" class="akademik-label">
+                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                <span>Makale Başlığı / Konu</span>
+              </label>
+              <input id="field-title" type="text" placeholder="Örn: Attention mechanism, CRISPR, solid state..." class="akademik-input" />
+            </div>
 
-      <!-- Arama & Filtre Paneli -->
-      <div class="bg-white rounded-2xl border border-mistral-border p-4 sm:p-5 shadow-xs mb-6">
-        <form id="akademik-search-form" class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
-          <div class="md:col-span-5">
-            <label for="akademik-query" class="block text-xs font-semibold text-mistral-slate mb-1.5">Konu, Başlık, Yazar veya DOI (ör: 10.1038/...)</label>
-            <div class="relative">
-              <input id="akademik-query" type="search" value="Large Language Models Transformer" placeholder="Makale adı, yazar, üniversite veya DOI girin..." required class="w-full pl-9 pr-3 py-2.5 rounded-xl border border-mistral-border bg-stone-50/60 text-sm text-mistral-ink focus:outline-none focus:border-amber-500 transition" />
-              <span class="absolute left-3 top-3 text-mistral-stone">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              </span>
+            <div>
+              <label for="field-author" class="akademik-label">
+                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>Yazar Adı Soyadı</span>
+              </label>
+              <input id="field-author" type="text" placeholder="Örn: Aziz Sancar,Geoffrey Hinton..." class="akademik-input" />
+            </div>
+
+            <div>
+              <label for="field-institution" class="akademik-label">
+                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+                <span>Kurum / Üniversite</span>
+              </label>
+              <input id="field-institution" type="text" placeholder="Örn: MIT, Stanford, Boğaziçi, İTÜ..." class="akademik-input" />
+            </div>
+
+            <div>
+              <label for="field-venue" class="akademik-label">
+                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                <span>Dergi / Konferans</span>
+              </label>
+              <input id="field-venue" type="text" placeholder="Örn: Nature, Science, NeurIPS, IEEE..." class="akademik-input" />
             </div>
           </div>
 
-          <div class="md:col-span-3">
-            <label for="akademik-sort" class="block text-xs font-semibold text-mistral-slate mb-1.5">Sıralama Ölçütü</label>
-            <select id="akademik-sort" class="w-full px-3 py-2.5 rounded-xl border border-mistral-border bg-stone-50/60 text-sm text-mistral-ink focus:outline-none focus:border-amber-500">
-              <option value="cited_by_count:desc">En Çok Atıf Alanlar (Atıf ↓)</option>
-              <option value="publication_year:desc">En Güncel Yayınlar (Yıl ↓)</option>
-              <option value="relevance_score:desc">Arama Alaka Düzeyi</option>
-            </select>
+          <!-- 2. Satır: DOI, Yıl Aralığı, Sıralama, Açık Erişim ve Aksiyon Butonları -->
+          <div class="akademik-form-row-bottom">
+            <div>
+              <label for="field-doi" class="akademik-label">
+                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                <span>DOI Numarası</span>
+              </label>
+              <input id="field-doi" type="text" placeholder="Örn: 10.1038/s41586-021-03819-2" class="akademik-input font-mono" />
+            </div>
+
+            <div>
+              <label for="field-year-from" class="akademik-label">
+                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span>Başlangıç Yılı</span>
+              </label>
+              <input id="field-year-from" type="number" min="1900" max="2030" placeholder="Örn: 2018" class="akademik-input font-mono" />
+            </div>
+
+            <div>
+              <label for="field-year-to" class="akademik-label">
+                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span>Bitiş Yılı</span>
+              </label>
+              <input id="field-year-to" type="number" min="1900" max="2030" placeholder="Örn: 2026" class="akademik-input font-mono" />
+            </div>
+
+            <div>
+              <label for="field-sort" class="akademik-label">
+                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+                <span>Sıralama Ölçütü</span>
+              </label>
+              <select id="field-sort" class="akademik-input">
+                <option value="cited_by_count:desc">Atıf Sayısı (Yüksekten Düşüğe)</option>
+                <option value="publication_year:desc">Yayın Yılı (En Yeniden Eskiye)</option>
+                <option value="relevance_score:desc">Arama Alaka Düzeyi</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="field-oa" class="akademik-label">
+                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+                <span>Erişim Filtresi</span>
+              </label>
+              <select id="field-oa" class="akademik-input">
+                <option value="all">Tüm Yayınlar</option>
+                <option value="oa">Yalnızca Açık Erişim (PDF)</option>
+              </select>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button type="submit" id="akademik-submit-btn" class="flex-1 py-2.5 px-4 rounded-xl bg-mistral-orange hover:bg-mistral-orange-deep text-white text-xs sm:text-sm font-semibold transition shadow-xs cursor-pointer inline-flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span>Sorgula</span>
+              </button>
+              <button type="button" id="akademik-reset-btn" title="Alanları Temizle" class="py-2.5 px-3 rounded-xl bg-stone-100 hover:bg-stone-200 text-mistral-slate hover:text-mistral-ink text-xs font-semibold transition cursor-pointer">
+                Temizle
+              </button>
+            </div>
           </div>
 
-          <div class="md:col-span-2">
-            <label for="akademik-year" class="block text-xs font-semibold text-mistral-slate mb-1.5">Başlangıç Yılı</label>
-            <select id="akademik-year" class="w-full px-3 py-2.5 rounded-xl border border-mistral-border bg-stone-50/60 text-sm text-mistral-ink focus:outline-none focus:border-amber-500">
-              <option value="0">Tüm Yıllar</option>
-              <option value="2024">2024 ve sonrası</option>
-              <option value="2022">2022 ve sonrası</option>
-              <option value="2018">2018 ve sonrası</option>
-              <option value="2010">2010 ve sonrası</option>
-            </select>
-          </div>
-
-          <div class="md:col-span-2 flex gap-2">
-            <button type="submit" id="akademik-submit-btn" class="w-full py-2.5 px-4 rounded-xl bg-mistral-ink hover:bg-amber-600 text-white text-sm font-semibold transition flex items-center justify-center gap-1.5 cursor-pointer">
-              <span>Araştır</span>
-            </button>
+          <!-- Alt Satır: Örnek Sorgu Şablonları & Durum Bilgisi -->
+          <div class="pt-3 border-t border-mistral-hairline flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-1.5 text-xs">
+              <span class="font-semibold text-mistral-stone mr-1 inline-flex items-center gap-1">
+                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span>Hazır Sorgu Şablonları:</span>
+              </span>
+              <button type="button" data-preset-title="Transformer Attention Mechanism" class="akademik-preset-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium transition cursor-pointer">Transformer & LLM</button>
+              <button type="button" data-preset-author="Aziz Sancar" class="akademik-preset-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium transition cursor-pointer">Yazar: Aziz Sancar</button>
+              <button type="button" data-preset-title="CRISPR-Cas9 Genome Editing" class="akademik-preset-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium transition cursor-pointer">CRISPR Gen Düzenleme</button>
+              <button type="button" data-preset-title="Quantum Error Correction" class="akademik-preset-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium transition cursor-pointer">Kuantum Hata Düzeltme</button>
+              <button type="button" data-preset-doi="10.1038/s41586-021-03819-2" class="akademik-preset-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium font-mono transition cursor-pointer">DOI: AlphaFold</button>
+            </div>
+            <div id="akademik-stats-bar" class="text-xs text-mistral-stone font-medium">
+              Sorgulama için yukarıdaki alanlardan en az birini doldurun.
+            </div>
           </div>
         </form>
+      </section>
 
-        <div class="mt-3 pt-3 border-t border-stone-100 flex flex-wrap items-center justify-between gap-3">
-          <label class="inline-flex items-center gap-2 text-xs font-medium text-mistral-slate cursor-pointer select-none">
-            <input id="akademik-oa-only" type="checkbox" class="rounded border-stone-300 text-amber-600 focus:ring-amber-500" />
-            <span>Yalnızca <b>Açık Erişim (Open Access PDF)</b> makaleleri göster</span>
-          </label>
-          <div id="akademik-stats-bar" class="text-xs text-mistral-stone font-medium">
-            Veriler yükleniyor...
-          </div>
+      <!-- Özet Metrik Kartları (Arama yapıldığında görünür) -->
+      <section id="akademik-metrics-section" class="hidden akademik-metrics-grid mb-6">
+        <div class="bg-white rounded-xl border border-mistral-hairline p-4 shadow-xs">
+          <div class="text-xs text-mistral-stone font-semibold uppercase tracking-wider">Eşleşen Toplam Yayın</div>
+          <div id="stat-total-works" class="text-2xl font-bold text-mistral-ink font-mono mt-1">—</div>
         </div>
-      </div>
+        <div class="bg-white rounded-xl border border-mistral-hairline p-4 shadow-xs">
+          <div class="text-xs text-mistral-stone font-semibold uppercase tracking-wider">Tablodaki Toplam Atıf</div>
+          <div id="stat-total-citations" class="text-2xl font-bold text-mistral-orange font-mono mt-1">—</div>
+        </div>
+        <div class="bg-white rounded-xl border border-mistral-hairline p-4 shadow-xs">
+          <div class="text-xs text-mistral-stone font-semibold uppercase tracking-wider">Açık Erişim (OA) Oranı</div>
+          <div id="stat-oa-ratio" class="text-2xl font-bold text-emerald-700 font-mono mt-1">—</div>
+        </div>
+        <div class="bg-white rounded-xl border border-mistral-hairline p-4 shadow-xs">
+          <div class="text-xs text-mistral-stone font-semibold uppercase tracking-wider">Medyan Yayın Yılı</div>
+          <div id="stat-median-year" class="text-2xl font-bold text-mistral-ink font-mono mt-1">—</div>
+        </div>
+      </section>
 
-      <!-- Özet Metrik Kartları -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-        <div class="bg-white rounded-xl border border-mistral-border p-3.5">
-          <div class="text-xs text-mistral-stone font-medium">Eşleşen Toplam Yayın</div>
-          <div id="stat-total-works" class="text-xl font-bold text-mistral-ink mt-0.5">—</div>
+      <!-- Başlangıç Boş Durumu (Sayfa ilk açıldığında API isteği atılmaz) -->
+      <section id="akademik-initial-state" class="bg-white rounded-2xl border border-mistral-hairline p-10 sm:p-14 text-center shadow-xs mb-12">
+        <div class="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-200 text-mistral-orange flex items-center justify-center mx-auto mb-4">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </div>
-        <div class="bg-white rounded-xl border border-mistral-border p-3.5">
-          <div class="text-xs text-mistral-stone font-medium">Listelenen Toplam Atıf</div>
-          <div id="stat-total-citations" class="text-xl font-bold text-amber-600 mt-0.5">—</div>
-        </div>
-        <div class="bg-white rounded-xl border border-mistral-border p-3.5">
-          <div class="text-xs text-mistral-stone font-medium">Açık Erişim (OA) Oranı</div>
-          <div id="stat-oa-ratio" class="text-xl font-bold text-emerald-600 mt-0.5">—</div>
-        </div>
-        <div class="bg-white rounded-xl border border-mistral-border p-3.5">
-          <div class="text-xs text-mistral-stone font-medium">Medyan Yayın Yılı</div>
-          <div id="stat-median-year" class="text-xl font-bold text-mistral-ink mt-0.5">—</div>
-        </div>
-      </div>
+        <h2 class="text-lg font-bold text-mistral-ink font-editorial">Akademik Literatür Sorgulamaya Hazır</h2>
+        <p class="text-xs sm:text-sm text-mistral-slate max-w-xl mx-auto mt-1.5 leading-relaxed">
+          Sayfa açılışında gereksiz ağ trafiği oluşturmamak için otomatik sorgu çalıştırılmaz. Makale başlığı, yazar adı, üniversite/kurum, dergi veya doğrudan DOI numarası girerek <b>Sorgula</b> butonuna basın.
+        </p>
+      </section>
 
       <!-- Yükleniyor Durumu -->
-      <div id="akademik-loading" class="py-16 text-center">
-        <div class="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-white border border-mistral-border shadow-xs">
-          <span class="w-4 h-4 rounded-full border-2 border-amber-500 border-t-transparent animate-spin"></span>
-          <span class="text-sm font-medium text-mistral-slate">OpenAlex & Crossref akademik dizini taranıyor...</span>
+      <section id="akademik-loading" class="hidden py-14 text-center">
+        <div class="inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-white border border-mistral-hairline shadow-xs">
+          <span class="w-4 h-4 rounded-full border-2 border-mistral-orange border-t-transparent animate-spin"></span>
+          <span class="text-sm font-medium text-mistral-slate">OpenAlex ve Crossref akademik veritabanı sorgulanıyor...</span>
         </div>
-      </div>
+      </section>
 
-      <!-- Makale Kartları Grid -->
-      <div id="akademik-grid" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4 mb-12" style="content-visibility: auto;">
-      </div>
+      <!-- Sonuç Tablosu (Arama yapıldığında görünür) -->
+      <section id="akademik-results-section" class="hidden mb-14">
+        <div class="akademik-table-container">
+          <table class="akademik-table">
+            <thead>
+              <tr>
+                <th style="width: 90px;">Yıl & Tür</th>
+                <th style="width: 34%;">Makale Başlığı & Alanlar</th>
+                <th style="width: 24%;">Yazarlar & Kurum</th>
+                <th style="width: 16%;">Dergi / Konferans</th>
+                <th style="width: 100px;">Atıf Sayısı</th>
+                <th style="width: 150px;">Erişim & İşlem</th>
+              </tr>
+            </thead>
+            <tbody id="akademik-table-body">
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       <!-- Native <dialog closedby="any"> Makale Detay, Atıf Grafiği & Kaynakça Üretici Modalı -->
-      <dialog id="akademik-detail-dialog" closedby="any" class="w-full max-w-3xl rounded-2xl border border-mistral-border bg-white p-0 shadow-2xl backdrop:bg-black/50">
-        <div class="p-5 sm:p-6 border-b border-mistral-border flex items-start justify-between gap-4">
+      <dialog id="akademik-detail-dialog" closedby="any" class="w-full max-w-3xl rounded-2xl border border-mistral-hairline bg-white p-0 shadow-2xl backdrop:bg-black/50">
+        <div class="p-5 sm:p-6 border-b border-mistral-hairline flex items-start justify-between gap-4">
           <div>
             <div id="dialog-work-badges" class="flex flex-wrap items-center gap-2 mb-2"></div>
-            <h2 id="dialog-work-title" class="text-lg sm:text-xl font-bold text-mistral-ink leading-snug">Makale Detayı</h2>
+            <h2 id="dialog-work-title" class="text-lg sm:text-xl font-bold text-mistral-ink font-editorial leading-snug">Makale Detayı</h2>
           </div>
-          <button type="button" id="dialog-close-btn" aria-label="Kapat" class="w-8 h-8 rounded-lg border border-mistral-border flex items-center justify-center text-mistral-slate hover:text-mistral-ink hover:bg-stone-100 transition shrink-0 cursor-pointer">
-            ✕
+          <button type="button" id="dialog-close-btn" aria-label="Kapat" class="w-8 h-8 rounded-lg border border-mistral-hairline flex items-center justify-center text-mistral-slate hover:text-mistral-ink hover:bg-stone-100 transition shrink-0 cursor-pointer">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
 
@@ -147,19 +232,19 @@ module.exports = function(pageTemplate) {
 
           <div>
             <div class="text-xs font-semibold uppercase tracking-wider text-mistral-stone mb-1">Özet (Abstract)</div>
-            <p id="dialog-work-abstract" class="text-sm text-mistral-slate leading-relaxed bg-stone-50 rounded-xl p-3.5 border border-stone-200/70"></p>
+            <p id="dialog-work-abstract" class="text-sm text-mistral-slate leading-relaxed bg-stone-50 rounded-xl p-3.5 border border-mistral-hairline"></p>
           </div>
 
           <div>
             <div class="text-xs font-semibold uppercase tracking-wider text-mistral-stone mb-2">Yıllara Göre Atıf Dağılımı</div>
-            <div id="dialog-citation-chart" class="grid grid-cols-4 sm:grid-cols-8 gap-2 items-end bg-stone-50 rounded-xl p-3.5 border border-stone-200/70 min-h-[110px]"></div>
+            <div id="dialog-citation-chart" class="grid grid-cols-4 sm:grid-cols-8 gap-2 items-end bg-stone-50 rounded-xl p-3.5 border border-mistral-hairline min-h-[110px]"></div>
           </div>
 
           <div>
             <div class="flex items-center justify-between gap-2 mb-2">
               <span class="text-xs font-semibold uppercase tracking-wider text-mistral-stone">Otomatik Kaynakça Üretici (APA 7 / IEEE / MLA 9 / BibTeX)</span>
               <div class="flex items-center gap-1.5">
-                <button type="button" id="dialog-copy-citation" class="px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-700 hover:bg-amber-500/20 text-xs font-semibold transition cursor-pointer">Kopyala</button>
+                <button type="button" id="dialog-copy-citation" class="px-2.5 py-1 rounded-lg bg-orange-50 border border-orange-200 text-mistral-orange hover:bg-orange-100 text-xs font-semibold transition cursor-pointer">Kopyala</button>
                 <button type="button" id="dialog-download-bib" class="px-2.5 py-1 rounded-lg bg-stone-100 text-mistral-ink hover:bg-stone-200 text-xs font-semibold transition cursor-pointer">.bib İndir</button>
               </div>
             </div>
@@ -172,9 +257,15 @@ module.exports = function(pageTemplate) {
             <pre id="dialog-citation-output" class="text-xs bg-stone-900 text-stone-100 rounded-xl p-3.5 overflow-x-auto whitespace-pre-wrap font-mono"></pre>
           </div>
 
-          <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-stone-200">
-            <a id="dialog-doi-link" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-amber-600 hover:underline">DOI Bağlantısını Aç ↗</a>
-            <a id="dialog-oa-link" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition">Tam Metin PDF / Kaynağı Aç ↗</a>
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-mistral-hairline">
+            <a id="dialog-doi-link" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-mistral-orange hover:underline inline-flex items-center gap-1">
+              <span>DOI Kaydını Aç</span>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+            </a>
+            <a id="dialog-oa-link" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-mistral-ink hover:bg-mistral-orange text-white text-xs font-semibold transition inline-flex items-center gap-1.5">
+              <span>Tam Metin PDF / Kaynağı Aç</span>
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+            </a>
           </div>
         </div>
       </dialog>

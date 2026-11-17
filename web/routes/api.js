@@ -58,5 +58,6 @@ router.use('/', require('./api/ilac'));
 router.use('/', require('./api/egzersiz'));
 router.use('/', require('./api/klinik'));
 router.use('/', require('./api/dso'));
+router.use('/', require('./api/akademik'));
 
 module.exports = router;
