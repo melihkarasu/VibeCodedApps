@@ -299,7 +299,7 @@ function exportApp(entry, opts) {
   const appJsSrc = pubDirAbs ? path.join(pubDirAbs, 'app.js') : null;
   const hasAppCss = Boolean(appCssSrc && fs.existsSync(appCssSrc));
   const hasAppJs = Boolean(appJsSrc && fs.existsSync(appJsSrc));
-  const hasInlineScript = cleanContent.includes('src="js/app.js"') || cleanHead.includes('src="js/app.js"');
+  const hasInlineScript = cleanContent.includes('src="js/app.js"');
 
   const html = buildStandaloneHtml({
     title: payload.title || entry.name,

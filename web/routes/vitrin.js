@@ -728,7 +728,7 @@ module.exports = function(pageTemplate) {
           </button>
 
           <!-- Accordion Body / App Cards Grid -->
-          <div id="acc-body-${c.id}" class="accordion-content px-4 sm:px-6 pb-5 sm:pb-6 pt-4 border-t border-stone-200/70 bg-[#F8FAFC] block">
+          <div id="acc-body-${c.id}" style="padding-top: 1.25rem; padding-bottom: 1.5rem;" class="accordion-content px-4 sm:px-6 pb-6 pt-5 border-t border-stone-200/70 bg-[#F8FAFC] block">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
               ${c.apps.map(app => `
                 <article data-app-id="${app.id}" data-search="${(app.name + ' ' + app.desc + ' ' + c.title).toLowerCase().replace(/"/g, '')}" style="view-transition-name: card-${app.id}; view-transition-class: vibe-vt-card;" class="vibe-app-card vibe-cq-container group">

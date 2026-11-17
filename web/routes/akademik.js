@@ -11,7 +11,7 @@ module.exports = function(pageTemplate) {
         <div>
           <div class="flex items-center gap-3">
             <a href="/" class="text-mistral-slate hover:text-mistral-ink transition text-xs inline-flex items-center gap-1 font-semibold">
-              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+              <svg width="14" height="14" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
               <span>Vitrine Dön</span>
             </a>
             <span class="text-mistral-hairline">|</span>
@@ -41,7 +41,7 @@ module.exports = function(pageTemplate) {
           <div class="akademik-form-row-top">
             <div>
               <label for="field-title" class="akademik-label">
-                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                <svg width="14" height="14" class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
                 <span>Makale Başlığı / Konu</span>
               </label>
               <input id="field-title" type="text" placeholder="Örn: Attention mechanism, CRISPR, solid state..." class="akademik-input" />
@@ -49,7 +49,7 @@ module.exports = function(pageTemplate) {
 
             <div>
               <label for="field-author" class="akademik-label">
-                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <svg width="14" height="14" class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 <span>Yazar Adı Soyadı</span>
               </label>
               <input id="field-author" type="text" placeholder="Örn: Aziz Sancar,Geoffrey Hinton..." class="akademik-input" />
@@ -57,7 +57,7 @@ module.exports = function(pageTemplate) {
 
             <div>
               <label for="field-institution" class="akademik-label">
-                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+                <svg width="14" height="14" class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
                 <span>Kurum / Üniversite</span>
               </label>
               <input id="field-institution" type="text" placeholder="Örn: MIT, Stanford, Boğaziçi, İTÜ..." class="akademik-input" />
@@ -65,7 +65,7 @@ module.exports = function(pageTemplate) {
 
             <div>
               <label for="field-venue" class="akademik-label">
-                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                <svg width="14" height="14" class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
                 <span>Dergi / Konferans</span>
               </label>
               <input id="field-venue" type="text" placeholder="Örn: Nature, Science, NeurIPS, IEEE..." class="akademik-input" />
@@ -76,7 +76,7 @@ module.exports = function(pageTemplate) {
           <div class="akademik-form-row-bottom">
             <div>
               <label for="field-doi" class="akademik-label">
-                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                <svg width="14" height="14" class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
                 <span>DOI Numarası</span>
               </label>
               <input id="field-doi" type="text" placeholder="Örn: 10.1038/s41586-021-03819-2" class="akademik-input font-mono" />
@@ -84,7 +84,7 @@ module.exports = function(pageTemplate) {
 
             <div>
               <label for="field-year-from" class="akademik-label">
-                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <svg width="14" height="14" class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                 <span>Başlangıç Yılı</span>
               </label>
               <input id="field-year-from" type="number" min="1900" max="2030" placeholder="Örn: 2018" class="akademik-input font-mono" />
@@ -92,7 +92,7 @@ module.exports = function(pageTemplate) {
 
             <div>
               <label for="field-year-to" class="akademik-label">
-                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <svg width="14" height="14" class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                 <span>Bitiş Yılı</span>
               </label>
               <input id="field-year-to" type="number" min="1900" max="2030" placeholder="Örn: 2026" class="akademik-input font-mono" />
@@ -100,7 +100,7 @@ module.exports = function(pageTemplate) {
 
             <div>
               <label for="field-sort" class="akademik-label">
-                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+                <svg width="14" height="14" class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
                 <span>Sıralama Ölçütü</span>
               </label>
               <select id="field-sort" class="akademik-input">
@@ -112,7 +112,7 @@ module.exports = function(pageTemplate) {
 
             <div>
               <label for="field-oa" class="akademik-label">
-                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+                <svg width="14" height="14" class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
                 <span>Erişim Filtresi</span>
               </label>
               <select id="field-oa" class="akademik-input">
@@ -123,7 +123,7 @@ module.exports = function(pageTemplate) {
 
             <div class="flex items-center gap-2">
               <button type="submit" id="akademik-submit-btn" class="flex-1 py-2.5 px-4 rounded-xl bg-mistral-orange hover:bg-mistral-orange-deep text-white text-xs sm:text-sm font-semibold transition shadow-xs cursor-pointer inline-flex items-center justify-center gap-2">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <svg width="16" height="16" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 <span>Sorgula</span>
               </button>
               <button type="button" id="akademik-reset-btn" title="Alanları Temizle" class="py-2.5 px-3 rounded-xl bg-stone-100 hover:bg-stone-200 text-mistral-slate hover:text-mistral-ink text-xs font-semibold transition cursor-pointer">
@@ -136,7 +136,7 @@ module.exports = function(pageTemplate) {
           <div class="pt-3 border-t border-mistral-hairline flex flex-wrap items-center justify-between gap-3">
             <div class="flex flex-wrap items-center gap-1.5 text-xs">
               <span class="font-semibold text-mistral-stone mr-1 inline-flex items-center gap-1">
-                <svg class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <svg width="14" height="14" class="w-3.5 h-3.5 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                 <span>Hazır Sorgu Şablonları:</span>
               </span>
               <button type="button" data-preset-title="Transformer Attention Mechanism" class="akademik-preset-btn px-2.5 py-1 rounded-md bg-stone-100 hover:bg-mistral-cream text-mistral-ink font-medium transition cursor-pointer">Transformer & LLM</button>
@@ -175,7 +175,7 @@ module.exports = function(pageTemplate) {
       <!-- Başlangıç Boş Durumu (Sayfa ilk açıldığında API isteği atılmaz) -->
       <section id="akademik-initial-state" class="bg-white rounded-2xl border border-mistral-hairline p-10 sm:p-14 text-center shadow-xs mb-12">
         <div class="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-200 text-mistral-orange flex items-center justify-center mx-auto mb-4">
-          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg width="24" height="24" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </div>
         <h2 class="text-lg font-bold text-mistral-ink font-editorial">Akademik Literatür Sorgulamaya Hazır</h2>
         <p class="text-xs sm:text-sm text-mistral-slate max-w-xl mx-auto mt-1.5 leading-relaxed">
@@ -219,7 +219,7 @@ module.exports = function(pageTemplate) {
             <h2 id="dialog-work-title" class="text-lg sm:text-xl font-bold text-mistral-ink font-editorial leading-snug">Makale Detayı</h2>
           </div>
           <button type="button" id="dialog-close-btn" aria-label="Kapat" class="w-8 h-8 rounded-lg border border-mistral-hairline flex items-center justify-center text-mistral-slate hover:text-mistral-ink hover:bg-stone-100 transition shrink-0 cursor-pointer">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <svg width="16" height="16" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
 
@@ -260,11 +260,11 @@ module.exports = function(pageTemplate) {
           <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-mistral-hairline">
             <a id="dialog-doi-link" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-mistral-orange hover:underline inline-flex items-center gap-1">
               <span>DOI Kaydını Aç</span>
-              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+              <svg width="14" height="14" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
             </a>
             <a id="dialog-oa-link" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-mistral-ink hover:bg-mistral-orange text-white text-xs font-semibold transition inline-flex items-center gap-1.5">
               <span>Tam Metin PDF / Kaynağı Aç</span>
-              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+              <svg width="14" height="14" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
             </a>
           </div>
         </div>

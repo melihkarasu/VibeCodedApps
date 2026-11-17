@@ -24,11 +24,11 @@
     if (typeof window.showToast === 'function') window.showToast(msg);
   };
 
-  var SVG_UNLOCK = '<svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>';
-  var SVG_LOCK = '<svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
-  var SVG_BUILDING = '<svg class="w-3.5 h-3.5 shrink-0 text-mistral-stone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>';
-  var SVG_CHART = '<svg class="w-3.5 h-3.5 shrink-0 text-mistral-orange" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>';
-  var SVG_EXT = '<svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>';
+  var SVG_UNLOCK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>';
+  var SVG_LOCK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+  var SVG_BUILDING = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>';
+  var SVG_CHART = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>';
+  var SVG_EXT = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>';
 
   var TYPE_LABELS = {
     'article': 'Makale',
@@ -255,8 +255,8 @@
     var rowsHtml = works.map(function (w, idx) {
       var typeLabel = TYPE_LABELS[w.type] || w.type || 'Makale';
       var oaBadge = w.is_oa
-        ? '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">' + SVG_UNLOCK + '<span>Açık Erişim PDF</span></span>'
-        : '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-stone-100 text-mistral-stone border border-stone-200">' + SVG_LOCK + '<span>Kapalı Erişim</span></span>';
+        ? '<span class="akademik-oa-badge akademik-oa-badge--open">' + SVG_UNLOCK + '<span>Açık Erişim PDF</span></span>'
+        : '<span class="akademik-oa-badge akademik-oa-badge--closed">' + SVG_LOCK + '<span>Kapalı Erişim</span></span>';
 
       var authorsText = (w.authors && w.authors.length)
         ? w.authors.slice(0, 3).join(', ') + (w.authors.length > 3 ? ' (+' + (w.authors.length - 3) + ')' : '')
@@ -267,44 +267,44 @@
         : '';
 
       var conceptsHtml = (w.concepts || []).slice(0, 4).map(function (c) {
-        return '<span class="px-2 py-0.5 rounded bg-stone-100 text-mistral-slate text-[11px] font-medium">' + esc(c) + '</span>';
+        return '<span class="akademik-concept-chip">' + esc(c) + '</span>';
       }).join('');
 
       var doiHtml = w.doi
-        ? '<a href="https://doi.org/' + esc(w.doi) + '" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-[11px] font-mono text-mistral-orange hover:underline mt-1"><span>DOI: ' + esc(w.doi) + '</span>' + SVG_EXT + '</a>'
+        ? '<a href="https://doi.org/' + esc(w.doi) + '" target="_blank" rel="noopener noreferrer" class="akademik-doi-link"><span>DOI: ' + esc(w.doi) + '</span>' + SVG_EXT + '</a>'
         : '';
 
       return [
-        '<tr class="group">',
-        '  <td class="whitespace-nowrap">',
-        '    <div class="font-mono font-bold text-sm text-mistral-ink">' + esc(w.publication_year || '—') + '</div>',
-        '    <div class="text-[11px] text-mistral-stone font-medium mt-0.5">' + esc(typeLabel) + '</div>',
+        '<tr>',
+        '  <td>',
+        '    <span class="akademik-year-badge">' + esc(w.publication_year || '—') + '</span>',
+        '    <span class="akademik-type-sub">' + esc(typeLabel) + '</span>',
         '  </td>',
         '  <td>',
-        '    <div class="font-bold text-mistral-ink leading-snug">' + esc(w.title) + '</div>',
+        '    <div class="akademik-work-title">' + esc(w.title) + '</div>',
         doiHtml ? '    <div>' + doiHtml + '</div>' : '',
-        conceptsHtml ? '    <div class="flex flex-wrap gap-1 mt-2">' + conceptsHtml + '</div>' : '',
+        conceptsHtml ? '    <div class="akademik-concepts-wrap">' + conceptsHtml + '</div>' : '',
         '  </td>',
         '  <td>',
-        '    <div class="text-xs font-semibold text-mistral-ink leading-snug">' + esc(authorsText) + '</div>',
-        instText ? '    <div class="inline-flex items-start gap-1 text-[11px] text-mistral-slate mt-1.5">' + SVG_BUILDING + '<span>' + esc(instText) + '</span></div>' : '',
+        '    <div class="akademik-author-list">' + esc(authorsText) + '</div>',
+        instText ? '    <div class="akademik-inst-row">' + SVG_BUILDING + '<span>' + esc(instText) + '</span></div>' : '',
         '  </td>',
         '  <td>',
-        '    <div class="text-xs font-semibold text-mistral-ink leading-snug">' + esc(w.venue) + '</div>',
-        w.publisher ? '    <div class="text-[11px] text-mistral-stone mt-0.5">' + esc(w.publisher) + '</div>' : '',
+        '    <div class="akademik-venue-name">' + esc(w.venue) + '</div>',
+        w.publisher ? '    <div class="akademik-publisher-sub">' + esc(w.publisher) + '</div>' : '',
         '  </td>',
-        '  <td class="whitespace-nowrap">',
-        '    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-orange-50 border border-orange-200 text-mistral-ink font-mono text-xs font-bold">',
+        '  <td>',
+        '    <span class="akademik-cite-badge">',
         '      ' + SVG_CHART,
         '      <span>' + Number(w.cited_by_count || 0).toLocaleString('tr-TR') + '</span>',
         '    </span>',
         '  </td>',
-        '  <td class="whitespace-nowrap">',
-        '    <div class="flex flex-col items-start gap-2">',
+        '  <td>',
+        '    <div class="akademik-actions-col">',
         '      ' + oaBadge,
-        '      <div class="flex items-center gap-2">',
-        '        <button type="button" data-open-work="' + idx + '" class="px-3 py-1.5 rounded-lg bg-mistral-ink hover:bg-mistral-orange text-white text-xs font-semibold transition cursor-pointer">İncele & Kaynakça</button>',
-        w.oa_url ? '        <a href="' + esc(w.oa_url) + '" target="_blank" rel="noopener noreferrer" title="Kaynağı / PDF Aç" class="p-1.5 rounded-lg border border-mistral-hairline text-mistral-slate hover:text-mistral-ink hover:bg-stone-100 transition">' + SVG_EXT + '</a>' : '',
+        '      <div class="akademik-actions-btns">',
+        '        <button type="button" data-open-work="' + idx + '" class="akademik-btn-inspect">İncele & Kaynakça</button>',
+        w.oa_url ? '        <a href="' + esc(w.oa_url) + '" target="_blank" rel="noopener noreferrer" title="Kaynağı / PDF Aç" class="akademik-btn-ext">' + SVG_EXT + '</a>' : '',
         '      </div>',
         '    </div>',
         '  </td>',
@@ -340,9 +340,9 @@
     if (badgesEl) {
       setHTML(
         badgesEl,
-        '<span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-orange-50 border border-orange-200 text-mistral-orange">' + esc(w.publication_year || '—') + '</span>' +
-        '<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-stone-100 text-mistral-ink">' + SVG_CHART + '<span>' + Number(w.cited_by_count || 0).toLocaleString('tr-TR') + ' Atıf</span></span>' +
-        (w.doi ? '<span class="px-2.5 py-0.5 rounded-full text-xs font-mono bg-stone-100 text-mistral-slate">DOI: ' + esc(w.doi) + '</span>' : '')
+        '<span class="akademik-year-badge">' + esc(w.publication_year || '—') + '</span>' +
+        '<span class="akademik-cite-badge">' + SVG_CHART + '<span>' + Number(w.cited_by_count || 0).toLocaleString('tr-TR') + ' Atıf</span></span>' +
+        (w.doi ? '<span class="akademik-concept-chip font-mono">DOI: ' + esc(w.doi) + '</span>' : '')
       );
     }
 
@@ -357,7 +357,7 @@
           return [
             '<div class="flex flex-col items-center justify-end gap-1">',
             '  <span class="text-[10px] font-mono font-bold text-mistral-ink">' + Number(c.cited_by_count || 0).toLocaleString('tr-TR') + '</span>',
-            '  <div class="w-full max-w-[32px] rounded-t-md bg-mistral-orange" style="height:' + hPct + 'px"></div>',
+            '  <div class="w-full max-w-[32px] rounded-t-md bg-mistral-orange" style="height:' + hPct + 'px; background-color:#fa520f; min-width:22px;"></div>',
             '  <span class="text-[10px] font-mono font-medium text-mistral-stone">' + esc(c.year) + '</span>',
             '</div>'
           ].join('');
@@ -605,7 +605,6 @@
         notify('BibTeX (.bib) dosyası indirildi.');
       });
     }
-    // Sayfa yüklenirken otomatik API isteği ATILMAZ.
   }
 
   if (document.readyState === 'loading') {
