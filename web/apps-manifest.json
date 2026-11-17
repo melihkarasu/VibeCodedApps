@@ -610,5 +610,17 @@
     "desc": "OpenAlex ve Crossref üzerinden 250M+ bilimsel yayını konu, yazar, kurum veya DOI ile tarayın; açık erişim PDF, yıllara göre atıf grafiği ve tek tıkla APA/IEEE/MLA/BibTeX kaynakça üretin.",
     "url": "/akademik-radar",
     "action": "Makale Ara"
+  },
+  {
+    "id": "yazar-atif",
+    "name": "Akademik Yazar & Tüm Yayın Atıf Röntgeni",
+    "routeFile": "web/routes/yazar.js",
+    "publicDir": "web/public/apps/yazar",
+    "standaloneDir": "yazar-atif",
+    "exportable": true,
+    "categoryId": "akademik",
+    "desc": "Bir akademisyenin tüm yayınlarını, H-indeksi/i10-indeksi metriklerini, yıllara göre atıf dağılımını ve tüm yayınlarına gelen atıfların birleşik listesini (Scopus/Core, Crossref, PubMed ayrımıyla) tablo halinde inceleyin ve CSV/BibTeX olarak indirin.",
+    "url": "/yazar-atif",
+    "action": "Yazar Sorgula"
   }
 ]

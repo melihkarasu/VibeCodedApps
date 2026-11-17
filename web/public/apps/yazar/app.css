@@ -1,0 +1,619 @@
+/* Akademik Makale & Atıf Ağı Kaşifi — Mistral AI Design System (DESIGN.md) */
+.akademik-form-row-top {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+}
+.akademik-form-row-bottom {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+  align-items: end;
+}
+@media (min-width: 640px) {
+  .akademik-form-row-top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .akademik-form-row-bottom {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .akademik-form-row-top {
+    grid-template-columns: 2fr 1.3fr 1.3fr 1.2fr;
+  }
+  .akademik-form-row-bottom {
+    grid-template-columns: 1.15fr 0.75fr 0.75fr 1.35fr 1.15fr 0.95fr 1.15fr;
+  }
+}
+
+.akademik-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.875rem;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .akademik-metrics-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.akademik-label {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #4a4a4a;
+  margin-bottom: 0.375rem;
+}
+.akademik-label svg {
+  width: 14px !important;
+  height: 14px !important;
+  flex-shrink: 0;
+  color: #fa520f;
+}
+
+.akademik-input {
+  width: 100%;
+  padding: 0.625rem 0.85rem;
+  border-radius: 0.625rem;
+  border: 1px solid #e5e5e5;
+  background-color: #fafafa;
+  color: #1f1f1f;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+.akademik-input:focus {
+  outline: none;
+  border-color: #fa520f;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(250, 82, 15, 0.1);
+}
+
+/* Tablo Konteyner & Tablo Hücre Stilleri */
+.akademik-table-container {
+  width: 100%;
+  overflow-x: auto;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(31, 31, 31, 0.04);
+}
+
+.akademik-table {
+  width: 100%;
+  min-width: 940px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.akademik-table svg {
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px;
+  min-height: 14px;
+  max-width: 14px;
+  max-height: 14px;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.akademik-table thead th {
+  background: #fff8e0;
+  color: #3d3d3d;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid #e6d5a8;
+  white-space: nowrap;
+}
+
+.akademik-table tbody tr {
+  border-bottom: 1px solid #ededed;
+  transition: background-color 0.15s ease;
+}
+.akademik-table tbody tr:last-child {
+  border-bottom: none;
+}
+.akademik-table tbody tr:hover {
+  background-color: #fffaeb;
+}
+
+.akademik-table td {
+  padding: 1rem;
+  vertical-align: top;
+  font-size: 0.84rem;
+  color: #1f1f1f;
+  line-height: 1.45;
+}
+
+/* Tablo İçi Tipografi, Rozetler, Etiketler ve Butonlar */
+.akademik-year-badge {
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1f1f1f;
+  background: #fff8e0;
+  border: 1px solid #e6d5a8;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.375rem;
+}
+
+.akademik-type-sub {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #8a8a8a;
+  margin-top: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.akademik-work-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1f1f1f;
+  line-height: 1.38;
+}
+
+.akademik-doi-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.35rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fa520f;
+  text-decoration: none;
+}
+.akademik-doi-link:hover {
+  text-decoration: underline;
+}
+
+.akademik-concepts-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.akademik-concept-chip {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.375rem;
+  background-color: #f5f5f4;
+  border: 1px solid #e5e5e5;
+  color: #4a4a4a;
+  font-size: 0.7rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.akademik-author-list {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1f1f1f;
+  line-height: 1.4;
+}
+
+.akademik-inst-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+  font-size: 0.73rem;
+  color: #6a6a6a;
+  line-height: 1.35;
+}
+.akademik-inst-row svg {
+  margin-top: 0.1rem;
+  color: #8a8a8a;
+}
+
+.akademik-venue-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1f1f1f;
+  line-height: 1.35;
+}
+
+.akademik-publisher-sub {
+  font-size: 0.72rem;
+  color: #8a8a8a;
+  margin-top: 0.25rem;
+}
+
+.akademik-cite-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.5rem;
+  background-color: #fff8e0;
+  border: 1px solid #e6d5a8;
+  color: #1f1f1f;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.akademik-cite-badge svg {
+  color: #fa520f;
+}
+
+.akademik-oa-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.akademik-oa-badge--open {
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #047857;
+}
+.akademik-oa-badge--closed {
+  background-color: #f5f5f4;
+  border: 1px solid #e5e5e5;
+  color: #6a6a6a;
+}
+
+.akademik-actions-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+
+.akademik-actions-btns {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.akademik-btn-inspect {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  background-color: #1f1f1f;
+  color: #ffffff;
+  font-size: 0.74rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  white-space: nowrap;
+}
+.akademik-btn-inspect:hover {
+  background-color: #fa520f;
+}
+
+.akademik-btn-ext {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e5e5;
+  background-color: #ffffff;
+  color: #4a4a4a;
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+.akademik-btn-ext:hover {
+  border-color: #fa520f;
+  color: #fa520f;
+  background-color: #fff8e0;
+}
+
+#akademik-detail-dialog svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* Modal İçi Yıllık Atıf Tablosu ve Atıf Yapan Makaleler Tablosu */
+.akademik-subtable-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e5e5e5;
+  border-radius: 0.75rem;
+  background: #ffffff;
+}
+
+.akademik-subtable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.78rem;
+}
+
+.akademik-subtable thead th {
+  background: #fff8e0;
+  color: #3d3d3d;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid #e6d5a8;
+  white-space: nowrap;
+}
+
+.akademik-subtable tbody tr {
+  border-bottom: 1px solid #ededed;
+}
+.akademik-subtable tbody tr:last-child {
+  border-bottom: none;
+}
+.akademik-subtable tbody tr:hover {
+  background-color: #fffaeb;
+}
+
+.akademik-subtable td {
+  padding: 0.6rem 0.85rem;
+  vertical-align: top;
+  color: #1f1f1f;
+  line-height: 1.4;
+}
+
+/* Sayfalama (Pagination) ve Toplu İndirme Buton Stilleri */
+.akademik-pagination-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #fafafa;
+  border-top: 1px solid #e5e5e5;
+  font-size: 0.78rem;
+  color: #4a4a4a;
+}
+
+.akademik-page-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.akademik-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.45rem;
+  border: 1px solid #e5e5e5;
+  background: #ffffff;
+  color: #1f1f1f;
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.akademik-page-btn:hover:not(:disabled) {
+  border-color: #fa520f;
+  color: #fa520f;
+  background: #fff8e0;
+}
+.akademik-page-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.akademik-export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.45rem;
+  border: 1px solid #e6d5a8;
+  background: #fff8e0;
+  color: #1f1f1f;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.akademik-export-btn:hover:not(:disabled) {
+  border-color: #fa520f;
+  background: #fa520f;
+  color: #ffffff;
+}
+.akademik-export-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* İndeks Kaynağı & Çekirdek Dergi (Core / Crossref / PubMed / DOAJ / arXiv / ISSN) Rozetleri */
+.akademik-idx-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.35rem;
+}
+
+.akademik-idx-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.42rem;
+  border-radius: 0.3rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  text-decoration: none;
+}
+
+.akademik-idx-badge--core {
+  background-color: #fff8e0;
+  border: 1px solid #f59e0b;
+  color: #b45309;
+}
+
+.akademik-idx-badge--crossref {
+  background-color: #f5f5f4;
+  border: 1px solid #d6d3d1;
+  color: #44403c;
+}
+
+.akademik-idx-badge--pubmed {
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+}
+
+.akademik-idx-badge--doaj {
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #047857;
+}
+
+.akademik-idx-badge--arxiv {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+}
+
+.akademik-idx-badge--issn {
+  background-color: #fafafa;
+  border: 1px solid #e5e5e5;
+  color: #6a6a6a;
+}
+
+/* Görünür İndeks & Scopus/Core Açıklama Rehberi (Legend) */
+.akademik-legend-box {
+  background: #fffaeb;
+  border: 1px solid #e6d5a8;
+  border-radius: 0.875rem;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1rem;
+  font-size: 0.76rem;
+  color: #3d3d3d;
+  line-height: 1.5;
+}
+
+.akademik-legend-title {
+  font-weight: 700;
+  color: #1f1f1f;
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.akademik-legend-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.45rem 1rem;
+  margin-top: 0.45rem;
+}
+@media (min-width: 768px) {
+  .akademik-legend-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.akademik-breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+@media (min-width: 640px) {
+  .akademik-breakdown-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.akademik-breakdown-card {
+  background: #fafafa;
+  border: 1px solid #e5e5e5;
+  border-radius: 0.65rem;
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.akademik-breakdown-card:hover {
+  border-color: #fa520f;
+  background: #fff8e0;
+}
+.akademik-breakdown-card.active {
+  border-color: #fa520f;
+  background: #fff8e0;
+}
+
+/* Yazar Arama 4 Sütunlu Izgara ve Sekme (Tab) Stilleri */
+.yazar-search-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+  align-items: end;
+}
+@media (min-width: 640px) {
+  .yazar-search-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .yazar-search-grid {
+    grid-template-columns: 1.5fr 1.4fr 1.1fr 1.2fr 1.1fr;
+  }
+}
+
+.yazar-tabs-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.yazar-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1rem;
+  border-radius: 0.65rem;
+  border: 1px solid #e5e5e5;
+  background: #ffffff;
+  color: #4a4a4a;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.yazar-tab-btn:hover {
+  border-color: #fa520f;
+  color: #1f1f1f;
+}
+.yazar-tab-btn.active {
+  background: #1f1f1f;
+  border-color: #1f1f1f;
+  color: #ffffff;
+}
+.yazar-tab-btn svg {
+  width: 15px !important;
+  height: 15px !important;
+  flex-shrink: 0;
+}

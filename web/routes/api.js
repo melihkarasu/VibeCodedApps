@@ -59,5 +59,6 @@ router.use('/', require('./api/egzersiz'));
 router.use('/', require('./api/klinik'));
 router.use('/', require('./api/dso'));
 router.use('/', require('./api/akademik'));
+router.use('/', require('./api/yazar'));
 
 module.exports = router;
