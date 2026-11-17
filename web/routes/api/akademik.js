@@ -89,6 +89,12 @@ function normalizeOpenAlexWork(w) {
     venue: src.display_name || 'Akademik Dergi / Konferans',
     publisher: src.host_organization_name || 'OpenAlex Indexed',
     type: w.type || 'article',
+    source_type: src.type || 'journal',
+    issn: src.issn_l || (Array.isArray(src.issn) && src.issn[0]) || '',
+    is_core: Boolean(src.is_core),
+    is_in_doaj: Boolean(src.is_in_doaj),
+    indexed_in: Array.isArray(w.indexed_in) ? w.indexed_in : [],
+    pmid: (w.ids && w.ids.pmid) ? String(w.ids.pmid).replace(/^https?:\/\/pubmed\.ncbi\.nlm\.nih\.gov\//i, '').replace(/\/$/, '') : '',
     authors,
     institutions: Array.from(instSet).slice(0, 5),
     concepts: (w.concepts || w.topics || []).slice(0, 6).map(c => c.display_name).filter(Boolean),
@@ -98,6 +104,26 @@ function normalizeOpenAlexWork(w) {
       cited_by_count: c.cited_by_count
     }))
   };
+}
+
+
+function resolveIndexFilterClause(indexFilter) {
+  switch (String(indexFilter || '').trim()) {
+    case 'core':
+      return 'primary_location.source.is_core:true';
+    case 'journal_core':
+      return 'primary_location.source.is_core:true,primary_location.source.type:journal';
+    case 'crossref':
+      return 'indexed_in:crossref';
+    case 'pubmed':
+      return 'indexed_in:pubmed';
+    case 'doaj':
+      return 'primary_location.source.is_in_doaj:true';
+    case 'arxiv':
+      return 'indexed_in:arxiv';
+    default:
+      return '';
+  }
 }
 
 function cleanFilterValue(val) {
@@ -113,10 +139,13 @@ router.get('/akademik/works', async (req, res) => {
     const doi = String(req.query.doi || '').trim().replace(/^https?:\/\/doi\.org\//i, '').slice(0, 120);
     const sort = String(req.query.sort || 'cited_by_count:desc').trim();
     const oaOnly = req.query.oa === '1' || req.query.oa === 'true' || req.query.oa === 'oa';
+    const indexFilter = String(req.query.indexFilter || 'all').trim();
     const yearFrom = parseInt(req.query.yearFrom, 10) || 0;
     const yearTo = parseInt(req.query.yearTo, 10) || 0;
+    const page = Math.max(1, Math.min(200, parseInt(req.query.page, 10) || 1));
+    const perPage = Math.max(10, Math.min(100, parseInt(req.query.perPage, 10) || 25));
 
-    const cacheKey = `akademik_v2_${title}_${author}_${institution}_${venue}_${doi}_${sort}_${oaOnly}_${yearFrom}_${yearTo}`;
+    const cacheKey = `akademik_v3_${title}_${author}_${institution}_${venue}_${doi}_${sort}_${oaOnly}_${indexFilter}_${yearFrom}_${yearTo}_p${page}_${perPage}`;
 
     const data = await getCachedJson(cacheKey, async () => {
       const filters = [];
@@ -125,6 +154,8 @@ router.get('/akademik/works', async (req, res) => {
       if (institution) filters.push(`raw_affiliation_strings.search:${institution}`);
       if (doi) filters.push(`doi:https://doi.org/${doi}`);
       if (oaOnly) filters.push('is_oa:true');
+      const idxClause = resolveIndexFilterClause(indexFilter);
+      if (idxClause) filters.push(idxClause);
       if (yearFrom >= 1900 && yearFrom <= 2030) filters.push(`from_publication_date:${yearFrom}-01-01`);
       if (yearTo >= 1900 && yearTo <= 2030) filters.push(`to_publication_date:${yearTo}-12-31`);
 
@@ -132,7 +163,7 @@ router.get('/akademik/works', async (req, res) => {
       if (!filters.length && !venue) searchParts.push('machine learning');
       if (venue) searchParts.push(venue);
 
-      const queryParams = ['per-page=25'];
+      const queryParams = [`per-page=${perPage}`, `page=${page}`];
       if (searchParts.length) queryParams.push(`search=${encodeURIComponent(searchParts.join(' '))}`);
       if (filters.length) queryParams.push(`filter=${encodeURIComponent(filters.join(','))}`);
 
@@ -176,10 +207,15 @@ router.get('/akademik/citations', async (req, res) => {
   try {
     const rawId = String(req.query.workId || '').trim().replace(/^https?:\/\/openalex\.org\//i, '');
     const workId = /^W\d+$/i.test(rawId) ? rawId.toUpperCase() : 'W2741809807';
-    const cacheKey = `akademik_cites_${workId}`;
+    const page = Math.max(1, Math.min(500, parseInt(req.query.page, 10) || 1));
+    const perPage = Math.max(10, Math.min(200, parseInt(req.query.perPage, 10) || 25));
+    const indexFilter = String(req.query.indexFilter || 'all').trim();
+    const idxClause = resolveIndexFilterClause(indexFilter);
+    const cacheKey = `akademik_cites_v2_${workId}_${indexFilter}_p${page}_${perPage}`;
 
     const data = await getCachedJson(cacheKey, async () => {
-      const url = `https://api.openalex.org/works?filter=cites:${encodeURIComponent(workId)}&sort=cited_by_count:desc&per-page=12`;
+      const filterStr = `cites:${workId}` + (idxClause ? `,${idxClause}` : '');
+      const url = `https://api.openalex.org/works?filter=${encodeURIComponent(filterStr)}&sort=cited_by_count:desc&per-page=${perPage}&page=${page}`;
       const resp = await fetch(url, {
         headers: { 'User-Agent': 'VibeCodedApps-AkademikRadar/1.0 (https://app.melihkarasu.com)' },
         signal: AbortSignal.timeout(8000)
