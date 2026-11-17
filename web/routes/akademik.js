@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/akademik/app.css?v=20261117d" />
-      <script src="/static/apps/akademik/app.js?v=20261117d" defer></script>
+      <link rel="stylesheet" href="/static/apps/akademik/app.css?v=20261117e" />
+      <script src="/static/apps/akademik/app.js?v=20261117e" defer></script>
     `;
 
     const content = `
@@ -209,6 +209,24 @@ module.exports = function(pageTemplate) {
 
       <!-- Sonuç Tablosu (Arama yapıldığında görünür) -->
       <section id="akademik-results-section" class="hidden mb-14">
+        <!-- Görünür İndeks & Scopus / Kaynak Doğrulama Açıklama Rehberi -->
+        <div class="akademik-legend-box">
+          <div class="akademik-legend-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>İndeks Kaynakları ve Scopus / Çekirdek Dergi Ayrımı Nasıl Çalışır?</span>
+          </div>
+          <p class="text-xs text-mistral-slate">
+            Scopus (Elsevier) ve Web of Science (Clarivate) kapalı ticari veritabanları olduğu için açık API'lerde doğrudan ticari etiket paylaşmazlar. Bunun yerine her yayının ve atıfın niteliği; <b>ISSN kaydı</b>, <b>CWTS Leiden Çekirdek Dergi (<code>is_core</code>) statüsü</b> ve <b>resmi açık indeks kayıtları (<code>indexed_in</code>)</b> üzerinden doğrulanarak aşağıdaki rozetlerle net biçimde ayrıştırılır:
+          </p>
+          <div class="akademik-legend-grid">
+            <div><span class="akademik-idx-badge akademik-idx-badge--core">SCOPUS / CORE DERGİ</span> — ISSN kayıtlı, uluslararası çekirdek hakemli dergi (CWTS Core &amp; Scopus/WoS dergi havuzu eşdeğeri).</div>
+            <div><span class="akademik-idx-badge akademik-idx-badge--crossref">CROSSREF</span> — Yayıncı tarafından resmi DOI ve referans listesi tescillenmiş yayın.</div>
+            <div><span class="akademik-idx-badge akademik-idx-badge--pubmed">PUBMED</span> — ABD Ulusal Tıp Kütüphanesi (NIH/MEDLINE) hakemli biyomedikal dizin kaydı.</div>
+            <div><span class="akademik-idx-badge akademik-idx-badge--doaj">DOAJ</span> — Directory of Open Access Journals onaylı hakemli açık erişim dergi.</div>
+            <div><span class="akademik-idx-badge akademik-idx-badge--arxiv">ARXIV (ÖN BASKI)</span> — Henüz dergi hakem sürecinden geçmemiş ön baskı (preprint) / arşiv yayını.</div>
+            <div><span class="akademik-idx-badge akademik-idx-badge--issn">ISSN: XXXX-XXXX</span> — Derginin resmi Uluslararası Standart Süreli Yayın Numarası.</div>
+          </div>
+        </div>
         <div class="akademik-table-container">
           <table class="akademik-table">
             <thead>
@@ -305,6 +323,29 @@ module.exports = function(pageTemplate) {
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                   <span id="citing-export-bib-label">Tümünü İndir (.bib)</span>
                 </button>
+              </div>
+            </div>
+            <!-- Modal İçi Atıf Kaynağı Sayısal Dağılım Kartları (Tıklanabilir Filtre) -->
+            <div id="dialog-citing-breakdown" class="akademik-breakdown-grid">
+              <div data-breakdown-filter="journal_core" class="akademik-breakdown-card">
+                <div class="text-[11px] font-semibold text-mistral-stone">Scopus / Core Hakemli Dergi</div>
+                <div id="bd-count-core" class="text-base font-bold font-mono text-mistral-orange mt-0.5">—</div>
+                <div class="text-[10px] text-mistral-slate">ISSN + Çekirdek Dergi Atıfı</div>
+              </div>
+              <div data-breakdown-filter="crossref" class="akademik-breakdown-card">
+                <div class="text-[11px] font-semibold text-mistral-stone">Crossref (Resmi DOI)</div>
+                <div id="bd-count-crossref" class="text-base font-bold font-mono text-mistral-ink mt-0.5">—</div>
+                <div class="text-[10px] text-mistral-slate">DOI Kayıtlı Yayın Atıfı</div>
+              </div>
+              <div data-breakdown-filter="pubmed" class="akademik-breakdown-card">
+                <div class="text-[11px] font-semibold text-mistral-stone">PubMed / MEDLINE</div>
+                <div id="bd-count-pubmed" class="text-base font-bold font-mono text-mistral-ink mt-0.5">—</div>
+                <div class="text-[10px] text-mistral-slate">NIH Biyomedikal Dizin</div>
+              </div>
+              <div data-breakdown-filter="arxiv" class="akademik-breakdown-card">
+                <div class="text-[11px] font-semibold text-mistral-stone">arXiv (Hakemsiz Ön Baskı)</div>
+                <div id="bd-count-arxiv" class="text-base font-bold font-mono text-mistral-ink mt-0.5">—</div>
+                <div class="text-[10px] text-mistral-slate">Preprint / Arşiv Atıfı</div>
               </div>
             </div>
             <div class="akademik-subtable-wrap">

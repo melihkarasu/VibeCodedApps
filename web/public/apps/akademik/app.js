@@ -206,7 +206,7 @@
     var badges = [];
     var idxList = Array.isArray(w.indexed_in) ? w.indexed_in : [];
     if (w.is_core) {
-      badges.push('<span class="akademik-idx-badge akademik-idx-badge--core" title="CWTS Leiden Core Journal (Scopus / Web of Science Eşdeğeri Çekirdek Hakemli Dergi)">CORE DERGİ</span>');
+      badges.push('<span class="akademik-idx-badge akademik-idx-badge--core" title="CWTS Leiden Core Journal (Scopus / Web of Science Eşdeğeri Çekirdek Hakemli Dergi)">SCOPUS / CORE DERGİ</span>');
     }
     if (idxList.indexOf('crossref') !== -1 || w.doi) {
       badges.push('<span class="akademik-idx-badge akademik-idx-badge--crossref" title="Crossref Resmi DOI Kaydı">CROSSREF</span>');
@@ -448,7 +448,11 @@
       citingPage = 1;
       var perPageSel = document.getElementById('citing-per-page');
       citingPerPage = parseInt((perPageSel && perPageSel.value) || '25', 10) || 25;
+      var cIdxReset = document.getElementById('citing-index-filter');
+      if (cIdxReset) cIdxReset.value = 'all';
+      document.querySelectorAll('.akademik-breakdown-card').forEach(function (c) { c.classList.remove('active'); });
       loadCitingWorksForDialog(w, citingPage, citingPerPage);
+      loadCitingBreakdownCounts(w);
     }
 
     if (citeOut) citeOut.textContent = formatCitation(w, activeCitationFormat);
@@ -489,6 +493,57 @@
     }
     if (prevBtn) prevBtn.disabled = citingPage <= 1;
     if (nextBtn) nextBtn.disabled = citingPage >= totalPages || shownLen < citingPerPage;
+  }
+
+
+  async function loadCitingBreakdownCounts(w) {
+    var elCore = document.getElementById('bd-count-core');
+    var elCr = document.getElementById('bd-count-crossref');
+    var elPm = document.getElementById('bd-count-pubmed');
+    var elAx = document.getElementById('bd-count-arxiv');
+    if (elCore) elCore.textContent = '...';
+    if (elCr) elCr.textContent = '...';
+    if (elPm) elPm.textContent = '...';
+    if (elAx) elAx.textContent = '...';
+
+    var workId = String((w && w.id) || '').replace(/^https?:\/\/openalex\.org\//i, '').trim();
+    if (!/^W\d+$/i.test(workId)) {
+      if (elCore) elCore.textContent = '—';
+      if (elCr) elCr.textContent = '—';
+      if (elPm) elPm.textContent = '—';
+      if (elAx) elAx.textContent = '—';
+      return;
+    }
+
+    var totalAll = Math.max(1, Number(w.cited_by_count || 0));
+    var fetchCount = async function (clause) {
+      var u = 'https://api.openalex.org/works?filter=' + encodeURIComponent('cites:' + workId + ',' + clause) + '&per-page=1';
+      var r = await fetch(u, { headers: { 'Accept': 'application/json' } });
+      if (!r.ok) return null;
+      var d = await r.json();
+      return (d && d.meta && typeof d.meta.count === 'number') ? d.meta.count : 0;
+    };
+
+    try {
+      var res = await Promise.all([
+        fetchCount('primary_location.source.is_core:true,primary_location.source.type:journal'),
+        fetchCount('indexed_in:crossref'),
+        fetchCount('indexed_in:pubmed'),
+        fetchCount('indexed_in:arxiv')
+      ]);
+      if (elCore && res[0] !== null) {
+        var pctCore = Math.min(100, Math.round((res[0] / totalAll) * 100));
+        elCore.textContent = res[0].toLocaleString('tr-TR') + ' (%' + pctCore + ')';
+      }
+      if (elCr && res[1] !== null) elCr.textContent = res[1].toLocaleString('tr-TR');
+      if (elPm && res[2] !== null) elPm.textContent = res[2].toLocaleString('tr-TR');
+      if (elAx && res[3] !== null) elAx.textContent = res[3].toLocaleString('tr-TR');
+    } catch (_) {
+      if (elCore) elCore.textContent = '—';
+      if (elCr) elCr.textContent = '—';
+      if (elPm) elPm.textContent = '—';
+      if (elAx) elAx.textContent = '—';
+    }
   }
 
   async function loadCitingWorksForDialog(w, page, perPage) {
@@ -852,6 +907,21 @@
         if (activeWork) loadCitingWorksForDialog(activeWork, citingPage + 1, citingPerPage);
       });
     }
+    document.querySelectorAll('.akademik-breakdown-card').forEach(function (card) {
+      card.addEventListener('click', function () {
+        var fVal = card.getAttribute('data-breakdown-filter') || 'all';
+        var cIdxSel = document.getElementById('citing-index-filter');
+        if (cIdxSel) {
+          var nextVal = (cIdxSel.value === fVal) ? 'all' : fVal;
+          cIdxSel.value = nextVal;
+          document.querySelectorAll('.akademik-breakdown-card').forEach(function (c) {
+            c.classList.toggle('active', c.getAttribute('data-breakdown-filter') === nextVal);
+          });
+          if (activeWork) loadCitingWorksForDialog(activeWork, 1, citingPerPage);
+        }
+      });
+    });
+
     var citingIdxSel = document.getElementById('citing-index-filter');
     if (citingIdxSel) {
       citingIdxSel.addEventListener('change', function () {
