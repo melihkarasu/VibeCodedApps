@@ -884,3 +884,9 @@ table.vibe-responsive-table thead th,
   z-index: 1;
   background-color: var(--vibe-surface, #FFFFFF);
 }
+
+/* Vitrin Kategori Kartı & Uygulama Kartları Arası Boşluk */
+.vibe-accordion-card .accordion-content {
+  padding-top: 1.25rem !important;
+  padding-bottom: 1.5rem !important;
+}

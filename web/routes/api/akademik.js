@@ -2,11 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { getCachedJson } = require('./cache');
 
-// =============================================================
-// Akademik Makale & Atıf Ağı Kaşifi API (/api/akademik/works)
-// OpenAlex API + Crossref Works API + Yerleşik Akademik Veri Seti
-// =============================================================
-
 const FALLBACK_WORKS = [
   {
     id: 'W2741809807',
@@ -21,7 +16,7 @@ const FALLBACK_WORKS = [
     type: 'article',
     authors: ['Ashish Vaswani', 'Noam Shazeer', 'Niki Parmar', 'Jakob Uszkoreit', 'Llion Jones', 'Aidan N. Gomez', 'Łukasz Kaiser', 'Illia Polosukhin'],
     institutions: ['Google Brain', 'Google Research', 'University of Toronto'],
-    concepts: ['Transformer', 'Self-Attention', 'Deep Learning', 'Natural Language Processing', 'Machine Translation'],
+    concepts: ['Transformer', 'Self-Attention', 'Deep Learning', 'Natural Language Processing'],
     abstract: 'The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.',
     counts_by_year: [
       { year: 2021, cited_by_count: 19400 },
@@ -44,7 +39,7 @@ const FALLBACK_WORKS = [
     type: 'review',
     authors: ['Aziz Sancar', 'Paul Modrich', 'Tomas Lindahl'],
     institutions: ['University of North Carolina at Chapel Hill', 'Duke University', 'Francis Crick Institute'],
-    concepts: ['Nucleotide Excision Repair', 'Mismatch Repair', 'DNA Damage', 'Molecular Biology', 'Biochemistry'],
+    concepts: ['Nucleotide Excision Repair', 'Mismatch Repair', 'DNA Damage', 'Molecular Biology'],
     abstract: 'Living cells possess sophisticated enzymatic machinery to repair UV-induced photoproducts, replication errors, and base lesions, safeguarding genomic integrity across generations.',
     counts_by_year: [
       { year: 2021, cited_by_count: 590 },
@@ -105,30 +100,62 @@ function normalizeOpenAlexWork(w) {
   };
 }
 
+function cleanFilterValue(val) {
+  return String(val || '').replace(/[,:|]/g, ' ').trim().slice(0, 120);
+}
+
 router.get('/akademik/works', async (req, res) => {
   try {
-    const q = String(req.query.q || 'artificial intelligence').trim().slice(0, 140);
+    const title = cleanFilterValue(req.query.title || req.query.q || '');
+    const author = cleanFilterValue(req.query.author || '');
+    const institution = cleanFilterValue(req.query.institution || '');
+    const venue = cleanFilterValue(req.query.venue || '');
+    const doi = String(req.query.doi || '').trim().replace(/^https?:\/\/doi\.org\//i, '').slice(0, 120);
     const sort = String(req.query.sort || 'cited_by_count:desc').trim();
-    const oaOnly = req.query.oa === '1' || req.query.oa === 'true';
+    const oaOnly = req.query.oa === '1' || req.query.oa === 'true' || req.query.oa === 'oa';
     const yearFrom = parseInt(req.query.yearFrom, 10) || 0;
-    const cacheKey = `akademik_works_${q}_${sort}_${oaOnly}_${yearFrom}`;
+    const yearTo = parseInt(req.query.yearTo, 10) || 0;
+
+    const cacheKey = `akademik_v2_${title}_${author}_${institution}_${venue}_${doi}_${sort}_${oaOnly}_${yearFrom}_${yearTo}`;
 
     const data = await getCachedJson(cacheKey, async () => {
       const filters = [];
+      if (title) filters.push(`title_and_abstract.search:${title}`);
+      if (author) filters.push(`raw_author_name.search:${author}`);
+      if (institution) filters.push(`raw_affiliation_strings.search:${institution}`);
+      if (doi) filters.push(`doi:https://doi.org/${doi}`);
       if (oaOnly) filters.push('is_oa:true');
       if (yearFrom >= 1900 && yearFrom <= 2030) filters.push(`from_publication_date:${yearFrom}-01-01`);
-      const filterParam = filters.length ? `&filter=${encodeURIComponent(filters.join(','))}` : '';
+      if (yearTo >= 1900 && yearTo <= 2030) filters.push(`to_publication_date:${yearTo}-12-31`);
+
+      const searchParts = [];
+      if (!filters.length && !venue) searchParts.push('machine learning');
+      if (venue) searchParts.push(venue);
+
+      const queryParams = ['per-page=25'];
+      if (searchParts.length) queryParams.push(`search=${encodeURIComponent(searchParts.join(' '))}`);
+      if (filters.length) queryParams.push(`filter=${encodeURIComponent(filters.join(','))}`);
+
       const validSort = ['cited_by_count:desc', 'publication_year:desc', 'relevance_score:desc'].includes(sort)
         ? sort
         : 'cited_by_count:desc';
-      const url = `https://api.openalex.org/works?search=${encodeURIComponent(q)}&sort=${encodeURIComponent(validSort)}&per-page=18${filterParam}`;
+      if (validSort !== 'relevance_score:desc' || searchParts.length) {
+        queryParams.push(`sort=${encodeURIComponent(validSort)}`);
+      }
+
+      const url = `https://api.openalex.org/works?${queryParams.join('&')}`;
       const resp = await fetch(url, {
         headers: { 'User-Agent': 'VibeCodedApps-AkademikRadar/1.0 (https://app.melihkarasu.com)' },
         signal: AbortSignal.timeout(8000)
       });
       if (!resp.ok) throw new Error('OpenAlex HTTP ' + resp.status);
       const json = await resp.json();
-      const results = Array.isArray(json.results) ? json.results.map(normalizeOpenAlexWork) : [];
+      let results = Array.isArray(json.results) ? json.results.map(normalizeOpenAlexWork) : [];
+      if (venue) {
+        const vLow = venue.toLowerCase();
+        const filtered = results.filter(r => (r.venue || '').toLowerCase().includes(vLow) || (r.publisher || '').toLowerCase().includes(vLow));
+        if (filtered.length) results = filtered;
+      }
       return {
         meta: { count: (json.meta && json.meta.count) || results.length, source: 'OpenAlex + Crossref' },
         results
@@ -139,6 +166,37 @@ router.get('/akademik/works', async (req, res) => {
   } catch (err) {
     res.json({
       meta: { count: FALLBACK_WORKS.length, source: 'Yerleşik Akademik Arşiv (Yedek)' },
+      results: FALLBACK_WORKS
+    });
+  }
+});
+
+
+router.get('/akademik/citations', async (req, res) => {
+  try {
+    const rawId = String(req.query.workId || '').trim().replace(/^https?:\/\/openalex\.org\//i, '');
+    const workId = /^W\d+$/i.test(rawId) ? rawId.toUpperCase() : 'W2741809807';
+    const cacheKey = `akademik_cites_${workId}`;
+
+    const data = await getCachedJson(cacheKey, async () => {
+      const url = `https://api.openalex.org/works?filter=cites:${encodeURIComponent(workId)}&sort=cited_by_count:desc&per-page=12`;
+      const resp = await fetch(url, {
+        headers: { 'User-Agent': 'VibeCodedApps-AkademikRadar/1.0 (https://app.melihkarasu.com)' },
+        signal: AbortSignal.timeout(8000)
+      });
+      if (!resp.ok) throw new Error('OpenAlex HTTP ' + resp.status);
+      const json = await resp.json();
+      const results = Array.isArray(json.results) ? json.results.map(normalizeOpenAlexWork) : [];
+      return {
+        meta: { count: (json.meta && json.meta.count) || results.length, workId },
+        results
+      };
+    }, 1800);
+
+    res.json(data);
+  } catch (err) {
+    res.json({
+      meta: { count: FALLBACK_WORKS.length, workId: req.query.workId || '' },
       results: FALLBACK_WORKS
     });
   }

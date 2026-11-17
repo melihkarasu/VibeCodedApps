@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/akademik/app.css?v=20261117a" />
-      <script src="/static/apps/akademik/app.js?v=20261117a" defer></script>
+      <link rel="stylesheet" href="/static/apps/akademik/app.css?v=20261117b" />
+      <script src="/static/apps/akademik/app.js?v=20261117b" defer></script>
     `;
 
     const content = `
@@ -236,8 +236,43 @@ module.exports = function(pageTemplate) {
           </div>
 
           <div>
-            <div class="text-xs font-semibold uppercase tracking-wider text-mistral-stone mb-2">Yıllara Göre Atıf Dağılımı</div>
-            <div id="dialog-citation-chart" class="grid grid-cols-4 sm:grid-cols-8 gap-2 items-end bg-stone-50 rounded-xl p-3.5 border border-mistral-hairline min-h-[110px]"></div>
+            <div class="text-xs font-semibold uppercase tracking-wider text-mistral-stone mb-2">Yıllara Göre Atıf Sayıları Tablosu</div>
+            <div class="akademik-subtable-wrap">
+              <table class="akademik-subtable">
+                <thead>
+                  <tr>
+                    <th>Yıl</th>
+                    <th>Yıllık Atıf Sayısı</th>
+                    <th>Toplam Atıf İçindeki Payı</th>
+                    <th>Önceki Yıla Göre Değişim</th>
+                  </tr>
+                </thead>
+                <tbody id="dialog-yearly-citations-tbody">
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider text-mistral-stone">Bu Makaleye Atıf Yapan Yayınlar (OpenAlex Citing Works)</span>
+              <span id="dialog-citing-works-count" class="text-xs font-mono font-semibold text-mistral-orange"></span>
+            </div>
+            <div class="akademik-subtable-wrap">
+              <table class="akademik-subtable">
+                <thead>
+                  <tr>
+                    <th style="width: 65px;">Yıl</th>
+                    <th>Atıf Yapan Yayın Başlığı & DOI</th>
+                    <th>Yazarlar & Kurum</th>
+                    <th>Dergi / Yayın Yeri</th>
+                    <th style="width: 85px;">Atıf</th>
+                  </tr>
+                </thead>
+                <tbody id="dialog-citing-works-tbody">
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div>

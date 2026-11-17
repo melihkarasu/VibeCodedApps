@@ -327,7 +327,9 @@
     var instEl = document.getElementById('dialog-work-institutions');
     var absEl = document.getElementById('dialog-work-abstract');
     var badgesEl = document.getElementById('dialog-work-badges');
-    var chartEl = document.getElementById('dialog-citation-chart');
+    var yearlyTbody = document.getElementById('dialog-yearly-citations-tbody');
+    var citingTbody = document.getElementById('dialog-citing-works-tbody');
+    var citingCountEl = document.getElementById('dialog-citing-works-count');
     var citeOut = document.getElementById('dialog-citation-output');
     var doiLink = document.getElementById('dialog-doi-link');
     var oaLink = document.getElementById('dialog-oa-link');
@@ -346,24 +348,44 @@
       );
     }
 
-    if (chartEl) {
-      var counts = (w.counts_by_year || []).slice().sort(function (a, b) { return a.year - b.year; });
+    if (yearlyTbody) {
+      var counts = (w.counts_by_year || []).slice().sort(function (a, b) { return b.year - a.year; });
       if (!counts.length) {
-        setHTML(chartEl, '<div class="col-span-full text-xs text-mistral-stone text-center py-4">Yıllık atıf dağılım verisi bulunmuyor.</div>');
+        setHTML(yearlyTbody, '<tr><td colspan="4" class="text-center py-4 text-mistral-stone">Yıllık atıf dağılım verisi bulunmuyor.</td></tr>');
       } else {
-        var maxC = Math.max.apply(null, counts.map(function (c) { return c.cited_by_count || 1; })) || 1;
-        var bars = counts.map(function (c) {
-          var hPct = Math.max(12, Math.round(((c.cited_by_count || 0) / maxC) * 72));
+        var totalAll = Number(w.cited_by_count || 0) || counts.reduce(function (s, x) { return s + (x.cited_by_count || 0); }, 0) || 1;
+        var ascCounts = counts.slice().sort(function (a, b) { return a.year - b.year; });
+        var prevMap = {};
+        for (var k = 0; k < ascCounts.length; k++) {
+          prevMap[ascCounts[k].year] = k > 0 ? (ascCounts[k - 1].cited_by_count || 0) : null;
+        }
+        var yRows = counts.map(function (c) {
+          var cVal = Number(c.cited_by_count || 0);
+          var sharePct = ((cVal / totalAll) * 100).toFixed(1);
+          var prevVal = prevMap[c.year];
+          var diffHtml = '—';
+          if (prevVal !== null && prevVal > 0) {
+            var diff = cVal - prevVal;
+            var diffPct = Math.round((diff / prevVal) * 100);
+            diffHtml = (diff >= 0 ? '+' : '') + diff.toLocaleString('tr-TR') + ' (' + (diffPct >= 0 ? '+' : '') + diffPct + '%)';
+          }
           return [
-            '<div class="flex flex-col items-center justify-end gap-1">',
-            '  <span class="text-[10px] font-mono font-bold text-mistral-ink">' + Number(c.cited_by_count || 0).toLocaleString('tr-TR') + '</span>',
-            '  <div class="w-full max-w-[32px] rounded-t-md bg-mistral-orange" style="height:' + hPct + 'px; background-color:#fa520f; min-width:22px;"></div>',
-            '  <span class="text-[10px] font-mono font-medium text-mistral-stone">' + esc(c.year) + '</span>',
-            '</div>'
+            '<tr>',
+            '  <td><span class="akademik-year-badge">' + esc(c.year) + '</span></td>',
+            '  <td class="font-mono font-bold">' + cVal.toLocaleString('tr-TR') + '</td>',
+            '  <td class="font-mono">%' + esc(sharePct) + '</td>',
+            '  <td class="font-mono text-mistral-slate">' + esc(diffHtml) + '</td>',
+            '</tr>'
           ].join('');
         }).join('');
-        setHTML(chartEl, bars);
+        setHTML(yearlyTbody, yRows);
       }
+    }
+
+    if (citingTbody) {
+      setHTML(citingTbody, '<tr><td colspan="5" class="text-center py-4 text-mistral-stone">Atıf yapan yayınlar OpenAlex üzerinden yükleniyor...</td></tr>');
+      if (citingCountEl) citingCountEl.textContent = '';
+      loadCitingWorksForDialog(w, citingTbody, citingCountEl);
     }
 
     if (citeOut) citeOut.textContent = formatCitation(w, activeCitationFormat);
@@ -379,6 +401,59 @@
     } else {
       dlg.setAttribute('open', 'open');
     }
+  }
+
+
+  async function loadCitingWorksForDialog(w, tbody, countEl) {
+    var workId = String((w && w.id) || '').replace(/^https?:\/\/openalex\.org\//i, '').trim();
+    if (!/^W\d+$/i.test(workId)) {
+      setHTML(tbody, '<tr><td colspan="5" class="text-center py-4 text-mistral-stone">Bu kayıt için OpenAlex Tekil Yayın Kimliği (Work ID) bulunmadığından atıf listesi sorgulanamadı.</td></tr>');
+      return;
+    }
+    try {
+      var url = 'https://api.openalex.org/works?filter=cites:' + encodeURIComponent(workId) + '&sort=cited_by_count:desc&per-page=10';
+      var resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      var data = await resp.json();
+      var list = Array.isArray(data.results) ? data.results.map(normalizeOpenAlexWork) : [];
+      var totalCiting = (data.meta && data.meta.count) || list.length;
+      if (countEl) countEl.textContent = 'Toplam ' + Number(totalCiting).toLocaleString('tr-TR') + ' atıf yapan yayından ilk ' + list.length + ' kayıt';
+      renderCitingWorksRows(list, tbody);
+    } catch (_) {
+      try {
+        var r2 = await fetch('/api/akademik/citations?workId=' + encodeURIComponent(workId));
+        var d2 = await r2.json();
+        var list2 = d2.results || [];
+        if (countEl) countEl.textContent = list2.length + ' kayıt listelendi';
+        renderCitingWorksRows(list2, tbody);
+      } catch (_e2) {
+        setHTML(tbody, '<tr><td colspan="5" class="text-center py-4 text-mistral-stone">Atıf yapan yayın listesi şu an alınamadı.</td></tr>');
+      }
+    }
+  }
+
+  function renderCitingWorksRows(list, tbody) {
+    if (!list || !list.length) {
+      setHTML(tbody, '<tr><td colspan="5" class="text-center py-4 text-mistral-stone">Bu makaleye atıf yapan açık dizin yayını bulunamadı.</td></tr>');
+      return;
+    }
+    var html = list.map(function (cw) {
+      var auths = (cw.authors && cw.authors.length) ? cw.authors.slice(0, 3).join(', ') + (cw.authors.length > 3 ? ' (+' + (cw.authors.length - 3) + ')' : '') : 'Belirtilmemiş';
+      var inst = (cw.institutions && cw.institutions.length) ? cw.institutions[0] : '';
+      var doiLink = cw.doi
+        ? '<a href="https://doi.org/' + esc(cw.doi) + '" target="_blank" rel="noopener noreferrer" class="akademik-doi-link"><span>DOI: ' + esc(cw.doi) + '</span>' + SVG_EXT + '</a>'
+        : (cw.oa_url ? '<a href="' + esc(cw.oa_url) + '" target="_blank" rel="noopener noreferrer" class="akademik-doi-link"><span>Kaynağı Aç</span>' + SVG_EXT + '</a>' : '');
+      return [
+        '<tr>',
+        '  <td><span class="akademik-year-badge">' + esc(cw.publication_year || '—') + '</span></td>',
+        '  <td><div class="font-bold text-mistral-ink">' + esc(cw.title) + '</div>' + doiLink + '</td>',
+        '  <td><div class="font-semibold text-mistral-ink">' + esc(auths) + '</div>' + (inst ? '<div class="text-mistral-slate text-[11px] mt-0.5">' + esc(inst) + '</div>' : '') + '</td>',
+        '  <td>' + esc(cw.venue || '—') + '</td>',
+        '  <td><span class="akademik-cite-badge">' + SVG_CHART + '<span>' + Number(cw.cited_by_count || 0).toLocaleString('tr-TR') + '</span></span></td>',
+        '</tr>'
+      ].join('');
+    }).join('');
+    setHTML(tbody, html);
   }
 
   function cleanFilterToken(str) {

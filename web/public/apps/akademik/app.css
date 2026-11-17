@@ -327,3 +327,48 @@
   height: 14px;
   flex-shrink: 0;
 }
+
+/* Modal İçi Yıllık Atıf Tablosu ve Atıf Yapan Makaleler Tablosu */
+.akademik-subtable-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e5e5e5;
+  border-radius: 0.75rem;
+  background: #ffffff;
+}
+
+.akademik-subtable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.78rem;
+}
+
+.akademik-subtable thead th {
+  background: #fff8e0;
+  color: #3d3d3d;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid #e6d5a8;
+  white-space: nowrap;
+}
+
+.akademik-subtable tbody tr {
+  border-bottom: 1px solid #ededed;
+}
+.akademik-subtable tbody tr:last-child {
+  border-bottom: none;
+}
+.akademik-subtable tbody tr:hover {
+  background-color: #fffaeb;
+}
+
+.akademik-subtable td {
+  padding: 0.6rem 0.85rem;
+  vertical-align: top;
+  color: #1f1f1f;
+  line-height: 1.4;
+}

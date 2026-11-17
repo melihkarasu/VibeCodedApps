@@ -30,3 +30,9 @@ web/cache/*.json
 *.bak
 security-report/
 security/reports/
+
+# Local-only standalone conversion & publish tooling (kept on local disk, excluded from remote repo)
+STANDALONE_EXPORT_PLAN.md
+scripts/
+.githooks/
+skills/
