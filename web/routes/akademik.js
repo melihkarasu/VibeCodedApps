@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/akademik/app.css?v=20261117e" />
-      <script src="/static/apps/akademik/app.js?v=20261117e" defer></script>
+      <link rel="stylesheet" href="/static/apps/akademik/app.css?v=20261118a" />
+      <script src="/static/apps/akademik/app.js?v=20261118a" defer></script>
     `;
 
     const content = `
@@ -24,13 +24,13 @@ module.exports = function(pageTemplate) {
             <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-mistral-ink font-editorial">Akademik Makale & Atıf Ağı Kaşifi</h1>
           </div>
           <p class="text-mistral-slate text-sm mt-0.5 font-normal">
-            OpenAlex ve Crossref açık akademik dizini üzerinden 250 milyondan fazla bilimsel yayını başlık, yazar, kurum, dergi veya DOI bazında sorgulayın; kaynakça ve atıf metriklerini tablo halinde inceleyin.
+            OpenAlex, Semantic Scholar (API Key'siz) ve Crossref akademik dizinlerini paralel sorgulayarak 250M+ bilimsel yayını başlık, yazar, kurum, dergi veya DOI bazında tarayın; hangi kaynaktan yanıt alındığını şeffaflık paneliyle görün.
           </p>
         </div>
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs self-start md:self-auto shrink-0">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span id="akademik-source-badge" class="font-semibold">OpenAlex & Crossref Hazır</span>
+          <span id="akademik-source-badge" class="font-semibold">OpenAlex + S2 + Crossref Hazır</span>
         </div>
       </div>
 
@@ -209,6 +209,18 @@ module.exports = function(pageTemplate) {
 
       <!-- Sonuç Tablosu (Arama yapıldığında görünür) -->
       <section id="akademik-results-section" class="hidden mb-14">
+        <!-- 3-API Paralel Sorgu Şeffaflık Paneli -->
+        <div id="akademik-transparency-panel" class="akademik-transparency-panel hidden">
+          <div class="akademik-transparency-header">
+            <div class="akademik-transparency-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <span>Çoklu Akademik API Sorgu &amp; Şeffaflık Raporu</span>
+            </div>
+            <span id="akademik-transparency-summary" class="text-xs font-mono text-mistral-slate"></span>
+          </div>
+          <div id="akademik-provider-grid" class="akademik-provider-grid"></div>
+        </div>
+
         <!-- Görünür İndeks & Scopus / Kaynak Doğrulama Açıklama Rehberi -->
         <div class="akademik-legend-box">
           <div class="akademik-legend-title">
@@ -347,6 +359,16 @@ module.exports = function(pageTemplate) {
                 <div id="bd-count-arxiv" class="text-base font-bold font-mono text-mistral-ink mt-0.5">—</div>
                 <div class="text-[10px] text-mistral-slate">Preprint / Arşiv Atıfı</div>
               </div>
+            </div>
+            <div id="dialog-citing-transparency" class="akademik-transparency-panel hidden">
+              <div class="akademik-transparency-header">
+                <div class="akademik-transparency-title">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  <span>Atıf Sorgusu API Kaynak Durumu</span>
+                </div>
+                <span id="dialog-citing-transparency-summary" class="text-xs font-mono text-mistral-slate"></span>
+              </div>
+              <div id="dialog-citing-provider-grid" class="akademik-provider-grid"></div>
             </div>
             <div class="akademik-subtable-wrap">
               <table class="akademik-subtable">

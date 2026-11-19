@@ -560,3 +560,117 @@
   border-color: #fa520f;
   background: #fff8e0;
 }
+
+/* 3-API Paralel Sorgu Şeffaflık Paneli */
+.akademik-transparency-panel {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 0.875rem;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 4px rgba(31, 31, 31, 0.04);
+}
+.akademik-transparency-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+.akademik-transparency-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #1f1f1f;
+}
+.akademik-transparency-title svg {
+  width: 15px !important;
+  height: 15px !important;
+  color: #fa520f;
+}
+.akademik-provider-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+@media (min-width: 768px) {
+  .akademik-provider-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.akademik-provider-card {
+  border: 1px solid #e5e5e5;
+  border-radius: 0.65rem;
+  padding: 0.65rem 0.85rem;
+  background: #fafafa;
+  font-size: 0.75rem;
+}
+.akademik-provider-card--ok {
+  border-color: #a7f3d0;
+  background: #f0fdf4;
+}
+.akademik-provider-card--warn {
+  border-color: #fde68a;
+  background: #fffbeb;
+}
+.akademik-provider-card--err {
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+.akademik-provider-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-bottom: 0.3rem;
+}
+.akademik-provider-name {
+  font-weight: 700;
+  color: #1f1f1f;
+}
+.akademik-provider-status {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.66rem;
+  font-weight: 700;
+  padding: 0.12rem 0.45rem;
+  border-radius: 9999px;
+}
+.akademik-provider-status--ok {
+  background: #dcfce7;
+  color: #166534;
+}
+.akademik-provider-status--warn {
+  background: #fef3c7;
+  color: #92400e;
+}
+.akademik-provider-status--err {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.akademik-provider-meta {
+  color: #4a4a4a;
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+.akademik-src-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.4rem;
+}
+.akademik-src-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.28rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.akademik-src-pill--oa { background: #fff7ed; border: 1px solid #fdba74; color: #c2410c; }
+.akademik-src-pill--s2 { background: #eff6ff; border: 1px solid #93c5fd; color: #1d4ed8; }
+.akademik-src-pill--cr { background: #f5f5f4; border: 1px solid #d6d3d1; color: #44403c; }

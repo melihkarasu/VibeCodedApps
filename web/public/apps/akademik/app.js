@@ -43,6 +43,7 @@
   var FALLBACK_WORKS = [
     {
       id: 'W2741809807',
+      s2Id: '',
       doi: '10.48550/arXiv.1706.03762',
       title: 'Attention Is All You Need',
       publication_year: 2017,
@@ -52,63 +53,18 @@
       venue: 'Advances in Neural Information Processing Systems (NeurIPS)',
       publisher: 'Curran Associates / arXiv',
       type: 'article',
+      source_type: 'conference',
+      issn: '',
+      is_core: false,
+      is_in_doaj: false,
+      indexed_in: ['arxiv'],
+      pmid: '',
       authors: ['Ashish Vaswani', 'Noam Shazeer', 'Niki Parmar', 'Jakob Uszkoreit', 'Llion Jones', 'Aidan N. Gomez', 'Łukasz Kaiser', 'Illia Polosukhin'],
       institutions: ['Google Brain', 'Google Research', 'University of Toronto'],
       concepts: ['Transformer', 'Self-Attention', 'Deep Learning', 'Natural Language Processing'],
       abstract: 'The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.',
-      counts_by_year: [
-        { year: 2021, cited_by_count: 19400 },
-        { year: 2022, cited_by_count: 26800 },
-        { year: 2023, cited_by_count: 34200 },
-        { year: 2024, cited_by_count: 38900 },
-        { year: 2025, cited_by_count: 23550 }
-      ]
-    },
-    {
-      id: 'W2153579005',
-      doi: '10.1126/science.aab3750',
-      title: 'DNA repair mechanisms and cellular genome stability',
-      publication_year: 2015,
-      cited_by_count: 4820,
-      is_oa: true,
-      oa_url: 'https://doi.org/10.1126/science.aab3750',
-      venue: 'Science',
-      publisher: 'American Association for the Advancement of Science',
-      type: 'review',
-      authors: ['Aziz Sancar', 'Paul Modrich', 'Tomas Lindahl'],
-      institutions: ['University of North Carolina at Chapel Hill', 'Duke University', 'Francis Crick Institute'],
-      concepts: ['Nucleotide Excision Repair', 'DNA Damage', 'Molecular Biology', 'Biochemistry'],
-      abstract: 'Living cells possess sophisticated enzymatic machinery to repair UV-induced photoproducts, replication errors, and base lesions, safeguarding genomic integrity across generations.',
-      counts_by_year: [
-        { year: 2021, cited_by_count: 590 },
-        { year: 2022, cited_by_count: 640 },
-        { year: 2023, cited_by_count: 710 },
-        { year: 2024, cited_by_count: 680 },
-        { year: 2025, cited_by_count: 520 }
-      ]
-    },
-    {
-      id: 'W3177828901',
-      doi: '10.1038/s41586-021-03819-2',
-      title: 'Highly accurate protein structure prediction with AlphaFold',
-      publication_year: 2021,
-      cited_by_count: 31400,
-      is_oa: true,
-      oa_url: 'https://www.nature.com/articles/s41586-021-03819-2.pdf',
-      venue: 'Nature',
-      publisher: 'Springer Nature',
-      type: 'article',
-      authors: ['John Jumper', 'Richard Evans', 'Alexander Pritzel', 'Tim Green', 'Michael Figurnov', 'Demis Hassabis'],
-      institutions: ['DeepMind', 'EMBL-EBI'],
-      concepts: ['Protein Structure Prediction', 'Computational Biology', 'Deep Learning', 'Bioinformatics'],
-      abstract: 'Proteins are essential to life, and understanding their structure can facilitate a mechanistic understanding of their function. Here we provide the first computational method that can regularly predict protein structures with atomic accuracy.',
-      counts_by_year: [
-        { year: 2021, cited_by_count: 2100 },
-        { year: 2022, cited_by_count: 7400 },
-        { year: 2023, cited_by_count: 8900 },
-        { year: 2024, cited_by_count: 8200 },
-        { year: 2025, cited_by_count: 4800 }
-      ]
+      counts_by_year: [],
+      sources: ['fallback']
     }
   ];
 
@@ -121,6 +77,18 @@
   var citingPage = 1;
   var citingPerPage = 25;
   var citingTotalCount = 0;
+  var queryCache = {};
+  var breakdownCache = {};
+  var CACHE_TTL_MS = 10 * 60 * 1000;
+
+  function getCached(key) {
+    var entry = queryCache[key];
+    if (entry && (Date.now() - entry.ts) < CACHE_TTL_MS) return entry.data;
+    return null;
+  }
+  function setCached(key, data) {
+    queryCache[key] = { ts: Date.now(), data: data };
+  }
 
   function reconstructAbstract(invertedIndex) {
     if (!invertedIndex || typeof invertedIndex !== 'object') return '';
@@ -157,6 +125,7 @@
     var oa = w.open_access || {};
     return {
       id: String(w.id || '').replace(/^https?:\/\/openalex\.org\//i, '') || doiRaw || 'W-OA',
+      s2Id: '',
       doi: doiRaw,
       title: w.display_name || w.title || 'Başlıksız Akademik Yayın',
       publication_year: w.publication_year || null,
@@ -178,8 +147,199 @@
       abstract: reconstructAbstract(w.abstract_inverted_index),
       counts_by_year: (w.counts_by_year || []).slice(0, 8).map(function (c) {
         return { year: c.year, cited_by_count: c.cited_by_count };
-      })
+      }),
+      sources: ['openalex']
     };
+  }
+
+  function normalizeS2Work(p) {
+    var ext = p.externalIds || {};
+    var doiRaw = ext.DOI ? String(ext.DOI).trim() : '';
+    var arxivId = ext.ArXiv ? String(ext.ArXiv).trim() : '';
+    var pmid = ext.PubMed ? String(ext.PubMed).trim() : '';
+    var oaPdf = p.openAccessPdf && p.openAccessPdf.url ? p.openAccessPdf.url : '';
+    var indexed = [];
+    if (doiRaw) indexed.push('crossref');
+    if (pmid) indexed.push('pubmed');
+    if (arxivId) indexed.push('arxiv');
+    return {
+      id: p.paperId ? 'S2:' + p.paperId : (doiRaw || 'S2-WORK'),
+      s2Id: p.paperId || '',
+      doi: doiRaw,
+      title: p.title || 'Başlıksız Akademik Yayın',
+      publication_year: p.year || null,
+      cited_by_count: Number(p.citationCount || 0),
+      is_oa: Boolean(p.isOpenAccess || oaPdf),
+      oa_url: oaPdf || (doiRaw ? 'https://doi.org/' + doiRaw : (p.url || '')),
+      venue: (p.publicationVenue && p.publicationVenue.name) || p.venue || 'Semantic Scholar Kaydı',
+      publisher: (p.journal && p.journal.name) || 'Semantic Scholar',
+      type: Array.isArray(p.publicationTypes) && p.publicationTypes.length ? String(p.publicationTypes[0]).toLowerCase() : 'article',
+      source_type: 'journal',
+      issn: (p.publicationVenue && p.publicationVenue.issn) || '',
+      is_core: false,
+      is_in_doaj: false,
+      indexed_in: indexed,
+      pmid: pmid,
+      authors: (p.authors || []).slice(0, 8).map(function (a) { return a && a.name; }).filter(Boolean),
+      institutions: [],
+      concepts: Array.isArray(p.fieldsOfStudy) ? p.fieldsOfStudy.slice(0, 5) : [],
+      abstract: p.abstract ? String(p.abstract).slice(0, 1200) : '',
+      counts_by_year: [],
+      sources: ['semanticscholar']
+    };
+  }
+
+  function normalizeCrossrefWork(item) {
+    var doiRaw = item.DOI ? String(item.DOI).trim() : '';
+    var title = Array.isArray(item.title) && item.title[0] ? String(item.title[0]) : 'Başlıksız Akademik Yayın';
+    var issued = (item.issued && item.issued['date-parts'] && item.issued['date-parts'][0]) || [];
+    var pubYear = issued[0] ? Number(issued[0]) : null;
+    var authors = (item.author || []).slice(0, 8).map(function (a) {
+      return [a.given, a.family].filter(Boolean).join(' ').trim();
+    }).filter(Boolean);
+    var instSet = {};
+    (item.author || []).forEach(function (a) {
+      (a.affiliation || []).forEach(function (af) {
+        if (af && af.name) instSet[af.name] = true;
+      });
+    });
+    var venue = (Array.isArray(item['container-title']) && item['container-title'][0]) || item.publisher || 'Crossref DOI Kaydı';
+    var issn = (Array.isArray(item.ISSN) && item.ISSN[0]) || '';
+    var links = Array.isArray(item.link) ? item.link : [];
+    var pdfLink = links.find(function (l) { return l && /pdf/i.test(l['content-type'] || ''); }) || links[0];
+    var abstractRaw = item.abstract ? String(item.abstract).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 1200) : '';
+    return {
+      id: doiRaw ? 'CR:' + doiRaw : 'CR-WORK',
+      s2Id: '',
+      doi: doiRaw,
+      title: title,
+      publication_year: pubYear,
+      cited_by_count: Number(item['is-referenced-by-count'] || 0),
+      is_oa: Boolean(pdfLink && pdfLink.URL),
+      oa_url: (pdfLink && pdfLink.URL) || item.URL || (doiRaw ? 'https://doi.org/' + doiRaw : ''),
+      venue: venue,
+      publisher: item.publisher || 'Crossref',
+      type: item.type || 'article',
+      source_type: 'journal',
+      issn: issn,
+      is_core: false,
+      is_in_doaj: false,
+      indexed_in: ['crossref'],
+      pmid: '',
+      authors: authors,
+      institutions: Object.keys(instSet).slice(0, 4),
+      concepts: Array.isArray(item.subject) ? item.subject.slice(0, 5) : [],
+      abstract: abstractRaw,
+      counts_by_year: [],
+      sources: ['crossref']
+    };
+  }
+
+  function mergeWorksLists(oaList, s2List, crList, sort) {
+    var byKey = {};
+    var order = [];
+    var duplicatesMerged = 0;
+
+    function makeKey(w) {
+      if (w.doi) return 'doi:' + w.doi.toLowerCase().trim();
+      var normTitle = String(w.title || '').toLowerCase().replace(/[^a-z0-9çğıöşü]+/gi, '').slice(0, 80);
+      return 't:' + normTitle;
+    }
+
+    function addOrMerge(w) {
+      var key = makeKey(w);
+      if (!key || key === 't:') return;
+      if (!byKey[key]) {
+        var copy = Object.assign({}, w, { sources: (w.sources || []).slice() });
+        byKey[key] = copy;
+        order.push(copy);
+        return;
+      }
+      duplicatesMerged += 1;
+      var ex = byKey[key];
+      var srcMap = {};
+      (ex.sources || []).concat(w.sources || []).forEach(function (s) { srcMap[s] = true; });
+      ex.sources = Object.keys(srcMap);
+      if (!ex.s2Id && w.s2Id) ex.s2Id = w.s2Id;
+      if (!ex.doi && w.doi) ex.doi = w.doi;
+      if ((!ex.id || ex.id.indexOf('S2:') === 0 || ex.id.indexOf('CR:') === 0) && w.id && /^W\d+$/i.test(w.id)) {
+        ex.id = w.id;
+      }
+      if (Number(w.cited_by_count || 0) > Number(ex.cited_by_count || 0)) ex.cited_by_count = w.cited_by_count;
+      if (!ex.abstract && w.abstract) ex.abstract = w.abstract;
+      if (!ex.is_oa && w.is_oa) {
+        ex.is_oa = true;
+        if (w.oa_url) ex.oa_url = w.oa_url;
+      }
+      if (!ex.issn && w.issn) ex.issn = w.issn;
+      if (!ex.is_core && w.is_core) ex.is_core = true;
+      if (!ex.is_in_doaj && w.is_in_doaj) ex.is_in_doaj = true;
+      var idxMap = {};
+      (ex.indexed_in || []).concat(w.indexed_in || []).forEach(function (i) { idxMap[i] = true; });
+      ex.indexed_in = Object.keys(idxMap);
+      if ((!ex.authors || !ex.authors.length) && w.authors && w.authors.length) ex.authors = w.authors;
+      if ((!ex.institutions || !ex.institutions.length) && w.institutions && w.institutions.length) ex.institutions = w.institutions;
+      if ((!ex.concepts || !ex.concepts.length) && w.concepts && w.concepts.length) ex.concepts = w.concepts;
+    }
+
+    (oaList || []).forEach(addOrMerge);
+    (s2List || []).forEach(addOrMerge);
+    (crList || []).forEach(addOrMerge);
+
+    if (sort === 'publication_year:desc') {
+      order.sort(function (a, b) {
+        return (Number(b.publication_year || 0) - Number(a.publication_year || 0)) || (Number(b.cited_by_count || 0) - Number(a.cited_by_count || 0));
+      });
+    } else if (sort === 'cited_by_count:desc') {
+      order.sort(function (a, b) { return Number(b.cited_by_count || 0) - Number(a.cited_by_count || 0); });
+    }
+    return { merged: order, duplicatesMerged: duplicatesMerged };
+  }
+
+  function renderTransparencyPanel(panelId, gridId, summaryId, providers, duplicatesMerged) {
+    var panel = document.getElementById(panelId);
+    var grid = document.getElementById(gridId);
+    var sumEl = document.getElementById(summaryId);
+    if (!panel || !grid) return;
+
+    if (!providers || !providers.length) {
+      panel.classList.add('hidden');
+      return;
+    }
+
+    panel.classList.remove('hidden');
+    var okNames = providers.filter(function (p) { return p.ok; }).map(function (p) { return p.provider; });
+    if (sumEl) {
+      sumEl.textContent = (okNames.length ? ('Yanıt alınan kaynaklar: ' + okNames.join(', ')) : 'Hiçbir API yanıt vermedi') +
+        (duplicatesMerged > 0 ? (' • ' + duplicatesMerged + ' mükerrer DOI/başlık birleştirildi') : '');
+    }
+
+    var cardsHtml = providers.map(function (p) {
+      var cardCls = p.ok ? 'akademik-provider-card akademik-provider-card--ok' : (p.status === 429 || p.status === 503 ? 'akademik-provider-card akademik-provider-card--warn' : 'akademik-provider-card akademik-provider-card--err');
+      var badgeCls = p.ok ? 'akademik-provider-status akademik-provider-status--ok' : (p.status === 429 || p.status === 503 ? 'akademik-provider-status akademik-provider-status--warn' : 'akademik-provider-status akademik-provider-status--err');
+      var statusLabel = p.ok ? ('HTTP 200 • ' + p.ms + ' ms') : (p.status ? ('HTTP ' + p.status + ' • ' + p.ms + ' ms') : 'Ağ / CORS Hatası');
+      return [
+        '<div class="' + cardCls + '">',
+        '  <div class="akademik-provider-top">',
+        '    <span class="akademik-provider-name">' + esc(p.provider) + '</span>',
+        '    <span class="' + badgeCls + '">' + esc(statusLabel) + '</span>',
+        '  </div>',
+        '  <div class="akademik-provider-meta">' + esc(p.note || '') + '</div>',
+        '</div>'
+      ].join('');
+    }).join('');
+    setHTML(grid, cardsHtml);
+  }
+
+  function renderSourcePills(sources) {
+    var list = Array.isArray(sources) && sources.length ? sources : ['openalex'];
+    var pills = list.map(function (s) {
+      if (s === 'openalex') return '<span class="akademik-src-pill akademik-src-pill--oa">OPENALEX</span>';
+      if (s === 'semanticscholar') return '<span class="akademik-src-pill akademik-src-pill--s2">SEMANTIC SCHOLAR</span>';
+      if (s === 'crossref') return '<span class="akademik-src-pill akademik-src-pill--cr">CROSSREF</span>';
+      return '<span class="akademik-src-pill akademik-src-pill--cr">' + esc(String(s).toUpperCase()) + '</span>';
+    }).join('');
+    return '<div class="akademik-src-badges">' + pills + '</div>';
   }
 
   function resolveIndexFilterClause(indexFilter) {
@@ -345,6 +505,7 @@
         '    <div class="akademik-work-title">' + esc(w.title) + '</div>',
         doiHtml ? '    <div>' + doiHtml + '</div>' : '',
         conceptsHtml ? '    <div class="akademik-concepts-wrap">' + conceptsHtml + '</div>' : '',
+        renderSourcePills(w.sources),
         '  </td>',
         '  <td>',
         '    <div class="akademik-author-list">' + esc(authorsText) + '</div>',
@@ -391,7 +552,6 @@
     var badgesEl = document.getElementById('dialog-work-badges');
     var yearlyTbody = document.getElementById('dialog-yearly-citations-tbody');
     var citingTbody = document.getElementById('dialog-citing-works-tbody');
-    var citingCountEl = document.getElementById('dialog-citing-works-count');
     var citeOut = document.getElementById('dialog-citation-output');
     var doiLink = document.getElementById('dialog-doi-link');
     var oaLink = document.getElementById('dialog-oa-link');
@@ -399,7 +559,7 @@
     if (titleEl) titleEl.textContent = w.title || '';
     if (authorsEl) authorsEl.textContent = (w.authors && w.authors.length) ? w.authors.join(', ') : 'Yazar bilgisi belirtilmemiş';
     if (instEl) instEl.textContent = ((w.institutions && w.institutions.length) ? w.institutions.join(' • ') + ' — ' : '') + (w.venue || '');
-    if (absEl) absEl.textContent = w.abstract || 'Bu yayın için tam özet metni yayımcı tarafından kısıtlanmış veya OpenAlex dizininde yer almıyor.';
+    if (absEl) absEl.textContent = w.abstract || 'Bu yayın için tam özet metni yayımcı tarafından kısıtlanmış veya dizinde yer almıyor.';
 
     if (badgesEl) {
       setHTML(
@@ -413,7 +573,7 @@
     if (yearlyTbody) {
       var counts = (w.counts_by_year || []).slice().sort(function (a, b) { return b.year - a.year; });
       if (!counts.length) {
-        setHTML(yearlyTbody, '<tr><td colspan="4" class="text-center py-4 text-mistral-stone">Yıllık atıf dağılım verisi bulunmuyor.</td></tr>');
+        setHTML(yearlyTbody, '<tr><td colspan="4" class="text-center py-4 text-mistral-stone">Yıllık atıf dağılım verisi yalnızca OpenAlex kaydında mevcuttur.</td></tr>');
       } else {
         var totalAll = Number(w.cited_by_count || 0) || counts.reduce(function (s, x) { return s + (x.cited_by_count || 0); }, 0) || 1;
         var ascCounts = counts.slice().sort(function (a, b) { return a.year - b.year; });
@@ -451,8 +611,9 @@
       var cIdxReset = document.getElementById('citing-index-filter');
       if (cIdxReset) cIdxReset.value = 'all';
       document.querySelectorAll('.akademik-breakdown-card').forEach(function (c) { c.classList.remove('active'); });
-      loadCitingWorksForDialog(w, citingPage, citingPerPage);
-      loadCitingBreakdownCounts(w);
+      loadCitingWorksForDialog(w, citingPage, citingPerPage).then(function () {
+        loadCitingBreakdownCounts(w);
+      });
     }
 
     if (citeOut) citeOut.textContent = formatCitation(w, activeCitationFormat);
@@ -470,7 +631,6 @@
     }
   }
 
-
   function updateMainPagination() {
     var infoEl = document.getElementById('main-page-info');
     var prevBtn = document.getElementById('main-prev-btn');
@@ -480,7 +640,7 @@
       infoEl.textContent = 'Sayfa ' + mainPage + ' / ' + totalPages.toLocaleString('tr-TR') + ' (Toplam ' + Number(mainTotalCount || currentWorks.length).toLocaleString('tr-TR') + ' yayın)';
     }
     if (prevBtn) prevBtn.disabled = mainPage <= 1;
-    if (nextBtn) nextBtn.disabled = mainPage >= totalPages || currentWorks.length < mainPerPage;
+    if (nextBtn) nextBtn.disabled = mainPage >= totalPages;
   }
 
   function updateCitingPagination(shownLen) {
@@ -495,16 +655,11 @@
     if (nextBtn) nextBtn.disabled = citingPage >= totalPages || shownLen < citingPerPage;
   }
 
-
   async function loadCitingBreakdownCounts(w) {
     var elCore = document.getElementById('bd-count-core');
     var elCr = document.getElementById('bd-count-crossref');
     var elPm = document.getElementById('bd-count-pubmed');
     var elAx = document.getElementById('bd-count-arxiv');
-    if (elCore) elCore.textContent = '...';
-    if (elCr) elCr.textContent = '...';
-    if (elPm) elPm.textContent = '...';
-    if (elAx) elAx.textContent = '...';
 
     var workId = String((w && w.id) || '').replace(/^https?:\/\/openalex\.org\//i, '').trim();
     if (!/^W\d+$/i.test(workId)) {
@@ -515,35 +670,131 @@
       return;
     }
 
+    if (breakdownCache[workId]) {
+      var cached = breakdownCache[workId];
+      if (elCore) elCore.textContent = cached.core;
+      if (elCr) elCr.textContent = cached.cr;
+      if (elPm) elPm.textContent = cached.pm;
+      if (elAx) elAx.textContent = cached.ax;
+      return;
+    }
+
+    if (elCore) elCore.textContent = '...';
+    if (elCr) elCr.textContent = '...';
+    if (elPm) elPm.textContent = '...';
+    if (elAx) elAx.textContent = '...';
+
     var totalAll = Math.max(1, Number(w.cited_by_count || 0));
+    var sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
     var fetchCount = async function (clause) {
-      var u = 'https://api.openalex.org/works?filter=' + encodeURIComponent('cites:' + workId + ',' + clause) + '&per-page=1';
-      var r = await fetch(u, { headers: { 'Accept': 'application/json' } });
-      if (!r.ok) return null;
-      var d = await r.json();
-      return (d && d.meta && typeof d.meta.count === 'number') ? d.meta.count : 0;
+      try {
+        var u = 'https://api.openalex.org/works?filter=' + encodeURIComponent('cites:' + workId + ',' + clause) + '&per-page=1';
+        var r = await fetch(u, { headers: { 'Accept': 'application/json' } });
+        if (!r.ok) return null;
+        var d = await r.json();
+        return (d && d.meta && typeof d.meta.count === 'number') ? d.meta.count : 0;
+      } catch (_) {
+        return null;
+      }
     };
 
-    try {
-      var res = await Promise.all([
-        fetchCount('primary_location.source.is_core:true,primary_location.source.type:journal'),
-        fetchCount('indexed_in:crossref'),
-        fetchCount('indexed_in:pubmed'),
-        fetchCount('indexed_in:arxiv')
-      ]);
-      if (elCore && res[0] !== null) {
-        var pctCore = Math.min(100, Math.round((res[0] / totalAll) * 100));
-        elCore.textContent = res[0].toLocaleString('tr-TR') + ' (%' + pctCore + ')';
-      }
-      if (elCr && res[1] !== null) elCr.textContent = res[1].toLocaleString('tr-TR');
-      if (elPm && res[2] !== null) elPm.textContent = res[2].toLocaleString('tr-TR');
-      if (elAx && res[3] !== null) elAx.textContent = res[3].toLocaleString('tr-TR');
-    } catch (_) {
-      if (elCore) elCore.textContent = '—';
-      if (elCr) elCr.textContent = '—';
-      if (elPm) elPm.textContent = '—';
-      if (elAx) elAx.textContent = '—';
+    // Hız sınırına (rate limit) takılmamak için istekleri ardışık ve aralıklı gönder
+    var cCore = await fetchCount('primary_location.source.is_core:true,primary_location.source.type:journal');
+    await sleep(220);
+    var cCr = await fetchCount('indexed_in:crossref');
+    await sleep(220);
+    var cPm = await fetchCount('indexed_in:pubmed');
+    await sleep(220);
+    var cAx = await fetchCount('indexed_in:arxiv');
+
+    var coreStr = cCore !== null ? (cCore.toLocaleString('tr-TR') + ' (%' + Math.min(100, Math.round((cCore / totalAll) * 100)) + ')') : '—';
+    var crStr = cCr !== null ? cCr.toLocaleString('tr-TR') : '—';
+    var pmStr = cPm !== null ? cPm.toLocaleString('tr-TR') : '—';
+    var axStr = cAx !== null ? cAx.toLocaleString('tr-TR') : '—';
+
+    if (cCore !== null || cCr !== null) {
+      breakdownCache[workId] = { core: coreStr, cr: crStr, pm: pmStr, ax: axStr };
     }
+    if (elCore) elCore.textContent = coreStr;
+    if (elCr) elCr.textContent = crStr;
+    if (elPm) elPm.textContent = pmStr;
+    if (elAx) elAx.textContent = axStr;
+  }
+
+  async function query3ApisCitingDirect(w, p, pp, cIdxVal) {
+    var workId = String((w && w.id) || '').replace(/^https?:\/\/openalex\.org\//i, '').trim();
+    var doi = (w && w.doi) ? String(w.doi).trim() : '';
+    var s2Id = (w && w.s2Id) ? String(w.s2Id).trim() : '';
+    var cIdxClause = resolveIndexFilterClause(cIdxVal);
+
+    var runOa = async function () {
+      var t0 = Date.now();
+      if (!/^W\d+$/i.test(workId)) {
+        return { provider: 'OpenAlex', key: 'openalex', ok: false, status: 0, ms: 0, count: 0, total: 0, note: 'OpenAlex Work ID yok', items: [] };
+      }
+      try {
+        var citeFilterStr = 'cites:' + workId + (cIdxClause ? ',' + cIdxClause : '');
+        var url = 'https://api.openalex.org/works?filter=' + encodeURIComponent(citeFilterStr) + '&sort=cited_by_count:desc&per-page=' + pp + '&page=' + p;
+        var resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        var ms = Date.now() - t0;
+        if (!resp.ok) return { provider: 'OpenAlex', key: 'openalex', ok: false, status: resp.status, ms: ms, count: 0, total: 0, note: 'HTTP ' + resp.status, items: [] };
+        var json = await resp.json();
+        var items = Array.isArray(json.results) ? json.results.map(normalizeOpenAlexWork) : [];
+        var total = (json.meta && json.meta.count) || items.length;
+        return { provider: 'OpenAlex', key: 'openalex', ok: true, status: 200, ms: ms, count: items.length, total: total, note: items.length + ' atıf alındı', items: items };
+      } catch (e) {
+        return { provider: 'OpenAlex', key: 'openalex', ok: false, status: 0, ms: Date.now() - t0, count: 0, total: 0, note: 'Ağ hatası', items: [] };
+      }
+    };
+
+    var runS2 = async function () {
+      var t0 = Date.now();
+      var ref = s2Id || (doi ? 'DOI:' + doi : '');
+      if (!ref) return { provider: 'Semantic Scholar', key: 'semanticscholar', ok: false, status: 0, ms: 0, count: 0, total: 0, note: 'DOI/S2 ID yok', items: [] };
+      try {
+        var fields = 'paperId,externalIds,title,year,citationCount,isOpenAccess,openAccessPdf,venue,publicationVenue,authors,url';
+        var offset = (p - 1) * pp;
+        var url = 'https://api.semanticscholar.org/graph/v1/paper/' + encodeURIComponent(ref) + '/citations?offset=' + offset + '&limit=' + Math.min(pp, 100) + '&fields=' + fields;
+        var resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        var ms = Date.now() - t0;
+        if (!resp.ok) {
+          var note = resp.status === 429 ? 'HTTP 429 (Key\'siz hız sınırı)' : 'HTTP ' + resp.status;
+          return { provider: 'Semantic Scholar', key: 'semanticscholar', ok: false, status: resp.status, ms: ms, count: 0, total: 0, note: note, items: [] };
+        }
+        var json = await resp.json();
+        var rawList = Array.isArray(json.data) ? json.data.map(function (x) { return x.citingPaper; }).filter(Boolean) : [];
+        var items = rawList.map(normalizeS2Work);
+        return { provider: 'Semantic Scholar', key: 'semanticscholar', ok: true, status: 200, ms: ms, count: items.length, total: items.length, note: items.length + ' atıf alındı', items: items };
+      } catch (e) {
+        return { provider: 'Semantic Scholar', key: 'semanticscholar', ok: false, status: 0, ms: Date.now() - t0, count: 0, total: 0, note: 'Rate limit / CORS hatası', items: [] };
+      }
+    };
+
+    var runCr = async function () {
+      var t0 = Date.now();
+      if (!doi) return { provider: 'Crossref', key: 'crossref', ok: false, status: 0, ms: 0, count: 0, total: 0, note: 'DOI yok', items: [] };
+      try {
+        var resp = await fetch('https://api.crossref.org/works/' + encodeURIComponent(doi));
+        var ms = Date.now() - t0;
+        if (!resp.ok) return { provider: 'Crossref', key: 'crossref', ok: false, status: resp.status, ms: ms, count: 0, total: 0, note: 'HTTP ' + resp.status, items: [] };
+        var json = await resp.json();
+        var tot = Number((json.message && json.message['is-referenced-by-count']) || 0);
+        return { provider: 'Crossref', key: 'crossref', ok: true, status: 200, ms: ms, count: 0, total: tot, note: 'Toplam ' + tot.toLocaleString('tr-TR') + ' atıf sayacı doğrulandı (açık liste vermez)', items: [] };
+      } catch (_) {
+        return { provider: 'Crossref', key: 'crossref', ok: false, status: 0, ms: Date.now() - t0, count: 0, total: 0, note: 'Ağ hatası', items: [] };
+      }
+    };
+
+    var res = await Promise.all([runOa(), runS2(), runCr()]);
+    var mergedObj = mergeWorksLists(res[0].items, res[1].items, [], 'cited_by_count:desc');
+    var providers = res.map(function (r) {
+      return { provider: r.provider, key: r.key, ok: r.ok, status: r.status, ms: r.ms, count: r.count, total: r.total, note: r.note };
+    });
+    return {
+      meta: { count: Math.max(res[0].total || 0, res[1].total || 0, mergedObj.merged.length), duplicatesMerged: mergedObj.duplicatesMerged },
+      providers: providers,
+      results: mergedObj.merged
+    };
   }
 
   async function loadCitingWorksForDialog(w, page, perPage) {
@@ -556,44 +807,48 @@
     citingPage = p;
     citingPerPage = pp;
 
-    setHTML(tbody, '<tr><td colspan="5" class="text-center py-4 text-mistral-stone">Atıf yapan yayınlar yükleniyor (Sayfa ' + p + ')...</td></tr>');
-
+    var cIdxSel = document.getElementById('citing-index-filter');
+    var cIdxVal = (cIdxSel && cIdxSel.value) || 'all';
     var workId = String((w && w.id) || '').replace(/^https?:\/\/openalex\.org\//i, '').trim();
-    if (!/^W\d+$/i.test(workId)) {
-      setHTML(tbody, '<tr><td colspan="5" class="text-center py-4 text-mistral-stone">Bu kayıt için OpenAlex Tekil Yayın Kimliği (Work ID) bulunmadığından atıf listesi sorgulanamadı.</td></tr>');
+    var doi = (w && w.doi) ? String(w.doi).trim() : '';
+    var s2Id = (w && w.s2Id) ? String(w.s2Id).trim() : '';
+
+    var cacheKey = 'cites_' + workId + '_' + doi + '_' + cIdxVal + '_' + p + '_' + pp;
+    var cached = getCached(cacheKey);
+    if (cached) {
+      citingTotalCount = (cached.meta && cached.meta.count) || cached.results.length;
+      if (countEl) countEl.textContent = 'Toplam ' + Number(citingTotalCount).toLocaleString('tr-TR') + ' atıf yapan yayın (Önbellek)';
+      renderCitingWorksRows(cached.results, tbody);
+      renderTransparencyPanel('dialog-citing-transparency', 'dialog-citing-provider-grid', 'dialog-citing-transparency-summary', cached.providers, cached.meta.duplicatesMerged || 0);
+      updateCitingPagination(cached.results.length);
       return;
     }
-    try {
-      var cIdxSel = document.getElementById('citing-index-filter');
-      var cIdxVal = (cIdxSel && cIdxSel.value) || 'all';
-      var cIdxClause = resolveIndexFilterClause(cIdxVal);
-      var citeFilterStr = 'cites:' + workId + (cIdxClause ? ',' + cIdxClause : '');
-      var url = 'https://api.openalex.org/works?filter=' + encodeURIComponent(citeFilterStr) + '&sort=cited_by_count:desc&per-page=' + pp + '&page=' + p;
-      var resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
-      if (!resp.ok) throw new Error('HTTP ' + resp.status);
-      var data = await resp.json();
-      var list = Array.isArray(data.results) ? data.results.map(normalizeOpenAlexWork) : [];
-      citingTotalCount = (data.meta && data.meta.count) || list.length;
-      if (countEl) {
-        countEl.textContent = 'Toplam ' + Number(citingTotalCount).toLocaleString('tr-TR') + ' atıf yapan yayın — Sayfa ' + p + ' (' + list.length + ' kayıt gösteriliyor)';
-      }
-      renderCitingWorksRows(list, tbody);
-      updateCitingPagination(list.length);
-    } catch (_) {
+
+    setHTML(tbody, '<tr><td colspan="5" class="text-center py-4 text-mistral-stone">OpenAlex, Semantic Scholar ve Crossref paralel sorgulanıyor (Sayfa ' + p + ')...</td></tr>');
+
+    var payload = null;
+    if (!window.__VIBE_STANDALONE__) {
       try {
-        var cIdxSel2 = document.getElementById('citing-index-filter');
-        var cIdxVal2 = (cIdxSel2 && cIdxSel2.value) || 'all';
-        var r2 = await fetch('/api/akademik/citations?workId=' + encodeURIComponent(workId) + '&page=' + p + '&perPage=' + pp + '&indexFilter=' + encodeURIComponent(cIdxVal2));
-        var d2 = await r2.json();
-        var list2 = d2.results || [];
-        citingTotalCount = (d2.meta && d2.meta.count) || list2.length;
-        if (countEl) countEl.textContent = 'Toplam ' + Number(citingTotalCount).toLocaleString('tr-TR') + ' kayıt — Sayfa ' + p;
-        renderCitingWorksRows(list2, tbody);
-        updateCitingPagination(list2.length);
-      } catch (_e2) {
-        setHTML(tbody, '<tr><td colspan="5" class="text-center py-4 text-mistral-stone">Atıf yapan yayın listesi şu an alınamadı.</td></tr>');
-      }
+        var qs = new URLSearchParams({
+          workId: workId, doi: doi, s2Id: s2Id, page: String(p), perPage: String(pp), indexFilter: cIdxVal
+        });
+        var resp = await fetch('/api/akademik/citations?' + qs.toString());
+        if (resp.ok) payload = await resp.json();
+      } catch (_) {}
     }
+    if (!payload) {
+      payload = await query3ApisCitingDirect(w, p, pp, cIdxVal);
+    }
+
+    setCached(cacheKey, payload);
+    var list = payload.results || [];
+    citingTotalCount = (payload.meta && payload.meta.count) || list.length;
+    if (countEl) {
+      countEl.textContent = 'Toplam ' + Number(citingTotalCount).toLocaleString('tr-TR') + ' atıf yapan yayın — Sayfa ' + p + ' (' + list.length + ' birleştirilmiş kayıt)';
+    }
+    renderCitingWorksRows(list, tbody);
+    renderTransparencyPanel('dialog-citing-transparency', 'dialog-citing-provider-grid', 'dialog-citing-transparency-summary', payload.providers, (payload.meta && payload.meta.duplicatesMerged) || 0);
+    updateCitingPagination(list.length);
   }
 
   function renderCitingWorksRows(list, tbody) {
@@ -610,7 +865,7 @@
       return [
         '<tr>',
         '  <td><span class="akademik-year-badge">' + esc(cw.publication_year || '—') + '</span></td>',
-        '  <td><div class="font-bold text-mistral-ink">' + esc(cw.title) + '</div>' + doiLink + '</td>',
+        '  <td><div class="font-bold text-mistral-ink">' + esc(cw.title) + '</div>' + doiLink + renderSourcePills(cw.sources) + '</td>',
         '  <td><div class="font-semibold text-mistral-ink">' + esc(auths) + '</div>' + (inst ? '<div class="text-mistral-slate text-[11px] mt-0.5">' + esc(inst) + '</div>' : '') + '</td>',
         '  <td><div class="font-semibold text-mistral-ink">' + esc(cw.venue || '—') + '</div>' + renderIndexBadges(cw) + '</td>',
         '  <td><span class="akademik-cite-badge">' + SVG_CHART + '<span>' + Number(cw.cited_by_count || 0).toLocaleString('tr-TR') + '</span></span></td>',
@@ -624,7 +879,7 @@
     if (!activeWork) return;
     var workId = String(activeWork.id || '').replace(/^https?:\/\/openalex\.org\//i, '').trim();
     if (!/^W\d+$/i.test(workId)) {
-      notify('Bu yayın için OpenAlex Work ID bulunamadı.');
+      notify('Toplu cursor indirme için OpenAlex Work ID gereklidir.');
       return;
     }
 
@@ -638,7 +893,8 @@
 
     var allCiting = [];
     var cursor = '*';
-    var maxRecords = 1000; // Tarayıcı belleğini korumak için tek seferde en fazla 1.000 atıf kaydı (5x200 cursor sayfası)
+    var maxRecords = 1000;
+    var sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
 
     try {
       while (cursor && allCiting.length < maxRecords) {
@@ -658,6 +914,7 @@
         allCiting = allCiting.concat(batch);
         cursor = (data.meta && data.meta.next_cursor) || null;
         if (batch.length < 200) break;
+        await sleep(300);
       }
 
       if (!allCiting.length) {
@@ -728,6 +985,136 @@
     return String(str || '').replace(/[,:|]/g, ' ').trim();
   }
 
+  async function query3ApisWorksDirect(params) {
+    var title = params.title, author = params.author, institution = params.institution, venue = params.venue, doi = params.doi;
+    var yearFrom = params.yearFrom, yearTo = params.yearTo, sort = params.sort, oaOnly = params.oaOnly, indexFilter = params.indexFilter;
+    var page = params.page, perPage = params.perPage;
+
+    var runOa = async function () {
+      var t0 = Date.now();
+      try {
+        var filters = [];
+        if (title) filters.push('title_and_abstract.search:' + title);
+        if (author) filters.push('raw_author_name.search:' + author);
+        if (institution) filters.push('raw_affiliation_strings.search:' + institution);
+        if (doi) filters.push('doi:https://doi.org/' + doi);
+        if (oaOnly) filters.push('is_oa:true');
+        var idxClause = resolveIndexFilterClause(indexFilter);
+        if (idxClause) filters.push(idxClause);
+        if (yearFrom >= 1900 && yearFrom <= 2030) filters.push('from_publication_date:' + yearFrom + '-01-01');
+        if (yearTo >= 1900 && yearTo <= 2030) filters.push('to_publication_date:' + yearTo + '-12-31');
+
+        var queryParts = ['per-page=' + perPage, 'page=' + page];
+        if (venue) queryParts.push('search=' + encodeURIComponent(venue));
+        if (filters.length) queryParts.push('filter=' + encodeURIComponent(filters.join(',')));
+        if (sort !== 'relevance_score:desc' || venue) queryParts.push('sort=' + encodeURIComponent(sort));
+
+        var resp = await fetch('https://api.openalex.org/works?' + queryParts.join('&'), { headers: { 'Accept': 'application/json' } });
+        var ms = Date.now() - t0;
+        if (!resp.ok) return { provider: 'OpenAlex', key: 'openalex', ok: false, status: resp.status, ms: ms, count: 0, total: 0, note: 'HTTP ' + resp.status + ' hatası', items: [] };
+        var data = await resp.json();
+        var items = Array.isArray(data.results) ? data.results.map(normalizeOpenAlexWork) : [];
+        var total = (data.meta && data.meta.count) || items.length;
+        return { provider: 'OpenAlex', key: 'openalex', ok: true, status: 200, ms: ms, count: items.length, total: total, note: items.length + ' kayıt alındı (Toplam ' + Number(total).toLocaleString('tr-TR') + ')', items: items };
+      } catch (e) {
+        return { provider: 'OpenAlex', key: 'openalex', ok: false, status: 0, ms: Date.now() - t0, count: 0, total: 0, note: 'Zaman aşımı / Ağ hatası', items: [] };
+      }
+    };
+
+    var runS2 = async function () {
+      var t0 = Date.now();
+      try {
+        var fields = 'paperId,externalIds,title,year,citationCount,isOpenAccess,openAccessPdf,venue,publicationVenue,journal,publicationTypes,fieldsOfStudy,abstract,authors,url';
+        var url;
+        if (doi) {
+          url = 'https://api.semanticscholar.org/graph/v1/paper/DOI:' + encodeURIComponent(doi) + '?fields=' + fields;
+        } else {
+          var qText = [title, author, institution, venue].filter(Boolean).join(' ').trim() || 'machine learning';
+          var offset = (page - 1) * perPage;
+          var yearParam = (yearFrom || yearTo) ? '&year=' + (yearFrom || 1900) + '-' + (yearTo || 2030) : '';
+          var oaParam = oaOnly ? '&openAccessPdf' : '';
+          url = 'https://api.semanticscholar.org/graph/v1/paper/search?query=' + encodeURIComponent(qText) + '&limit=' + Math.min(perPage, 50) + '&offset=' + offset + yearParam + oaParam + '&fields=' + fields;
+        }
+        var resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        var ms = Date.now() - t0;
+        if (!resp.ok) {
+          var note = resp.status === 429 ? 'HTTP 429 (API Key olmadan ortak hız sınırı aşıldı)' : (resp.status === 404 ? 'DOI Semantic Scholar dizininde bulunamadı' : 'HTTP ' + resp.status + ' hatası');
+          return { provider: 'Semantic Scholar', key: 'semanticscholar', ok: false, status: resp.status, ms: ms, count: 0, total: 0, note: note, items: [] };
+        }
+        var json = await resp.json();
+        var rawList = doi ? (json && json.paperId ? [json] : []) : (Array.isArray(json.data) ? json.data : []);
+        var items = rawList.map(normalizeS2Work);
+        var total = doi ? items.length : Number(json.total || items.length);
+        return { provider: 'Semantic Scholar', key: 'semanticscholar', ok: true, status: 200, ms: ms, count: items.length, total: total, note: items.length + ' kayıt alındı (Key\'siz erişim)', items: items };
+      } catch (e) {
+        return { provider: 'Semantic Scholar', key: 'semanticscholar', ok: false, status: 0, ms: Date.now() - t0, count: 0, total: 0, note: 'Hız sınırı / Tarayıcı CORS engeli', items: [] };
+      }
+    };
+
+    var runCr = async function () {
+      var t0 = Date.now();
+      try {
+        var url;
+        if (doi) {
+          url = 'https://api.crossref.org/works/' + encodeURIComponent(doi);
+        } else {
+          var qp = ['rows=' + Math.min(perPage, 40), 'offset=' + ((page - 1) * perPage)];
+          if (title) qp.push('query.title=' + encodeURIComponent(title));
+          if (author) qp.push('query.author=' + encodeURIComponent(author));
+          if (institution) qp.push('query.affiliation=' + encodeURIComponent(institution));
+          if (venue) qp.push('query.container-title=' + encodeURIComponent(venue));
+          if (!title && !author && !institution && !venue) qp.push('query.bibliographic=machine+learning');
+          var crFilters = [];
+          if (yearFrom >= 1900 && yearFrom <= 2030) crFilters.push('from-pub-date:' + yearFrom + '-01-01');
+          if (yearTo >= 1900 && yearTo <= 2030) crFilters.push('until-pub-date:' + yearTo + '-12-31');
+          if (crFilters.length) qp.push('filter=' + encodeURIComponent(crFilters.join(',')));
+          if (sort === 'cited_by_count:desc') qp.push('sort=is-referenced-by-count&order=desc');
+          else if (sort === 'publication_year:desc') qp.push('sort=published&order=desc');
+          url = 'https://api.crossref.org/works?' + qp.join('&');
+        }
+        var resp = await fetch(url);
+        var ms = Date.now() - t0;
+        if (!resp.ok) return { provider: 'Crossref', key: 'crossref', ok: false, status: resp.status, ms: ms, count: 0, total: 0, note: 'HTTP ' + resp.status + ' hatası', items: [] };
+        var json = await resp.json();
+        var msg = json.message || {};
+        var rawList = doi ? (msg.DOI ? [msg] : []) : (Array.isArray(msg.items) ? msg.items : []);
+        var items = rawList.map(normalizeCrossrefWork);
+        var total = doi ? items.length : Number(msg['total-results'] || items.length);
+        return { provider: 'Crossref', key: 'crossref', ok: true, status: 200, ms: ms, count: items.length, total: total, note: items.length + ' resmi DOI kaydı alındı', items: items };
+      } catch (e) {
+        return { provider: 'Crossref', key: 'crossref', ok: false, status: 0, ms: Date.now() - t0, count: 0, total: 0, note: 'Zaman aşımı / Ağ hatası', items: [] };
+      }
+    };
+
+    var res = await Promise.all([runOa(), runS2(), runCr()]);
+    var mergedObj = mergeWorksLists(res[0].items, res[1].items, res[2].items, sort);
+    var results = mergedObj.merged;
+
+    if (oaOnly) {
+      var oaF = results.filter(function (r) { return r.is_oa; });
+      if (oaF.length) results = oaF;
+    }
+    if (venue) {
+      var vLow = venue.toLowerCase();
+      var vF = results.filter(function (r) { return (r.venue || '').toLowerCase().indexOf(vLow) !== -1 || (r.publisher || '').toLowerCase().indexOf(vLow) !== -1; });
+      if (vF.length) results = vF;
+    }
+
+    var providers = res.map(function (r) {
+      return { provider: r.provider, key: r.key, ok: r.ok, status: r.status, ms: r.ms, count: r.count, total: r.total, note: r.note };
+    });
+    var anyOk = providers.some(function (p) { return p.ok; });
+    return {
+      meta: {
+        count: Math.max(res[0].total || 0, res[2].total || 0, res[1].total || 0, results.length),
+        duplicatesMerged: mergedObj.duplicatesMerged,
+        source: providers.filter(function (p) { return p.ok; }).map(function (p) { return p.provider; }).join(' + ') || 'Yedek Veri Seti'
+      },
+      providers: providers,
+      results: anyOk && results.length ? results : FALLBACK_WORKS
+    };
+  }
+
   async function searchWorks(targetPage) {
     mainPage = (typeof targetPage === 'number' && targetPage >= 1) ? targetPage : 1;
     var fTitle = document.getElementById('field-title');
@@ -764,88 +1151,56 @@
       return;
     }
 
+    var cacheKey = ['works', title, author, institution, venue, doi, yearFrom, yearTo, sort, oaOnly, indexFilter, mainPage, mainPerPage].join('|');
+    var cached = getCached(cacheKey);
+    if (cached) {
+      currentWorks = cached.results || FALLBACK_WORKS;
+      mainTotalCount = (cached.meta && cached.meta.count) || currentWorks.length;
+      updateSummaryStats(currentWorks, mainTotalCount);
+      renderTable(currentWorks);
+      renderTransparencyPanel('akademik-transparency-panel', 'akademik-provider-grid', 'akademik-transparency-summary', cached.providers, (cached.meta && cached.meta.duplicatesMerged) || 0);
+      updateMainPagination();
+      if (badgeEl) badgeEl.textContent = (cached.meta && cached.meta.source) || 'Önbellek';
+      if (statsBar) statsBar.textContent = 'Toplam ' + Number(mainTotalCount).toLocaleString('tr-TR') + ' eşleşmeden ' + currentWorks.length + ' birleştirilmiş yayın (Önbellekten).';
+      return;
+    }
+
     if (initial) initial.classList.add('hidden');
     if (resultsSection) resultsSection.classList.add('hidden');
     if (loading) loading.classList.remove('hidden');
-    if (statsBar) statsBar.textContent = 'OpenAlex & Crossref veritabanı sorgulanıyor...';
+    if (statsBar) statsBar.textContent = 'OpenAlex, Semantic Scholar ve Crossref paralel sorgulanıyor...';
 
-    try {
-      var filters = [];
-      if (title) filters.push('title_and_abstract.search:' + title);
-      if (author) filters.push('raw_author_name.search:' + author);
-      if (institution) filters.push('raw_affiliation_strings.search:' + institution);
-      if (doi) filters.push('doi:https://doi.org/' + doi);
-      if (oaOnly) filters.push('is_oa:true');
-      var idxClause = resolveIndexFilterClause(indexFilter);
-      if (idxClause) filters.push(idxClause);
-      if (yearFrom >= 1900 && yearFrom <= 2030) filters.push('from_publication_date:' + yearFrom + '-01-01');
-      if (yearTo >= 1900 && yearTo <= 2030) filters.push('to_publication_date:' + yearTo + '-12-31');
-
-      var queryParts = ['per-page=' + mainPerPage, 'page=' + mainPage];
-      if (venue) {
-        queryParts.push('search=' + encodeURIComponent(venue));
-      }
-      if (filters.length) {
-        queryParts.push('filter=' + encodeURIComponent(filters.join(',')));
-      }
-      if (sort !== 'relevance_score:desc' || venue) {
-        queryParts.push('sort=' + encodeURIComponent(sort));
-      }
-
-      var oaUrl = 'https://api.openalex.org/works?' + queryParts.join('&');
-      var resp = await fetch(oaUrl, { headers: { 'Accept': 'application/json' } });
-      if (!resp.ok) throw new Error('OpenAlex HTTP ' + resp.status);
-      var data = await resp.json();
-      var works = Array.isArray(data.results) ? data.results.map(normalizeOpenAlexWork) : [];
-
-      if (venue) {
-        var vLow = venue.toLowerCase();
-        var vFiltered = works.filter(function (w) {
-          return (w.venue || '').toLowerCase().includes(vLow) || (w.publisher || '').toLowerCase().includes(vLow);
-        });
-        if (vFiltered.length) works = vFiltered;
-      }
-
-      var totalCount = (data.meta && data.meta.count) || works.length;
-      currentWorks = works;
-      mainTotalCount = totalCount;
-      updateSummaryStats(works, totalCount);
-      renderTable(works);
-      updateMainPagination();
-      if (badgeEl) badgeEl.textContent = 'OpenAlex + Crossref Canlı';
-      if (statsBar) {
-        statsBar.textContent = 'Toplam ' + Number(totalCount).toLocaleString('tr-TR') + ' eşleşmeden ' + works.length + ' yayın tabloda listeleniyor.';
-      }
-    } catch (_) {
+    var payload = null;
+    if (!window.__VIBE_STANDALONE__) {
       try {
         var qs = new URLSearchParams({
-          title: title,
-          author: author,
-          institution: institution,
-          venue: venue,
-          doi: doi,
-          yearFrom: String(yearFrom || ''),
-          yearTo: String(yearTo || ''),
-          sort: sort,
-          oa: oaOnly ? '1' : '0',
-          indexFilter: indexFilter,
-          page: String(mainPage),
-          perPage: String(mainPerPage)
+          title: title, author: author, institution: institution, venue: venue, doi: doi,
+          yearFrom: String(yearFrom || ''), yearTo: String(yearTo || ''), sort: sort,
+          oa: oaOnly ? '1' : '0', indexFilter: indexFilter, page: String(mainPage), perPage: String(mainPerPage)
         });
         var apiResp = await fetch('/api/akademik/works?' + qs.toString());
-        var apiData = await apiResp.json();
-        currentWorks = apiData.results || FALLBACK_WORKS;
-        mainTotalCount = (apiData.meta && apiData.meta.count) || currentWorks.length;
-        updateSummaryStats(currentWorks, mainTotalCount);
-        renderTable(currentWorks);
-        updateMainPagination();
-        if (statsBar) statsBar.textContent = 'Akademik arşiv sonuçları tabloya aktarıldı (' + currentWorks.length + ' yayın).';
-      } catch (_err2) {
-        currentWorks = FALLBACK_WORKS;
-        updateSummaryStats(currentWorks, currentWorks.length);
-        renderTable(currentWorks);
-        if (statsBar) statsBar.textContent = 'Çevrimdışı örnek veri seti gösteriliyor (' + currentWorks.length + ' yayın).';
-      }
+        if (apiResp.ok) payload = await apiResp.json();
+      } catch (_) {}
+    }
+
+    if (!payload) {
+      payload = await query3ApisWorksDirect({
+        title: title, author: author, institution: institution, venue: venue, doi: doi,
+        yearFrom: yearFrom, yearTo: yearTo, sort: sort, oaOnly: oaOnly, indexFilter: indexFilter,
+        page: mainPage, perPage: mainPerPage
+      });
+    }
+
+    setCached(cacheKey, payload);
+    currentWorks = payload.results || FALLBACK_WORKS;
+    mainTotalCount = (payload.meta && payload.meta.count) || currentWorks.length;
+    updateSummaryStats(currentWorks, mainTotalCount);
+    renderTable(currentWorks);
+    renderTransparencyPanel('akademik-transparency-panel', 'akademik-provider-grid', 'akademik-transparency-summary', payload.providers, (payload.meta && payload.meta.duplicatesMerged) || 0);
+    updateMainPagination();
+    if (badgeEl) badgeEl.textContent = (payload.meta && payload.meta.source) || 'Çoklu API';
+    if (statsBar) {
+      statsBar.textContent = 'Toplam ' + Number(mainTotalCount).toLocaleString('tr-TR') + ' eşleşmeden ' + currentWorks.length + ' birleştirilmiş yayın tabloda listeleniyor.';
     }
   }
 

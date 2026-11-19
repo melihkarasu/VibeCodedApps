@@ -1,8 +1,8 @@
 module.exports = function(pageTemplate) {
   return function(req, res) {
     const extraHead = `
-      <link rel="stylesheet" href="/static/apps/yazar/app.css?v=20261118a" />
-      <script src="/static/apps/yazar/app.js?v=20261118a" defer></script>
+      <link rel="stylesheet" href="/static/apps/yazar/app.css?v=20261118b" />
+      <script src="/static/apps/yazar/app.js?v=20261118b" defer></script>
     `;
 
     const content = `
@@ -30,7 +30,7 @@ module.exports = function(pageTemplate) {
 
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-mistral-hairline text-xs text-mistral-ink shadow-xs self-start md:self-auto shrink-0">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span id="yazar-source-badge" class="font-semibold">OpenAlex Authors & Works Hazır</span>
+          <span id="yazar-source-badge" class="font-semibold">OpenAlex + S2 + Crossref Hazır</span>
         </div>
       </div>
 
@@ -127,6 +127,16 @@ module.exports = function(pageTemplate) {
         <div class="flex items-center justify-between gap-2 mb-2.5">
           <h2 class="text-base font-bold text-mistral-ink font-editorial">Eşleşen Akademisyen Profilleri (İncelemek İçin Seçin)</h2>
           <span id="yazar-candidates-count" class="text-xs font-mono text-mistral-stone"></span>
+        </div>
+        <div id="yazar-candidates-transparency" class="akademik-transparency-panel hidden">
+          <div class="akademik-transparency-header">
+            <div class="akademik-transparency-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <span>Yazar Sorgusu — Çoklu API Şeffaflık Raporu</span>
+            </div>
+            <span id="yazar-candidates-transparency-summary" class="text-xs font-mono text-mistral-slate"></span>
+          </div>
+          <div id="yazar-candidates-provider-grid" class="akademik-provider-grid"></div>
         </div>
         <div class="akademik-table-container">
           <table class="akademik-table">
@@ -226,6 +236,16 @@ module.exports = function(pageTemplate) {
 
         <!-- SEKME 1: Yazarın Tüm Yayınları Tablosu -->
         <div id="tab-panel-works">
+          <div id="yazar-works-transparency" class="akademik-transparency-panel hidden">
+            <div class="akademik-transparency-header">
+              <div class="akademik-transparency-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span>Yayınlar Sorgusu — Çoklu API Şeffaflık Raporu</span>
+              </div>
+              <span id="yazar-works-transparency-summary" class="text-xs font-mono text-mistral-slate"></span>
+            </div>
+            <div id="yazar-works-provider-grid" class="akademik-provider-grid"></div>
+          </div>
           <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
             <span id="works-filter-summary" class="text-xs font-semibold text-mistral-slate">Yazarın yayın portföyü</span>
             <div class="flex flex-wrap items-center gap-2">
@@ -272,6 +292,16 @@ module.exports = function(pageTemplate) {
 
         <!-- SEKME 2: Yazarın Tüm Yayınlarına Gelen Birleşik Atıf Listesi Tablosu -->
         <div id="tab-panel-citations" class="hidden">
+          <div id="yazar-cites-transparency" class="akademik-transparency-panel hidden">
+            <div class="akademik-transparency-header">
+              <div class="akademik-transparency-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span>Birleşik Atıf Sorgusu — Çoklu API Şeffaflık Raporu</span>
+              </div>
+              <span id="yazar-cites-transparency-summary" class="text-xs font-mono text-mistral-slate"></span>
+            </div>
+            <div id="yazar-cites-provider-grid" class="akademik-provider-grid"></div>
+          </div>
           <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
             <div>
               <span class="text-xs font-bold text-mistral-ink block">Yazarın Yayınlarına Atıf Yapan Tüm Makaleler (Birleşik Liste)</span>
